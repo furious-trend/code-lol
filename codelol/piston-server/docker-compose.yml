@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  piston:
+    image: ghcr.io/engineer-man/piston
+    container_name: piston-execution-engine
+    ports:
+      - "2000:2000"
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - piston-packages:/piston/packages
+
+volumes:
+  piston-packages:
