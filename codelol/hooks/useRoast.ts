@@ -14,24 +14,16 @@ export function useRoast() {
   const [roastData, setRoastData] = useState<RoastResult | null>(null);
   const [roastError, setRoastError] = useState<string>('');
   
-  // Cache to store roast results based on the code string
-  const [roastCache, setRoastCache] = useState<Record<string, RoastResult>>({});
+
 
   const clearRoast = () => {
     setRoastData(null);
     setRoastError('');
   };
 
-  const handleRoast = useCallback(async (code: string) => {
+  const handleRoast = useCallback(async (code: string, output?: string, isSuccess?: boolean, soundUrl?: string) => {
     if (!code.trim()) {
       setRoastError('Please provide some code to roast!');
-      return;
-    }
-
-    if (roastCache[code]) {
-      // Use cached version
-      setRoastData(roastCache[code]);
-      setRoastError('');
       return;
     }
 
@@ -47,7 +39,7 @@ export function useRoast() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, output, isSuccess }),
       });
       
       const roastResponseData = await roastRes.json();
@@ -60,7 +52,28 @@ export function useRoast() {
       setRoastStatus('Finding the perfect reaction...');
       
       const mood: RoastMood = roastResponseData.mood || 'facepalm';
-      const gifKeyword = moodToGifKeyword[mood] || 'coding funny';
+      
+      // Use the keyword provided by the LLM that relates to the joke, fallback to random if missing
+      let gifKeyword = roastResponseData.gifKeyword;
+      
+      if (!gifKeyword) {
+        // 100% Tamil GIFs only! (Movies + Famous Insta/YT Influencers)
+        const tamilLegends = [
+          'vadivelu',
+          'santhanam',
+          'seeman',
+          'goundamani',
+          'vivek comedy',
+          'yogi babu',
+          'soori',
+          'gp muthu',
+          'parithabangal',
+          'ttf vasan',
+          'madan gowri',
+          'jump cuts'
+        ];
+        gifKeyword = tamilLegends[Math.floor(Math.random() * tamilLegends.length)];
+      }
       
       const gifRes = await fetch(`/api/gif?keyword=${encodeURIComponent(gifKeyword)}`, {
         method: 'GET'
@@ -79,8 +92,6 @@ export function useRoast() {
         gifUrl: gifResponseData.url
       };
 
-      // 3. Cache and set result
-      setRoastCache(prev => ({ ...prev, [code]: finalResult }));
       setRoastData(finalResult);
       
     } catch (err) {
@@ -89,7 +100,7 @@ export function useRoast() {
       setIsRoasting(false);
       setRoastStatus('');
     }
-  }, [roastCache]);
+  }, []);
 
   return {
     isRoasting,

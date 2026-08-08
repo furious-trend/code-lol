@@ -8,7 +8,7 @@ export const beginnerLessons: Lesson[] = [
     title: "Variables",
     sticker: "📦",
     funnyExplanation: "A variable is like your mom labeling leftovers in the fridge. chicken = 'leftover_biryani' — technically true, practically confusing.",
-    codeExample: "let dinner = 'leftover_biryani';\nconsole.log(dinner);",
+    codeExample: "let fridgeLabel = 'Leftover Biryani';\nlet actualFood = 'Frozen Dal';\nconsole.log('Label says:', fridgeLabel);\nconsole.log('Mom actually put:', actualFood);",
     gifKeyword: "confused fridge",
     miniQuizQuestion: {
       question: "What keyword do we use to declare a variable that can change later?",
@@ -16,9 +16,9 @@ export const beginnerLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Using let to declare a changeable variable.", code: "let age = 21;\nage = 22; // Happy Birthday!\nconsole.log(age);" },
-      { explanation: "Using const for things that never change (like your mom's wifi password).", code: "const WIFI = 'admin123';\n// WIFI = 'hacked'; // Error!\nconsole.log(WIFI);" },
-      { explanation: "Declaring multiple variables at once.", code: "let a = 1, b = 2, c = 3;\nconsole.log(a + b + c);" }
+      { explanation: "Using let to declare a changeable variable, simulating a fridge surprise.", code: "let sweetBox = 'Cookies';\nconsole.log('Opening sweet box...');\nsweetBox = 'Sewing Kit';\nconsole.log('Result:', sweetBox);\nconsole.log('Trust issues level increased.');" },
+      { explanation: "Using const for things that never change, like Mom's rules.", code: "const TUPPERWARE = 'Moms Favorite Box';\nlet borrower = 'Me';\nconsole.log('I borrowed:', TUPPERWARE);\nborrower = 'My Friend';\nconsole.log('Now who has it?', borrower);\nconsole.log('Mom is going to be mad.');" },
+      { explanation: "Declaring multiple items at once to prepare a full meal.", code: "let dinner1 = 'Rice', dinner2 = 'Dal', drink = 'Water';\nconsole.log('Menu tonight:');\nconsole.log(dinner1);\nconsole.log(dinner2);\nconsole.log(drink);" }
     ]
   },
   {
@@ -499,6 +499,126 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Slice a piece of string.", code: "let str = 'Hello World';\nconsole.log(str.slice(0, 5)); // Hello" },
       { explanation: "Split a string by spaces.", code: "let sentence = 'I love code';\nlet words = sentence.split(' ');\nconsole.log(words); // ['I', 'love', 'code']" },
       { explanation: "Split by every character.", code: "let word = 'Cat';\nconsole.log(word.split('')); // ['C', 'a', 't']" }
+    ]
+  },
+  {
+    id: 101,
+    chapter: "Chapter 1: The Absolute Basics",
+    tier: "Beginner",
+    title: "Workout: Basics Builder",
+    sticker: "🏋️",
+    funnyExplanation: "Time to sweat! This workout will test if you can actually create variables and print them without crying. You've got this.",
+    codeExample: "// Create a variable 'playerName' and print a greeting.",
+    gifKeyword: "gym workout",
+    miniQuizQuestion: {
+      question: "Are you ready for the Chapter 1 workout?",
+      options: ["Yes", "No", "Maybe", "I want my mommy"],
+      correctAnswerIndex: 0
+    },
+    examples: [
+      { explanation: "Step 1: Declare a variable for a player's name.", code: "let playerName = 'NoobMaster69';" },
+      { explanation: "Step 2: Declare a constant for their starting health.", code: "const STARTING_HEALTH = 100;" },
+      { explanation: "Step 3: Print a welcome message.", code: "console.log('Welcome ' + playerName + '! Health: ' + STARTING_HEALTH);" }
+    ]
+  },
+  {
+    id: 102,
+    chapter: "Chapter 2: Logic & Control Flow",
+    tier: "Beginner",
+    title: "Workout: Logic & Flow",
+    sticker: "🏋️",
+    funnyExplanation: "We are combining Chapter 1 & 2. Time to make choices and run in circles (loops). Don't get dizzy.",
+    codeExample: "// Write a loop that counts down from 3, then says 'GO!'",
+    gifKeyword: "running tracks",
+    miniQuizQuestion: {
+      question: "Are you ready for the Chapter 2 workout?",
+      options: ["Yes", "No", "Maybe", "I want my mommy"],
+      correctAnswerIndex: 0
+    },
+    examples: [
+      { explanation: "Step 1: Setup a loop that counts backwards.", code: "for (let i = 3; i > 0; i--) {\n  console.log(i);\n}" },
+      { explanation: "Step 2: Add an if statement inside the loop.", code: "for (let i = 3; i > 0; i--) {\n  if (i === 1) {\n    console.log('Almost there...');\n  }\n  console.log(i);\n}" },
+      { explanation: "Step 3: Print GO! at the end.", code: "console.log('GO!');" }
+    ]
+  },
+  {
+    id: 103,
+    chapter: "Chapter 3: Data Structures",
+    tier: "Beginner",
+    title: "Workout: Data Mastery",
+    sticker: "🏋️",
+    funnyExplanation: "Chapters 1, 2, and 3 combined. Time to juggle arrays and objects like a clown at a circus.",
+    codeExample: "// Create an inventory array and add items to it using a loop.",
+    gifKeyword: "juggling clown",
+    miniQuizQuestion: {
+      question: "Are you ready for the Chapter 3 workout?",
+      options: ["Yes", "No", "Maybe", "I want my mommy"],
+      correctAnswerIndex: 0
+    },
+    examples: [
+      { explanation: "Step 1: Create an array of loot.", code: "let loot = ['Sword', 'Shield', 'Potion'];" },
+      { explanation: "Step 2: Loop through the loot and print it.", code: "for (let i = 0; i < loot.length; i++) {\n  console.log('Found: ' + loot[i]);\n}" },
+      { explanation: "Step 3: Remove the last item and add 'Gold'.", code: "loot.pop();\nloot.push('Gold');\nconsole.log(loot);" }
+    ]
+  },
+  {
+    id: 104,
+    chapter: "Chapter 4: Functions & Scope",
+    tier: "Beginner",
+    title: "Workout: Function Architect",
+    sticker: "🏋️",
+    funnyExplanation: "Chapters 1 to 4! Package your messy code into beautiful, reusable functions. It's like putting your dirty laundry in a nice basket.",
+    codeExample: "// Create a function that calculates total damage.",
+    gifKeyword: "architect blueprints",
+    miniQuizQuestion: {
+      question: "Are you ready for the Chapter 4 workout?",
+      options: ["Yes", "No", "Maybe", "I want my mommy"],
+      correctAnswerIndex: 0
+    },
+    examples: [
+      { explanation: "Step 1: Write a function taking parameters.", code: "function attack(base, bonus) {\n  return base + bonus;\n}" },
+      { explanation: "Step 2: Use an array inside the function.", code: "function totalDamage(hits) {\n  let total = 0;\n  for(let i=0; i<hits.length; i++) total += hits[i];\n  return total;\n}" },
+      { explanation: "Step 3: Call the function and print the result.", code: "let myHits = [10, 20, 15];\nconsole.log('Total DMG:', totalDamage(myHits));" }
+    ]
+  },
+  {
+    id: 105,
+    chapter: "Chapter 5: The Weird Parts",
+    tier: "Beginner",
+    title: "Workout: Bug Hunter",
+    sticker: "🏋️",
+    funnyExplanation: "Chapters 1 to 5. Deal with undefined values, falsy checks, and weird JS behaviors safely. Protect your code from reality.",
+    codeExample: "// Write a safe function that handles missing data.",
+    gifKeyword: "bug catching net",
+    miniQuizQuestion: {
+      question: "Are you ready for the Chapter 5 workout?",
+      options: ["Yes", "No", "Maybe", "I want my mommy"],
+      correctAnswerIndex: 0
+    },
+    examples: [
+      { explanation: "Step 1: Check for undefined.", code: "function greetUser(name) {\n  if (!name) return 'Who are you?';\n  return 'Hi ' + name;\n}" },
+      { explanation: "Step 2: Use falsy checks for safe math.", code: "function safeAdd(a, b) {\n  let numA = Number(a) || 0;\n  let numB = Number(b) || 0;\n  return numA + numB;\n}" },
+      { explanation: "Step 3: Test with weird inputs.", code: "console.log(safeAdd('5', null)); // 5" }
+    ]
+  },
+  {
+    id: 106,
+    chapter: "Chapter 6: Essential Syntax",
+    tier: "Beginner",
+    title: "Final Workout: The Ultimate Trial",
+    sticker: "🔥",
+    funnyExplanation: "This is it. The culmination of everything you've learned. Build a mini RPG battle simulator. Don't let me down.",
+    codeExample: "// Combine everything to build a mini-game logic.",
+    gifKeyword: "final boss battle",
+    miniQuizQuestion: {
+      question: "Are you ready for the FINAL workout?",
+      options: ["Yes", "No", "Maybe", "I want my mommy"],
+      correctAnswerIndex: 0
+    },
+    examples: [
+      { explanation: "Step 1: Setup player and enemy objects.", code: "let player = { hp: 100, name: 'Hero' };\nlet enemy = { hp: 50, name: 'Slime' };" },
+      { explanation: "Step 2: Create a battle function using ternary operators and loops.", code: "function battle(p, e) {\n  while(p.hp > 0 && e.hp > 0) {\n    e.hp -= 20;\n    if (e.hp > 0) p.hp -= 10;\n  }\n  return p.hp > 0 ? `${p.name} Wins!` : `${e.name} Wins!`;\n}" },
+      { explanation: "Step 3: Execute the game.", code: "console.log(battle(player, enemy));" }
     ]
   }
 ];

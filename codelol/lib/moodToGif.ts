@@ -6,15 +6,21 @@ export type RoastMood =
   | 'crying_laughing'
   | 'done'
   | 'disaster'
-  | 'relief';
+  | 'relief'
+  | 'party'
+  | 'genius'
+  | 'happy';
 
 export const moodToGifKeyword: Record<RoastMood, string> = {
-  facepalm: "facepalm meme",
-  mind_blown: "mind blown reaction",
-  dead: "im dead lol",
-  screaming: "internal screaming",
-  crying_laughing: "crying laughing meme",
-  done: "im done reaction",
-  disaster: "this is fine fire",
-  relief: "phew relief meme"
+  facepalm: "vadivelu facepalm reaction",
+  mind_blown: "vivek shocked reaction",
+  dead: "vadivelu crying reaction",
+  screaming: "santhanam screaming reaction",
+  crying_laughing: "yogi babu laughing reaction",
+  done: "goundamani frustrated reaction",
+  disaster: "seeman angry reaction",
+  relief: "vadivelu relief sigh reaction",
+  party: "tamil kuthu dance celebration",
+  genius: "santhanam smart thinking reaction",
+  happy: "soori happy smile reaction"
 };

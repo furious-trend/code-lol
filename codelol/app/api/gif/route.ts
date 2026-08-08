@@ -14,11 +14,23 @@ export async function GET(request: Request) {
   }
 
   try {
-    const res = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=${encodeURIComponent(keyword)}&rating=pg-13`);
+    const searchQuery = 'tamil ' + keyword;
+    const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${encodeURIComponent(searchQuery)}&limit=15&rating=pg-13`);
     const data = await res.json();
 
-    if (data.data && data.data.images && data.data.images.downsized_large) {
-      return NextResponse.json({ url: data.data.images.downsized_large.url });
+    if (data.data && data.data.length > 0) {
+      const randomGif = data.data[Math.floor(Math.random() * data.data.length)];
+      if (randomGif.images && randomGif.images.downsized_large) {
+        return NextResponse.json({ url: randomGif.images.downsized_large.url });
+      }
+    }
+
+    // Fallback if the specific search fails: just search 'tamil comedy'
+    const fallbackRes = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=tamil%20comedy&limit=20&rating=pg-13`);
+    const fallbackData = await fallbackRes.json();
+    if (fallbackData.data && fallbackData.data.length > 0) {
+       const randomFallback = fallbackData.data[Math.floor(Math.random() * fallbackData.data.length)];
+       return NextResponse.json({ url: randomFallback.images.downsized_large.url });
     }
 
     return NextResponse.json({ error: 'No GIF found' }, { status: 404 });

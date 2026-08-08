@@ -23,28 +23,77 @@ export interface Problem {
 // 1. Define our handful of real, hand-crafted problems
 const handCraftedProblems: Record<string, Partial<Problem>> = {
   "beginner-1": {
-    title: "Level 1: Two Sum",
-    description: `Given an array of integers \`nums\` and an integer \`target\`, return indices of the two numbers such that they add up to \`target\`.
-
-You may assume that each input would have **exactly one solution**, and you may not use the same element twice.
+    title: "Level 1: Add Two Numbers",
+    description: `Given two numbers \`a\` and \`b\`, return their sum.
 
 **Example:**
 \`\`\`
-Input: nums = [2,7,11,15], target = 9
-Output: [0,1]
+Input: a = 2, b = 3
+Output: 5
 \`\`\`
 `,
-    starterCode: `function twoSum(nums, target) {
+    starterCode: `function addNumbers(a, b) {
   // Write your code here
   
 }`,
     testCases: [
-      { input: [[2, 7, 11, 15], 9], expected: [0, 1] },
-      { input: [[3, 2, 4], 6], expected: [1, 2] }
+      { input: [2, 3], expected: 5 },
+      { input: [-1, 5], expected: 4 }
     ]
   },
   "beginner-2": {
-    title: "Level 2: Fizz Buzz",
+    title: "Level 2: String Length",
+    description: `Given a string \`str\`, return the number of characters in it.
+
+**Example:**
+\`\`\`
+Input: str = "hello"
+Output: 5
+\`\`\`
+`,
+    starterCode: `function getStringLength(str) {
+  // Write your code here
+  
+}`,
+    testCases: [
+      { input: ["hello"], expected: 5 },
+      { input: [""], expected: 0 },
+      { input: ["coding"], expected: 6 }
+    ]
+  },
+  "beginner-3": {
+    title: "Level 3: Is Even?",
+    description: `Given an integer \`n\`, return \`true\` if it is an even number, otherwise return \`false\`.
+
+**Example:**
+\`\`\`
+Input: n = 4
+Output: true
+\`\`\`
+`,
+    starterCode: `function isEven(n) {
+  // Write your code here
+  
+}`,
+    testCases: [
+      { input: [4], expected: true },
+      { input: [7], expected: false }
+    ]
+  },
+  "beginner-4": {
+    title: "Level 4: Multiply by Ten",
+    description: `Given a number \`n\`, return the result of multiplying it by 10.`,
+    starterCode: `function multiplyByTen(n) {
+  // Write your code here
+  
+}`,
+    testCases: [
+      { input: [5], expected: 50 },
+      { input: [0], expected: 0 }
+    ]
+  },
+  "beginner-5": {
+    title: "Level 5: Fizz Buzz",
     description: `Given an integer \`n\`, return a string array \`answer\` (1-indexed) where:
 - \`answer[i] == "FizzBuzz"\` if \`i\` is divisible by 3 and 5.
 - \`answer[i] == "Fizz"\` if \`i\` is divisible by 3.

@@ -15,6 +15,7 @@ function PlaygroundContent() {
   const [code, setCode] = useState('// Write your code here\nconsole.log("Hello, World!");');
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+  const [lastRunSuccess, setLastRunSuccess] = useState<boolean | null>(null);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
 
   useEffect(() => {
@@ -35,9 +36,79 @@ function PlaygroundContent() {
     }
   }, [snippetId]);
 
-  const handleRun = async () => {
+  const playMemeSound = (isSuccess: boolean, player: HTMLAudioElement, player2: HTMLAudioElement): string => {
+    if (typeof window !== 'undefined') {
+      const failSounds = [
+        "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", // Seeman Buhaha
+        "https://www.myinstants.com/media/sounds/nov-thappa-irrkuthu-naa.mp3", // Nov thappa irrkuthu naa
+        "https://www.myinstants.com/media/sounds/thambi-keela-erangu-pa.mp3", // Thambi keela erangu pa
+        "https://www.myinstants.com/media/sounds/aiyo-apdi-chollatha.mp3", // Aiyo apdi chollatha
+        "https://www.myinstants.com/media/sounds/faaah.mp3", // Additional faaah
+        "https://www.myinstants.com/media/sounds/896756048.mp3", // Slm Lykm
+        "https://www.myinstants.com/media/sounds/tf_nemesis.mp3", // Sad Violin
+        "https://www.myinstants.com/media/sounds/directed-by-robert-b_voI2Z4T.mp3", // Directed by Robert B Weide
+      ];
+      
+      const successSounds = [
+        "https://www.myinstants.com/media/sounds/dexter-meme.mp3", // Dexter meme
+        "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3",
+        "https://www.myinstants.com/media/sounds/level-up-super-mario.mp3"
+      ];
+
+      const list = isSuccess ? successSounds : failSounds;
+      const soundUrl = list[Math.floor(Math.random() * list.length)];
+      
+      const playWithLimit = (p: HTMLAudioElement, src: string, maxRepeats: number = 0) => {
+        p.src = src;
+        
+        if (maxRepeats > 0) {
+          p.loop = false;
+          let plays = 0;
+          const onEnded = () => {
+            plays++;
+            if (plays < maxRepeats) p.play().catch(() => {});
+            else p.removeEventListener('ended', onEnded);
+          };
+          p.addEventListener('ended', onEnded);
+          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
+        } else {
+          p.loop = true;
+          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
+          setTimeout(() => {
+            p.pause();
+            p.currentTime = 0;
+          }, 20000);
+        }
+      };
+
+      if (!isSuccess) {
+        playWithLimit(player, "https://www.myinstants.com/media/sounds/faaaaaaaaaaaaaaaaaah.mp3", 3);
+      } else {
+        // Play success sound and Seeman laugh as requested!
+        playWithLimit(player, soundUrl, 3);
+        playWithLimit(player2, "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", 3);
+      }
+      
+      return soundUrl;
+    }
+    return '';
+  };
+
+  const handleRunAndRoast = async () => {
+    // Synchronously create and unlock TWO audio players on click
+    const audioPlayer = new Audio();
+    audioPlayer.src = "data:audio/mp3;base64,//OwgAAAAAAAAAAAAAAAWGluZwAAAA8AAAAFAAAJwAAMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw";
+    audioPlayer.volume = 0.6;
+    audioPlayer.play().catch(() => {});
+
+    const audioPlayer2 = new Audio();
+    audioPlayer2.src = "data:audio/mp3;base64,//OwgAAAAAAAAAAAAAAAWGluZwAAAA8AAAAFAAAJwAAMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw";
+    audioPlayer2.volume = 0.8; // Seeman laugh a bit louder!
+    audioPlayer2.play().catch(() => {});
+
     setIsRunning(true);
     setOutput('Running...');
+    clearRoast();
     
     try {
       const res = await fetch('/api/run', {
@@ -49,18 +120,40 @@ function PlaygroundContent() {
       });
       
       const data = await res.json();
-      
+
       if (res.ok) {
         let result = data.output || '';
+        let isSuccess = true;
         if (data.error) {
           result += (result ? '\n' : '') + 'Error:\n' + data.error;
+          isSuccess = false;
         }
-        setOutput(result || 'Code ran successfully with no output.');
+        setLastRunSuccess(isSuccess);
+        const finalOutput = result || 'Code ran successfully with no output.';
+        setOutput(finalOutput);
+        
+        // Wait for roast and GIF to fully load
+        await handleRoast(code, finalOutput, isSuccess, '');
+        // Play audio exactly when UI updates
+        playMemeSound(isSuccess, audioPlayer, audioPlayer2);
+        
       } else {
-        setOutput(`Error: ${data.error}\n${data.details ? JSON.stringify(data.details, null, 2) : ''}`);
+        setLastRunSuccess(false);
+        const errorOutput = `Error: ${data.error}\n${data.details ? JSON.stringify(data.details, null, 2) : ''}`;
+        setOutput(errorOutput);
+        
+        // Wait for roast and GIF to fully load
+        await handleRoast(code, errorOutput, false, '');
+        // Play audio exactly when UI updates
+        playMemeSound(false, audioPlayer, audioPlayer2);
       }
     } catch {
+      setLastRunSuccess(false);
       setOutput('Failed to execute code. Check your connection or try again later.');
+      // Wait for roast and GIF to fully load
+      await handleRoast(code, 'Failed to execute code.', false, '');
+      // Play audio exactly when UI updates
+      playMemeSound(false, audioPlayer, audioPlayer2);
     } finally {
       setIsRunning(false);
     }
@@ -100,21 +193,11 @@ function PlaygroundContent() {
           </select>
           
           <button 
-            onClick={handleRun}
-            disabled={isRunning || isRoasting}
-            className={`flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRunning ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            {isRunning ? 'Running...' : 'Run Code'}
-            {!isRunning && <span>▶</span>}
-          </button>
-          
-          <button 
-            onClick={() => handleRoast(code)}
+            onClick={handleRunAndRoast}
             disabled={isRoasting || isRunning}
-            className={`flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRoasting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRoasting || isRunning ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            {isRoasting ? 'Roasting...' : 'Roast My Code'}
-            {!isRoasting && <span className="text-xl">🔥</span>}
+            {isRoasting || isRunning ? 'Cooking... 🔥' : 'Run & Roast 🔥'}
           </button>
         </div>
       </div>
@@ -153,42 +236,44 @@ function PlaygroundContent() {
 
         {/* Output Console Area */}
         <div className="lg:w-1/3 flex flex-col gap-4 h-64 lg:h-auto shrink-0">
-          <div className="flex flex-col border border-zinc-800 rounded-xl overflow-hidden bg-black shadow-lg flex-1 min-h-[150px]">
-             <div className="bg-zinc-900 border-b border-zinc-800 p-2 px-4 flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">Console Output</span>
-              <button onClick={() => setOutput('')} className="text-xs text-zinc-500 hover:text-zinc-300">Clear</button>
-            </div>
-            <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
-               {output ? (
-                 <pre className="text-zinc-300 whitespace-pre-wrap break-words">{output}</pre>
-               ) : (
-                 <span className="text-zinc-600 italic">No output yet. Click &apos;Run Code&apos; to execute.</span>
-               )}
-            </div>
-          </div>
-          
           {isRoasting && (
             <div className="flex flex-col border border-purple-500/30 rounded-xl overflow-hidden bg-purple-950/20 shadow-lg shadow-purple-500/10 flex-1 min-h-[150px] justify-center items-center p-8">
-              <span className="text-4xl animate-bounce mb-4">🔥</span>
-              <span className="text-purple-300 font-medium animate-pulse">{roastStatus}</span>
+              <div className="animate-spin text-4xl mb-4">🔥</div>
+              <p className="text-purple-400 font-bold animate-pulse text-center">{roastStatus}</p>
             </div>
           )}
           
           {roastError && (
-            <div className="flex flex-col border border-red-500/30 rounded-xl overflow-hidden bg-red-950/20 p-4">
-              <span className="text-red-400">Error: {roastError}</span>
-              <button onClick={clearRoast} className="mt-2 text-xs text-red-500 hover:text-red-300 self-start">Dismiss</button>
+            <div className="flex flex-col border border-red-500/30 rounded-xl overflow-hidden bg-red-950/20 shadow-lg shadow-red-500/10 flex-1 min-h-[150px] justify-center items-center p-8 text-center">
+              <div className="text-4xl mb-2">❌</div>
+              <p className="text-red-400 font-bold mb-2">Failed to Roast</p>
+              <p className="text-red-300 text-sm">{roastError}</p>
+              <button 
+                onClick={clearRoast}
+                className="mt-4 px-4 py-2 bg-red-900/50 hover:bg-red-800/50 text-red-200 rounded-lg text-sm transition-colors"
+              >
+                Dismiss
+              </button>
             </div>
           )}
           
-          {roastData && (
-            <RoastCard 
-              roast={roastData.roast}
-              fix={roastData.fix}
-              mood={roastData.mood}
-              gifUrl={roastData.gifUrl}
-              onDismiss={clearRoast}
-            />
+          {roastData && !isRoasting && (
+             <RoastCard 
+               roast={roastData.roast}
+               fix={roastData.fix}
+               mood={roastData.mood}
+               gifUrl={roastData.gifUrl}
+               output={output}
+               onDismiss={clearRoast}
+               onReplayAudio={() => {
+                 if (lastRunSuccess !== null) {
+                   const audioPlayer = new Audio();
+                   const audioPlayer2 = new Audio();
+                   audioPlayer2.volume = 0.8;
+                   playMemeSound(lastRunSuccess, audioPlayer, audioPlayer2);
+                 }
+               }}
+             />
           )}
         </div>
         

@@ -29,6 +29,50 @@ export default function QuizPage() {
   const currentQuiz = topic ? quizzes[topic] : [];
   const currentQuestion = currentQuiz[currentQuestionIndex];
 
+  const playQuizSound = (isSuccess: boolean) => {
+    if (typeof window !== 'undefined') {
+      const audioPlayer = new Audio();
+      audioPlayer.volume = 0.6;
+      const audioPlayer2 = new Audio();
+      audioPlayer2.volume = 0.8;
+
+      const playWithLimit = (p: HTMLAudioElement, src: string, maxRepeats: number = 0) => {
+        p.src = src;
+        
+        if (maxRepeats > 0) {
+          p.loop = false;
+          let plays = 0;
+          const onEnded = () => {
+            plays++;
+            if (plays < maxRepeats) p.play().catch(() => {});
+            else p.removeEventListener('ended', onEnded);
+          };
+          p.addEventListener('ended', onEnded);
+          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
+        } else {
+          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
+          setTimeout(() => {
+            p.pause();
+            p.currentTime = 0;
+          }, 8000);
+        }
+      };
+
+      if (!isSuccess) {
+        playWithLimit(audioPlayer, "https://www.myinstants.com/media/sounds/faaaaaaaaaaaaaaaaaah.mp3", 3);
+      } else {
+        const successSounds = [
+          "https://www.myinstants.com/media/sounds/dexter-meme.mp3",
+          "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3",
+          "https://www.myinstants.com/media/sounds/level-up-super-mario.mp3"
+        ];
+        const soundUrl = successSounds[Math.floor(Math.random() * successSounds.length)];
+        playWithLimit(audioPlayer, soundUrl, 3);
+        playWithLimit(audioPlayer2, "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", 3);
+      }
+    }
+  };
+
   const handleOptionClick = async (index: number) => {
     if (isAnswered) return;
     
@@ -38,7 +82,22 @@ export default function QuizPage() {
     const isCorrect = index === currentQuestion.correctIndex;
     if (isCorrect) setScore(s => s + 1);
 
-    const keyword = isCorrect ? 'success dance' : 'facepalm fail';
+    const tamilFailKeywords = [
+      'vadivelu facepalm',
+      'santhanam crying',
+      'goundamani comedy',
+      'vivek comedy',
+      'tamil actor fail',
+      'vadivelu crying',
+      'vadivelu nesamani'
+    ];
+
+    const keyword = isCorrect 
+      ? 'tamil comedy success' 
+      : tamilFailKeywords[Math.floor(Math.random() * tamilFailKeywords.length)];
+      
+    // Play the sound immediately
+    playQuizSound(isCorrect);
     try {
       const res = await fetch(`/api/gif?keyword=${encodeURIComponent(keyword)}`);
       const data = await res.json();
@@ -112,27 +171,39 @@ export default function QuizPage() {
   };
 
   if (!topic) {
+    const topicMeta: Record<string, { icon: string, color: string }> = {
+      variables: { icon: '📦', color: 'hover:border-purple-500' },
+      loops: { icon: '🔁', color: 'hover:border-pink-500' },
+      arrays: { icon: '📚', color: 'hover:border-blue-500' },
+      functions: { icon: '⚙️', color: 'hover:border-green-500' },
+      conditionals: { icon: '🔀', color: 'hover:border-yellow-500' },
+      objects: { icon: '🏗️', color: 'hover:border-orange-500' },
+      dom: { icon: '🌐', color: 'hover:border-teal-500' },
+      promises: { icon: '🤝', color: 'hover:border-indigo-500' },
+      events: { icon: '⚡', color: 'hover:border-red-500' },
+      classes: { icon: '🏛️', color: 'hover:border-cyan-500' },
+    };
+
     return (
       <div className="flex flex-col min-h-[calc(100vh-4rem)] p-6 items-center justify-center gap-8 bg-zinc-950 text-zinc-50 font-sans">
         <div className="text-center">
           <h1 className="text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">Quiz Zone</h1>
           <p className="text-zinc-400 text-lg">Select a topic to test your knowledge.</p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-6">
-          <button 
-            onClick={() => handleStart('variables')}
-            className="bg-zinc-900 border border-zinc-800 hover:border-purple-500 rounded-2xl p-8 transition-all hover:scale-105 shadow-lg flex flex-col items-center gap-4 w-64"
-          >
-            <span className="text-6xl">📦</span>
-            <span className="text-xl font-bold">Variables</span>
-          </button>
-          <button 
-            onClick={() => handleStart('loops')}
-            className="bg-zinc-900 border border-zinc-800 hover:border-pink-500 rounded-2xl p-8 transition-all hover:scale-105 shadow-lg flex flex-col items-center gap-4 w-64"
-          >
-            <span className="text-6xl">🔁</span>
-            <span className="text-xl font-bold">Loops</span>
-          </button>
+        <div className="flex flex-wrap justify-center gap-6 max-w-4xl">
+          {Object.keys(quizzes).map((quizTopic) => {
+            const meta = topicMeta[quizTopic] || { icon: '📝', color: 'hover:border-gray-500' };
+            return (
+              <button 
+                key={quizTopic}
+                onClick={() => handleStart(quizTopic)}
+                className={`bg-zinc-900 border border-zinc-800 ${meta.color} rounded-2xl p-8 transition-all hover:scale-105 shadow-lg flex flex-col items-center gap-4 w-48 sm:w-64`}
+              >
+                <span className="text-6xl">{meta.icon}</span>
+                <span className="text-xl font-bold capitalize">{quizTopic}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     );

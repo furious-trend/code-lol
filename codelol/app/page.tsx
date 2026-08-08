@@ -26,7 +26,16 @@ export default async function Home() {
   const joke = getJokeOfTheDay();
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] p-6 md:p-12 gap-12 bg-zinc-950 text-zinc-50 font-sans">
+    <div className="flex flex-col min-h-[calc(100vh-4rem)] p-6 md:p-12 gap-12 text-zinc-50 font-sans relative">
+      {/* Iconic Funny Transparent Background (Home Page Only) */}
+      <div className="fixed bottom-0 right-10 z-[0] opacity-10 pointer-events-none w-[300px] md:w-[600px] mix-blend-screen">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img 
+          src="https://media.tenor.com/Yw_A_J8u9T0AAAAi/bongo-cat-transparent.gif" 
+          alt="Funny Transparent Background" 
+          className="w-full h-auto drop-shadow-2xl"
+        />
+      </div>
       
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center mt-8 gap-6">

@@ -27,3 +27,7 @@ export function getJokeOfTheDay(): string {
   const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
   return jokes[dayOfYear % jokes.length];
 }
+
+export function getRandomJoke(): string {
+  return jokes[Math.floor(Math.random() * jokes.length)];
+}
