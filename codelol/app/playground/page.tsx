@@ -52,7 +52,8 @@ function PlaygroundContent() {
       const successSounds = [
         "https://www.myinstants.com/media/sounds/dexter-meme.mp3", // Dexter meme
         "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3",
-        "https://www.myinstants.com/media/sounds/level-up-super-mario.mp3"
+        "https://www.myinstants.com/media/sounds/level-up-super-mario.mp3",
+        "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3" // Seeman Buhaha
       ];
 
       const list = isSuccess ? successSounds : failSounds;
@@ -82,11 +83,10 @@ function PlaygroundContent() {
       };
 
       if (!isSuccess) {
-        playWithLimit(player, "https://www.myinstants.com/media/sounds/faaaaaaaaaaaaaaaaaah.mp3", 3);
+        playWithLimit(player, "https://www.myinstants.com/media/sounds/faaaaaaaaaaaaaaaaaah.mp3", 1);
       } else {
-        // Play success sound and Seeman laugh as requested!
-        playWithLimit(player, soundUrl, 3);
-        playWithLimit(player2, "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", 3);
+        // Play one random success sound
+        playWithLimit(player, soundUrl, 1);
       }
       
       return soundUrl;

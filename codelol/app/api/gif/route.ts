@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
   try {
     const searchQuery = 'tamil ' + keyword;
-    const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${encodeURIComponent(searchQuery)}&limit=15&rating=pg-13`);
+    const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${encodeURIComponent(searchQuery)}&limit=15&rating=g`);
     const data = await res.json();
 
     if (data.data && data.data.length > 0) {
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     }
 
     // Fallback if the specific search fails: just search 'tamil comedy'
-    const fallbackRes = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=tamil%20comedy&limit=20&rating=pg-13`);
+    const fallbackRes = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=tamil%20comedy&limit=20&rating=g`);
     const fallbackData = await fallbackRes.json();
     if (fallbackData.data && fallbackData.data.length > 0) {
        const randomFallback = fallbackData.data[Math.floor(Math.random() * fallbackData.data.length)];
