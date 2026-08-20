@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { allLessons } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
-import { getRandomJoke } from '@/lib/jokes';
+import { useMemeSound } from '@/hooks/useMemeSound';
 
 export default function LessonExplanationPage() {
   const params = useParams();
@@ -17,12 +17,14 @@ export default function LessonExplanationPage() {
   const examples = lesson?.examples || [];
   
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentJoke, setCurrentJoke] = useState("");
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
+  const { playMemeSound } = useMemeSound();
 
-  useEffect(() => {
-    setCurrentJoke(getRandomJoke());
-  }, [currentSlide]);
+  const handleExplain = async (code: string) => {
+    if (!code) return;
+    await handleRoast(code);
+    playMemeSound(false); // Play meme sound when roast finishes
+  };
 
   if (!lesson) {
     return (
@@ -99,29 +101,17 @@ export default function LessonExplanationPage() {
               </p>
             </div>
           </div>
-
-          {/* Left Page Footer (Joke Break) */}
-          <div className="mt-8 pt-6 border-t border-zinc-800/50">
-            <div className="bg-pink-950/20 border border-pink-900/30 rounded-xl p-4 flex gap-4 items-start">
-              <span className="text-2xl">🤡</span>
-              <div>
-                <h4 className="text-pink-400 text-sm font-bold uppercase tracking-wider mb-1">Joke Break</h4>
-                <p className="text-sm text-zinc-400 italic">"{currentJoke}"</p>
-              </div>
-            </div>
-
-            {/* Pagination Controls - Mobile friendly, left page holds prev */}
-            <div className="mt-6 flex justify-between items-center lg:justify-start">
-              <button 
-                onClick={handlePrev}
-                disabled={currentSlide === 0}
-                className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-full font-bold disabled:opacity-30 transition-all flex items-center gap-2"
-              >
-                ← Prev Page
-              </button>
-              <div className="lg:hidden text-zinc-500 text-sm font-mono">
-                {currentSlide + 1} / {examples.length}
-              </div>
+          
+          <div className="mt-6 pt-6 border-t border-zinc-800/50 flex justify-between items-center lg:justify-start">
+            <button 
+              onClick={handlePrev}
+              disabled={currentSlide === 0}
+              className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-full font-bold disabled:opacity-30 transition-all flex items-center gap-2"
+            >
+              ← Prev Page
+            </button>
+            <div className="lg:hidden text-zinc-500 text-sm font-mono">
+              {currentSlide + 1} / {examples.length}
             </div>
           </div>
         </div>
@@ -139,11 +129,11 @@ export default function LessonExplanationPage() {
                 <pre><code>{currentExample?.code || "// No code available"}</code></pre>
               </div>
               <button 
-                onClick={() => handleRoast(currentExample?.code || "")}
+                onClick={() => handleExplain(currentExample?.code || "")}
                 disabled={isRoasting || !currentExample?.code}
                 className="absolute top-4 right-4 bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold py-2 px-4 rounded-xl opacity-90 hover:opacity-100 transition-all shadow-lg hover:shadow-pink-500/20 disabled:opacity-50"
               >
-                {isRoasting ? 'Roasting...' : 'Roast this 🔥'}
+                {isRoasting ? 'Thinking...' : 'Explain this 🤔'}
               </button>
             </div>
 
@@ -164,6 +154,7 @@ export default function LessonExplanationPage() {
                        mood={roastData.mood}
                        gifUrl={roastData.gifUrl}
                        onDismiss={() => clearRoast()}
+                       onReplayAudio={() => playMemeSound(false)}
                      />
                    </div>
                 )}

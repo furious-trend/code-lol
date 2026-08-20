@@ -27,10 +27,16 @@ export function useRoast() {
       return;
     }
 
-    setIsRoasting(true);
     setRoastError('');
     setRoastData(null);
-    setRoastStatus('Cooking up a roast... 🔥');
+    setRoastStatus('Roasting your code... 🔥');
+    
+    let isDone = false;
+    const timeoutId = setTimeout(() => {
+      if (!isDone) {
+        setIsRoasting(true);
+      }
+    }, 500);
     
     try {
       // 1. Fetch the roast from Gemini
@@ -57,24 +63,11 @@ export function useRoast() {
       let gifKeyword = roastResponseData.gifKeyword;
       
       if (!gifKeyword) {
-        // 100% Tamil GIFs only! (Movies + Famous Insta/YT Influencers)
-        const tamilLegends = [
-          'vadivelu',
-          'santhanam',
-          'seeman',
-          'goundamani',
-          'vivek comedy',
-          'yogi babu',
-          'soori',
-          'gp muthu',
-          'parithabangal',
-          'ttf vasan',
-          'madan gowri',
-          'jump cuts'
-        ];
-        gifKeyword = tamilLegends[Math.floor(Math.random() * tamilLegends.length)];
+        // Fallback to a general keyword if none is provided
+        gifKeyword = 'funny reaction';
       }
       
+      let gifUrl = '';
       const gifRes = await fetch(`/api/gif?keyword=${encodeURIComponent(gifKeyword)}`, {
         method: 'GET'
       });
@@ -84,12 +77,14 @@ export function useRoast() {
       if (!gifRes.ok) {
         throw new Error(gifResponseData.error || 'Failed to fetch reaction GIF.');
       }
+      
+      gifUrl = gifResponseData.url;
 
       const finalResult: RoastResult = {
         roast: roastResponseData.roast,
         fix: roastResponseData.fix,
         mood: mood,
-        gifUrl: gifResponseData.url
+        gifUrl: gifUrl
       };
 
       setRoastData(finalResult);
@@ -97,6 +92,8 @@ export function useRoast() {
     } catch (err) {
       setRoastError(err instanceof Error ? err.message : 'An unexpected error occurred.');
     } finally {
+      isDone = true;
+      clearTimeout(timeoutId);
       setIsRoasting(false);
       setRoastStatus('');
     }

@@ -6,6 +6,8 @@ import Editor from '@monaco-editor/react';
 import { lessonCategories } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { useMemeSound } from '@/hooks/useMemeSound';
+import { executeCodeInBrowser } from '@/lib/executor';
 
 function PlaygroundContent() {
   const searchParams = useSearchParams();
@@ -17,6 +19,7 @@ function PlaygroundContent() {
   const [isRunning, setIsRunning] = useState(false);
   const [lastRunSuccess, setLastRunSuccess] = useState<boolean | null>(null);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
+  const { playMemeSound } = useMemeSound();
 
   useEffect(() => {
     if (snippetId) {
@@ -36,116 +39,35 @@ function PlaygroundContent() {
     }
   }, [snippetId]);
 
-  const playMemeSound = (isSuccess: boolean, player: HTMLAudioElement, player2: HTMLAudioElement): string => {
-    if (typeof window !== 'undefined') {
-      const failSounds = [
-        "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", // Seeman Buhaha
-        "https://www.myinstants.com/media/sounds/nov-thappa-irrkuthu-naa.mp3", // Nov thappa irrkuthu naa
-        "https://www.myinstants.com/media/sounds/thambi-keela-erangu-pa.mp3", // Thambi keela erangu pa
-        "https://www.myinstants.com/media/sounds/aiyo-apdi-chollatha.mp3", // Aiyo apdi chollatha
-        "https://www.myinstants.com/media/sounds/faaah.mp3", // Additional faaah
-        "https://www.myinstants.com/media/sounds/896756048.mp3", // Slm Lykm
-        "https://www.myinstants.com/media/sounds/tf_nemesis.mp3", // Sad Violin
-        "https://www.myinstants.com/media/sounds/directed-by-robert-b_voI2Z4T.mp3", // Directed by Robert B Weide
-      ];
-      
-      const successSounds = [
-        "https://www.myinstants.com/media/sounds/dexter-meme.mp3", // Dexter meme
-        "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3",
-        "https://www.myinstants.com/media/sounds/level-up-super-mario.mp3",
-        "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3" // Seeman Buhaha
-      ];
-
-      const list = isSuccess ? successSounds : failSounds;
-      const soundUrl = list[Math.floor(Math.random() * list.length)];
-      
-      const playWithLimit = (p: HTMLAudioElement, src: string, maxRepeats: number = 0) => {
-        p.src = src;
-        
-        if (maxRepeats > 0) {
-          p.loop = false;
-          let plays = 0;
-          const onEnded = () => {
-            plays++;
-            if (plays < maxRepeats) p.play().catch(() => {});
-            else p.removeEventListener('ended', onEnded);
-          };
-          p.addEventListener('ended', onEnded);
-          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
-        } else {
-          p.loop = true;
-          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
-          setTimeout(() => {
-            p.pause();
-            p.currentTime = 0;
-          }, 20000);
-        }
-      };
-
-      if (!isSuccess) {
-        playWithLimit(player, "https://www.myinstants.com/media/sounds/faaaaaaaaaaaaaaaaaah.mp3", 1);
-      } else {
-        // Play one random success sound
-        playWithLimit(player, soundUrl, 1);
-      }
-      
-      return soundUrl;
-    }
-    return '';
-  };
-
   const handleRunAndRoast = async () => {
-    // Synchronously create and unlock TWO audio players on click
-    const audioPlayer = new Audio();
-    audioPlayer.src = "data:audio/mp3;base64,//OwgAAAAAAAAAAAAAAAWGluZwAAAA8AAAAFAAAJwAAMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw";
-    audioPlayer.volume = 0.6;
-    audioPlayer.play().catch(() => {});
-
-    const audioPlayer2 = new Audio();
-    audioPlayer2.src = "data:audio/mp3;base64,//OwgAAAAAAAAAAAAAAAWGluZwAAAA8AAAAFAAAJwAAMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw";
-    audioPlayer2.volume = 0.8; // Seeman laugh a bit louder!
-    audioPlayer2.play().catch(() => {});
 
     setIsRunning(true);
     setOutput('Running...');
     clearRoast();
     
     try {
-      const res = await fetch('/api/run', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ language, code }),
-      });
-      
-      const data = await res.json();
+      const data = await executeCodeInBrowser(language, code);
 
-      if (res.ok) {
+      if (!data.error) {
         let result = data.output || '';
-        let isSuccess = true;
-        if (data.error) {
-          result += (result ? '\n' : '') + 'Error:\n' + data.error;
-          isSuccess = false;
-        }
-        setLastRunSuccess(isSuccess);
+        setLastRunSuccess(true);
         const finalOutput = result || 'Code ran successfully with no output.';
         setOutput(finalOutput);
         
         // Wait for roast and GIF to fully load
-        await handleRoast(code, finalOutput, isSuccess, '');
+        await handleRoast(code, finalOutput, true, '');
         // Play audio exactly when UI updates
-        playMemeSound(isSuccess, audioPlayer, audioPlayer2);
+        playMemeSound(true);
         
       } else {
         setLastRunSuccess(false);
-        const errorOutput = `Error: ${data.error}\n${data.details ? JSON.stringify(data.details, null, 2) : ''}`;
+        const errorOutput = `Error: ${data.error}`;
         setOutput(errorOutput);
         
         // Wait for roast and GIF to fully load
         await handleRoast(code, errorOutput, false, '');
         // Play audio exactly when UI updates
-        playMemeSound(false, audioPlayer, audioPlayer2);
+        playMemeSound(false);
       }
     } catch {
       setLastRunSuccess(false);
@@ -153,7 +75,7 @@ function PlaygroundContent() {
       // Wait for roast and GIF to fully load
       await handleRoast(code, 'Failed to execute code.', false, '');
       // Play audio exactly when UI updates
-      playMemeSound(false, audioPlayer, audioPlayer2);
+      playMemeSound(false);
     } finally {
       setIsRunning(false);
     }
@@ -170,27 +92,9 @@ function PlaygroundContent() {
         </div>
         
         <div className="flex items-center gap-4 w-full sm:w-auto">
-          <select 
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm focus:outline-none focus:border-blue-500 transition-colors"
-          >
-            <option value="javascript">JavaScript (Node.js)</option>
-            <option value="python">Python</option>
-            <option value="typescript">TypeScript</option>
-            <option value="java">Java</option>
-            <option value="c">C</option>
-            <option value="c++">C++</option>
-            <option value="csharp">C#</option>
-            <option value="go">Go</option>
-            <option value="rust">Rust</option>
-            <option value="ruby">Ruby</option>
-            <option value="php">PHP</option>
-            <option value="kotlin">Kotlin</option>
-            <option value="swift">Swift</option>
-            <option value="bash">Bash</option>
-            <option value="sqlite">SQL (SQLite)</option>
-          </select>
+          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400">
+            JavaScript
+          </div>
           
           <button 
             onClick={handleRunAndRoast}
@@ -213,7 +117,7 @@ function PlaygroundContent() {
               <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
             </div>
-            <span className="ml-4 text-xs font-mono text-zinc-500">main.{language === 'python' ? 'py' : 'js'}</span>
+            <span className="ml-4 text-xs font-mono text-zinc-500">main.js</span>
           </div>
           <div className="flex-1 relative">
             <Editor
@@ -257,7 +161,7 @@ function PlaygroundContent() {
             </div>
           )}
           
-          {roastData && !isRoasting && (
+           {roastData && !isRoasting && (
              <RoastCard 
                roast={roastData.roast}
                fix={roastData.fix}
@@ -267,10 +171,7 @@ function PlaygroundContent() {
                onDismiss={clearRoast}
                onReplayAudio={() => {
                  if (lastRunSuccess !== null) {
-                   const audioPlayer = new Audio();
-                   const audioPlayer2 = new Audio();
-                   audioPlayer2.volume = 0.8;
-                   playMemeSound(lastRunSuccess, audioPlayer, audioPlayer2);
+                   playMemeSound(lastRunSuccess);
                  }
                }}
              />

@@ -7,6 +7,9 @@ import { allLessons } from '@/lib/lessons';
 import Link from 'next/link';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { executeCodeInBrowser } from '@/lib/executor';
+import { useMemeSound } from '@/hooks/useMemeSound';
+import confetti from 'canvas-confetti';
 
 function LearnPageContent() {
   const [currentLevel, setCurrentLevel] = useState<number>(1);
@@ -54,6 +57,7 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
 
   // Auto-roast state handled by hook
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
+  const { playMemeSound } = useMemeSound();
   const [lessonGif, setLessonGif] = useState<string | null>(null);
 
   // Quiz State
@@ -91,9 +95,7 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
     
     // Fetch context GIF for lesson
     fetchLessonGif(lesson.gifKeyword);
-    // Trigger auto-roast
-    handleRoast(lesson.codeExample);
-  }, [lesson, handleRoast]);
+  }, [lesson]);
 
   if (!lesson) {
     return (
@@ -108,23 +110,29 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
   const handleRun = async () => {
     setIsRunning(true);
     setOutput('Running...');
+    clearRoast();
     
     try {
-      const res = await fetch('/api/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ language: 'javascript', code }),
-      });
-      const data = await res.json();
+      const data = await executeCodeInBrowser('javascript', code);
       
-      if (res.ok && !data.error) {
-        setOutput(data.output || 'Code ran successfully with no output.');
+      if (!data.error) {
+        const finalOutput = data.output || 'Code ran successfully with no output.';
+        setOutput(finalOutput);
+        
+        await handleRoast(code, finalOutput, true, '');
+        playMemeSound(true);
         setHasRunSuccessfully(true);
       } else {
-        setOutput(`Error:\n${data.error || data.details}`);
+        const errorOutput = `Error: ${data.error}`;
+        setOutput(errorOutput);
+        
+        await handleRoast(code, errorOutput, false, '');
+        playMemeSound(false);
       }
     } catch {
       setOutput('Failed to execute code. Check your connection.');
+      await handleRoast(code, 'Failed to execute code.', false, '');
+      playMemeSound(false);
     } finally {
       setIsRunning(false);
     }
@@ -139,7 +147,7 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
     setQuizState(isCorrect ? 'correct' : 'wrong');
     setQuizGif(null);
     
-    const keyword = isCorrect ? 'success celebration' : 'facepalm fail';
+    const keyword = isCorrect ? (currentLevel === 1 ? 'epic victory level up' : 'success celebration') : 'facepalm fail';
     try {
       const res = await fetch(`/api/gif?keyword=${encodeURIComponent(keyword)}`);
       const data = await res.json();
@@ -147,6 +155,14 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
     } catch {}
 
     if (isCorrect) {
+      if (currentLevel === 1) {
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+        playMemeSound(true);
+      }
       await handleLevelComplete();
     }
   };

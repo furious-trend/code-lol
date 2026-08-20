@@ -73,7 +73,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
                     disabled={isRoasting}
                     className="absolute top-2 right-2 bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold py-1 px-3 rounded-lg opacity-80 hover:opacity-100 transition-opacity disabled:opacity-50"
                   >
-                    {isRoasting ? 'Roasting...' : 'Roast this 🔥'}
+                    {isRoasting ? 'Thinking...' : 'Explain this 🤔'}
                   </button>
                 </div>
 

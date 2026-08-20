@@ -14,7 +14,10 @@ export async function GET(request: Request) {
   }
 
   try {
-    const searchQuery = 'tamil ' + keyword;
+    const TAMIL_BIAS_RATIO = 0.5;
+    const isTamilSearch = Math.random() < TAMIL_BIAS_RATIO;
+    const searchQuery = isTamilSearch ? 'tamil ' + keyword : keyword;
+    
     const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${encodeURIComponent(searchQuery)}&limit=15&rating=g`);
     const data = await res.json();
 
@@ -25,8 +28,8 @@ export async function GET(request: Request) {
       }
     }
 
-    // Fallback if the specific search fails: just search 'tamil comedy'
-    const fallbackRes = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=tamil%20comedy&limit=20&rating=g`);
+    // Fallback if the specific search fails: just search a general funny reaction
+    const fallbackRes = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=funny%20reaction&limit=20&rating=g`);
     const fallbackData = await fallbackRes.json();
     if (fallbackData.data && fallbackData.data.length > 0) {
        const randomFallback = fallbackData.data[Math.floor(Math.random() * fallbackData.data.length)];

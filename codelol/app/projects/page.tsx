@@ -51,10 +51,12 @@ const projects: Project[] = [
 
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { useMemeSound } from '@/hooks/useMemeSound';
 
 function ProjectCard({ project }: { project: Project }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
+  const { playMemeSound } = useMemeSound();
 
   const handleExpand = async () => {
     if (isExpanded) {
@@ -69,7 +71,8 @@ function ProjectCard({ project }: { project: Project }) {
 
     // Crafting a pseudo-code string to roast the project idea itself
     const pseudoCode = `// Project Idea: ${project.title}\n// ${project.description}\n// Concepts: ${project.concepts}\n// TODO: Actually write the code.`;
-    handleRoast(pseudoCode);
+    await handleRoast(pseudoCode);
+    playMemeSound(false);
   };
 
   return (
@@ -125,6 +128,7 @@ function ProjectCard({ project }: { project: Project }) {
                mood={roastData.mood}
                gifUrl={roastData.gifUrl}
                onDismiss={() => { setIsExpanded(false); clearRoast(); }}
+               onReplayAudio={() => playMemeSound(false)}
              />
           )}
         </div>

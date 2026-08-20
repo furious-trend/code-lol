@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { getRandomFallback } from '@/lib/fallbackRoasts';
 
 export async function POST(request: Request) {
   try {
@@ -9,17 +9,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Code is required' }, { status: 400 });
     }
 
-    const apiKey = process.env.GROQ_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ error: 'Groq API Key is not configured. Add GROQ_API_KEY to your environment.' }, { status: 500 });
+      return NextResponse.json({ error: 'Gemini API Key is not configured. Add GEMINI_API_KEY to your environment.' }, { status: 500 });
     }
 
     let prompt = '';
     if (isSuccess) {
-      prompt = `You are a hilarious, over-the-top Tamil comedy mentor. The user just successfully ran or solved this code!
-1. CRITICAL RULE: Keep the 'roast' field strictly as an empty string (""). No dialogue at all!
-2. Keep the 'fix' field strictly as an empty string ("").
-3. Provide a 'gifKeyword' that specifically searches for a happy funny excited meme gif (e.g. 'vadivelu excited meme', 'santhanam happy meme').
+      prompt = `You are a hilarious, over-the-top comedy mentor. The user just successfully ran or solved this code!
+1. CRITICAL RULE: Keep the 'roast' field strictly as an empty string ("").
+2. Keep the 'fix' field strictly as an empty string ("") since there are no errors.
+3. Provide a 'gifKeyword' that specifically searches for a happy funny excited meme gif (e.g. 'excited meme', 'happy meme').
 4. At the end, output one word only on a new line labeled 'MOOD:' summarizing the vibe — must be exactly one of: party, genius, happy.
 
 Format the response strictly as a JSON object with this exact shape:
@@ -30,21 +30,29 @@ Format the response strictly as a JSON object with this exact shape:
   "gifKeyword": "the search term for the GIF"
 }`;
     } else {
-      prompt = `You are an absolutely savage, relentless, and hilariously unhinged Tamil comedy mentor who violently roasts bugs. Look at this code and its error output and:
-1. Identify the bug or issue based on the output/code.
-2. CRITICAL RULE: Keep the 'roast' field strictly as an empty string (""). No dialogue at all!
-3. Explain the mistake clearly and provide the corrected code in the 'fix' field.
-4. STRICT RULE: Keep it 100% clean, family-friendly, and PG! No adult jokes, no bad words. Roast the CODE, not the person in a mean way.
-5. Provide a 'gifKeyword' that specifically searches for a famous funny sad gif (e.g. 'vadivelu crying funny', 'goundamani sad meme').
-6. At the end, output one word only on a new line labeled 'MOOD:' summarizing the vibe — must be exactly one of: facepalm, mind_blown, dead, screaming, crying_laughing, done, disaster, relief.
+      prompt = `You are a witty, ruthless coding mentor. Look at this code and the execution error. You MUST find the actual bug or issue causing the error.
 
-Format the response strictly as a JSON object with this exact shape:
-{
-  "roast": "",
-  "fix": "Explanation of the mistake followed by the corrected code",
-  "mood": "the single word mood from the list above",
-  "gifKeyword": "the search term for the GIF"
-}`;
+Respond in this exact format:
+ROAST: [ONE short punchy sentence, under 20 words, comparing the SPECIFIC bug/error to a simple everyday annoyance. Be brutal, funny, and accurate to the error.]
+FIX: [the corrected code]
+MOOD: [one word: facepalm, mind_blown, dead, screaming, crying_laughing, done, disaster, or relief]
+
+Example of GOOD roasts (Specific to the error):
+- Error: ReferenceError: consol is not defined
+  Roast: 'consol.log? Did you mean console, or are you trying to invent a new JavaScript framework?'
+- Error: SyntaxError: Unexpected token ')'
+  Roast: 'An unexpected parenthesis—it's like adding a closing bracket to a hug nobody asked for.'
+- Error: TypeError: Cannot read properties of undefined
+  Roast: 'Reading properties of undefined is like asking a ghost for their phone number.'
+- Error: missing variable declaration
+  Roast: 'Using a variable without declaring it first? Who do you think you are, JavaScript in 1995?'
+
+Example of BAD roasts (Too generic, do NOT do this):
+- 'Your code is broken like a cracked screen.' (Doesn't mention the actual error)
+- 'You forgot to compile your code.' (Generic and often wrong)
+- 'Please check your syntax.' (Boring)
+
+The roast must strictly relate to the specific error seen in the Execution Output. It must be ONE sentence, under 20 words.`;
     }
 
     prompt += `
@@ -55,81 +63,91 @@ ${code}
 Execution Output:
 \`\`\`
 ${output || 'None'}
-\`\`\`
-
-(IMPORTANT: Make this roast 100% unique! Do not repeat standard jokes. Pick a random, obscure, or different Tamil comedy reference! Random seed to force uniqueness: ${Math.random()})`;
+\`\`\``;
 
     let text = "";
     try {
-      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${apiKey}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
-          messages: [
-            { role: "user", content: prompt }
-          ],
-          max_tokens: 500,
-          temperature: 0.8,
-          response_format: { type: "json_object" }
-        })
+          contents: [{
+            parts: [{ text: prompt }]
+          }],
+          generationConfig: {
+            temperature: 0.8,
+            maxOutputTokens: 500,
+            ...(isSuccess ? { responseMimeType: "application/json" } : {})
+          }
+        }),
+        signal: controller.signal
       });
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        if (response.status === 429 || response.status === 503) {
-          console.warn('Groq API quota exceeded or overloaded. Returning fallback roast.');
-          return NextResponse.json({
-            roast: "Aiyo, the roasting servers are overloaded with too many requests! Give me a minute to cool down before I judge your code again.",
-            fix: code,
-            mood: "dead"
-          });
-        }
-        const errorBody = await response.text();
-        console.error("Groq Error Response:", errorBody);
-        throw new Error(`Groq API error: ${response.status} ${response.statusText} - ${errorBody}`);
+        console.warn(`Gemini API error: ${response.status}. Using fallback roast.`);
+        return NextResponse.json(getRandomFallback(isSuccess));
       }
 
       const result = await response.json();
-      text = result.choices[0].message.content.trim();
+      text = result.candidates[0].content.parts[0].text.trim();
     } catch (apiError) {
-      if (apiError instanceof Error && (apiError.message.includes('429') || apiError.message.includes('Quota') || apiError.message.includes('503'))) {
-        console.warn('Groq API quota exceeded or overloaded. Returning fallback roast.');
-        return NextResponse.json({
-          roast: "Aiyo, the roasting servers are overloaded with too many requests! Give me a minute to cool down before I judge your code again.",
-          fix: code,
-          mood: "dead"
-        });
-      }
-      throw apiError;
-    }
-
-    // Strip markdown formatting if the model included it
-    let jsonText = text;
-    if (jsonText.startsWith('\`\`\`json')) {
-      jsonText = jsonText.replace(/^\`\`\`json\n/, '').replace(/\n\`\`\`$/, '');
-    } else if (jsonText.startsWith('\`\`\`')) {
-      jsonText = jsonText.replace(/^\`\`\`\n/, '').replace(/\n\`\`\`$/, '');
+      console.warn('Gemini API fetch failed or timed out. Using fallback roast.', apiError);
+      return NextResponse.json(getRandomFallback(isSuccess));
     }
 
     let parsedResponse;
-    try {
-      parsedResponse = JSON.parse(jsonText);
-    } catch {
-      console.error('Failed to parse Gemini roast response:', jsonText);
-      return NextResponse.json({ 
-        error: 'Failed to process roast response. The engine returned invalid JSON.'
-      }, { status: 500 });
-    }
+    
+    if (isSuccess) {
+      // Strip markdown formatting if the model included it
+      let jsonText = text;
+      if (jsonText.startsWith('```json')) {
+        jsonText = jsonText.replace(/^```json\n/, '').replace(/\n```$/, '');
+      } else if (jsonText.startsWith('```')) {
+        jsonText = jsonText.replace(/^```\n/, '').replace(/\n```$/, '');
+      }
+      try {
+        parsedResponse = JSON.parse(jsonText);
+      } catch {
+        console.error('Failed to parse success JSON response:', jsonText);
+        return NextResponse.json(getRandomFallback(isSuccess));
+      }
+    } else {
+      // Parse the custom text format
+      const roastMatch = text.match(/ROAST:\s*([\s\S]*?)(?=\nFIX:|$)/i);
+      const fixMatch = text.match(/FIX:\s*([\s\S]*?)(?=\nMOOD:|$)/i);
+      const moodMatch = text.match(/MOOD:\s*([\s\S]*?)(?=\n|$)/i);
+      let parsedMood = moodMatch ? moodMatch[1].trim().toLowerCase() : "facepalm";
+      
+      const allowedMoods = ['facepalm', 'mind_blown', 'dead', 'screaming', 'crying_laughing', 'done', 'disaster', 'relief'];
+      if (!allowedMoods.includes(parsedMood)) {
+        parsedMood = 'facepalm'; // fallback
+      }
 
-    // Forcefully remove the dialogue from the response
-    parsedResponse.roast = "";
+      parsedResponse = {
+        roast: roastMatch ? roastMatch[1].trim().replace(/^ROAST:\s*/i, '') : text.trim().replace(/^ROAST:\s*/i, ''),
+        fix: fixMatch ? fixMatch[1].trim().replace(/^FIX:\s*/i, '') : "",
+        mood: parsedMood,
+        gifKeyword: ""
+      };
+    }
 
     return NextResponse.json(parsedResponse);
   } catch (error) {
     console.error('Error roasting code:', error);
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Failed to roast code' }, { status: 500 });
+    // If the top-level handler fails, at least return a valid roast shape.
+    const fallback = {
+      roast: "Something went completely wrong, but honestly your code probably did too.",
+      fix: "",
+      mood: "dead",
+      gifKeyword: "explosion"
+    };
+    return NextResponse.json(fallback);
   }
 }

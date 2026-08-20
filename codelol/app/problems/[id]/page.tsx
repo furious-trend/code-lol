@@ -6,6 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { problems } from '@/lib/problems';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { useMemeSound } from '@/hooks/useMemeSound';
+import { executeCodeInBrowser } from '@/lib/executor';
 
 export default function ProblemSolverPage() {
   const params = useParams();
@@ -26,6 +28,7 @@ export default function ProblemSolverPage() {
   const [quizAnswered, setQuizAnswered] = useState<number | null>(null);
   
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
+  const { playMemeSound } = useMemeSound();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Sync state if problem loads
@@ -49,13 +52,13 @@ export default function ProblemSolverPage() {
   // Basic markdown parser for description
   const formatDescription = (text: string) => {
     // Basic bold
-    let html = text.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');
+    let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     // Basic code blocks
-    html = html.replace(/```([\\s\\S]*?)```/g, '<pre class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 my-4 text-sm font-mono overflow-x-auto"><code>$1</code></pre>');
+    html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 my-4 text-sm font-mono overflow-x-auto"><code>$1</code></pre>');
     // Inline code
     html = html.replace(/`([^`]+)`/g, '<code class="bg-zinc-800 text-pink-400 px-1 py-0.5 rounded">$1</code>');
     // Newlines to <br/> outside of pre blocks (simplified approach: just map paragraphs)
-    const paragraphs = html.split('\\n\\n').map((p, i) => `<p key="${i}" class="mb-4">${p.replace(/\\n/g, '<br/>')}</p>`).join('');
+    const paragraphs = html.split('\n\n').map((p, i) => `<p key="${i}" class="mb-4">${p.replace(/\n/g, '<br/>')}</p>`).join('');
     
     return <div dangerouslySetInnerHTML={{ __html: paragraphs }} className="text-zinc-300 leading-relaxed" />;
   };
@@ -76,71 +79,7 @@ export default function ProblemSolverPage() {
     }
   };
 
-  const playMemeSound = (isSuccess: boolean, player: HTMLAudioElement, player2: HTMLAudioElement): string => {
-    if (typeof window !== 'undefined') {
-      const failSounds = [
-        "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", // Seeman Buhaha
-        "https://www.myinstants.com/media/sounds/nov-thappa-irrkuthu-naa.mp3", // Nov thappa irrkuthu naa
-        "https://www.myinstants.com/media/sounds/thambi-keela-erangu-pa.mp3", // Thambi keela erangu pa
-        "https://www.myinstants.com/media/sounds/aiyo-apdi-chollatha.mp3", // Aiyo apdi chollatha
-        "https://www.myinstants.com/media/sounds/faaah.mp3", // Additional faaah
-        "https://www.myinstants.com/media/sounds/896756048.mp3", // Slm Lykm
-        "https://www.myinstants.com/media/sounds/tf_nemesis.mp3", // Sad Violin
-        "https://www.myinstants.com/media/sounds/directed-by-robert-b_voI2Z4T.mp3", // Directed by Robert B Weide
-      ];
-      
-      const successSounds = [
-        "https://www.myinstants.com/media/sounds/dexter-meme.mp3", // Dexter meme
-        "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3",
-        "https://www.myinstants.com/media/sounds/level-up-super-mario.mp3"
-      ];
-
-      const list = isSuccess ? successSounds : failSounds;
-      const soundUrl = list[Math.floor(Math.random() * list.length)];
-      const playWithLimit = (p: HTMLAudioElement, src: string, maxRepeats: number = 0) => {
-        p.src = src;
-        if (maxRepeats > 0) {
-          p.loop = false;
-          let plays = 0;
-          const onEnded = () => {
-            plays++;
-            if (plays < maxRepeats) p.play().catch(() => {});
-            else p.removeEventListener('ended', onEnded);
-          };
-          p.addEventListener('ended', onEnded);
-          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
-        } else {
-          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
-        }
-      };
-
-      if (!isSuccess) {
-        // 1st Sound: Faaah 3 times
-        playWithLimit(player, "https://www.myinstants.com/media/sounds/faaaaaaaaaaaaaaaaaah.mp3", 3);
-        
-        // 2nd Sound: ALWAYS Seeman Laugh for maximum chaos!
-        playWithLimit(player2, "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", 3);
-      } else {
-        playWithLimit(player, soundUrl, 3);
-      }
-      
-      return soundUrl;
-    }
-    return '';
-  };
-
   const handleSubmit = async () => {
-    // Synchronously create and unlock TWO audio players on click
-    const audioPlayer = new Audio();
-    audioPlayer.src = "data:audio/mp3;base64,//OwgAAAAAAAAAAAAAAAWGluZwAAAA8AAAAFAAAJwAAMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw";
-    audioPlayer.volume = 0.6;
-    audioPlayer.play().catch(() => {});
-
-    const audioPlayer2 = new Audio();
-    audioPlayer2.src = "data:audio/mp3;base64,//OwgAAAAAAAAAAAAAAAWGluZwAAAA8AAAAFAAAJwAAMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw";
-    audioPlayer2.volume = 0.8; // Seeman laugh louder!
-    audioPlayer2.play().catch(() => {});
-
     setIsSubmitting(true);
     setTestResults(null);
     setRawOutput('');
@@ -158,31 +97,56 @@ const _tc = ${JSON.stringify(problem.testCases)};
 let _passed = 0;
 let _log = [];
 
-for (let i = 0; i < _tc.length; i++) {
-  try {
-    const result = eval('${functionName}(...' + JSON.stringify(_tc[i].input) + ')');
-    if (JSON.stringify(result) === JSON.stringify(_tc[i].expected)) {
-      _passed++;
-      _log.push('Test ' + (i+1) + ': PASS');
-    } else {
-      _log.push('Test ' + (i+1) + ': FAIL (Expected ' + JSON.stringify(_tc[i].expected) + ', got ' + JSON.stringify(result) + ')');
+(async () => {
+  for (let i = 0; i < _tc.length; i++) {
+    try {
+      const fn = globalThis['${functionName}'];
+      if (typeof fn !== 'function') {
+        _log.push('Test ' + (i+1) + ': ERROR (Function \\'${functionName}\\' not found. Did you rename it or change its definition?)');
+        continue;
+      }
+      
+      // Catch asynchronous hangs with a 2-second timeout
+      const result = await Promise.race([
+        Promise.resolve(fn(..._tc[i].input)),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Test case timed out (async hang)')), 2000))
+      ]);
+      
+      if (result === undefined) {
+        _log.push('Test ' + (i+1) + ': FAIL (No return value detected. Did you forget to use \\'return\\'?)');
+        continue;
+      }
+      
+      if (JSON.stringify(result) === JSON.stringify(_tc[i].expected)) {
+        _passed++;
+        _log.push('Test ' + (i+1) + ': PASS');
+      } else {
+        _log.push('Test ' + (i+1) + ': FAIL (Expected ' + JSON.stringify(_tc[i].expected) + ', got ' + JSON.stringify(result) + ')');
+      }
+    } catch(e) {
+      if (e instanceof ReferenceError && e.message.includes('${functionName}')) {
+        _log.push('Test ' + (i+1) + ': ERROR (Function \\'${functionName}\\' not found. Ensure you did not rename the function!)');
+      } else {
+        _log.push('Test ' + (i+1) + ': ERROR (' + e.message + ')');
+      }
     }
-  } catch(e) {
-    _log.push('Test ' + (i+1) + ': ERROR (' + e.message + ')');
   }
-}
-console.log('===TEST_RESULTS===');
-console.log(JSON.stringify({ passed: _passed, total: _tc.length, log: _log }));
+  console.log('===TEST_RESULTS===');
+  console.log(JSON.stringify({ passed: _passed, total: _tc.length, log: _log }));
+})();
 `;
 
     try {
-      const res = await fetch('/api/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ language: 'javascript', code: testSuite })
-      });
+      const data = await executeCodeInBrowser('javascript', testSuite);
       
-      const data = await res.json();
+      if (data.error) {
+        setRawOutput("Execution Error:\n" + data.error);
+        const playedSound = playMemeSound(false);
+        handleRoast(code, "Execution Error:\n" + data.error, false, playedSound);
+        setIsSubmitting(false);
+        return;
+      }
+      
       const outputLines = data.output.split('\\n');
       
       // Parse the output to find our test results
@@ -201,29 +165,29 @@ console.log(JSON.stringify({ passed: _passed, total: _tc.length, log: _log }));
               completed.push(problem.id);
               localStorage.setItem('completedProblems', JSON.stringify(completed));
             }
-            const playedSound = playMemeSound(true, audioPlayer, audioPlayer2);
+            const playedSound = playMemeSound(true);
             // Trigger the happy roast (meme/joke) on success
             handleRoast(code, data.output, true, playedSound);
           } else {
-            const playedSound = playMemeSound(false, audioPlayer, audioPlayer2);
+            const playedSound = playMemeSound(false);
             // Automatically trigger the roast (meme/joke) on test failure
             handleRoast(code, data.output, false, playedSound);
           }
           
         } catch (e) {
           setRawOutput("Failed to parse test results.\n" + data.output);
-          const playedSound = playMemeSound(false, audioPlayer, audioPlayer2);
+          const playedSound = playMemeSound(false);
           handleRoast(code, "Failed to parse test results.\n" + data.output, false, playedSound);
         }
       } else {
         // Syntax error or runtime error before our tests could even run
         setRawOutput("Execution Error:\n" + data.output);
-        const playedSound = playMemeSound(false, audioPlayer, audioPlayer2);
+        const playedSound = playMemeSound(false);
         handleRoast(code, "Execution Error:\n" + data.output, false, playedSound);
       }
     } catch (err) {
       setRawOutput("Network Error. Please try again.");
-      const playedSound = playMemeSound(false, audioPlayer, audioPlayer2);
+      const playedSound = playMemeSound(false);
       handleRoast(code, "Network Error. Please try again.", false, playedSound);
     } finally {
       setIsSubmitting(false);

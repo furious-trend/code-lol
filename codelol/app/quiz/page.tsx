@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { quizzes, QuizQuestion } from '@/lib/quizzes';
 import { createClient } from '@/lib/supabase/client';
+import { useMemeSound } from '@/hooks/useMemeSound';
 
 export default function QuizPage() {
   const [topic, setTopic] = useState<string | null>(null);
@@ -29,49 +30,7 @@ export default function QuizPage() {
   const currentQuiz = topic ? quizzes[topic] : [];
   const currentQuestion = currentQuiz[currentQuestionIndex];
 
-  const playQuizSound = (isSuccess: boolean) => {
-    if (typeof window !== 'undefined') {
-      const audioPlayer = new Audio();
-      audioPlayer.volume = 0.6;
-      const audioPlayer2 = new Audio();
-      audioPlayer2.volume = 0.8;
-
-      const playWithLimit = (p: HTMLAudioElement, src: string, maxRepeats: number = 0) => {
-        p.src = src;
-        
-        if (maxRepeats > 0) {
-          p.loop = false;
-          let plays = 0;
-          const onEnded = () => {
-            plays++;
-            if (plays < maxRepeats) p.play().catch(() => {});
-            else p.removeEventListener('ended', onEnded);
-          };
-          p.addEventListener('ended', onEnded);
-          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
-        } else {
-          p.play().catch(e => console.log('Audio playback prevented by browser:', e));
-          setTimeout(() => {
-            p.pause();
-            p.currentTime = 0;
-          }, 8000);
-        }
-      };
-
-      if (!isSuccess) {
-        playWithLimit(audioPlayer, "https://www.myinstants.com/media/sounds/faaaaaaaaaaaaaaaaaah.mp3", 3);
-      } else {
-        const successSounds = [
-          "https://www.myinstants.com/media/sounds/dexter-meme.mp3",
-          "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3",
-          "https://www.myinstants.com/media/sounds/level-up-super-mario.mp3"
-        ];
-        const soundUrl = successSounds[Math.floor(Math.random() * successSounds.length)];
-        playWithLimit(audioPlayer, soundUrl, 3);
-        playWithLimit(audioPlayer2, "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", 3);
-      }
-    }
-  };
+  const { playMemeSound } = useMemeSound();
 
   const handleOptionClick = async (index: number) => {
     if (isAnswered) return;
@@ -97,7 +56,7 @@ export default function QuizPage() {
       : tamilFailKeywords[Math.floor(Math.random() * tamilFailKeywords.length)];
       
     // Play the sound immediately
-    playQuizSound(isCorrect);
+    playMemeSound(isCorrect);
     try {
       const res = await fetch(`/api/gif?keyword=${encodeURIComponent(keyword)}`);
       const data = await res.json();
