@@ -31,7 +31,7 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
       <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-4">
         {roast && (
           <p className="text-lg font-bold text-white italic text-center">
-            "{roast}"
+            &quot;{roast}&quot;
           </p>
         )}
         

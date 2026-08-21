@@ -12,6 +12,7 @@ export default function ProblemsDashboard() {
     const saved = localStorage.getItem('completedProblems');
     if (saved) {
       try {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCompletedProblems(JSON.parse(saved));
       } catch (e) {
         console.error('Failed to parse completed problems', e);

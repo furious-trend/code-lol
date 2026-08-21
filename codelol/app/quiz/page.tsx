@@ -53,6 +53,7 @@ export default function QuizPage() {
 
     const keyword = isCorrect 
       ? 'tamil comedy success' 
+      // eslint-disable-next-line react-hooks/purity
       : tamilFailKeywords[Math.floor(Math.random() * tamilFailKeywords.length)];
       
     // Play the sound immediately
@@ -87,8 +88,8 @@ export default function QuizPage() {
     setIsSaving(true);
     try {
       await saveQuizProgress();
-    } catch (err: any) {
-      console.error('Unexpected error saving progress:', err.message || err);
+    } catch (err: unknown) {
+      console.error('Unexpected error saving progress:', (err as Error)?.message || err);
     } finally {
       setIsSaving(false);
     }

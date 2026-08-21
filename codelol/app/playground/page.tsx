@@ -33,6 +33,7 @@ function PlaygroundContent() {
       }
       
       if (lesson) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCode(lesson.codeExample);
         setLanguage('javascript');
       }
@@ -46,10 +47,11 @@ function PlaygroundContent() {
     clearRoast();
     
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data = await executeCodeInBrowser(language, code);
 
       if (!data.error) {
-        let result = data.output || '';
+        const result = data.output || '';
         setLastRunSuccess(true);
         const finalOutput = result || 'Code ran successfully with no output.';
         setOutput(finalOutput);

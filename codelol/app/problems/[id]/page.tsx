@@ -36,6 +36,7 @@ export default function ProblemSolverPage() {
   // Sync state if problem loads
   useEffect(() => {
     if (problem) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCode(problem.starterCode);
     }
   }, [problem]);
@@ -60,10 +61,11 @@ export default function ProblemSolverPage() {
           pre: ({node, ...props}) => (
             <pre className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 my-4 text-sm font-mono overflow-x-auto" {...props} />
           ),
-          code: ({node, className, children, ...props}: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          code: ({node, className, children, ...props}: unknown & { node?: unknown, className?: string, children?: React.ReactNode }) => {
             const isBlock = /language-(\w+)/.test(className || '') || String(children).includes('\n');
             return isBlock ? (
-              <code className={className} {...props}>
+              <code className={className} {...(props as any)}>
                 {children}
               </code>
             ) : (

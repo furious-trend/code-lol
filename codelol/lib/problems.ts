@@ -1,8 +1,8 @@
 export type Difficulty = 'Beginner' | 'Intermediate' | 'Expert';
 
 export interface TestCase {
-  input: any[];
-  expected: any;
+  input: unknown[];
+  expected: unknown;
 }
 
 export interface Problem {

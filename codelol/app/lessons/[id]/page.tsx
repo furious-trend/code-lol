@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { allLessons } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
@@ -89,7 +88,7 @@ export default function LessonExplanationPage() {
             {currentSlide === 0 && (
               <div className="mb-8 p-6 bg-zinc-950/50 rounded-2xl border border-zinc-800 border-dashed">
                 <p className="text-lg text-zinc-300 italic">
-                  "{lesson.funnyExplanation}"
+                  &quot;{lesson.funnyExplanation}&quot;
                 </p>
               </div>
             )}
