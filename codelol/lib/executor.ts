@@ -1,45 +1,89 @@
 export async function executeCodeInBrowser(language: string, code: string): Promise<{ output: string; error?: string }> {
   if (language === 'javascript') {
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       const iframe = document.createElement('iframe');
       iframe.style.display = 'none';
-      document.body.appendChild(iframe);
+      iframe.sandbox.add('allow-scripts');
       
-      const win = iframe.contentWindow as any;
-      const logs: string[] = [];
+      const executionId = Math.random().toString(36).substring(2);
       
-      win.console.log = (...args: any[]) => {
-        logs.push(args.map(a => {
-          if (typeof a === 'object') {
-            try { return JSON.stringify(a); } catch { return String(a); }
-          }
-          return String(a);
-        }).join(' '));
-      };
-      
-      win.console.error = (...args: any[]) => {
-        logs.push("Error: " + args.map(a => {
-          if (typeof a === 'object') {
-            try { return JSON.stringify(a); } catch { return String(a); }
-          }
-          return String(a);
-        }).join(' '));
-      };
-
-      try {
-        const result = win.eval(code);
-        if (result && typeof result.then === 'function') {
-          await result;
+      const messageHandler = (event: MessageEvent) => {
+        if (event.origin !== "null") return; // Sandboxed iframes have "null" origin
+        if (event.data?.executionId !== executionId) return;
+        
+        window.removeEventListener('message', messageHandler);
+        
+        if (iframe.parentNode) {
+          document.body.removeChild(iframe);
         }
-        resolve({ output: logs.join('\n') });
-      } catch (err: any) {
-        resolve({ 
-          output: logs.length > 0 ? logs.join('\n') + '\nError: ' + err.message : 'Error: ' + err.message,
-          error: err.message
+        
+        resolve({
+          output: event.data.output,
+          error: event.data.error
         });
-      } finally {
-        document.body.removeChild(iframe);
-      }
+      };
+      
+      window.addEventListener('message', messageHandler);
+      
+      // Escape script tags and other HTML inside the JSON string
+      const escapedCode = JSON.stringify(code).replace(/</g, '\\u003c');
+      
+      iframe.srcdoc = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <script>
+              const logs = [];
+              
+              console.log = (...args) => {
+                logs.push(args.map(a => {
+                  if (typeof a === 'object') {
+                    try { return JSON.stringify(a); } catch { return String(a); }
+                  }
+                  return String(a);
+                }).join(' '));
+              };
+              
+              console.error = (...args) => {
+                logs.push("Error: " + args.map(a => {
+                  if (typeof a === 'object') {
+                    try { return JSON.stringify(a); } catch { return String(a); }
+                  }
+                  return String(a);
+                }).join(' '));
+              };
+
+              window.onerror = (msg) => {
+                logs.push("Error: " + msg);
+              };
+
+              async function run() {
+                let errStr = undefined;
+                try {
+                  const result = eval(${escapedCode});
+                  if (result && typeof result.then === 'function') {
+                    await result;
+                  }
+                } catch (e) {
+                  errStr = e.message;
+                  logs.push("Error: " + e.message);
+                }
+                
+                window.parent.postMessage({
+                  executionId: "${executionId}",
+                  output: logs.join('\\n'),
+                  error: errStr
+                }, "*");
+              }
+              
+              run();
+            </script>
+          </head>
+          <body></body>
+        </html>
+      `;
+      
+      document.body.appendChild(iframe);
     });
   }
   

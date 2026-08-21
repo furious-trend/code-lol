@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { quizzes, QuizQuestion } from '@/lib/quizzes';
-import { createClient } from '@/lib/supabase/client';
 import { useMemeSound } from '@/hooks/useMemeSound';
+import { saveQuizProgress } from '@/lib/progress';
 
 export default function QuizPage() {
   const [topic, setTopic] = useState<string | null>(null);
@@ -15,7 +15,7 @@ export default function QuizPage() {
   const [score, setScore] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
 
-  const supabase = createClient();
+
 
   const handleStart = (selectedTopic: string) => {
     setTopic(selectedTopic);
@@ -86,42 +86,7 @@ export default function QuizPage() {
   const completeQuiz = async () => {
     setIsSaving(true);
     try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
-      let currentLevels = 0;
-      let currentStreak = 0;
-
-      if (user && !authError) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('levels_completed, current_streak')
-          .eq('id', user.id)
-          .single();
-
-        currentLevels = profile?.levels_completed || 0;
-        currentStreak = profile?.current_streak || 0;
-
-        const { error: upsertError } = await supabase.from('profiles').upsert({
-          id: user.id,
-          levels_completed: currentLevels + 1,
-          current_streak: currentStreak + 1,
-        });
-
-        if (upsertError) {
-          console.error('Error saving to Supabase:', upsertError.message || JSON.stringify(upsertError) || upsertError);
-        }
-      } else {
-        const local = JSON.parse(localStorage.getItem('userProfile') || '{"levels_completed":0,"current_streak":0}');
-        currentLevels = local.levels_completed || 0;
-        currentStreak = local.current_streak || 0;
-      }
-
-      // Always update local storage as a fallback
-      localStorage.setItem('userProfile', JSON.stringify({
-        levels_completed: currentLevels + 1,
-        current_streak: currentStreak + 1
-      }));
-
+      await saveQuizProgress();
     } catch (err: any) {
       console.error('Unexpected error saving progress:', err.message || err);
     } finally {

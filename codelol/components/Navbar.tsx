@@ -15,7 +15,17 @@ export default async function Navbar() {
 
   return (
     <nav className="w-full h-16 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50 flex items-center justify-between px-6">
-      <Link href="/" className="font-bold text-xl text-zinc-100 tracking-tight">CodeLOL</Link>
+      <div className="flex items-center gap-6">
+        <Link href="/" className="font-bold text-xl text-zinc-100 tracking-tight">CodeLOL</Link>
+        <div className="hidden md:flex items-center gap-4 text-sm font-medium text-zinc-400">
+          <Link href="/learn" className="hover:text-zinc-100 transition-colors">Learn</Link>
+          <Link href="/lessons" className="hover:text-zinc-100 transition-colors">Library</Link>
+          <Link href="/problems" className="hover:text-zinc-100 transition-colors">Problems</Link>
+          <Link href="/quiz" className="hover:text-zinc-100 transition-colors">Quiz</Link>
+          <Link href="/playground" className="hover:text-zinc-100 transition-colors">Playground</Link>
+          <Link href="/projects" className="hover:text-zinc-100 transition-colors">Projects</Link>
+        </div>
+      </div>
       <div className="flex items-center gap-4 text-zinc-300">
         {user ? (
           <>

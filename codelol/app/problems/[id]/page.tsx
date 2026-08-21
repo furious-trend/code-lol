@@ -8,6 +8,8 @@ import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { executeCodeInBrowser } from '@/lib/executor';
+import { saveProblemCompletion } from '@/lib/progress';
+import ReactMarkdown from 'react-markdown';
 
 export default function ProblemSolverPage() {
   const params = useParams();
@@ -51,16 +53,31 @@ export default function ProblemSolverPage() {
 
   // Basic markdown parser for description
   const formatDescription = (text: string) => {
-    // Basic bold
-    let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    // Basic code blocks
-    html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 my-4 text-sm font-mono overflow-x-auto"><code>$1</code></pre>');
-    // Inline code
-    html = html.replace(/`([^`]+)`/g, '<code class="bg-zinc-800 text-pink-400 px-1 py-0.5 rounded">$1</code>');
-    // Newlines to <br/> outside of pre blocks (simplified approach: just map paragraphs)
-    const paragraphs = html.split('\n\n').map((p, i) => `<p key="${i}" class="mb-4">${p.replace(/\n/g, '<br/>')}</p>`).join('');
-    
-    return <div dangerouslySetInnerHTML={{ __html: paragraphs }} className="text-zinc-300 leading-relaxed" />;
+    return (
+      <ReactMarkdown
+        components={{
+          strong: ({node, ...props}) => <strong {...props} />,
+          pre: ({node, ...props}) => (
+            <pre className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 my-4 text-sm font-mono overflow-x-auto" {...props} />
+          ),
+          code: ({node, className, children, ...props}: any) => {
+            const isBlock = /language-(\w+)/.test(className || '') || String(children).includes('\n');
+            return isBlock ? (
+              <code className={className} {...props}>
+                {children}
+              </code>
+            ) : (
+              <code className="bg-zinc-800 text-pink-400 px-1 py-0.5 rounded" {...props}>
+                {children}
+              </code>
+            );
+          },
+          p: ({node, ...props}) => <p className="mb-4 text-zinc-300 leading-relaxed" {...props} />
+        }}
+      >
+        {text}
+      </ReactMarkdown>
+    );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -147,7 +164,7 @@ let _log = [];
         return;
       }
       
-      const outputLines = data.output.split('\\n');
+      const outputLines = data.output.split('\n');
       
       // Parse the output to find our test results
       const resultsIdx = outputLines.findIndex((l: string) => l === '===TEST_RESULTS===');
@@ -158,13 +175,8 @@ let _log = [];
           setTestResults(parsedResults);
           
           if (parsedResults.passed === parsedResults.total) {
-            // Save completion to local storage
-            const saved = localStorage.getItem('completedProblems');
-            const completed = saved ? JSON.parse(saved) : [];
-            if (!completed.includes(problem.id)) {
-              completed.push(problem.id);
-              localStorage.setItem('completedProblems', JSON.stringify(completed));
-            }
+            // Save completion via helper
+            await saveProblemCompletion(problem.id);
             const playedSound = playMemeSound(true);
             // Trigger the happy roast (meme/joke) on success
             handleRoast(code, data.output, true, playedSound);

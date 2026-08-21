@@ -18,6 +18,5 @@ UPDATE public.profiles
 SET current_tier = CASE 
   WHEN current_level <= 25 THEN 'Beginner'
   WHEN current_level <= 50 THEN 'Intermediate'
-  WHEN current_level <= 75 THEN 'Advanced'
   ELSE 'Expert'
 END;

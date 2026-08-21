@@ -1,4 +1,4 @@
-export type Tier = "Beginner" | "Intermediate" | "Advanced" | "Expert" | "Interview";
+export type Tier = "Beginner" | "Intermediate" | "Expert" | "Interview";
 
 export type QuizQuestion = {
   question: string;
@@ -21,5 +21,9 @@ export type Lesson = {
   codeExample: string;
   gifKeyword: string;
   miniQuizQuestion: QuizQuestion;
+  topicRequirement?: {
+    pattern: string;
+    errorMessage: string;
+  };
   examples?: LessonExample[];
 };

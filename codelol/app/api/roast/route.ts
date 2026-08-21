@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server';
 import { getRandomFallback } from '@/lib/fallbackRoasts';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 export async function POST(request: Request) {
   try {
     const { code, output, isSuccess } = await request.json();
+
+    const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+    const rateLimit = checkRateLimit(ip);
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: rateLimit.error }, { status: 429 });
+    }
 
     if (!code) {
       return NextResponse.json({ error: 'Code is required' }, { status: 400 });
@@ -70,7 +77,7 @@ ${output || 'None'}
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4000);
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

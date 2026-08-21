@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const keyword = searchParams.get('keyword');
+
+  const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+  const rateLimit = checkRateLimit(ip);
+  if (!rateLimit.success) {
+    return NextResponse.json({ error: rateLimit.error }, { status: 429 });
+  }
 
   if (!keyword) {
     return NextResponse.json({ error: 'Keyword is required' }, { status: 400 });

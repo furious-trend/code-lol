@@ -9,6 +9,7 @@ import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { executeCodeInBrowser } from '@/lib/executor';
 import { useMemeSound } from '@/hooks/useMemeSound';
+import { saveLessonProgress } from '@/lib/progress';
 import confetti from 'canvas-confetti';
 
 function LearnPageContent() {
@@ -47,7 +48,6 @@ function LearnPageContent() {
 
 function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, setCurrentLevel: (level: number) => void }) {
   const lesson = allLessons[currentLevel - 1];
-  const supabase = createClient();
   
   // Editor & Run State
   const [code, setCode] = useState(lesson?.codeExample || '');
@@ -112,6 +112,18 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
     setOutput('Running...');
     clearRoast();
     
+    if (lesson.topicRequirement) {
+      const regex = new RegExp(lesson.topicRequirement.pattern);
+      if (!regex.test(code)) {
+        const errorOutput = `Error: ${lesson.topicRequirement.errorMessage}`;
+        setOutput(errorOutput);
+        await handleRoast(code, errorOutput, false, '');
+        playMemeSound(false);
+        setIsRunning(false);
+        return;
+      }
+    }
+    
     try {
       const data = await executeCodeInBrowser('javascript', code);
       
@@ -170,23 +182,7 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
   const handleLevelComplete = async () => {
     setIsSaving(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const nextLevel = currentLevel + 1;
-        const nextTier = nextLevel <= 25 ? 'Beginner' : nextLevel <= 50 ? 'Intermediate' : nextLevel <= 75 ? 'Advanced' : 'Expert';
-        
-        await supabase.from('profiles').update({
-          current_level: nextLevel,
-          current_tier: nextTier
-        }).eq('id', user.id);
-        
-        // Update levels_completed as well to not break legacy tracking
-        const { data: profile } = await supabase.from('profiles').select('levels_completed').eq('id', user.id).single();
-        const currentCompleted = profile?.levels_completed || 0;
-        if (currentCompleted < currentLevel) {
-          await supabase.from('profiles').update({ levels_completed: currentLevel }).eq('id', user.id);
-        }
-      }
+      await saveLessonProgress(currentLevel);
     } catch (e) {
       console.error("Error saving progress", e);
     } finally {

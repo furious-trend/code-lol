@@ -15,6 +15,10 @@ export const beginnerLessons: Lesson[] = [
       options: ["const", "let", "make", "variable"],
       correctAnswerIndex: 1
     },
+    topicRequirement: {
+      pattern: "(?:let|const)\\s+",
+      errorMessage: "You should declare a variable using 'let' or 'const' in this exercise."
+    },
     examples: [
       { explanation: "Using let to declare a changeable variable, simulating a fridge surprise.", code: "let sweetBox = 'Cookies';\nconsole.log('Opening sweet box...');\nsweetBox = 'Sewing Kit';\nconsole.log('Result:', sweetBox);\nconsole.log('Trust issues level increased.');" },
       { explanation: "Using const for things that never change, like Mom's rules.", code: "const TUPPERWARE = 'Moms Favorite Box';\nlet borrower = 'Me';\nconsole.log('I borrowed:', TUPPERWARE);\nborrower = 'My Friend';\nconsole.log('Now who has it?', borrower);\nconsole.log('Mom is going to be mad.');" },
@@ -94,6 +98,10 @@ export const beginnerLessons: Lesson[] = [
       question: "What are the three parts of a standard for loop?",
       options: ["start, stop, pause", "initialization, condition, increment", "begin, middle, end", "let, const, var"],
       correctAnswerIndex: 1
+    },
+    topicRequirement: {
+      pattern: "for\\s*\\(",
+      errorMessage: "You must use a 'for' loop in this exercise to practice the topic!"
     },
     examples: [
       { explanation: "Basic counting loop.", code: "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}" },
