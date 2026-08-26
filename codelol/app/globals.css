@@ -20,7 +20,9 @@
 }
 
 body {
-  background: var(--background);
+  background-color: #09090b; /* zinc-950 */
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }

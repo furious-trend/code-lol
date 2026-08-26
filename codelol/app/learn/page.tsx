@@ -159,11 +159,9 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
     setQuizState(isCorrect ? 'correct' : 'wrong');
     setQuizGif(null);
     
-    const keyword = isCorrect ? (currentLevel === 1 ? 'epic victory level up' : 'success celebration') : 'facepalm fail';
     try {
-      const res = await fetch(`/api/gif?keyword=${encodeURIComponent(keyword)}`);
-      const data = await res.json();
-      if (res.ok && data.url) setQuizGif(data.url);
+      const { getResultGif } = await import('@/lib/localGifs');
+      setQuizGif(getResultGif(isCorrect));
     } catch {}
 
     if (isCorrect) {

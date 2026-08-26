@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { allLessons, Lesson, Tier } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { Bugsy } from '@/components/Bugsy';
 
 function LessonCard({ lesson }: { lesson: Lesson }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -81,8 +82,9 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
                 {(isRoasting || roastError || roastData) && (
                   <div className="mt-4 pt-4 border-t border-zinc-800 animate-in fade-in slide-in-from-top-4 duration-500">
                     {isRoasting && (
-                      <div className="flex flex-col items-center gap-2 py-2 text-pink-400">
-                        <span className="animate-pulse font-bold tracking-widest">{roastStatus} 🔥</span>
+                      <div className="flex flex-col items-center gap-4 py-6 text-amber-400">
+                        <Bugsy size={64} mood="dizzy" />
+                        <span className="animate-pulse font-bold tracking-widest">{roastStatus}</span>
                       </div>
                     )}
                     {roastError && <div className="text-red-400 text-sm">{roastError}</div>}

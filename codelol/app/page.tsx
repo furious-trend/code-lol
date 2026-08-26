@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getJokeOfTheDay } from "@/lib/jokes";
+import { Bugsy } from "@/components/Bugsy";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -75,11 +76,16 @@ export default async function Home() {
             <div className="h-full flex flex-col justify-center gap-6">
               <h3 className="text-blue-400 font-bold uppercase tracking-wider text-sm">Your Progress</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-zinc-950 rounded-2xl p-6 flex flex-col items-center justify-center border border-zinc-800">
-                  <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-orange-400 to-red-500">
+                <div className="bg-zinc-950 rounded-2xl p-6 flex flex-col items-center justify-center border border-zinc-800 relative group overflow-hidden">
+                  <div className={`absolute -bottom-4 -right-4 transition-transform duration-500 ${currentStreak >= 7 ? 'scale-125' : 'scale-100 group-hover:scale-110'}`}>
+                    <Bugsy size={80} mood={currentStreak >= 7 ? 'happy' : (currentStreak > 0 ? 'laughing' : 'thinking')} />
+                  </div>
+                  <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-orange-400 to-red-500 z-10">
                     {currentStreak}
                   </span>
-                  <span className="text-zinc-400 font-medium mt-2">Day Streak 🔥</span>
+                  <span className="text-zinc-400 font-medium mt-2 z-10 flex items-center gap-1">
+                    Day Streak {currentStreak > 0 && <span className="animate-pulse">🔥</span>}
+                  </span>
                 </div>
                 <div className="bg-zinc-950 rounded-2xl p-6 flex flex-col items-center justify-center border border-zinc-800">
                   <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-emerald-500">
@@ -115,7 +121,14 @@ export default async function Home() {
       {/* Navigation Links Grid */}
       <section className="w-full max-w-6xl mx-auto mt-8 mb-16">
         <h2 className="text-2xl font-bold mb-6 px-2">Where to next?</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+          <Link href="/learn" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-yellow-500/50 hover:shadow-lg hover:shadow-yellow-500/10">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all"></div>
+            <div className="text-3xl mb-4">🧠</div>
+            <h3 className="text-xl font-bold mb-2">Learn</h3>
+            <p className="text-sm text-zinc-400">Guides to master coding.</p>
+          </Link>
+
           <Link href="/lessons" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/10">
             <div className="absolute -right-4 -top-4 w-24 h-24 bg-pink-500/10 rounded-full blur-2xl group-hover:bg-pink-500/20 transition-all"></div>
             <div className="text-3xl mb-4">📚</div>

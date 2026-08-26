@@ -27,7 +27,8 @@ export default function QuizPage() {
     setScore(0);
   };
 
-  const currentQuiz = topic ? quizzes[topic] : [];
+  const currentTopic = topic ? quizzes[topic] : null;
+  const currentQuiz = currentTopic ? currentTopic.questions : [];
   const currentQuestion = currentQuiz[currentQuestionIndex];
 
   const { playMemeSound } = useMemeSound();
@@ -41,33 +42,13 @@ export default function QuizPage() {
     const isCorrect = index === currentQuestion.correctIndex;
     if (isCorrect) setScore(s => s + 1);
 
-    const tamilFailKeywords = [
-      'vadivelu facepalm',
-      'santhanam crying',
-      'goundamani comedy',
-      'vivek comedy',
-      'tamil actor fail',
-      'vadivelu crying',
-      'vadivelu nesamani'
-    ];
-
-    const keyword = isCorrect 
-      ? 'tamil comedy success' 
-      // eslint-disable-next-line react-hooks/purity
-      : tamilFailKeywords[Math.floor(Math.random() * tamilFailKeywords.length)];
-      
     // Play the sound immediately
     playMemeSound(isCorrect);
     try {
-      const res = await fetch(`/api/gif?keyword=${encodeURIComponent(keyword)}`);
-      const data = await res.json();
-      if (res.ok && data.url) {
-        setGifUrl(data.url);
-      } else {
-        setGifUrl('error');
-      }
+      const { getResultGif } = await import('@/lib/localGifs');
+      setGifUrl(getResultGif(isCorrect));
     } catch (e) {
-      console.error('Failed to fetch GIF');
+      console.error('Failed to fetch local GIF', e);
       setGifUrl('error');
     }
   };
@@ -96,39 +77,51 @@ export default function QuizPage() {
   };
 
   if (!topic) {
-    const topicMeta: Record<string, { icon: string, color: string }> = {
-      variables: { icon: '📦', color: 'hover:border-purple-500' },
-      loops: { icon: '🔁', color: 'hover:border-pink-500' },
-      arrays: { icon: '📚', color: 'hover:border-blue-500' },
-      functions: { icon: '⚙️', color: 'hover:border-green-500' },
-      conditionals: { icon: '🔀', color: 'hover:border-yellow-500' },
-      objects: { icon: '🏗️', color: 'hover:border-orange-500' },
-      dom: { icon: '🌐', color: 'hover:border-teal-500' },
-      promises: { icon: '🤝', color: 'hover:border-indigo-500' },
-      events: { icon: '⚡', color: 'hover:border-red-500' },
-      classes: { icon: '🏛️', color: 'hover:border-cyan-500' },
+    const tiers = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+    const groupedTopics = tiers.map(tier => ({
+      tier,
+      topics: Object.values(quizzes).filter(t => t.tier === tier)
+    })).filter(g => g.topics.length > 0);
+
+    const tierColors: Record<string, string> = {
+      'Beginner': 'text-green-400 border-green-500/30 bg-green-500/5',
+      'Intermediate': 'text-blue-400 border-blue-500/30 bg-blue-500/5',
+      'Advanced': 'text-purple-400 border-purple-500/30 bg-purple-500/5',
+      'Expert': 'text-red-400 border-red-500/30 bg-red-500/5',
     };
 
     return (
-      <div className="flex flex-col min-h-[calc(100vh-4rem)] p-6 items-center justify-center gap-8 bg-zinc-950 text-zinc-50 font-sans">
+      <div className="flex flex-col min-h-[calc(100vh-4rem)] p-6 items-center py-12 gap-12 bg-zinc-950 text-zinc-50 font-sans">
         <div className="text-center">
           <h1 className="text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">Quiz Zone</h1>
-          <p className="text-zinc-400 text-lg">Select a topic to test your knowledge.</p>
+          <p className="text-zinc-400 text-lg max-w-xl mx-auto">Select a topic to test your knowledge. Topics are grouped by difficulty tier.</p>
         </div>
-        <div className="flex flex-wrap justify-center gap-6 max-w-4xl">
-          {Object.keys(quizzes).map((quizTopic) => {
-            const meta = topicMeta[quizTopic] || { icon: '📝', color: 'hover:border-gray-500' };
-            return (
-              <button 
-                key={quizTopic}
-                onClick={() => handleStart(quizTopic)}
-                className={`bg-zinc-900 border border-zinc-800 ${meta.color} rounded-2xl p-8 transition-all hover:scale-105 shadow-lg flex flex-col items-center gap-4 w-48 sm:w-64`}
-              >
-                <span className="text-6xl">{meta.icon}</span>
-                <span className="text-xl font-bold capitalize">{quizTopic}</span>
-              </button>
-            );
-          })}
+        
+        <div className="w-full max-w-5xl flex flex-col gap-12">
+          {groupedTopics.map(({ tier, topics }) => (
+            <div key={tier} className="flex flex-col gap-6">
+              <div className={`flex items-center gap-4 pb-2 border-b ${tierColors[tier].split(' ')[1]}`}>
+                <h2 className={`text-3xl font-black uppercase tracking-widest ${tierColors[tier].split(' ')[0]}`}>{tier}</h2>
+                <span className="text-zinc-500 font-bold">{topics.length} {topics.length === 1 ? 'Topic' : 'Topics'}</span>
+              </div>
+              
+              <div className="flex flex-wrap gap-6">
+                {topics.map((t) => (
+                  <button 
+                    key={t.id}
+                    onClick={() => handleStart(t.id)}
+                    className={`bg-zinc-900 border border-zinc-800 ${t.color} rounded-2xl p-6 transition-all hover:scale-105 shadow-lg flex flex-col items-center gap-4 w-48 sm:w-60 relative overflow-hidden group`}
+                  >
+                    <span className="text-5xl mb-2">{t.icon}</span>
+                    <span className="text-xl font-bold text-center leading-tight">{t.title}</span>
+                    <span className="text-sm font-medium text-zinc-500 group-hover:text-zinc-300 transition-colors bg-zinc-950 px-3 py-1 rounded-full border border-zinc-800">
+                      {t.questions.length} Questions
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );

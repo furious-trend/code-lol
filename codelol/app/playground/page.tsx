@@ -2,12 +2,15 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import Editor from '@monaco-editor/react';
 import { lessonCategories } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { Bugsy } from '@/components/Bugsy';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { executeCodeInBrowser } from '@/lib/executor';
+import { getRandomLoadingMessage, getRandomEmptyMessage } from '@/lib/funnyCopy';
 
 function PlaygroundContent() {
   const searchParams = useSearchParams();
@@ -18,8 +21,14 @@ function PlaygroundContent() {
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [lastRunSuccess, setLastRunSuccess] = useState<boolean | null>(null);
+  const [loadingMsg, setLoadingMsg] = useState("Cooking... 🔥");
+  const [emptyMsg, setEmptyMsg] = useState("Run your code to see results and get roasted!");
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
+
+  useEffect(() => {
+    setEmptyMsg(getRandomEmptyMessage());
+  }, []);
 
   useEffect(() => {
     if (snippetId) {
@@ -43,6 +52,7 @@ function PlaygroundContent() {
   const handleRunAndRoast = async () => {
 
     setIsRunning(true);
+    setLoadingMsg(getRandomLoadingMessage());
     setOutput('Running...');
     clearRoast();
     
@@ -98,13 +108,15 @@ function PlaygroundContent() {
             JavaScript
           </div>
           
-          <button 
+          <motion.button 
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleRunAndRoast}
             disabled={isRoasting || isRunning}
-            className={`flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRoasting || isRunning ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRoasting || isRunning ? 'opacity-50 cursor-not-allowed' : 'shadow-lg shadow-purple-600/30'}`}
           >
-            {isRoasting || isRunning ? 'Cooking... 🔥' : 'Run & Roast 🔥'}
-          </button>
+            {isRoasting || isRunning ? 'Evaluating... ⏳' : 'Submit & Roast 🚀🔥'}
+          </motion.button>
         </div>
       </div>
 
@@ -141,43 +153,78 @@ function PlaygroundContent() {
         </div>
 
         {/* Output Console Area */}
-        <div className="lg:w-1/3 flex flex-col gap-4 h-64 lg:h-auto shrink-0">
-          {isRoasting && (
-            <div className="flex flex-col border border-purple-500/30 rounded-xl overflow-hidden bg-purple-950/20 shadow-lg shadow-purple-500/10 flex-1 min-h-[150px] justify-center items-center p-8">
-              <div className="animate-spin text-4xl mb-4">🔥</div>
-              <p className="text-purple-400 font-bold animate-pulse text-center">{roastStatus}</p>
-            </div>
-          )}
-          
-          {roastError && (
-            <div className="flex flex-col border border-red-500/30 rounded-xl overflow-hidden bg-red-950/20 shadow-lg shadow-red-500/10 flex-1 min-h-[150px] justify-center items-center p-8 text-center">
-              <div className="text-4xl mb-2">❌</div>
-              <p className="text-red-400 font-bold mb-2">Failed to Roast</p>
-              <p className="text-red-300 text-sm">{roastError}</p>
-              <button 
-                onClick={clearRoast}
-                className="mt-4 px-4 py-2 bg-red-900/50 hover:bg-red-800/50 text-red-200 rounded-lg text-sm transition-colors"
+        <div className="lg:w-1/3 flex flex-col gap-4 h-64 lg:h-auto shrink-0 relative">
+          <AnimatePresence mode="wait">
+            {isRoasting && (
+              <motion.div 
+                key="loading"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col border border-purple-500/30 rounded-xl overflow-hidden bg-purple-950/20 shadow-lg shadow-purple-500/10 flex-1 min-h-[150px] justify-center items-center p-8 absolute inset-0"
               >
-                Dismiss
-              </button>
-            </div>
-          )}
-          
-           {roastData && !isRoasting && (
-             <RoastCard 
-               roast={roastData.roast}
-               fix={roastData.fix}
-               mood={roastData.mood}
-               gifUrl={roastData.gifUrl}
-               output={output}
-               onDismiss={clearRoast}
-               onReplayAudio={() => {
-                 if (lastRunSuccess !== null) {
-                   playMemeSound(lastRunSuccess);
-                 }
-               }}
-             />
-          )}
+                <Bugsy size={80} mood="dizzy" />
+                <p className="text-amber-400 font-bold animate-pulse text-center mt-4">{roastStatus === 'Roasting...' ? loadingMsg : roastStatus}</p>
+              </motion.div>
+            )}
+            
+            {roastError && (
+              <motion.div 
+                key="error"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col border border-red-500/30 rounded-xl overflow-hidden bg-red-950/20 shadow-lg shadow-red-500/10 flex-1 min-h-[150px] justify-center items-center p-8 text-center absolute inset-0 z-10"
+              >
+                <div className="text-4xl mb-2">❌</div>
+                <p className="text-red-400 font-bold mb-2">Failed to Roast</p>
+                <p className="text-red-300 text-sm">{roastError}</p>
+                <button 
+                  onClick={clearRoast}
+                  className="mt-4 px-4 py-2 bg-red-900/50 hover:bg-red-800/50 text-red-200 rounded-lg text-sm transition-colors"
+                >
+                  Dismiss
+                </button>
+              </motion.div>
+            )}
+            
+            {roastData && !isRoasting && (
+              <motion.div
+                key="result"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="w-full flex-1"
+              >
+                <RoastCard 
+                  roast={roastData.roast}
+                  fix={roastData.fix}
+                  mood={roastData.mood}
+                  gifUrl={roastData.gifUrl}
+                  output={output}
+                  onDismiss={clearRoast}
+                  onReplayAudio={() => {
+                    if (lastRunSuccess !== null) {
+                      playMemeSound(lastRunSuccess);
+                    }
+                  }}
+                />
+              </motion.div>
+            )}
+
+            {!roastData && !isRoasting && !roastError && (
+              <motion.div 
+                key="empty"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col border-2 border-dashed border-zinc-800 rounded-xl flex-1 min-h-[150px] justify-center items-center p-8 text-center text-zinc-500 absolute inset-0"
+              >
+                <Bugsy size={64} mood="thinking" className="opacity-50 mb-4" />
+                <p>{emptyMsg}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
         
       </div>

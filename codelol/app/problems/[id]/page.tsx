@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import { problems } from '@/lib/problems';
 import { useRoast } from '@/hooks/useRoast';
@@ -9,6 +10,8 @@ import { RoastCard } from '@/components/RoastCard';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { executeCodeInBrowser } from '@/lib/executor';
 import { saveProblemCompletion } from '@/lib/progress';
+import { getRandomLoadingMessage, getRandomSuccessMessage, getRandomNudgeMessage } from '@/lib/funnyCopy';
+import { MilestoneCelebration } from '@/components/MilestoneCelebration';
 import ReactMarkdown from 'react-markdown';
 
 export default function ProblemSolverPage() {
@@ -28,6 +31,12 @@ export default function ProblemSolverPage() {
   const [testResults, setTestResults] = useState<{passed: number, total: number, log: string[]} | null>(null);
   const [rawOutput, setRawOutput] = useState('');
   const [quizAnswered, setQuizAnswered] = useState<number | null>(null);
+  const [loadingMsg, setLoadingMsg] = useState('Evaluating... ⏳');
+  const [successMsg, setSuccessMsg] = useState('🎉 Accepted! All tests passed.');
+  const [nudgeMsg, setNudgeMsg] = useState('One more? Bugsy dares you 😏');
+  
+  const [showMilestone, setShowMilestone] = useState(false);
+  const [milestoneData, setMilestoneData] = useState<{milestone: number, type: 'problem' | 'level'} | null>(null);
   
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
@@ -100,6 +109,7 @@ export default function ProblemSolverPage() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    setLoadingMsg(getRandomLoadingMessage());
     setTestResults(null);
     setRawOutput('');
     clearRoast();
@@ -119,7 +129,12 @@ let _log = [];
 (async () => {
   for (let i = 0; i < _tc.length; i++) {
     try {
-      const fn = globalThis['${functionName}'];
+      let fn;
+      try {
+        fn = eval('typeof ' + '${functionName}' + " !== 'undefined' ? " + '${functionName}' + ' : undefined');
+      } catch(e) {
+        fn = undefined;
+      }
       if (typeof fn !== 'function') {
         _log.push('Test ' + (i+1) + ': ERROR (Function \\'${functionName}\\' not found. Did you rename it or change its definition?)');
         continue;
@@ -177,8 +192,24 @@ let _log = [];
           setTestResults(parsedResults);
           
           if (parsedResults.passed === parsedResults.total) {
+            // Check milestone before save
+            const savedBefore = localStorage.getItem('completedProblems');
+            const completedBefore = savedBefore ? JSON.parse(savedBefore) : [];
+            const isNew = !completedBefore.includes(problem.id);
+            
             // Save completion via helper
             await saveProblemCompletion(problem.id);
+            
+            if (isNew && (completedBefore.length + 1) % 5 === 0) {
+              setMilestoneData({
+                milestone: completedBefore.length + 1,
+                type: 'problem'
+              });
+              setShowMilestone(true);
+            }
+            
+            setSuccessMsg(getRandomSuccessMessage());
+            setNudgeMsg(getRandomNudgeMessage());
             const playedSound = playMemeSound(true);
             // Trigger the happy roast (meme/joke) on success
             handleRoast(code, data.output, true, playedSound);
@@ -213,6 +244,7 @@ let _log = [];
   if (problem.difficulty === "Expert") badgeColor = "text-red-400 bg-red-400/10 border-red-400/20";
 
   return (
+    <>
     <div className="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-50 font-sans">
       {/* Left Panel: Problem Description & Editor */}
       <div className="w-full lg:w-1/2 flex flex-col h-auto lg:h-[calc(100vh-4rem)] lg:border-r border-zinc-800">
@@ -254,15 +286,24 @@ let _log = [];
                   }
 
                   return (
-                    <button
+                    <motion.button
                       key={idx}
                       disabled={quizAnswered !== null}
                       onClick={() => setQuizAnswered(idx)}
+                      animate={
+                        quizAnswered !== null
+                          ? isSelected
+                            ? isCorrect
+                              ? { scale: [1, 1.1, 1], transition: { duration: 0.3 } }
+                              : { x: [-10, 10, -10, 10, 0], transition: { duration: 0.4 } }
+                            : {}
+                          : {}
+                      }
                       className={`text-left font-medium py-3 px-5 rounded-xl transition-all border border-transparent ${btnClass} ${quizAnswered === null ? 'hover:scale-[1.02]' : ''}`}
                     >
                       {opt} {quizAnswered !== null && isCorrect && "✅"}
                       {quizAnswered !== null && isSelected && !isCorrect && "❌"}
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
@@ -301,13 +342,15 @@ let _log = [];
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-zinc-400">Solution.js</h3>
             <div className="flex gap-3">
-              <button 
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleSubmit}
                 disabled={isSubmitting || isRoasting}
-                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl text-sm transition-transform active:scale-95 shadow-lg shadow-blue-500/20 flex items-center gap-2 disabled:opacity-50"
+                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl text-sm transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2 disabled:opacity-50"
               >
                 {isSubmitting || isRoasting ? 'Evaluating... ⏳' : 'Submit & Roast 🚀🔥'}
-              </button>
+              </motion.button>
             </div>
           </div>
           
@@ -333,7 +376,7 @@ let _log = [];
             <div className="mb-6 pb-6 border-b border-zinc-800 animate-in fade-in slide-in-from-top-4 duration-500">
               {isRoasting && (
                 <div className="flex flex-col items-center gap-2 py-4 text-pink-400">
-                  <span className="animate-pulse font-bold tracking-widest text-lg">{roastStatus} 🔥</span>
+                  <span className="animate-pulse font-bold tracking-widest text-lg">{roastStatus === 'Roasting...' ? loadingMsg : roastStatus} 🔥</span>
                 </div>
               )}
               {roastError && <div className="text-red-400 text-sm p-4 bg-red-500/10 rounded-lg">{roastError}</div>}
@@ -354,16 +397,21 @@ let _log = [];
               <div className={`text-xl font-bold flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-lg ${testResults.passed === testResults.total ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
                 <div>
                   {testResults.passed === testResults.total 
-                    ? '🎉 Accepted! All tests passed.' 
+                    ? successMsg 
                     : `❌ Failed: ${testResults.passed} / ${testResults.total} tests passed.`}
                 </div>
                 {testResults.passed === testResults.total && nextProblem && (
-                  <Link 
-                    href={`/problems/${nextProblem.id}`}
-                    className="bg-green-600 hover:bg-green-500 text-white text-sm py-2 px-6 rounded-full transition-transform active:scale-95 shadow-lg shadow-green-500/20 text-center"
-                  >
-                    Next Level ➡️
-                  </Link>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-xs text-green-500/70 font-bold uppercase tracking-wider">{nudgeMsg}</span>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Link 
+                        href={`/problems/${nextProblem.id}`}
+                        className="bg-green-600 hover:bg-green-500 text-white text-sm py-2 px-6 rounded-full shadow-lg shadow-green-500/20 text-center inline-block"
+                      >
+                        Next Level ➡️
+                      </Link>
+                    </motion.div>
+                  </div>
                 )}
               </div>
               <ul className="space-y-2 mt-4">
@@ -386,5 +434,14 @@ let _log = [];
         </div>
       </div>
     </div>
+    
+    {showMilestone && milestoneData && (
+      <MilestoneCelebration
+        milestone={milestoneData.milestone}
+        type={milestoneData.type}
+        onDismiss={() => setShowMilestone(false)}
+      />
+    )}
+    </>
   );
 }

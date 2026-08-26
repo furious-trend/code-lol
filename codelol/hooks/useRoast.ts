@@ -54,31 +54,15 @@ export function useRoast() {
         throw new Error(roastResponseData.error || 'Failed to connect to the roasting service.');
       }
 
-      // 2. Fetch the corresponding GIF based on the mood
-      setRoastStatus('Finding the perfect reaction...');
-      
+      // 2. Assign a local GIF based on success/failure
       const mood: RoastMood = roastResponseData.mood || 'facepalm';
-      
-      // Use the keyword provided by the LLM that relates to the joke, fallback to random if missing
-      let gifKeyword = roastResponseData.gifKeyword;
-      
-      if (!gifKeyword) {
-        // Fallback to a general keyword if none is provided
-        gifKeyword = 'funny reaction';
-      }
-      
       let gifUrl = '';
-      const gifRes = await fetch(`/api/gif?keyword=${encodeURIComponent(gifKeyword)}`, {
-        method: 'GET'
-      });
-
-      const gifResponseData = await gifRes.json();
-      
-      if (!gifRes.ok) {
-        throw new Error(gifResponseData.error || 'Failed to fetch reaction GIF.');
+      try {
+        const { getResultGif } = await import('@/lib/localGifs');
+        gifUrl = getResultGif(!!isSuccess);
+      } catch (err) {
+        console.error('Failed to load local gif:', err);
       }
-      
-      gifUrl = gifResponseData.url;
 
       const finalResult: RoastResult = {
         roast: roastResponseData.roast,

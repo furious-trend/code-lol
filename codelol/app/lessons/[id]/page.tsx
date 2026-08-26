@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import { allLessons } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
@@ -93,12 +94,20 @@ export default function LessonExplanationPage() {
               </div>
             )}
 
-            <div className="animate-in fade-in duration-500" key={`exp-${currentSlide}`}>
-              <h2 className="text-xl font-bold mb-4 text-white">The Concept</h2>
-              <p className="text-lg text-zinc-300 leading-relaxed font-medium">
-                {currentExample?.explanation || "No explanation provided for this example."}
-              </p>
-            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`exp-${currentSlide}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h2 className="text-xl font-bold mb-4 text-white">The Concept</h2>
+                <p className="text-lg text-zinc-300 leading-relaxed font-medium">
+                  {currentExample?.explanation || "No explanation provided for this example."}
+                </p>
+              </motion.div>
+            </AnimatePresence>
           </div>
           
           <div className="mt-6 pt-6 border-t border-zinc-800/50 flex justify-between items-center lg:justify-start">
@@ -123,18 +132,29 @@ export default function LessonExplanationPage() {
               <span className="text-pink-500">{"</>"}</span> The Code
             </h2>
             
-            <div className="relative group/code animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100" key={`code-${currentSlide}`}>
-              <div className="bg-[#0c0c0c] p-6 rounded-2xl border border-zinc-800 font-mono text-sm md:text-base text-zinc-300 overflow-x-auto shadow-inner shadow-black/50">
-                <pre><code>{currentExample?.code || "// No code available"}</code></pre>
-              </div>
-              <button 
-                onClick={() => handleExplain(currentExample?.code || "")}
-                disabled={isRoasting || !currentExample?.code}
-                className="absolute top-4 right-4 bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold py-2 px-4 rounded-xl opacity-90 hover:opacity-100 transition-all shadow-lg hover:shadow-pink-500/20 disabled:opacity-50"
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`code-${currentSlide}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="relative group/code delay-100"
               >
-                {isRoasting ? 'Thinking...' : 'Explain this 🤔'}
-              </button>
-            </div>
+                <div className="bg-[#0c0c0c] p-6 rounded-2xl border border-zinc-800 font-mono text-sm md:text-base text-zinc-300 overflow-x-auto shadow-inner shadow-black/50">
+                  <pre><code>{currentExample?.code || "// No code available"}</code></pre>
+                </div>
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleExplain(currentExample?.code || "")}
+                  disabled={isRoasting || !currentExample?.code}
+                  className="absolute top-4 right-4 bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold py-2 px-4 rounded-xl opacity-90 hover:opacity-100 transition-colors shadow-lg hover:shadow-pink-500/20 disabled:opacity-50"
+                >
+                  {isRoasting ? 'Thinking...' : 'Explain this 🤔'}
+                </motion.button>
+              </motion.div>
+            </AnimatePresence>
 
             {/* Roast Results */}
             {(isRoasting || roastError || roastData) && (
@@ -175,21 +195,25 @@ export default function LessonExplanationPage() {
             </div>
 
             {currentSlide === examples.length - 1 ? (
-              <button 
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleNext}
-                className="w-full sm:w-auto px-8 py-3 bg-pink-600 hover:bg-pink-500 text-white rounded-full font-bold transition-all shadow-lg shadow-pink-600/20 flex items-center justify-center gap-3 animate-in zoom-in duration-300 group"
+                className="w-full sm:w-auto px-8 py-3 bg-pink-600 hover:bg-pink-500 text-white rounded-full font-bold transition-colors shadow-lg shadow-pink-600/20 flex items-center justify-center gap-3 animate-in zoom-in duration-300 group"
               >
                 <span>Code It Now</span>
                 <span className="group-hover:translate-x-1 transition-transform">🚀</span>
-              </button>
+              </motion.button>
             ) : (
-              <button 
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleNext}
-                className="w-full sm:w-auto px-8 py-3 bg-zinc-100 hover:bg-white text-zinc-900 rounded-full font-bold transition-all flex items-center justify-center gap-2 group"
+                className="w-full sm:w-auto px-8 py-3 bg-zinc-100 hover:bg-white text-zinc-900 rounded-full font-bold transition-colors flex items-center justify-center gap-2 group"
               >
                 <span>Turn Page</span>
                 <span className="group-hover:translate-x-1 transition-transform">➔</span>
-              </button>
+              </motion.button>
             )}
           </div>
           

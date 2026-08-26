@@ -1,0 +1,39 @@
+# Happy GIFs
+
+Drop your celebratory, funny "success" GIFs or MP4s here.
+These will be shown when the user successfully passes a code challenge or quiz.
+(e.g., dancing, thumbs up, applause, epic victory)
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjhtNWlvd3ZjMW9henVodml0NDFuY2RkZzRlOWo4YzdrdzR5enNkdiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Xw6yFn7frR3Y4/giphy.gif
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjhtNWlvd3ZjMW9henVodml0NDFuY2RkZzRlOWo4YzdrdzR5enNkdiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/13hxeOYjoTWtK8/giphy.gif
+
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjhtNWlvd3ZjMW9henVodml0NDFuY2RkZzRlOWo4YzdrdzR5enNkdiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/14qb1Uhf40ndw4/giphy.gif
+
+https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bWc5MWk0bWZhMHZkemh6amt5YzBxMWlpeDV3cTRwdTRpamdvMnZmdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/2LmgEyEwBQvtM8Le9M/giphy.gif
+
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3pjb2szcGxzeHkxeDBja3R1dGJhaG83Z3JxOXgzNWs1ZjM2a3QxdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/111ebonMs90YLu/giphy.gif
+
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3pjb2szcGxzeHkxeDBja3R1dGJhaG83Z3JxOXgzNWs1ZjM2a3QxdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26gsvAm8UPaczzXz2/giphy.gif
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3pjb2szcGxzeHkxeDBja3R1dGJhaG83Z3JxOXgzNWs1ZjM2a3QxdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LVIbmaUwpRJ1C/giphy.gif
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2o1cjA1dmhlNG00YmFtZHhmbXpwcmR3ODBqZ2xvbWRlcjlqcjR0dyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1qFwN4Su3tuCit6QUT/giphy.gif
+
+
+
+
+
+https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cXp3a25rcTVyaGY2cWVja2Y5OWVzbHRodWVybG1sZGswM2RiYzIwaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/JZLaL7vxYBMwOw4Vjd/giphy.gif
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXNseW9rZWppdmlsMDFoMGw0enN3cHVldjY1dHFkdXZrdTN3b2N1ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/JZLaL7vxYBMwOw4Vjd/giphy.gif
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXNseW9rZWppdmlsMDFoMGw0enN3cHVldjY1dHFkdXZrdTN3b2N1ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/vnMdLhS2vs35fTXIk0/giphy.gif
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXNseW9rZWppdmlsMDFoMGw0enN3cHVldjY1dHFkdXZrdTN3b2N1ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3kD720zFVu22rfIA0s/giphy.gif
+
+https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXNseW9rZWppdmlsMDFoMGw0enN3cHVldjY1dHFkdXZrdTN3b2N1ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/e5OgbyGSyxbdpyO1ug/giphy.gif
+
+

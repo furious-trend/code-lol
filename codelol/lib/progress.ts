@@ -24,6 +24,10 @@ export async function saveProblemCompletion(problemId: string) {
       completed.push(problemId);
       localStorage.setItem('completedProblems', JSON.stringify(completed));
     }
+    
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('codelol-progress-update'));
+    }
   } catch (err) {
     console.error('Error saving problem completion:', err);
   }
@@ -95,6 +99,10 @@ export async function saveQuizProgress() {
       levels_completed: currentLevels + 1,
       current_streak: currentStreak + 1
     }));
+    
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('codelol-progress-update'));
+    }
   } catch (err) {
     console.error('Error saving quiz progress:', err);
   }

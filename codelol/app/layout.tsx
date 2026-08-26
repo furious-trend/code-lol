@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import Navbar from "@/components/Navbar";
+import { AmbientJoke } from "@/components/AmbientJoke";
 
 export default function RootLayout({
   children,
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col text-zinc-50 relative bg-zinc-950">
         <Navbar />
         {children}
+        <AmbientJoke />
       </body>
     </html>
   );
