@@ -11,28 +11,33 @@ export function useMemeSound() {
     const audioPlayer2 = new Audio();
     audioPlayer2.volume = 0.8;
 
-    const failSounds = [
-      "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3",
-      "https://www.myinstants.com/media/sounds/nov-thappa-irrkuthu-naa.mp3",
-      "https://www.myinstants.com/media/sounds/thambi-keela-erangu-pa.mp3",
-      "https://www.myinstants.com/media/sounds/aiyo-apdi-chollatha.mp3",
-      "https://www.myinstants.com/media/sounds/faaah.mp3",
-      "https://www.myinstants.com/media/sounds/896756048.mp3",
-      "https://www.myinstants.com/media/sounds/tf_nemesis.mp3",
-      "https://www.myinstants.com/media/sounds/directed-by-robert-b_voI2Z4T.mp3",
-      "https://www.myinstants.com/media/sounds/dexter-meme.mp3",
-      "https://www.myinstants.com/media/sounds/faaaaaaaaaaaaaaaaaah.mp3"
+    const generalFailSounds = [
+      "/sounds/general/faaah.mp3",
+      "/sounds/general/896756048.mp3",
+      "/sounds/general/tf_nemesis.mp3",
+      "/sounds/general/directed-by-robert-b_voI2Z4T.mp3",
+      "/sounds/general/dexter-meme.mp3",
+      "/sounds/general/faaaaaaaaaaaaaaaaaah.mp3"
+    ];
+    
+    const tamilFailSounds = [
+      "/sounds/tamil/seeman-buhaha.mp3",
+      "/sounds/tamil/nov-thappa-irrkuthu-naa.mp3",
+      "/sounds/tamil/thambi-keela-erangu-pa.mp3",
+      "/sounds/tamil/aiyo-apdi-chollatha.mp3"
     ];
     
     const successSounds = [
-      "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3",
-      "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3",
-      "https://www.myinstants.com/media/sounds/indian-song.mp3",
-      "https://www.myinstants.com/media/sounds/kids-saying-yay-sound-effect_3.mp3",
-      "https://www.myinstants.com/media/sounds/happy-happy-happy-song.mp3",
-      "https://www.myinstants.com/media/sounds/let-her-go.mp3",
-      "https://www.myinstants.com/media/sounds/level-up-super-mario.mp3"
+      "/sounds/general/anime-wow-sound-effect.mp3",
+      "/sounds/tamil/seeman-buhaha.mp3",
+      "/sounds/general/indian-song.mp3",
+      "/sounds/general/kids-saying-yay-sound-effect_3.mp3",
+      "/sounds/general/happy-happy-happy-song.mp3",
+      "/sounds/general/let-her-go.mp3"
     ];
+
+    // Use Tamil sounds by default to match the gif behavior
+    const failSounds = tamilFailSounds;
 
     const list = isSuccess ? successSounds : failSounds;
     const soundUrl = list[Math.floor(Math.random() * list.length)];

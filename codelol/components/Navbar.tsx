@@ -47,6 +47,9 @@ export default async function Navbar() {
         {user ? (
           <>
             <FriendBell />
+            <Link href="/settings" className="text-sm hover:text-white transition-colors" title="Settings">
+              ⚙️
+            </Link>
             <span className="text-sm hidden sm:inline-block">{user.email}</span>
             <form action={handleLogout}>
               <button className="text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-100 px-4 py-2 rounded transition-colors font-medium">

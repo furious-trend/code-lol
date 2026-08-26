@@ -1,5 +1,8 @@
 import urllib.request
 import os
+import socket
+
+socket.setdefaulttimeout(10)
 
 urls = [
 "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXgwenY3dXlhYXVkOG0zcWR6aGNwZGFleDIwMmhiYTlyYjZoNnkyNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/N2oM0eoQfDTcwhw3LZ/giphy.gif",
@@ -21,10 +24,13 @@ urls = [
 os.makedirs("public/gifs/tamil/wrong", exist_ok=True)
 
 for i, url in enumerate(urls):
+    filename = f"public/gifs/tamil/wrong/tamil_roast_{i+1}.gif"
+    if os.path.exists(filename) and os.path.getsize(filename) > 0:
+        continue
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     try:
         with urllib.request.urlopen(req) as response:
-            with open(f"public/gifs/tamil/wrong/tamil_roast_{i+1}.gif", "wb") as f:
+            with open(filename, "wb") as f:
                 f.write(response.read())
         print(f"Downloaded {i+1}")
     except Exception as e:

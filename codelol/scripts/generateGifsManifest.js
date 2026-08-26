@@ -15,15 +15,18 @@ function getGifsInDir(dirPath) {
   }
 }
 
-const happyGifs = getGifsInDir('gifs/happy');
-const roastingGifs = getGifsInDir('gifs/roasting');
-
 const manifest = {
-  happy: happyGifs,
-  roasting: roastingGifs
+  general: {
+    right: getGifsInDir('gifs/general/right'),
+    wrong: getGifsInDir('gifs/general/wrong')
+  },
+  tamil: {
+    right: getGifsInDir('gifs/tamil/right'),
+    wrong: getGifsInDir('gifs/tamil/wrong')
+  }
 };
 
 const outputPath = path.join(process.cwd(), 'lib', 'gifManifest.json');
 fs.writeFileSync(outputPath, JSON.stringify(manifest, null, 2));
 
-console.log(`✅ Generated gifManifest.json with ${happyGifs.length} happy and ${roastingGifs.length} roasting GIFs.`);
+console.log(`✅ Generated gifManifest.json for Humor Engine.`);
