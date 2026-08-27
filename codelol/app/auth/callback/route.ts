@@ -8,8 +8,19 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
+    const { error, data: sessionData } = await supabase.auth.exchangeCodeForSession(code)
+    
+    if (!error && sessionData.user) {
+      // Check user profile for humor_preference
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('humor_preference')
+        .eq('id', sessionData.user.id)
+        .single()
+
+      if (!profile?.humor_preference) {
+        return NextResponse.redirect(`${origin}/onboarding`)
+      }
       return NextResponse.redirect(`${origin}${next}`)
     }
   }
