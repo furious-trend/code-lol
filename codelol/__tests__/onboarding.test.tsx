@@ -15,44 +15,41 @@ vi.mock('@/lib/supabase/client', () => ({
 }));
 
 // Mock framer-motion to skip animations
-vi.mock('framer-motion', async () => {
-  const actual = await vi.importActual('framer-motion');
-  return {
-    ...actual,
-    AnimatePresence: ({ children }: any) => <>{children}</>,
-    motion: {
-      div: require('react').forwardRef(({ children, ...props }: any, ref: any) => <div ref={ref} {...props}>{children}</div>),
-      button: require('react').forwardRef(({ children, ...props }: any, ref: any) => <button ref={ref} {...props}>{children}</button>),
-      h1: require('react').forwardRef(({ children, ...props }: any, ref: any) => <h1 ref={ref} {...props}>{children}</h1>),
-    },
-  };
+vi.mock('framer-motion', () => {
+  const React = require('react');
+  const motion = new Proxy({}, {
+    get: (_t: unknown, tag: string) =>
+      ({ children, ...props }: Record<string, unknown>) =>
+        React.createElement(tag, props, children),
+  });
+  return { motion, AnimatePresence: ({ children }: { children: unknown }) => children };
 });
 
 // Mock Bugsy
 vi.mock('@/components/Bugsy', () => ({
-  default: () => <div data-testid="bugsy" />
+  Bugsy: () => <div data-testid="bugsy" />
 }));
 
 describe('Onboarding Page', () => {
   const mockPush = vi.fn();
-  const mockUpdate = vi.fn();
-  const mockEq = vi.fn(() => ({ update: mockUpdate }));
+  const mockUpsert = vi.fn();
   const mockGetUser = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     (useRouter as any).mockReturnValue({ push: mockPush });
     
+    mockUpsert.mockResolvedValue({ error: null });
+
     // Setup mock supabase client
     const mockSupabase = {
       auth: {
         getUser: mockGetUser,
       },
       from: vi.fn(() => ({
-        update: mockUpdate,
+        upsert: mockUpsert,
       })),
     };
-    mockUpdate.mockReturnValue({ eq: mockEq });
     
     (createClient as any).mockReturnValue(mockSupabase);
   });
@@ -62,10 +59,10 @@ describe('Onboarding Page', () => {
     
     render(<Onboarding />);
     
-    expect(screen.getByText(/Pick your vibe/i)).toBeTruthy();
+    expect(screen.getByText(/Pick Your Vibe/i)).toBeTruthy();
     expect(screen.getByText(/General Meme Sense/i)).toBeTruthy();
     expect(screen.getByText(/Tamil Comedy Sense/i)).toBeTruthy();
-    expect(screen.getByRole('button', { name: /Confirm/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Continue/i })).toBeTruthy();
   });
 
   it('shows error if try to submit without selection', async () => {
@@ -73,8 +70,8 @@ describe('Onboarding Page', () => {
     
     render(<Onboarding />);
     
-    const confirmButton = screen.getByRole('button', { name: /Confirm/i });
-    fireEvent.click(confirmButton);
+    const continueButton = screen.getByRole('button', { name: /Continue/i });
+    fireEvent.click(continueButton);
     
     await waitFor(() => {
       expect(screen.getByText(/Please select a vibe/i)).toBeTruthy();
@@ -83,7 +80,6 @@ describe('Onboarding Page', () => {
 
   it('submits selected vibe and redirects to home', async () => {
     mockGetUser.mockResolvedValueOnce({ data: { user: { id: 'test-user-id' } }, error: null });
-    mockUpdate.mockReturnValueOnce({ eq: vi.fn().mockResolvedValueOnce({ error: null }) });
     
     render(<Onboarding />);
     
@@ -91,13 +87,15 @@ describe('Onboarding Page', () => {
     const generalButton = screen.getByText(/General Meme Sense/i);
     fireEvent.click(generalButton);
     
-    const confirmButton = screen.getByRole('button', { name: /Confirm/i });
-    fireEvent.click(confirmButton);
+    const continueButton = screen.getByRole('button', { name: /Continue/i });
+    fireEvent.click(continueButton);
     
     await waitFor(() => {
-      // should update with general
-      expect(mockUpdate).toHaveBeenCalledWith({ humor_preference: 'general' });
-      expect(mockPush).toHaveBeenCalledWith('/');
+      // should upsert with general
+      expect(mockUpsert).toHaveBeenCalledWith(
+        { id: 'test-user-id', humor_preference: 'general' },
+        { onConflict: 'id' }
+      );
     });
   });
 });

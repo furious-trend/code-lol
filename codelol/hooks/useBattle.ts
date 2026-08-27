@@ -54,7 +54,6 @@ export function useBattle(roomCode: string | null) {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'battle_participants', filter: `battle_id=eq.${battle.id}` },
         async (payload) => {
-          console.log('Realtime battle participant payload received:', payload);
           // It's easiest to just refetch participants to ensure we get their profile data
           // since INSERT/UPDATE payloads on battle_participants don't include joined relations (profiles).
           const p = await getBattleParticipants(battle.id);

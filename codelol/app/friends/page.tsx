@@ -10,6 +10,7 @@ export default function FriendsPage() {
   const [pendingRequests, setPendingRequests] = useState<FriendRequest[]>([]);
   const [friends, setFriends] = useState<FriendRequest[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [requestStatus, setRequestStatus] = useState<Record<string, 'sent' | 'failed' | null>>({});
 
   useEffect(() => {
     loadFriendsData();
@@ -36,11 +37,8 @@ export default function FriendsPage() {
 
   const handleSendRequest = async (userId: string) => {
     const success = await sendFriendRequest(userId);
-    if (success) {
-      alert('Friend request sent!');
-    } else {
-      alert('Failed to send request.');
-    }
+    setRequestStatus(prev => ({ ...prev, [userId]: success ? 'sent' : 'failed' }));
+    if (success) setTimeout(() => setRequestStatus(prev => ({ ...prev, [userId]: null })), 3000);
   };
 
   const handleAcceptRequest = async (requestId: string) => {
@@ -84,12 +82,18 @@ export default function FriendsPage() {
                   {searchResults.map((user) => (
                     <div key={user.id} className="flex items-center justify-between bg-zinc-950 p-4 rounded-xl border border-zinc-800">
                       <span className="font-bold">{user.display_name || 'Unknown Coder'}</span>
-                      <button
-                        onClick={() => handleSendRequest(user.id)}
-                        className="text-sm bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1 rounded-lg"
-                      >
-                        Add Friend
-                      </button>
+                      <div className="flex flex-col items-end gap-1">
+                        <button
+                          onClick={() => handleSendRequest(user.id)}
+                          disabled={requestStatus[user.id] === 'sent'}
+                          className="text-sm bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50 text-white px-3 py-1 rounded-lg"
+                        >
+                          {requestStatus[user.id] === 'sent' ? 'Sent ✓' : 'Add Friend'}
+                        </button>
+                        {requestStatus[user.id] === 'failed' && (
+                          <span className="text-xs text-red-400">Failed to send</span>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>

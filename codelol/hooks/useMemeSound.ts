@@ -53,10 +53,10 @@ export function useMemeSound() {
           else p.removeEventListener('ended', onEnded);
         };
         p.addEventListener('ended', onEnded);
-        p.play().catch(e => console.log('Audio playback prevented by browser:', e));
+        p.play().catch(e => console.error('Audio playback prevented by browser:', e));
       } else {
         p.loop = true;
-        p.play().catch(e => console.log('Audio playback prevented by browser:', e));
+        p.play().catch(e => console.error('Audio playback prevented by browser:', e));
         setTimeout(() => {
           p.pause();
           p.currentTime = 0;

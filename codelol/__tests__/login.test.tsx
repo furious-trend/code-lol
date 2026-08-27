@@ -32,7 +32,7 @@ vi.mock('framer-motion', async () => {
 
 // Mock Bugsy
 vi.mock('@/components/Bugsy', () => ({
-  default: () => <div data-testid="bugsy" />
+  Bugsy: () => <div data-testid="bugsy" />
 }));
 
 describe('Login Page', () => {
@@ -126,7 +126,7 @@ describe('Login Page', () => {
     fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'password123' } });
     
     // Select humor preference
-    const tamilButton = screen.getByText(/Tamil Comedy Sense/i);
+    const tamilButton = screen.getByText(/Tamil Comedy/i);
     fireEvent.click(tamilButton);
     
     const submitButton = screen.getByRole('button', { name: /Create Profile/i });

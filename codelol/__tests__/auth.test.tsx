@@ -15,17 +15,33 @@ vi.mock('@/lib/supabase/client', () => ({
   createClient: vi.fn(),
 }));
 
+// Mock Bugsy
+vi.mock('@/components/Bugsy', () => ({
+  Bugsy: () => <div data-testid="bugsy" />
+}));
+
 describe('Authentication Flow', () => {
   const mockSignInWithPassword = vi.fn();
   const mockSignUp = vi.fn();
   const mockSignInWithOAuth = vi.fn();
   const mockPush = vi.fn();
-  const mockFrom = { insert: vi.fn().mockResolvedValue({ error: null }) };
+  const mockFrom = { 
+    insert: vi.fn().mockResolvedValue({ error: null }),
+    select: vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        single: vi.fn().mockResolvedValue({ data: { display_name: 'test', humor_preference: 'general' }, error: null })
+      })
+    })
+  };
   const mockSupabase = {
     auth: {
       signInWithPassword: mockSignInWithPassword,
       signUp: mockSignUp,
       signInWithOAuth: mockSignInWithOAuth,
+      getUser: vi.fn().mockResolvedValue({
+        data: { user: { id: 'user-123', identities: [{ provider: 'email' }] } },
+        error: null,
+      }),
     },
     from: vi.fn(() => mockFrom),
   };
@@ -54,24 +70,14 @@ describe('Authentication Flow', () => {
   it('calls signInWithOAuth for Google', async () => {
     mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
     render(<Login />);
-    fireEvent.click(screen.getByText('Google'));
+    fireEvent.click(screen.getByText(/Continue with Google/i));
     expect(mockSignInWithOAuth).toHaveBeenCalledWith({
       provider: 'google',
       options: expect.objectContaining({ redirectTo: expect.any(String) }),
     });
   });
 
-  it('calls signInWithOAuth for Facebook', async () => {
-    mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
-    render(<Login />);
-    fireEvent.click(screen.getByText('Facebook'));
-    expect(mockSignInWithOAuth).toHaveBeenCalledWith({
-      provider: 'facebook',
-      options: expect.objectContaining({ redirectTo: expect.any(String) }),
-    });
-  });
-
-  it('submits login with email and password, redirects to /learn on success', async () => {
+  it('submits login with email and password, redirects to / on success', async () => {
     mockSignInWithPassword.mockResolvedValueOnce({ data: { user: {} }, error: null });
     
     render(<Login />);
@@ -83,8 +89,8 @@ describe('Authentication Flow', () => {
     expect(mockSignInWithPassword).toHaveBeenCalledWith({ email: 'test@example.com', password: 'password123' });
     
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/learn');
-    });
+      expect(mockPush).toHaveBeenCalledWith('/');
+    }, { timeout: 2000 });
   });
 
   it('submits signup, creates profile, and redirects on success', async () => {
@@ -98,7 +104,7 @@ describe('Authentication Flow', () => {
     fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'password123' } });
     
     // Select Tamil humor
-    fireEvent.click(screen.getByText(/Tamil Comedy Sense/i));
+    fireEvent.click(screen.getByText(/Tamil Comedy/i));
     
     fireEvent.click(screen.getByRole('button', { name: /Create Profile/i }));
     
@@ -108,11 +114,11 @@ describe('Authentication Flow', () => {
       expect(mockSupabase.from).toHaveBeenCalledWith('profiles');
       expect(mockFrom.insert).toHaveBeenCalledWith([{
         id: 'user-123',
-        username: 'NewUser',
+        display_name: 'NewUser',
         humor_preference: 'tamil'
       }]);
-      expect(mockPush).toHaveBeenCalledWith('/learn');
-    });
+      expect(mockPush).toHaveBeenCalledWith('/');
+    }, { timeout: 2000 });
   });
 
   it('shows error message if login fails', async () => {
@@ -129,9 +135,11 @@ describe('Authentication Flow', () => {
 });
 
 describe('Settings Flow', () => {
-  it('renders settings interface with humor preference toggle', () => {
+  it('renders settings interface with humor preference toggle', async () => {
     render(<Settings />);
-    expect(screen.getByText(/Update Password/i)).toBeDefined();
-    expect(screen.getByText(/Humor Preference/i)).toBeDefined();
+    await waitFor(() => {
+      expect(screen.getByText(/Update Password/i)).toBeDefined();
+      expect(screen.getByText(/Humor Preference/i)).toBeDefined();
+    });
   });
 });

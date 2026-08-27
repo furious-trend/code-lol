@@ -38,7 +38,6 @@ export function useMessages(friendId: string | null) {
           // or just listen to all for this friend
         },
         (payload: any) => {
-          console.log('Realtime message payload received:', payload);
           const newMsg = payload.new as Message;
           // Only add if it belongs to this conversation
           if (

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import Bugsy from '@/components/Bugsy';
+import { Bugsy } from '@/components/Bugsy';
 
 export default function Onboarding() {
   const [humorPref, setHumorPref] = useState<'general' | 'tamil' | null>(null);
@@ -51,13 +51,13 @@ export default function Onboarding() {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1, y: 0,
-      transition: { duration: 0.6, ease: "easeOut", staggerChildren: 0.15 }
+      transition: { duration: 0.6, ease: "easeOut" as const, staggerChildren: 0.15 }
     }
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 15 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } }
   };
 
   return (
@@ -76,7 +76,7 @@ export default function Onboarding() {
       >
         <motion.div variants={itemVariants} className="flex flex-col items-center mb-8 relative">
           <div className="absolute -top-14 -left-8 z-20">
-            <Bugsy mood={success ? "excited" : "happy"} size="small" />
+            <Bugsy mood={success ? "laughing" : "happy"} size={64} />
           </div>
           <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 text-center relative z-10">
             Pick Your Vibe
