@@ -23,11 +23,10 @@ export function useMemeSound() {
     const tamilFailSounds = [
       "/sounds/tamil/wrong/nov-thappa-irrkuthu-naa.mp3",
       "/sounds/tamil/wrong/aiyo-apdi-chollatha.mp3",
-      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee.mp3"
+      "/sounds/tamil/wrong/chei-sirikkira-nee.mp3"
     ];
     
     const successSounds = [
-      "/sounds/tamil/right/chei-sirikkira-nee.mp3",
       "/sounds/tamil/right/thalapathy_kacheri.webm",
       "/sounds/tamil/right/powerhouse_coolie.webm",
       "/sounds/tamil/right/sandakozhi.webm",

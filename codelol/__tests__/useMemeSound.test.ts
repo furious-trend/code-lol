@@ -42,7 +42,6 @@ describe('useMemeSound', () => {
     const soundUrl = result.current.playMemeSound(true);
     
     const expectedSuccessSounds = [
-      "/sounds/tamil/right/chei-sirikkira-nee.mp3",
       "/sounds/tamil/right/thalapathy_kacheri.webm",
       "/sounds/tamil/right/powerhouse_coolie.webm",
       "/sounds/tamil/right/sandakozhi.webm",
