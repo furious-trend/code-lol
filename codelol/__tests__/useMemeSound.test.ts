@@ -42,14 +42,12 @@ describe('useMemeSound', () => {
     const soundUrl = result.current.playMemeSound(true);
     
     const expectedSuccessSounds = [
-      "https://www.myinstants.com/en/instant/chei-sirikkira-nee-77266/?utm_source=copy&utm_medium=share",
-      "https://tamilsoundboard.com/share/227",
-      "https://tamilsoundboard.com/share/168",
-      "https://tamilsoundboard.com/share/165",
-      "https://mobcup.fm/ringtone/jana-nayagan-thalapathy-kacheri-song-bgm-79m4mwVm?utm_source=share&utm_medium=web&utm_name=list",
-      "https://mobcup.fm/ringtone/powerhouse-coolie-oTxTYZm4?utm_source=share&utm_medium=web&utm_name=list",
-      "https://mobcup.fm/ringtone/sandakozhi-the-glow-of-angel-bgm-rvmw5SZW?utm_source=share&utm_medium=web&utm_name=list",
-      "https://mobcup.fm/ringtone/pa-da-ni-ga-re-sa-re-ni-sa-raga-of-revenge-dc-movie-rrk8SCo9?utm_source=share&utm_medium=web&utm_name=list"
+      "/sounds/tamil/right/chei-sirikkira-nee.mp3",
+      "/sounds/tamil/right/thalapathy_kacheri.webm",
+      "/sounds/tamil/right/powerhouse_coolie.webm",
+      "/sounds/tamil/right/sandakozhi.webm",
+      "/sounds/tamil/right/raga_of_revenge.webm",
+      "/sounds/tamil/right/seeman-buhaha.mp3"
     ];
 
     expect(expectedSuccessSounds).toContain(soundUrl);
