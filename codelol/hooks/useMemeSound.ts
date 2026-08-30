@@ -21,9 +21,9 @@ export function useMemeSound() {
     ];
     
     const tamilFailSounds = [
-      "/sounds/tamil/seeman-buhaha.mp3",
       "/sounds/tamil/nov-thappa-irrkuthu-naa.mp3",
-      "/sounds/tamil/aiyo-apdi-chollatha.mp3"
+      "/sounds/tamil/aiyo-apdi-chollatha.mp3",
+      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee-77266.mp3"
     ];
     
     const successSounds = [
