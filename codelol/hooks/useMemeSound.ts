@@ -27,15 +27,15 @@ export function useMemeSound() {
     ];
     
     const successSounds = [
-      "/sounds/general/anime-wow-sound-effect.mp3",
-      "/sounds/tamil/seeman-buhaha.mp3",
-      "/sounds/general/indian-song.mp3",
-      "/sounds/general/kids-saying-yay-sound-effect_3.mp3",
-      "/sounds/general/let-her-go.mp3",
-      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee-77266.mp3",
-      "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3",
-      "https://www.myinstants.com/media/sounds/nov-thappa-irrkuthu-naa.mp3",
-      "https://www.myinstants.com/media/sounds/thambi-keela-erangu-pa.mp3"
+      "https://www.myinstants.com/en/instant/chei-sirikkira-nee-77266/?utm_source=copy&utm_medium=share",
+      "https://tamilsoundboard.com/share/227",
+      "https://tamilsoundboard.com/share/168",
+      "https://tamilsoundboard.com/share/165",
+      "https://mobcup.fm/ringtone/jana-nayagan-thalapathy-kacheri-song-bgm-79m4mwVm?utm_source=share&utm_medium=web&utm_name=list",
+      "https://mobcup.fm/ringtone/powerhouse-coolie-oTxTYZm4?utm_source=share&utm_medium=web&utm_name=list",
+      "https://mobcup.fm/ringtone/sandakozhi-the-glow-of-angel-bgm-rvmw5SZW?utm_source=share&utm_medium=web&utm_name=list",
+      "https://mobcup.fm/ringtone/pa-da-ni-ga-re-sa-re-ni-sa-raga-of-revenge-dc-movie-rrk8SCo9?utm_source=share&utm_medium=web&utm_name=list",
+      "/sounds/tamil/seeman-buhaha.mp3"
     ];
 
     // Use Tamil sounds by default to match the gif behavior
