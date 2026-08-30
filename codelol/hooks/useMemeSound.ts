@@ -23,12 +23,11 @@ export function useMemeSound() {
     const tamilFailSounds = [
       "/sounds/tamil/wrong/nov-thappa-irrkuthu-naa.mp3",
       "/sounds/tamil/wrong/aiyo-apdi-chollatha.mp3",
-      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee-77266.mp3"
+      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee.mp3"
     ];
     
     const successSounds = [
-      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee-77266.mp3",
-      "/sounds/tamil/right/seeman-buhaha.mp3"
+      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee.mp3"
     ];
 
     // Use Tamil sounds by default to match the gif behavior

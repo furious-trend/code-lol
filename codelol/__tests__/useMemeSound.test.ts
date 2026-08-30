@@ -41,10 +41,8 @@ describe('useMemeSound', () => {
     const { result } = renderHook(() => useMemeSound());
     const soundUrl = result.current.playMemeSound(true);
     
-    // Expected success sounds including the user requested ones
     const expectedSuccessSounds = [
-      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee-77266.mp3",
-      "/sounds/tamil/right/seeman-buhaha.mp3"
+      "https://www.myinstants.com/media/sounds/chei-sirikkira-nee.mp3"
     ];
 
     expect(expectedSuccessSounds).toContain(soundUrl);
