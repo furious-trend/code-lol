@@ -38,51 +38,54 @@ vi.mock('@/components/Bugsy', () => ({
 describe('Login Page', () => {
   const mockPush = vi.fn();
   const mockSignInWithPassword = vi.fn();
-  const mockSignUp = vi.fn();
   const mockSignInWithOAuth = vi.fn();
-  const mockInsert = vi.fn();
+  const mockRpc = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     (useRouter as any).mockReturnValue({ push: mockPush });
     
-    // Setup mock supabase client
+    mockRpc.mockResolvedValue({ data: null, error: null });
+
     const mockSupabase = {
       auth: {
         signInWithPassword: mockSignInWithPassword,
-        signUp: mockSignUp,
         signInWithOAuth: mockSignInWithOAuth,
       },
-      from: vi.fn(() => ({
-        insert: mockInsert,
-      })),
+      rpc: mockRpc,
     };
     (createClient as any).mockReturnValue(mockSupabase);
   });
 
-  it('renders login mode by default with Google and Email options', () => {
+  it('renders login tab by default with Username or Email and Password fields, plus Google login and Forgot Password link', () => {
     render(<Login />);
     
-    // Should have Google button
-    expect(screen.getByText(/Google/i)).toBeTruthy();
-    
-    // Should NOT have Facebook button
-    expect(screen.queryByText(/Facebook/i)).toBeNull();
-
-    // Should have Email and Password inputs
-    expect(screen.getByPlaceholderText(/Email/i)).toBeTruthy();
+    expect(screen.getByText(/Continue with Google/i)).toBeTruthy();
+    expect(screen.getByPlaceholderText(/Username or Email/i)).toBeTruthy();
     expect(screen.getByPlaceholderText(/Password/i)).toBeTruthy();
-    
-    // Should not have Username input in login mode
-    expect(screen.queryByPlaceholderText(/Username/i)).toBeNull();
+    expect(screen.getByText(/Forgot password\?/i)).toBeTruthy();
   });
 
-  it('calls signInWithOAuth for Google login', async () => {
+  it('renders signup tab with ONLY Google OAuth and supporting text', () => {
+    render(<Login />);
+    
+    // Switch to Signup tab
+    fireEvent.click(screen.getByRole('button', { name: 'Signup' }));
+    
+    expect(screen.getByText(/Continue with Google/i)).toBeTruthy();
+    expect(screen.getByText(/We'll get you set up in a few quick steps/i)).toBeTruthy();
+    
+    // Should NOT show any input fields in signup tab
+    expect(screen.queryByPlaceholderText(/Username or Email/i)).toBeNull();
+    expect(screen.queryByPlaceholderText(/Password/i)).toBeNull();
+  });
+
+  it('calls signInWithOAuth for Google signup/login', async () => {
     mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
     
     render(<Login />);
     
-    const googleButton = screen.getByText(/Google/i);
+    const googleButton = screen.getByText(/Continue with Google/i);
     fireEvent.click(googleButton);
     
     expect(mockSignInWithOAuth).toHaveBeenCalledWith({
@@ -93,55 +96,70 @@ describe('Login Page', () => {
     });
   });
 
-  it('calls signInWithPassword in login mode with correct fields', async () => {
-    mockSignInWithPassword.mockResolvedValueOnce({ error: null });
+  it('logs in with email directly when input contains @', async () => {
+    mockSignInWithPassword.mockResolvedValueOnce({ error: null, data: { user: { id: 'u1' } } });
     
     render(<Login />);
     
-    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'test@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'password123' } });
+    fireEvent.change(screen.getByPlaceholderText(/Username or Email/i), { target: { value: 'user@example.com' } });
+    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'secretpass' } });
     
     const submitButton = screen.getByRole('button', { name: /Enter Arena/i });
     fireEvent.click(submitButton);
     
     await waitFor(() => {
       expect(mockSignInWithPassword).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password123',
+        email: 'user@example.com',
+        password: 'secretpass',
       });
-    });
+      expect(mockPush).toHaveBeenCalledWith('/');
+    }, { timeout: 2000 });
   });
 
-  it('switches to signup mode and calls signUp and inserts profile with display_name', async () => {
-    mockSignUp.mockResolvedValueOnce({ data: { user: { id: 'test-id' } }, error: null });
-    mockInsert.mockResolvedValueOnce({ error: null });
-    
+  it('looks up email by username when input does NOT contain @ and logs in with found email', async () => {
+    // Mock rpc query finding the user
+    mockRpc.mockResolvedValueOnce({
+      data: 'resolved@example.com',
+      error: null,
+    });
+    mockSignInWithPassword.mockResolvedValueOnce({ error: null, data: { user: { id: 'u2' } } });
+
     render(<Login />);
     
-    // Switch to Signup tab
-    fireEvent.click(screen.getByText('Signup'));
+    fireEvent.change(screen.getByPlaceholderText(/Username or Email/i), { target: { value: 'testdev' } });
+    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'secretpass' } });
     
-    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'new@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/Username/i), { target: { value: 'NewUser' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'password123' } });
-    
-    // Select humor preference
-    const tamilButton = screen.getByText(/Tamil Comedy/i);
-    fireEvent.click(tamilButton);
-    
-    const submitButton = screen.getByRole('button', { name: /Create Profile/i });
+    const submitButton = screen.getByRole('button', { name: /Enter Arena/i });
     fireEvent.click(submitButton);
     
     await waitFor(() => {
-      expect(mockSignUp).toHaveBeenCalledWith({
-        email: 'new@example.com',
-        password: 'password123',
+      expect(mockRpc).toHaveBeenCalledWith('get_email_by_username', { p_username: 'testdev' });
+      expect(mockSignInWithPassword).toHaveBeenCalledWith({
+        email: 'resolved@example.com',
+        password: 'secretpass',
       });
-      expect(mockInsert).toHaveBeenCalledWith([{
-        id: 'test-id',
-        display_name: 'NewUser', 
-        humor_preference: 'tamil',
-      }]);
+      expect(mockPush).toHaveBeenCalledWith('/');
+    }, { timeout: 2000 });
+  });
+
+  it('shows error if username is not found in profiles', async () => {
+    // Mock rpc query returning null
+    mockRpc.mockResolvedValueOnce({
+      data: null,
+      error: null,
+    });
+
+    render(<Login />);
+    
+    fireEvent.change(screen.getByPlaceholderText(/Username or Email/i), { target: { value: 'nonexistentuser' } });
+    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'secretpass' } });
+    
+    const submitButton = screen.getByRole('button', { name: /Enter Arena/i });
+    fireEvent.click(submitButton);
+    
+    await waitFor(() => {
+      expect(screen.getByText(/No account found with that username/i)).toBeTruthy();
+      expect(mockSignInWithPassword).not.toHaveBeenCalled();
     });
   });
 });

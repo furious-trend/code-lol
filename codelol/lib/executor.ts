@@ -1,4 +1,8 @@
-export async function executeCodeInBrowser(language: string, code: string): Promise<{ output: string; error?: string }> {
+export async function executeCodeInBrowser(
+  language: string, 
+  code: string,
+  assertions?: Array<{ id: string, code: string }>
+): Promise<{ output: string; error?: string, verificationResults?: Array<{ id: string, passed: boolean, error?: string }> }> {
   if (language === 'javascript') {
     return new Promise((resolve) => {
       const iframe = document.createElement('iframe');
@@ -19,7 +23,8 @@ export async function executeCodeInBrowser(language: string, code: string): Prom
         
         resolve({
           output: event.data.output,
-          error: event.data.error
+          error: event.data.error,
+          verificationResults: event.data.verificationResults
         });
       };
       
@@ -69,10 +74,24 @@ export async function executeCodeInBrowser(language: string, code: string): Prom
                   logs.push("Error: " + e.message);
                 }
                 
+                const verificationResults = [];
+                ${assertions && assertions.length > 0 ? `
+                  const assertionsToRun = ${JSON.stringify(assertions)};
+                  for (const assertion of assertionsToRun) {
+                    try {
+                      const passed = eval(assertion.code);
+                      verificationResults.push({ id: assertion.id, passed: !!passed });
+                    } catch(e) {
+                      verificationResults.push({ id: assertion.id, passed: false, error: e.message });
+                    }
+                  }
+                ` : ''}
+
                 window.parent.postMessage({
                   executionId: "${executionId}",
                   output: logs.join('\\n'),
-                  error: errStr
+                  error: errStr,
+                  verificationResults
                 }, "*");
               }
               

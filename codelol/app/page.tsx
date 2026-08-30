@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getJokeOfTheDay } from "@/lib/jokes";
 import { Bugsy } from "@/components/Bugsy";
+import { WelcomeToast } from "@/components/WelcomeToast";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -28,6 +29,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)] p-6 md:p-12 gap-12 text-zinc-50 font-sans relative">
+      <WelcomeToast />
       {/* Iconic Funny Transparent Background (Home Page Only) */}
       <div className="fixed bottom-0 right-10 z-[0] opacity-10 pointer-events-none w-[300px] md:w-[600px] mix-blend-screen">
         {/* eslint-disable-next-line @next/next/no-img-element */}

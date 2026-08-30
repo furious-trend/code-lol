@@ -60,15 +60,46 @@ export default function Settings() {
     setToast(null);
 
     const supabase = createClient();
+    const trimmedName = displayName.trim();
+
+    if (!trimmedName) {
+      setToast({ type: 'error', msg: 'Username cannot be empty' });
+      setIsSaving(false);
+      return;
+    }
+
+    // Check if username is already taken by someone else
+    const { data: existingUser, error: checkError } = await supabase
+      .from('profiles')
+      .select('id')
+      .ilike('display_name', trimmedName)
+      .limit(1);
+
+    if (checkError) {
+      setToast({ type: 'error', msg: 'Error checking username availability' });
+      setIsSaving(false);
+      return;
+    }
+
+    const isTaken = existingUser && existingUser.length > 0 && existingUser[0].id !== userId;
+    if (isTaken) {
+      setToast({ type: 'error', msg: 'That username is already taken — try another' });
+      setIsSaving(false);
+      return;
+    }
 
     // Always update profile (display_name + humor_preference together)
     const { error: profileError } = await supabase
       .from('profiles')
-      .update({ display_name: displayName, humor_preference: humorPref })
+      .update({ display_name: trimmedName, humor_preference: humorPref })
       .eq('id', userId);
 
     if (profileError) {
-      setToast({ type: 'error', msg: profileError.message });
+      if (profileError.code === '23505') {
+        setToast({ type: 'error', msg: 'That username is already taken — try another' });
+      } else {
+        setToast({ type: 'error', msg: profileError.message });
+      }
       setIsSaving(false);
       return;
     }

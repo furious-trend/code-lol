@@ -72,6 +72,9 @@ export async function saveQuizProgress() {
     
     let currentLevels = 0;
     let currentStreak = 0;
+    let lastActivity = '';
+    const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
 
     if (user) {
       const { data: profile } = await supabase
@@ -83,21 +86,39 @@ export async function saveQuizProgress() {
       currentLevels = profile?.levels_completed || 0;
       currentStreak = profile?.current_streak || 0;
 
+      let newStreak = currentStreak;
+      if (lastActivity === yesterday) {
+        newStreak += 1;
+      } else if (lastActivity !== today) {
+        newStreak = 1; // Reset if older than yesterday or no activity
+      }
+
       await supabase.from('profiles').upsert({
         id: user.id,
         levels_completed: currentLevels + 1,
-        current_streak: currentStreak + 1,
+        current_streak: newStreak,
       });
+      
+      currentStreak = newStreak;
     } else {
-      const local = JSON.parse(localStorage.getItem('userProfile') || '{"levels_completed":0,"current_streak":0}');
+      const localStr = localStorage.getItem('userProfile');
+      const local = localStr ? JSON.parse(localStr) : { levels_completed: 0, current_streak: 0, last_activity_date: '' };
       currentLevels = local.levels_completed || 0;
       currentStreak = local.current_streak || 0;
+      lastActivity = local.last_activity_date || '';
+
+      if (lastActivity === yesterday) {
+        currentStreak += 1;
+      } else if (lastActivity !== today) {
+        currentStreak = 1;
+      }
     }
 
     // Always update local storage as a fallback
     localStorage.setItem('userProfile', JSON.stringify({
       levels_completed: currentLevels + 1,
-      current_streak: currentStreak + 1
+      current_streak: currentStreak,
+      last_activity_date: today,
     }));
     
     if (typeof window !== 'undefined') {

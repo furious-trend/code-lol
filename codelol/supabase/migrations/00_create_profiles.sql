@@ -1,6 +1,8 @@
 -- Create a table for public profiles
 create table public.profiles (
   id uuid references auth.users on delete cascade not null primary key,
+  display_name text,
+  humor_preference text default 'general',
   levels_completed integer default 0,
   current_streak integer default 0,
   current_level integer default 1,

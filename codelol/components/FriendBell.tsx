@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export function FriendBell() {
   const [count, setCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [streak, setStreak] = useState(0);
 
   useEffect(() => {
     async function fetchCount() {
@@ -18,6 +19,24 @@ export function FriendBell() {
       }
     }
     fetchCount();
+
+    const syncStreak = () => {
+      const profileStr = localStorage.getItem('userProfile');
+      if (profileStr) {
+        try {
+          const profile = JSON.parse(profileStr);
+          setStreak(profile.current_streak || 0);
+        } catch (e) {}
+      }
+    };
+    syncStreak();
+    window.addEventListener('storage', syncStreak);
+    window.addEventListener('codelol-progress-update', syncStreak);
+
+    return () => {
+      window.removeEventListener('storage', syncStreak);
+      window.removeEventListener('codelol-progress-update', syncStreak);
+    };
   }, []);
 
   return (
@@ -68,8 +87,14 @@ export function FriendBell() {
               <section>
                 <h4 className="text-xs uppercase font-bold text-zinc-500 mb-2">Milestones</h4>
                 <div className="bg-gradient-to-r from-orange-500/20 to-pink-500/20 p-3 rounded-xl border border-orange-500/30">
-                  <p className="text-sm font-medium text-orange-200">🔥 7 Day Streak!</p>
-                  <p className="text-xs text-orange-200/70 mt-1">Keep coding to reach 10 days!</p>
+                  <p className="text-sm font-medium text-orange-200">
+                    🔥 {streak > 0 ? `${streak} Day Streak!` : "No Active Streak"}
+                  </p>
+                  <p className="text-xs text-orange-200/70 mt-1">
+                    {streak > 0 
+                      ? `Keep coding to reach ${Math.ceil((streak + 1) / 5) * 5} days!`
+                      : "Complete a lesson or problem to start your streak!"}
+                  </p>
                 </div>
               </section>
 

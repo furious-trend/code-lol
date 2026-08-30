@@ -10,7 +10,21 @@ vi.mock('../lib/friends', () => ({
 describe('FriendBell Notification Center', () => {
   beforeEach(() => {
     vi.mocked(friendsLib.getPendingRequests).mockResolvedValue([
-      { id: '1', user_id: '123', friend_id: '456', status: 'pending', created_at: '', profiles: { display_name: 'test' } }
+      { 
+        id: '1', 
+        user_id: '123', 
+        friend_id: '456', 
+        status: 'pending', 
+        created_at: '', 
+        profiles: { 
+          id: '123', 
+          display_name: 'test', 
+          levels_completed: 0, 
+          current_streak: 0, 
+          current_level: 1, 
+          current_tier: 'Beginner' 
+        } 
+      }
     ]);
   });
 

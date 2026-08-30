@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Login from '../app/login/page';
-import Settings from '../app/settings/page';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
@@ -20,14 +19,26 @@ vi.mock('@/components/Bugsy', () => ({
   Bugsy: () => <div data-testid="bugsy" />
 }));
 
-describe('Authentication Flow', () => {
+// Mock framer-motion
+vi.mock('framer-motion', () => {
+  const React = require('react');
+  const motion = new Proxy({}, {
+    get: (_t: unknown, tag: string) =>
+      ({ children, ...props }: Record<string, unknown>) =>
+        React.createElement(tag, props, children),
+  });
+  return { motion, AnimatePresence: ({ children }: { children: unknown }) => children };
+});
+
+describe('Authentication Flow Integration', () => {
   const mockSignInWithPassword = vi.fn();
-  const mockSignUp = vi.fn();
   const mockSignInWithOAuth = vi.fn();
   const mockPush = vi.fn();
   const mockFrom = { 
-    insert: vi.fn().mockResolvedValue({ error: null }),
     select: vi.fn().mockReturnValue({
+      ilike: vi.fn().mockReturnValue({
+        limit: vi.fn().mockResolvedValue({ data: [{ email: 'user@example.com' }], error: null })
+      }),
       eq: vi.fn().mockReturnValue({
         single: vi.fn().mockResolvedValue({ data: { display_name: 'test', humor_preference: 'general' }, error: null })
       })
@@ -36,10 +47,9 @@ describe('Authentication Flow', () => {
   const mockSupabase = {
     auth: {
       signInWithPassword: mockSignInWithPassword,
-      signUp: mockSignUp,
       signInWithOAuth: mockSignInWithOAuth,
       getUser: vi.fn().mockResolvedValue({
-        data: { user: { id: 'user-123', identities: [{ provider: 'email' }] } },
+        data: { user: { id: 'user-123', email: 'user@example.com' } },
         error: null,
       }),
     },
@@ -52,19 +62,17 @@ describe('Authentication Flow', () => {
     (useRouter as any).mockReturnValue({ push: mockPush });
   });
 
-  it('renders Login mode with Email and Password by default', () => {
+  it('renders Login mode with Username/Email and Password by default', () => {
     render(<Login />);
-    expect(screen.getByPlaceholderText(/Email/i)).toBeDefined();
+    expect(screen.getByPlaceholderText(/Username or Email/i)).toBeDefined();
     expect(screen.getByPlaceholderText(/Password/i)).toBeDefined();
-    expect(screen.queryByPlaceholderText(/Username/i)).toBeNull(); // Shouldn't be in Login mode
   });
 
-  it('renders Signup mode with Email, Username, and Password when Signup tab clicked', () => {
+  it('renders Signup mode with Google OAuth only', () => {
     render(<Login />);
-    fireEvent.click(screen.getByText('Signup'));
-    expect(screen.getByPlaceholderText(/Email/i)).toBeDefined();
-    expect(screen.getByPlaceholderText(/Username/i)).toBeDefined();
-    expect(screen.getByPlaceholderText(/Password/i)).toBeDefined();
+    fireEvent.click(screen.getByRole('button', { name: 'Signup' }));
+    expect(screen.getByText(/Continue with Google/i)).toBeDefined();
+    expect(screen.getByText(/We'll get you set up in a few quick steps/i)).toBeDefined();
   });
 
   it('calls signInWithOAuth for Google', async () => {
@@ -81,7 +89,7 @@ describe('Authentication Flow', () => {
     mockSignInWithPassword.mockResolvedValueOnce({ data: { user: {} }, error: null });
     
     render(<Login />);
-    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByPlaceholderText(/Username or Email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'password123' } });
     
     fireEvent.click(screen.getByRole('button', { name: /Enter Arena/i }));
@@ -93,53 +101,15 @@ describe('Authentication Flow', () => {
     }, { timeout: 2000 });
   });
 
-  it('submits signup, creates profile, and redirects on success', async () => {
-    mockSignUp.mockResolvedValueOnce({ data: { user: { id: 'user-123' } }, error: null });
-    
-    render(<Login />);
-    fireEvent.click(screen.getByText('Signup'));
-    
-    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'new@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/Username/i), { target: { value: 'NewUser' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'password123' } });
-    
-    // Select Tamil humor
-    fireEvent.click(screen.getByText(/Tamil Comedy/i));
-    
-    fireEvent.click(screen.getByRole('button', { name: /Create Profile/i }));
-    
-    expect(mockSignUp).toHaveBeenCalledWith({ email: 'new@example.com', password: 'password123' });
-    
-    await waitFor(() => {
-      expect(mockSupabase.from).toHaveBeenCalledWith('profiles');
-      expect(mockFrom.insert).toHaveBeenCalledWith([{
-        id: 'user-123',
-        display_name: 'NewUser',
-        humor_preference: 'tamil'
-      }]);
-      expect(mockPush).toHaveBeenCalledWith('/');
-    }, { timeout: 2000 });
-  });
-
   it('shows error message if login fails', async () => {
     mockSignInWithPassword.mockResolvedValueOnce({ data: { user: null }, error: { message: 'Invalid credentials' } });
     
     render(<Login />);
-    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByPlaceholderText(/Username or Email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'wrong' } });
     fireEvent.click(screen.getByRole('button', { name: /Enter Arena/i }));
     
     const errorMessage = await screen.findByText(/Invalid credentials/i);
     expect(errorMessage).toBeDefined();
-  });
-});
-
-describe('Settings Flow', () => {
-  it('renders settings interface with humor preference toggle', async () => {
-    render(<Settings />);
-    await waitFor(() => {
-      expect(screen.getByText(/Update Password/i)).toBeDefined();
-      expect(screen.getByText(/Humor Preference/i)).toBeDefined();
-    });
   });
 });

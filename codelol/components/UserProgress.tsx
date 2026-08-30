@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 export function UserProgress() {
   const [level, setLevel] = useState(1);
   const [xp, setXp] = useState(0);
+  const [streak, setStreak] = useState(0);
   const xpNeeded = level * 100; // 100 XP per level
   const progressPercent = Math.min(100, Math.max(0, (xp / xpNeeded) * 100));
 
@@ -35,6 +36,7 @@ export function UserProgress() {
       
       setLevel(currentLvl);
       setXp(remainingXp);
+      setStreak(profile.current_streak || 0);
     };
 
     syncProgress();
@@ -55,6 +57,12 @@ export function UserProgress() {
 
   return (
     <div className="flex items-center gap-3 bg-zinc-900 border border-zinc-800 rounded-full py-1 px-3 hidden sm:flex">
+      {streak > 0 && (
+        <div className="flex items-center gap-1 text-amber-500 font-bold text-xs" title={`${streak} day streak!`}>
+          <span>🔥</span>
+          <span>{streak}</span>
+        </div>
+      )}
       <div className="flex items-center justify-center bg-gradient-to-br from-amber-400 to-amber-600 w-6 h-6 rounded-full text-zinc-950 font-black text-xs shadow-[0_0_10px_rgba(245,158,11,0.5)]">
         {level}
       </div>

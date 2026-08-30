@@ -38,54 +38,67 @@ describe('Auth Callback Route', () => {
     (createClient as any).mockResolvedValue(mockSupabase);
   });
 
-  it('redirects to /onboarding for a brand new Google user (no humor_preference)', async () => {
-    // Setup code exchange success
+  it('redirects to /onboarding for a brand new Google user (no profile found)', async () => {
     mockExchangeCodeForSession.mockResolvedValueOnce({
       error: null,
-      data: { session: { user: { id: 'new-user-id' } } },
+      data: { session: { user: { id: 'new-user-id', email: 'new@gmail.com' } } },
     });
 
-    // Setup profile query to return no humor_preference
     mockSingle.mockResolvedValueOnce({
-      data: { humor_preference: null },
-      error: null,
+      data: null,
+      error: { message: 'Not found' },
     });
 
     const request = new Request('http://localhost:3000/auth/callback?code=mock-code&next=/');
-    const response = await GET(request);
+    await GET(request);
 
     expect(mockExchangeCodeForSession).toHaveBeenCalledWith('mock-code');
     expect(NextResponse.redirect).toHaveBeenCalledWith('http://localhost:3000/onboarding');
   });
 
-  it('redirects to the next param (or home) for returning user (has humor_preference)', async () => {
-    // Setup code exchange success
+  it('redirects to /onboarding for a user with onboarding_complete = false', async () => {
     mockExchangeCodeForSession.mockResolvedValueOnce({
       error: null,
-      data: { session: { user: { id: 'returning-user-id' } } },
+      data: { session: { user: { id: 'incomplete-user-id', email: 'incomplete@gmail.com' } } },
     });
 
-    // Setup profile query to return an existing humor_preference
     mockSingle.mockResolvedValueOnce({
-      data: { humor_preference: 'tamil' },
+      data: { onboarding_complete: false },
+      error: null,
+    });
+
+    const request = new Request('http://localhost:3000/auth/callback?code=mock-code&next=/');
+    await GET(request);
+
+    expect(mockExchangeCodeForSession).toHaveBeenCalledWith('mock-code');
+    expect(NextResponse.redirect).toHaveBeenCalledWith('http://localhost:3000/onboarding');
+  });
+
+  it('redirects to the next param (or home) for returning user with onboarding_complete = true', async () => {
+    mockExchangeCodeForSession.mockResolvedValueOnce({
+      error: null,
+      data: { session: { user: { id: 'returning-user-id', email: 'user@gmail.com' } } },
+    });
+
+    mockSingle.mockResolvedValueOnce({
+      data: { onboarding_complete: true },
       error: null,
     });
 
     const request = new Request('http://localhost:3000/auth/callback?code=mock-code&next=/dashboard');
-    const response = await GET(request);
+    await GET(request);
 
     expect(mockExchangeCodeForSession).toHaveBeenCalledWith('mock-code');
     expect(NextResponse.redirect).toHaveBeenCalledWith('http://localhost:3000/dashboard');
   });
 
   it('redirects to auth-code-error if code exchange fails', async () => {
-    // Setup code exchange failure
     mockExchangeCodeForSession.mockResolvedValueOnce({
       error: new Error('Invalid code'),
     });
 
     const request = new Request('http://localhost:3000/auth/callback?code=mock-code');
-    const response = await GET(request);
+    await GET(request);
 
     expect(NextResponse.redirect).toHaveBeenCalledWith('http://localhost:3000/auth/auth-code-error');
   });
