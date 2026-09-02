@@ -13,7 +13,7 @@ const allLessons = [
 const flagged = [];
 
 for (const l of allLessons) {
-  const exp = l.funnyExplanation || '';
+  const exp = l.funnyExplanationGeneral || '';
   const words = exp.split(/\s+/).length;
   // match periods or exclamation marks not at the very end
   const sentences = (exp.match(/[.!?!]+(?=\s+.)/g) || []).length + 1;

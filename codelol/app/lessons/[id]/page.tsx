@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { allLessons } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
@@ -19,11 +20,30 @@ export default function LessonExplanationPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
+  const supabase = createClient();
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+
+  useEffect(() => {
+    async function loadPref() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('humor_preference')
+          .eq('id', user.id)
+          .single();
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
+        }
+      }
+    }
+    loadPref();
+  }, [supabase]);
 
   const handleExplain = async (code: string) => {
     if (!code) return;
-    await handleRoast(code);
-    playMemeSound(false); // Play meme sound when roast finishes
+    await handleRoast(code, undefined, undefined, undefined, humorPref);
+    playMemeSound(false, humorPref); // Play meme sound when roast finishes
   };
 
   if (!lesson) {
@@ -89,7 +109,7 @@ export default function LessonExplanationPage() {
             {currentSlide === 0 && (
               <div className="mb-8 p-6 bg-zinc-950/50 rounded-2xl border border-zinc-800 border-dashed">
                 <p className="text-lg text-zinc-300 italic">
-                  &quot;{lesson.funnyExplanation}&quot;
+                  &quot;{humorPref === 'tamil' && lesson.funnyExplanationTamil ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}&quot;
                 </p>
               </div>
             )}
@@ -173,7 +193,7 @@ export default function LessonExplanationPage() {
                        mood={roastData.mood}
                        gifUrl={roastData.gifUrl}
                        onDismiss={() => clearRoast()}
-                       onReplayAudio={() => playMemeSound(false)}
+                       onReplayAudio={() => playMemeSound(false, humorPref)}
                      />
                    </div>
                 )}

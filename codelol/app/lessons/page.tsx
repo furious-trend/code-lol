@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
 import { allLessons, Lesson, Tier } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
@@ -12,6 +13,25 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [quizAnswered, setQuizAnswered] = useState<number | null>(null);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
+  const supabase = createClient();
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+
+  useEffect(() => {
+    async function loadPref() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('humor_preference')
+          .eq('id', user.id)
+          .single();
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
+        }
+      }
+    }
+    loadPref();
+  }, [supabase]);
 
   const handleExpand = () => {
     if (!isExpanded) {
@@ -54,7 +74,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
                   <span>📖</span> Step 1: The Concept
                 </h4>
                 <p className="text-zinc-200 text-lg leading-relaxed bg-zinc-950/50 p-6 rounded-xl border border-zinc-800/50 shadow-inner">
-                  {lesson.funnyExplanation}
+                  {humorPref === 'tamil' && lesson.funnyExplanationTamil ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}
                 </p>
               </div>
             )}
@@ -134,7 +154,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
           /* Collapsed state preview */
           <div>
             <p className="text-zinc-400 leading-relaxed line-clamp-2">
-              {lesson.funnyExplanation}
+              {humorPref === 'tamil' && lesson.funnyExplanationTamil ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}
             </p>
             <div className="mt-4 text-pink-500 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
               Click to start learning <span>→</span>
