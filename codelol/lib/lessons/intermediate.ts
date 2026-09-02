@@ -7,7 +7,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Time Complexity",
     sticker: "⏱️",
-    funnyExplanation: "Time complexity is like rush hour traffic—you think you're making progress, but you're actually just moving in slow motion",
+    funnyExplanationGeneral: "Time complexity is like rush hour traffic—you think you're making progress, but you're actually just moving in slow motion",
+    funnyExplanationTamil: "Time complexity is like rush hour traffic—you think you're making progress, but you're actually just moving in slow motion",
     codeExample: "// O(1) - Instant\nfunction getFirst(arr) { return arr[0]; }\n\n// O(n) - Linear (Depends on size)\nfunction logAll(arr) { arr.forEach(x => console.log(x)); }",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -26,7 +27,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Space Complexity",
     sticker: "💾",
-    funnyExplanation: "Space complexity is like your phone storage—you think you have enough until you download one more app",
+    funnyExplanationGeneral: "Space complexity is like your phone storage—you think you have enough until you download one more app",
+    funnyExplanationTamil: "Space complexity is like your phone storage—you think you have enough until you download one more app",
     codeExample: "// O(1) Space - Using a single variable\nlet sum = 0;\n\n// O(n) Space - Creating a new array based on input\nlet newArr = originalArr.map(x => x * 2);",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -45,7 +47,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Two Pointers",
     sticker: "✌️",
-    funnyExplanation: "Two Pointers is like trying to get two WiFi signals to connect at the same time—you think it's a good idea until it gets complicated",
+    funnyExplanationGeneral: "Two Pointers is like trying to get two WiFi signals to connect at the same time—you think it's a good idea until it gets complicated",
+    funnyExplanationTamil: "Two Pointers is like trying to get two WiFi signals to connect at the same time—you think it's a good idea until it gets complicated",
     codeExample: "let left = 0;\nlet right = arr.length - 1;\nwhile(left < right) {\n  // Do something smart\n  left++; right--;\n}",
     gifKeyword: "this is fine fire",
     miniQuizQuestion: {
@@ -64,7 +67,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Sliding Window",
     sticker: "🪟",
-    funnyExplanation: "Sliding Window is like your phone's WiFi range—you move a bit too far and everything just drops",
+    funnyExplanationGeneral: "Sliding Window is like your phone's WiFi range—you move a bit too far and everything just drops",
+    funnyExplanationTamil: "Sliding Window is like your phone's WiFi range—you move a bit too far and everything just drops",
     codeExample: "let windowSum = 0;\n// Add first k elements\nfor(let i=0; i<k; i++) windowSum += arr[i];\n// Slide the window\nfor(let i=k; i<arr.length; i++) {\n  windowSum += arr[i] - arr[i-k];\n}",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -82,7 +86,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Hash Maps (Objects)",
     sticker: "🗺️",
-    funnyExplanation: "Hash Maps are like phone contacts—you think you're organized, but duplicates always sneak in and cause chaos",
+    funnyExplanationGeneral: "Hash Maps are like phone contacts—you think you're organized, but duplicates always sneak in and cause chaos",
+    funnyExplanationTamil: "Hash Maps are like phone contacts—you think you're organized, but duplicates always sneak in and cause chaos",
     codeExample: "let map = new Map();\nmap.set('Shafiq', 'Cool Guy');\nconsole.log(map.get('Shafiq')); // O(1) Instant lookup!",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -101,7 +106,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Sets (Deduplication)",
     sticker: "🚫",
-    funnyExplanation: "Sets are like your phone contacts – they automatically remove duplicates, so you don't have to deal with multiple versions of your mom",
+    funnyExplanationGeneral: "Sets are like your phone contacts – they automatically remove duplicates, so you don't have to deal with multiple versions of your mom",
+    funnyExplanationTamil: "Sets are like your phone contacts – they automatically remove duplicates, so you don't have to deal with multiple versions of your mom",
     codeExample: "let mySet = new Set([1, 2, 2, 3, 3, 3]);\nconsole.log([...mySet]); // [1, 2, 3]",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -120,7 +126,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Singly Linked Lists",
     sticker: "🔗",
-    funnyExplanation: "Singly Linked Lists are like phone notifications—you can only delete them one by one, but they just keep coming",
+    funnyExplanationGeneral: "Singly Linked Lists are like phone notifications—you can only delete them one by one, but they just keep coming",
+    funnyExplanationTamil: "Singly Linked Lists are like phone notifications—you can only delete them one by one, but they just keep coming",
     codeExample: "class Node {\n  constructor(val) {\n    this.val = val;\n    this.next = null;\n  }\n}",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -139,7 +146,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Fast & Slow Pointers (Tortoise & Hare)",
     sticker: "🐢",
-    funnyExplanation: "Fast and slow pointers are like a tortoise and hare, where the fast one leaves the slow one in the dust, only to realize it's been going in circles",
+    funnyExplanationGeneral: "Fast and slow pointers are like a tortoise and hare, where the fast one leaves the slow one in the dust, only to realize it's been going in circles",
+    funnyExplanationTamil: "Fast and slow pointers are like a tortoise and hare, where the fast one leaves the slow one in the dust, only to realize it's been going in circles",
     codeExample: "let slow = head, fast = head;\nwhile (fast && fast.next) {\n  slow = slow.next;\n  fast = fast.next.next;\n  if (slow === fast) return true; // CYCLE!\n}",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -157,7 +165,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Stacks (LIFO)",
     sticker: "🥞",
-    funnyExplanation: "Stacks are like phone notifications—you think you're done with the last one, but another pops up demanding attention",
+    funnyExplanationGeneral: "Stacks are like phone notifications—you think you're done with the last one, but another pops up demanding attention",
+    funnyExplanationTamil: "Stacks are like phone notifications—you think you're done with the last one, but another pops up demanding attention",
     codeExample: "let stack = [];\nstack.push('Bottom');\nstack.push('Top');\nconsole.log(stack.pop()); // 'Top' comes off first",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -175,7 +184,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Queues (FIFO)",
     sticker: "🚶",
-    funnyExplanation: "Queues are like lines at the grocery store—you wait forever and then someone cuts in front of you",
+    funnyExplanationGeneral: "Queues are like lines at the grocery store—you wait forever and then someone cuts in front of you",
+    funnyExplanationTamil: "Queues are like lines at the grocery store—you wait forever and then someone cuts in front of you",
     codeExample: "let queue = [];\nqueue.push('First Guy');\nqueue.push('Second Guy');\nconsole.log(queue.shift()); // First Guy gets served",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -193,7 +203,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Intro to Recursion",
     sticker: "🪞",
-    funnyExplanation: "Recursion is like your phone autocorrect—it keeps calling itself to fix the same mistake, but makes it worse",
+    funnyExplanationGeneral: "Recursion is like your phone autocorrect—it keeps calling itself to fix the same mistake, but makes it worse",
+    funnyExplanationTamil: "Recursion is like your phone autocorrect—it keeps calling itself to fix the same mistake, but makes it worse",
     codeExample: "function inception(n) {\n  if (n === 0) return 'Wake up!'; // Base case\n  return inception(n - 1);\n}",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -211,7 +222,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "The Call Stack",
     sticker: "📚",
-    funnyExplanation: "The call stack is like a traffic jam—you think you're making progress, but really you're just waiting for something to unwind",
+    funnyExplanationGeneral: "The call stack is like a traffic jam—you think you're making progress, but really you're just waiting for something to unwind",
+    funnyExplanationTamil: "The call stack is like a traffic jam—you think you're making progress, but really you're just waiting for something to unwind",
     codeExample: "function crashMe() {\n  crashMe();\n}\n// crashMe(); // RangeError: Maximum call stack size exceeded",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -229,7 +241,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Classes & Instances",
     sticker: "🏗️",
-    funnyExplanation: "Classes are like restaurant menus, instances are meals—each meal is a unique version of the same menu item",
+    funnyExplanationGeneral: "Classes are like restaurant menus, instances are meals—each meal is a unique version of the same menu item",
+    funnyExplanationTamil: "Classes are like restaurant menus, instances are meals—each meal is a unique version of the same menu item",
     codeExample: "class Car {\n  drive() { console.log('Vroom!'); }\n}\nconst myCar = new Car(); // myCar is the Instance!\nmyCar.drive();",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -248,7 +261,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "The Constructor & 'this'",
     sticker: "👷",
-    funnyExplanation: "The constructor is like setting up your profile, and 'this' ensures the food gets delivered specifically to you.",
+    funnyExplanationGeneral: "The constructor is like setting up your profile, and 'this' ensures the food gets delivered specifically to you.",
+    funnyExplanationTamil: "The constructor is like setting up your profile, and 'this' ensures the food gets delivered specifically to you.",
     codeExample: "class User {\n  constructor(name) {\n    this.name = name; // Setting up THIS specific user\n  }\n}\nconst u1 = new User('Shafiq');\nconsole.log(u1.name);",
     gifKeyword: "wrong delivery",
     miniQuizQuestion: {
@@ -266,7 +280,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Inheritance (extends)",
     sticker: "🧬",
-    funnyExplanation: "Inheritance is like copying homework from a friend who barely passed the class",
+    funnyExplanationGeneral: "Inheritance is like copying homework from a friend who barely passed the class",
+    funnyExplanationTamil: "Inheritance is like copying homework from a friend who barely passed the class",
     codeExample: "class Animal {\n  breathe() { console.log('Breathing...'); }\n}\nclass Dog extends Animal {\n  bark() { console.log('Woof!'); }\n}\nconst d = new Dog();\nd.breathe(); d.bark();",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -285,7 +300,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Encapsulation (Private Fields)",
     sticker: "🔒",
-    funnyExplanation: "Encapsulation is like a cluttered room—you hide the mess from outsiders but still know it's a disaster inside",
+    funnyExplanationGeneral: "Encapsulation is like a cluttered room—you hide the mess from outsiders but still know it's a disaster inside",
+    funnyExplanationTamil: "Encapsulation is like a cluttered room—you hide the mess from outsiders but still know it's a disaster inside",
     codeExample: "class BankAccount {\n  #balance = 0;\n  deposit(amt) { this.#balance += amt; }\n  getBalance() { return this.#balance; }\n}\nconst account = new BankAccount();\n// account.#balance; // ERROR! Private!",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -303,7 +319,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Polymorphism (Overriding)",
     sticker: "🎭",
-    funnyExplanation: "Polymorphism is like having multiple browser tabs open – they all look similar but behave differently",
+    funnyExplanationGeneral: "Polymorphism is like having multiple browser tabs open – they all look similar but behave differently",
+    funnyExplanationTamil: "Polymorphism is like having multiple browser tabs open – they all look similar but behave differently",
     codeExample: "class Parent {\n  speak() { console.log('Hello'); }\n}\nclass Teenager extends Parent {\n  speak() { console.log('Whatever'); } // Overriding!\n}\nnew Teenager().speak();",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -321,7 +338,8 @@ export const intermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Static Methods",
     sticker: "⚡",
-    funnyExplanation: "Static methods are like highway rest stops - they're shared by everyone and always in the same place",
+    funnyExplanationGeneral: "Static methods are like highway rest stops - they're shared by everyone and always in the same place",
+    funnyExplanationTamil: "Static methods are like highway rest stops - they're shared by everyone and always in the same place",
     codeExample: "class MathHelper {\n  static add(a, b) { return a + b; }\n}\n// No 'new' keyword needed!\nconsole.log(MathHelper.add(5, 5));",
     gifKeyword: "mind blown",
     miniQuizQuestion: {

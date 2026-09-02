@@ -7,7 +7,8 @@ export const interviewLessons: Lesson[] = [
     tier: "Interview",
     title: "The 5-Step Process",
     sticker: "🧠",
-    funnyExplanation: "The 5-Step Process is like a phone notification—you think you've cleared all the steps, but another one pops up",
+    funnyExplanationGeneral: "The 5-Step Process is like a phone notification—you think you've cleared all the steps, but another one pops up",
+    funnyExplanationTamil: "The 5-Step Process is like a phone notification—you think you've cleared all the steps, but another one pops up",
     codeExample: "// Step 1: Clarify\n// 'Can the array have negative numbers?'\n\n// Step 2 & 3: Pseudo-code\n/* \n  Loop through array\n  Keep track of max sum\n  Return max\n*/\n\n// Step 4: Code\nfunction getMax(arr) {\n  return Math.max(...arr);\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -25,7 +26,8 @@ export const interviewLessons: Lesson[] = [
     tier: "Interview",
     title: "AND, OR, XOR",
     sticker: "🤖",
-    funnyExplanation: "AND needs coffee and sleep, OR needs pizza or a burger, XOR forces you to choose iPhone or Android.",
+    funnyExplanationGeneral: "AND needs coffee and sleep, OR needs pizza or a burger, XOR forces you to choose iPhone or Android.",
+    funnyExplanationTamil: "AND needs coffee and sleep, OR needs pizza or a burger, XOR forces you to choose iPhone or Android.",
     codeExample: "// AND (&) - Both must be 1\nconsole.log(5 & 1); // 1 (Is it odd?)\n\n// XOR (^) - Must be DIFFERENT\nconsole.log(5 ^ 5); // 0 (Destroys itself)",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -43,7 +45,8 @@ export const interviewLessons: Lesson[] = [
     tier: "Interview",
     title: "Bit Shifting",
     sticker: "⏩",
-    funnyExplanation: "Bit shifting is like skipping songs on a playlist—you rapidly click next until you hit the right spot.",
+    funnyExplanationGeneral: "Bit shifting is like skipping songs on a playlist—you rapidly click next until you hit the right spot.",
+    funnyExplanationTamil: "Bit shifting is like skipping songs on a playlist—you rapidly click next until you hit the right spot.",
     codeExample: "let num = 5;\nconsole.log(num << 1); // 10 (Multiplied by 2!)\nconsole.log(num >> 1); // 2 (Divided by 2 and floored!)",
     gifKeyword: "scrolling forever",
     miniQuizQuestion: {
@@ -61,7 +64,8 @@ export const interviewLessons: Lesson[] = [
     tier: "Interview",
     title: "Scalability 101",
     sticker: "📈",
-    funnyExplanation: "Scalability is like adding lanes to a highway—you think it'll reduce traffic, but it just invites more cars",
+    funnyExplanationGeneral: "Scalability is like adding lanes to a highway—you think it'll reduce traffic, but it just invites more cars",
+    funnyExplanationTamil: "Scalability is like adding lanes to a highway—you think it'll reduce traffic, but it just invites more cars",
     codeExample: "// Vertical Scaling: \n// Server.upgradeRAM('128GB');\n\n// Horizontal Scaling:\n// LoadBalancer.distribute([Server1, Server2, Server3]);",
     gifKeyword: "traffic jam meme",
     miniQuizQuestion: {
@@ -79,7 +83,8 @@ export const interviewLessons: Lesson[] = [
     tier: "Interview",
     title: "Caching (Redis/Memcached)",
     sticker: "⚡",
-    funnyExplanation: "Caching is like having snacks nearby—but they're stale after a while and you still have to go grocery shopping",
+    funnyExplanationGeneral: "Caching is like having snacks nearby—but they're stale after a while and you still have to go grocery shopping",
+    funnyExplanationTamil: "Caching is like having snacks nearby—but they're stale after a while and you still have to go grocery shopping",
     codeExample: "let cache = {};\nasync function getUser(id) {\n  if (cache[id]) return cache[id]; // FAST!\n  let user = await db.query('...'); // SLOW\n  cache[id] = user;\n  return user;\n}",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -97,7 +102,8 @@ export const interviewLessons: Lesson[] = [
     tier: "Interview",
     title: "Brain Teasers",
     sticker: "🤯",
-    funnyExplanation: "Brain teasers are like trying to merge lanes in heavy traffic—you think you've figured it out, but then everything changes",
+    funnyExplanationGeneral: "Brain teasers are like trying to merge lanes in heavy traffic—you think you've figured it out, but then everything changes",
+    funnyExplanationTamil: "Brain teasers are like trying to merge lanes in heavy traffic—you think you've figured it out, but then everything changes",
     codeExample: "// Step 1: Volume of Bus = Length * Width * Height\n// Step 2: Volume of Golf Ball = 4/3 * PI * r^3\n// Step 3: Divide Bus by Ball\n// Step 4: Subtract 20% for seats and empty space",
     gifKeyword: "mind blown",
     miniQuizQuestion: {

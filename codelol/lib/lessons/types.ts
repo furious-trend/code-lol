@@ -17,7 +17,8 @@ export type Lesson = {
   tier: Tier;
   title: string;
   sticker: string;
-  funnyExplanation: string;
+  funnyExplanationGeneral: string;
+  funnyExplanationTamil: string;
   codeExample: string;
   gifKeyword: string;
   miniQuizQuestion: QuizQuestion;

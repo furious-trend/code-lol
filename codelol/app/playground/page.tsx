@@ -11,6 +11,7 @@ import { Bugsy } from '@/components/Bugsy';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { executeCodeInBrowser } from '@/lib/executor';
 import { getRandomLoadingMessage, getRandomEmptyMessage } from '@/lib/funnyCopy';
+import { createClient } from '@/lib/supabase/client';
 
 function PlaygroundContent() {
   const searchParams = useSearchParams();
@@ -25,6 +26,25 @@ function PlaygroundContent() {
   const [emptyMsg, setEmptyMsg] = useState("Run your code to see results and get roasted!");
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
+  const supabase = createClient();
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+
+  useEffect(() => {
+    async function loadPref() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('humor_preference')
+          .eq('id', user.id)
+          .single();
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
+        }
+      }
+    }
+    loadPref();
+  }, [supabase]);
 
   useEffect(() => {
     setEmptyMsg(getRandomEmptyMessage());
@@ -67,9 +87,9 @@ function PlaygroundContent() {
         setOutput(finalOutput);
         
         // Wait for roast and GIF to fully load
-        await handleRoast(code, finalOutput, true, '');
+        await handleRoast(code, finalOutput, true, '', humorPref);
         // Play audio exactly when UI updates
-        playMemeSound(true);
+        playMemeSound(true, humorPref);
         
       } else {
         setLastRunSuccess(false);
@@ -77,17 +97,17 @@ function PlaygroundContent() {
         setOutput(errorOutput);
         
         // Wait for roast and GIF to fully load
-        await handleRoast(code, errorOutput, false, '');
+        await handleRoast(code, errorOutput, false, '', humorPref);
         // Play audio exactly when UI updates
-        playMemeSound(false);
+        playMemeSound(false, humorPref);
       }
     } catch {
       setLastRunSuccess(false);
       setOutput('Failed to execute code. Check your connection or try again later.');
       // Wait for roast and GIF to fully load
-      await handleRoast(code, 'Failed to execute code.', false, '');
+      await handleRoast(code, 'Failed to execute code.', false, '', humorPref);
       // Play audio exactly when UI updates
-      playMemeSound(false);
+      playMemeSound(false, humorPref);
     } finally {
       setIsRunning(false);
     }
@@ -205,7 +225,7 @@ function PlaygroundContent() {
                   onDismiss={clearRoast}
                   onReplayAudio={() => {
                     if (lastRunSuccess !== null) {
-                      playMemeSound(lastRunSuccess);
+                      playMemeSound(lastRunSuccess, humorPref);
                     }
                   }}
                 />

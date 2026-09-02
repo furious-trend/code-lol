@@ -21,7 +21,7 @@ export function useRoast() {
     setRoastError('');
   };
 
-  const handleRoast = useCallback(async (code: string, output?: string, isSuccess?: boolean, soundUrl?: string) => {
+  const handleRoast = useCallback(async (code: string, output?: string, isSuccess?: boolean, soundUrl?: string, humorPref: 'general' | 'tamil' = 'general') => {
     if (!code.trim()) {
       setRoastError('Please provide some code to roast!');
       return;
@@ -45,7 +45,7 @@ export function useRoast() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code, output, isSuccess }),
+        body: JSON.stringify({ code, output, isSuccess, humorPref }),
       });
       
       const roastResponseData = await roastRes.json();
@@ -59,7 +59,7 @@ export function useRoast() {
       let gifUrl = '';
       try {
         const { getResultGif } = await import('@/lib/localGifs');
-        gifUrl = getResultGif(!!isSuccess);
+        gifUrl = getResultGif(!!isSuccess, humorPref);
       } catch (err) {
         console.error('Failed to load local gif:', err);
       }

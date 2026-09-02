@@ -7,7 +7,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Binary Trees",
     sticker: "🌲",
-    funnyExplanation: "Binary Trees are like traffic - every route seems efficient until you hit a node and everything comes to a standstill",
+    funnyExplanationGeneral: "Binary Trees are like traffic - every route seems efficient until you hit a node and everything comes to a standstill",
+    funnyExplanationTamil: "Binary Trees are like traffic - every route seems efficient until you hit a node and everything comes to a standstill",
     codeExample: "class TreeNode {\n  constructor(val) {\n    this.val = val;\n    this.left = null;\n    this.right = null;\n  }\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -25,7 +26,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Binary Search Trees (BST)",
     sticker: "🔍",
-    funnyExplanation: "Binary Search Trees are like phonebooks—you can quickly find a specific name, but good luck inserting a new one in the correct spot",
+    funnyExplanationGeneral: "Binary Search Trees are like phonebooks—you can quickly find a specific name, but good luck inserting a new one in the correct spot",
+    funnyExplanationTamil: "Binary Search Trees are like phonebooks—you can quickly find a specific name, but good luck inserting a new one in the correct spot",
     codeExample: "function searchBST(root, val) {\n  if (!root) return null;\n  if (root.val === val) return root;\n  if (val < root.val) return searchBST(root.left, val);\n  return searchBST(root.right, val);\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -43,7 +45,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Depth First Search (DFS)",
     sticker: "🤿",
-    funnyExplanation: "Depth First Search is like trying to find the WiFi password in your notes—you keep digging deeper and deeper until you finally find it",
+    funnyExplanationGeneral: "Depth First Search is like trying to find the WiFi password in your notes—you keep digging deeper and deeper until you finally find it",
+    funnyExplanationTamil: "Depth First Search is like trying to find the WiFi password in your notes—you keep digging deeper and deeper until you finally find it",
     codeExample: "function dfs(node) {\n  if (!node) return;\n  console.log(node.val); // Pre-order\n  dfs(node.left);\n  dfs(node.right);\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -61,7 +64,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Breadth First Search (BFS)",
     sticker: "🌊",
-    funnyExplanation: "Breadth First Search is like searching for a specific text in a long WhatsApp conversation—you have to go through all the irrelevant messages first",
+    funnyExplanationGeneral: "Breadth First Search is like searching for a specific text in a long WhatsApp conversation—you have to go through all the irrelevant messages first",
+    funnyExplanationTamil: "Breadth First Search is like searching for a specific text in a long WhatsApp conversation—you have to go through all the irrelevant messages first",
     codeExample: "function bfs(root) {\n  let queue = [root];\n  while(queue.length) {\n    let node = queue.shift(); // Dequeue\n    console.log(node.val);\n    if (node.left) queue.push(node.left);\n    if (node.right) queue.push(node.right);\n  }\n}",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -79,7 +83,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Graph Basics",
     sticker: "🕸️",
-    funnyExplanation: "Graphs are like traffic—you think you've found the shortest path, but then roadwork happens",
+    funnyExplanationGeneral: "Graphs are like traffic—you think you've found the shortest path, but then roadwork happens",
+    funnyExplanationTamil: "Graphs are like traffic—you think you've found the shortest path, but then roadwork happens",
     codeExample: "// Adjacency List\nconst graph = {\n  'Alice': ['Bob', 'Charlie'],\n  'Bob': ['Alice'],\n  'Charlie': ['Alice']\n};",
     gifKeyword: "road rage gif",
     miniQuizQuestion: {
@@ -97,7 +102,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Graph Traversal",
     sticker: "🧭",
-    funnyExplanation: "Graph traversal is like trying to escape a traffic circle—you think you're making progress, but you're just ending up back where you started",
+    funnyExplanationGeneral: "Graph traversal is like trying to escape a traffic circle—you think you're making progress, but you're just ending up back where you started",
+    funnyExplanationTamil: "Graph traversal is like trying to escape a traffic circle—you think you're making progress, but you're just ending up back where you started",
     codeExample: "let visited = new Set();\nfunction dfsGraph(node) {\n  if (visited.has(node)) return;\n  visited.add(node);\n  console.log(node);\n  for (let neighbor of graph[node]) dfsGraph(neighbor);\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -115,7 +121,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Memoization (Top-Down)",
     sticker: "🧠",
-    funnyExplanation: "Memoization is like saving your WiFi password so you don't have to remember it every time, but your browser does",
+    funnyExplanationGeneral: "Memoization is like saving your WiFi password so you don't have to remember it every time, but your browser does",
+    funnyExplanationTamil: "Memoization is like saving your WiFi password so you don't have to remember it every time, but your browser does",
     codeExample: "let memo = {};\nfunction fib(n) {\n  if (n <= 1) return n;\n  if (memo[n]) return memo[n]; // Oh yeah, I know this!\n  memo[n] = fib(n-1) + fib(n-2);\n  return memo[n];\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -133,7 +140,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Tabulation (Bottom-Up)",
     sticker: "📊",
-    funnyExplanation: "Tabulation is like making a grocery list, but with each item, you realize you need to buy something else first",
+    funnyExplanationGeneral: "Tabulation is like making a grocery list, but with each item, you realize you need to buy something else first",
+    funnyExplanationTamil: "Tabulation is like making a grocery list, but with each item, you realize you need to buy something else first",
     codeExample: "function fib(n) {\n  let dp = [0, 1];\n  for(let i = 2; i <= n; i++) {\n    dp[i] = dp[i-1] + dp[i-2];\n  }\n  return dp[n];\n}",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -151,7 +159,8 @@ export const expertLessons: Lesson[] = [
     tier: "Expert",
     title: "Merge Sort",
     sticker: "🗂️",
-    funnyExplanation: "Merge sort is like sorting laundry, except instead of folding, you're just combining piles until it's all tidy",
+    funnyExplanationGeneral: "Merge sort is like sorting laundry, except instead of folding, you're just combining piles until it's all tidy",
+    funnyExplanationTamil: "Merge sort is like sorting laundry, except instead of folding, you're just combining piles until it's all tidy",
     codeExample: "function merge(left, right) {\n  let res = [];\n  while(left.length && right.length) {\n    if(left[0] < right[0]) res.push(left.shift());\n    else res.push(right.shift());\n  }\n  return [...res, ...left, ...right];\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {

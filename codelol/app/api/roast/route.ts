@@ -4,7 +4,7 @@ import { checkRateLimit } from '@/lib/rateLimit';
 
 export async function POST(request: Request) {
   try {
-    const { code, output, isSuccess } = await request.json();
+    const { code, output, isSuccess, humorPref = 'general' } = await request.json();
 
     const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
     const rateLimit = checkRateLimit(ip);
@@ -37,7 +37,32 @@ Format the response strictly as a JSON object with this exact shape:
   "gifKeyword": "the search term for the GIF"
 }`;
     } else {
-      prompt = `You are a witty, ruthless coding mentor. Look at this code and the execution error. You MUST find the actual bug or issue causing the error.
+      if (humorPref === 'tamil') {
+        prompt = `You are a witty, ruthless coding mentor. Look at this code and the execution error. You MUST find the actual bug or issue causing the error.
+
+Respond in this exact format:
+ROAST: [ONE short punchy sentence, under 20 words, comparing the SPECIFIC bug/error to a Kollywood movie-reference, Tamil meme-culture rhythm, and exaggerated dramatic delivery.]
+FIX: [the corrected code]
+MOOD: [one word: facepalm, mind_blown, dead, screaming, crying_laughing, done, disaster, or relief]
+
+Example of GOOD roasts (Specific to the error):
+- Error: ReferenceError: consol is not defined
+  Roast: 'consol.log? Idhu enna Baasha padathula vara Antony mathiri pudhusa oru per vechirukka!'
+- Error: SyntaxError: Unexpected token ')'
+  Roast: 'Unexpected parenthesis? Sivaji the Boss mathiri getha code ezhudha vandhuttu, ipadi brackets miss pandriye!'
+- Error: TypeError: Cannot read properties of undefined
+  Roast: 'Reading properties of undefined is like searching for comedy in a Muni movie—adhukku edame illa!'
+- Error: missing variable declaration
+  Roast: 'Declare pannama variable use panriya? Naan oru thadava sonna nooru thadava sonna madhiri... let or const use pannu!'
+
+Example of BAD roasts (Too generic, do NOT do this):
+- 'Your code is broken like a cracked screen.' (Doesn't mention the actual error)
+- 'You forgot to compile your code.' (Generic and often wrong)
+- 'Please check your syntax.' (Boring)
+
+The roast must strictly relate to the specific error seen in the Execution Output. It must be ONE sentence, under 20 words. Use Kollywood movie-reference energy.`;
+      } else {
+        prompt = `You are a witty, ruthless coding mentor. Look at this code and the execution error. You MUST find the actual bug or issue causing the error.
 
 Respond in this exact format:
 ROAST: [ONE short punchy sentence, under 20 words, comparing the SPECIFIC bug/error to a simple everyday annoyance. Be brutal, funny, and accurate to the error.]
@@ -60,6 +85,7 @@ Example of BAD roasts (Too generic, do NOT do this):
 - 'Please check your syntax.' (Boring)
 
 The roast must strictly relate to the specific error seen in the Execution Output. It must be ONE sentence, under 20 words.`;
+      }
     }
 
     prompt += `
@@ -99,14 +125,14 @@ ${output || 'None'}
 
       if (!response.ok) {
         console.warn(`Gemini API error: ${response.status}. Using fallback roast.`);
-        return NextResponse.json(getRandomFallback(isSuccess));
+        return NextResponse.json(getRandomFallback(isSuccess, humorPref));
       }
 
       const result = await response.json();
       text = result.candidates[0].content.parts[0].text.trim();
     } catch (apiError) {
       console.warn('Gemini API fetch failed or timed out. Using fallback roast.', apiError);
-      return NextResponse.json(getRandomFallback(isSuccess));
+      return NextResponse.json(getRandomFallback(isSuccess, humorPref));
     }
 
     let parsedResponse;
@@ -123,7 +149,7 @@ ${output || 'None'}
         parsedResponse = JSON.parse(jsonText);
       } catch {
         console.error('Failed to parse success JSON response:', jsonText);
-        return NextResponse.json(getRandomFallback(isSuccess));
+        return NextResponse.json(getRandomFallback(isSuccess, humorPref));
       }
     } else {
       // Parse the custom text format

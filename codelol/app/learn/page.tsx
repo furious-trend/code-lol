@@ -14,6 +14,7 @@ import confetti from 'canvas-confetti';
 
 function LearnPageContent() {
   const [currentLevel, setCurrentLevel] = useState<number>(1);
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [isInitializing, setIsInitializing] = useState(true);
   const supabase = createClient();
 
@@ -24,13 +25,16 @@ function LearnPageContent() {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('current_level')
+          .select('current_level, humor_preference')
           .eq('id', user.id)
           .single();
         if (profile?.current_level) {
           // Ensure we don't go out of bounds if they completed everything
           const maxLevel = Math.min(profile.current_level, allLessons.length);
           setCurrentLevel(Math.max(1, maxLevel));
+        }
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
         }
       }
       setIsInitializing(false);
@@ -43,10 +47,10 @@ function LearnPageContent() {
     return <div className="flex h-screen items-center justify-center bg-zinc-950 text-white">Loading your progress...</div>;
   }
 
-  return <LessonView currentLevel={currentLevel} setCurrentLevel={setCurrentLevel} />;
+  return <LessonView currentLevel={currentLevel} setCurrentLevel={setCurrentLevel} humorPref={humorPref} />;
 }
 
-function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, setCurrentLevel: (level: number) => void }) {
+function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel: number, setCurrentLevel: (level: number) => void, humorPref: 'general' | 'tamil' }) {
   const lesson = allLessons[currentLevel - 1];
   
   // Editor & Run State
@@ -117,8 +121,8 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
       if (!regex.test(code)) {
         const errorOutput = `Error: ${lesson.topicRequirement.errorMessage}`;
         setOutput(errorOutput);
-        await handleRoast(code, errorOutput, false, '');
-        playMemeSound(false);
+        await handleRoast(code, errorOutput, false, '', humorPref);
+        playMemeSound(false, humorPref);
         setIsRunning(false);
         return;
       }
@@ -131,20 +135,20 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
         const finalOutput = data.output || 'Code ran successfully with no output.';
         setOutput(finalOutput);
         
-        await handleRoast(code, finalOutput, true, '');
-        playMemeSound(true);
+        await handleRoast(code, finalOutput, true, '', humorPref);
+        playMemeSound(true, humorPref);
         setHasRunSuccessfully(true);
       } else {
         const errorOutput = `Error: ${data.error}`;
         setOutput(errorOutput);
         
-        await handleRoast(code, errorOutput, false, '');
-        playMemeSound(false);
+        await handleRoast(code, errorOutput, false, '', humorPref);
+        playMemeSound(false, humorPref);
       }
     } catch {
       setOutput('Failed to execute code. Check your connection.');
-      await handleRoast(code, 'Failed to execute code.', false, '');
-      playMemeSound(false);
+      await handleRoast(code, 'Failed to execute code.', false, '', humorPref);
+      playMemeSound(false, humorPref);
     } finally {
       setIsRunning(false);
     }
@@ -171,7 +175,7 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
           spread: 70,
           origin: { y: 0.6 }
         });
-        playMemeSound(true);
+        playMemeSound(true, humorPref);
       }
       await handleLevelComplete();
     }
@@ -257,7 +261,7 @@ function LessonView({ currentLevel, setCurrentLevel }: { currentLevel: number, s
             </div>
             
             <p className="text-zinc-300 leading-relaxed text-lg mb-6">
-              {lesson.funnyExplanation}
+              {humorPref === 'tamil' ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}
             </p>
 
             {lessonGif && (

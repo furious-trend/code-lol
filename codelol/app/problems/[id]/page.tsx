@@ -13,6 +13,7 @@ import { saveProblemCompletion } from '@/lib/progress';
 import { getRandomLoadingMessage, getRandomSuccessMessage, getRandomNudgeMessage } from '@/lib/funnyCopy';
 import { MilestoneCelebration } from '@/components/MilestoneCelebration';
 import ReactMarkdown from 'react-markdown';
+import { createClient } from '@/lib/supabase/client';
 
 export default function ProblemSolverPage() {
   const params = useParams();
@@ -41,6 +42,25 @@ export default function ProblemSolverPage() {
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const supabase = createClient();
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+
+  useEffect(() => {
+    async function loadPref() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('humor_preference')
+          .eq('id', user.id)
+          .single();
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
+        }
+      }
+    }
+    loadPref();
+  }, [supabase]);
 
   // Sync state if problem loads
   useEffect(() => {
@@ -175,8 +195,8 @@ let _log = [];
       
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);
-        const playedSound = playMemeSound(false);
-        handleRoast(code, "Execution Error:\n" + data.error, false, playedSound);
+        const playedSound = playMemeSound(false, humorPref);
+        handleRoast(code, "Execution Error:\n" + data.error, false, playedSound, humorPref);
         setIsSubmitting(false);
         return;
       }
@@ -210,30 +230,30 @@ let _log = [];
             
             setSuccessMsg(getRandomSuccessMessage());
             setNudgeMsg(getRandomNudgeMessage());
-            const playedSound = playMemeSound(true);
+            const playedSound = playMemeSound(true, humorPref);
             // Trigger the happy roast (meme/joke) on success
-            handleRoast(code, data.output, true, playedSound);
+            handleRoast(code, data.output, true, playedSound, humorPref);
           } else {
-            const playedSound = playMemeSound(false);
+            const playedSound = playMemeSound(false, humorPref);
             // Automatically trigger the roast (meme/joke) on test failure
-            handleRoast(code, data.output, false, playedSound);
+            handleRoast(code, data.output, false, playedSound, humorPref);
           }
           
         } catch (e) {
           setRawOutput("Failed to parse test results.\n" + data.output);
-          const playedSound = playMemeSound(false);
-          handleRoast(code, "Failed to parse test results.\n" + data.output, false, playedSound);
+          const playedSound = playMemeSound(false, humorPref);
+          handleRoast(code, "Failed to parse test results.\n" + data.output, false, playedSound, humorPref);
         }
       } else {
         // Syntax error or runtime error before our tests could even run
         setRawOutput("Execution Error:\n" + data.output);
-        const playedSound = playMemeSound(false);
-        handleRoast(code, "Execution Error:\n" + data.output, false, playedSound);
+        const playedSound = playMemeSound(false, humorPref);
+        handleRoast(code, "Execution Error:\n" + data.output, false, playedSound, humorPref);
       }
     } catch (err) {
       setRawOutput("Network Error. Please try again.");
-      const playedSound = playMemeSound(false);
-      handleRoast(code, "Network Error. Please try again.", false, playedSound);
+      const playedSound = playMemeSound(false, humorPref);
+      handleRoast(code, "Network Error. Please try again.", false, playedSound, humorPref);
     } finally {
       setIsSubmitting(false);
     }

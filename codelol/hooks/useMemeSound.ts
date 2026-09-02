@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 export function useMemeSound() {
-  const playMemeSound = useCallback((isSuccess: boolean) => {
+  const playMemeSound = useCallback((isSuccess: boolean, humorPref: 'general' | 'tamil' = 'general') => {
     if (typeof window === 'undefined') return '';
 
     // Create 2 parallel audio players as was done in playground
@@ -12,30 +12,42 @@ export function useMemeSound() {
     audioPlayer2.volume = 0.8;
 
     const generalFailSounds = [
-      "/sounds/general/faaah.mp3",
-      "/sounds/general/896756048.mp3",
-      "/sounds/general/tf_nemesis.mp3",
-      "/sounds/general/directed-by-robert-b_voI2Z4T.mp3",
-      "/sounds/general/dexter-meme.mp3",
-      "/sounds/general/faaaaaaaaaaaaaaaaaah.mp3"
+      "/sounds/general/wrong/faaah.mp3",
+      "/sounds/general/wrong/896756048.mp3",
+      "/sounds/general/wrong/tf_nemesis.mp3",
+      "/sounds/general/wrong/directed-by-robert-b_voI2Z4T.mp3",
+      "/sounds/general/wrong/dexter-meme.mp3",
+      "/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3"
     ];
     
     const tamilFailSounds = [
       "/sounds/tamil/wrong/nov-thappa-irrkuthu-naa.mp3",
       "/sounds/tamil/wrong/aiyo-apdi-chollatha.mp3",
-      "/sounds/tamil/wrong/chei-sirikkira-nee.mp3"
+      "/sounds/tamil/wrong/chei-sirikkira-nee.mp3",
+      "/sounds/tamil/wrong/annaiku_kalaila_6_mani.mp3",
+      "/sounds/tamil/wrong/yarume_illatha_kadaila_yarukuda.mp3",
+      "/sounds/tamil/wrong/vadivelu_winner.mp3"
     ];
     
-    const successSounds = [
-      "/sounds/tamil/right/thalapathy_kacheri.webm",
-      "/sounds/tamil/right/powerhouse_coolie.webm",
-      "/sounds/tamil/right/sandakozhi.webm",
-      "/sounds/tamil/right/raga_of_revenge.webm",
-      "/sounds/tamil/right/seeman-buhaha.mp3"
+    const generalSuccessSounds = [
+      "/sounds/general/right/happy-happy-happy-song.mp3",
+      "/sounds/general/right/indian-song.mp3",
+      "/sounds/general/right/kids-saying-yay-sound-effect_3.mp3",
+      "/sounds/general/right/anime-wow-sound-effect.mp3"
     ];
 
-    // Use Tamil sounds by default to match the gif behavior
-    const failSounds = tamilFailSounds;
+    const tamilSuccessSounds = [
+      "/sounds/tamil/right/thalapathy_kacheri.mp3",
+      "/sounds/tamil/right/powerhouse_coolie.mp3",
+      "/sounds/tamil/right/raga_of_revenge.mp3",
+      "/sounds/tamil/right/evalavo_pannitom.mp3",
+      "/sounds/tamil/right/if_you_are_bad.mp3",
+      "/sounds/tamil/right/vadivelu_bomb.mp3",
+      "/sounds/tamil/right/vadivelu.mp3"
+    ];
+
+    const failSounds = humorPref === 'tamil' ? tamilFailSounds : generalFailSounds;
+    const successSounds = humorPref === 'tamil' ? tamilSuccessSounds : generalSuccessSounds;
 
     const list = isSuccess ? successSounds : failSounds;
     const soundUrl = list[Math.floor(Math.random() * list.length)];
@@ -59,7 +71,7 @@ export function useMemeSound() {
       setTimeout(() => {
         p.pause();
         p.currentTime = 0;
-      }, 8000); // 8s absolute maximum limit
+      }, 10000); // 10s absolute maximum limit
     };
 
     // Synchronously create and unlock TWO audio players on click
@@ -73,11 +85,6 @@ export function useMemeSound() {
     // Slight delay to allow unlock to process before setting actual source
     setTimeout(() => {
         playWithLimit(audioPlayer, soundUrl, 1);
-        
-        // For success, optionally play an extra sound like seeman laugh or level up
-        if (isSuccess && Math.random() > 0.5) {
-            playWithLimit(audioPlayer2, "https://www.myinstants.com/media/sounds/seeman-buhaha.mp3", 1);
-        }
     }, 50);
 
     return soundUrl;

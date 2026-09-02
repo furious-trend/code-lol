@@ -7,7 +7,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Variables",
     sticker: "📦",
-    funnyExplanation: "Variables are like phone notifications—you think you've cleared them all, but more just keep coming",
+    funnyExplanationGeneral: "Variables are like phone notifications—you think you've cleared them all, but more just keep coming",
+    funnyExplanationTamil: "Variables are like a Rajini movie intro—oru thadava sonna nooru thadava sonna mathiri, unless you use 'let' to change it!",
     codeExample: "let fridgeLabel = 'Leftover Biryani';\nlet actualFood = 'Frozen Dal';\nconsole.log('Label says:', fridgeLabel);\nconsole.log('Mom actually put:', actualFood);",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -31,7 +32,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Data Types",
     sticker: "📊",
-    funnyExplanation: "Data types are like phone notifications—they pop up everywhere and you're not always sure what they mean",
+    funnyExplanationGeneral: "Data types are like phone notifications—they pop up everywhere and you're not always sure what they mean",
+    funnyExplanationTamil: "Data types are like the cast in a Hari movie—you've got the hero (string), the comedian (boolean), and a hundred side actors (numbers) doing their own thing.",
     codeExample: "let status = 'It\\'s Complicated';\nlet singles = 1;\nlet isHappy = false;\nconsole.log(typeof status, typeof singles, typeof isHappy);",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -51,7 +53,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Arrays",
     sticker: "📚",
-    funnyExplanation: "Arrays are like phone notifications—you can't ignore them and they just keep piling up",
+    funnyExplanationGeneral: "Arrays are like phone notifications—you can't ignore them and they just keep piling up",
+    funnyExplanationTamil: "Arrays are like the seats in a local bus—everyone is packed in order, and there's always that one guy taking up three indexes.",
     codeExample: "let family = ['Uncle', 'Aunty', 'Cousin'];\nconsole.log(family[0]); // Uncle is at index 0",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -71,7 +74,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Objects",
     sticker: "🏷️",
-    funnyExplanation: "Objects are like phone notifications—you think you've handled them all, but more just keep popping up",
+    funnyExplanationGeneral: "Objects are like phone notifications—you think you've handled them all, but more just keep popping up",
+    funnyExplanationTamil: "Objects are like a typical Tamil mom's kitchen cabinet—everything is labeled, but only she knows what property holds the 'murukku'.",
     codeExample: "let person = {\n  name: 'Shafiq',\n  age: 21,\n  patience: 0\n};\nconsole.log(person.name);",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -91,7 +95,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "For Loops",
     sticker: "🔁",
-    funnyExplanation: "For loops are like autocorrect on your phone—it keeps repeating the same mistake over and over",
+    funnyExplanationGeneral: "For loops are like autocorrect on your phone—it keeps repeating the same mistake over and over",
+    funnyExplanationTamil: "For loops are like a Vijay movie dance step—repeat the same 'Dappankuthu' 100 times until the director says cut!",
     codeExample: "for (let minutes = 1; minutes <= 5; minutes++) {\n  console.log('Scrolling reel #' + minutes);\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -115,7 +120,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "While Loops",
     sticker: "☕",
-    funnyExplanation: "While loops are like checking your phone for a text from someone—you keep going back hoping something new is there, but it's always the same",
+    funnyExplanationGeneral: "While loops are like checking your phone for a text from someone—you keep going back hoping something new is there, but it's always the same",
+    funnyExplanationTamil: "While loops are like waiting for an Ajith movie update—you just keep looping and waiting until the condition (producer tweets) finally becomes true.",
     codeExample: "let broke = false;\nlet cups = 0;\nwhile (!broke && cups < 3) {\n  console.log('One more chai!');\n  cups++;\n}",
     gifKeyword: "waiting forever",
     miniQuizQuestion: {
@@ -135,7 +141,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Conditionals (if/else)",
     sticker: "🔀",
-    funnyExplanation: "Conditionals are like your phone's low battery warning: if you charge it, you're good, else you're calling your mom to pick you up",
+    funnyExplanationGeneral: "Conditionals are like your phone's low battery warning: if you charge it, you're good, else you're calling your mom to pick you up",
+    funnyExplanationTamil: "Conditionals are like dealing with a strict dad: 'If (marks > 90) get a bike, Else get an umbrella for walking'.",
     codeExample: "let isBored = true;\nif (isBored) {\n  console.log('Opening Insta...');\n} else {\n  console.log('Writing code!');\n}",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -155,7 +162,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Functions",
     sticker: "🤖",
-    funnyExplanation: "Functions are like phone notifications—you think they're helpful, but sometimes they just keep popping up and interrupting everything",
+    funnyExplanationGeneral: "Functions are like phone notifications—you think they're helpful, but sometimes they just keep popping up and interrupting everything",
+    funnyExplanationTamil: "Functions are like calling Vadivelu for help—you pass in the problem, and he returns an epic disaster, but at least it's reusable!",
     codeExample: "function orderBiryani(isSpicy) {\n  if (isSpicy) return '🔥 Spicy Biryani';\n  return 'Normal Biryani';\n}\nconsole.log(orderBiryani(true));",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -175,7 +183,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Operators",
     sticker: "➕",
-    funnyExplanation: "Operators are like traffic lights—you think they're controlling the flow, but sometimes they just stop everything",
+    funnyExplanationGeneral: "Operators are like traffic lights—you think they're controlling the flow, but sometimes they just stop everything",
+    funnyExplanationTamil: "Operators are like the fight scene gravity in Boyapati movies—they push, pull, and multiply things in ways that defy logic.",
     codeExample: "let score = 95;\nlet cousinScore = '95';\nconsole.log(score == cousinScore); // true (loose)\nconsole.log(score === cousinScore); // false (strict!)",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -195,7 +204,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "String Basics",
     sticker: "🧵",
-    funnyExplanation: "Strings are like autocorrected text messages—you type one thing, but it comes out as something entirely different",
+    funnyExplanationGeneral: "Strings are like autocorrected text messages—you type one thing, but it comes out as something entirely different",
+    funnyExplanationTamil: "Strings are like Dhanush singing 'Why This Kolaveri Di'—you just keep adding words together until it becomes a massive hit.",
     codeExample: "let msg = 'Hello';\nlet name = \"Shafiq\";\nconsole.log(msg + ' ' + name); // concatenation",
     gifKeyword: "facepalm",
     miniQuizQuestion: {
@@ -215,7 +225,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Comments",
     sticker: "🤫",
-    funnyExplanation: "Comments are like old phone notifications—you swipe them away but they keep coming back",
+    funnyExplanationGeneral: "Comments are like old phone notifications—you swipe them away but they keep coming back",
+    funnyExplanationTamil: "Comments are like the director's cut explanations—nobody reads them during the movie, but without them, you have no idea what's happening.",
     codeExample: "// This is a single line comment\nlet x = 10; /* This is a \nmulti-line comment */\nconsole.log(x);",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -235,7 +246,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Type Conversion",
     sticker: "🔄",
-    funnyExplanation: "Type conversion is like autocorrecting your text to your ex's name",
+    funnyExplanationGeneral: "Type conversion is like autocorrecting your text to your ex's name",
+    funnyExplanationTamil: "Type conversion is like Kamal Haasan's Dasavatharam—suddenly a number dresses up as a string and you're just confused about who is who.",
     codeExample: "let a = '5' + 1;\nlet b = '5' - 1;\nconsole.log('a = ' + a + ', b = ' + b);",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -255,7 +267,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Input/Output Basics",
     sticker: "🖨️",
-    funnyExplanation: "Input/Output is like phone notifications—you think you're in control, but they just keep coming",
+    funnyExplanationGeneral: "Input/Output is like phone notifications—you think you're in control, but they just keep coming",
+    funnyExplanationTamil: "Input/Output is like a press meet—you throw a question (input) and get a pre-planned political answer (output) on the console.",
     codeExample: "let secret = 'I love coding';\nconsole.log('The secret is:', secret);",
     gifKeyword: "this is fine fire",
     miniQuizQuestion: {
@@ -275,7 +288,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Variable Scope",
     sticker: "🔭",
-    funnyExplanation: "Variables are like phone notifications—they can pop up anywhere and change everything",
+    funnyExplanationGeneral: "Variables are like phone notifications—they can pop up anywhere and change everything",
+    funnyExplanationTamil: "Variable scope is like local rowdy vs international don—a local 'let' has no power outside its own street (block).",
     codeExample: "let globalGossip = 'Everyone knows';\nfunction myHouse() {\n  let secret = 'Only I know';\n  console.log(globalGossip);\n}\nmyHouse();",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -295,7 +309,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Constants vs Variables",
     sticker: "🛑",
-    funnyExplanation: "Constants are like your WiFi password—you set it once and then you're stuck with it forever.",
+    funnyExplanationGeneral: "Constants are like your WiFi password—you set it once and then you're stuck with it forever.",
+    funnyExplanationTamil: "Constants are like the villain's promise in a masala film—it never changes until the hero breaks it (which throws a TypeError).",
     codeExample: "const PI = 3.14159;\n// PI = 3; // This would cause an error!\nconsole.log('PI is', PI);",
     gifKeyword: "wifi not working",
     miniQuizQuestion: {
@@ -315,7 +330,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Basic Math Operations",
     sticker: "🧮",
-    funnyExplanation: "Division is like sharing fries with a friend who takes the biggest pieces",
+    funnyExplanationGeneral: "Division is like sharing fries with a friend who takes the biggest pieces",
+    funnyExplanationTamil: "Division is like sharing biryani with friends—someone always takes the 'leg piece' (remainder) and you use modulo to find who took it.",
     codeExample: "let slices = 5;\nlet friends = 2;\nlet leftover = slices % friends;\nconsole.log('Leftover slices:', leftover);",
     gifKeyword: "salty reaction",
     miniQuizQuestion: {
@@ -335,7 +351,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Ternary Operator",
     sticker: "❓",
-    funnyExplanation: "Ternary operator is like a traffic light—it's either go or stop, with no annoying yellow phase",
+    funnyExplanationGeneral: "Ternary operator is like a traffic light—it's either go or stop, with no annoying yellow phase",
+    funnyExplanationTamil: "Ternary operator is like a quick punch dialogue—short, sharp, and hits you with either 'Success' or 'Failure' in one line.",
     codeExample: "let marks = 85;\nlet result = (marks > 40) ? 'Pass 🎉' : 'Fail 💀';\nconsole.log(result);",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -355,7 +372,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Template Literals",
     sticker: "📝",
-    funnyExplanation: "Template literals are like phone notifications - they fill in the blanks, but sometimes with embarrassing results",
+    funnyExplanationGeneral: "Template literals are like phone notifications - they fill in the blanks, but sometimes with embarrassing results",
+    funnyExplanationTamil: "Template literals are like a Harris Jayaraj song—you just plug in some random English words \`\${here}\` and it sounds beautiful.",
     codeExample: "let name = 'Batman';\nlet city = 'Gotham';\nconsole.log(`${name} protects ${city}`);",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -375,7 +393,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Null vs Undefined",
     sticker: "🕳️",
-    funnyExplanation: "Null is like an empty pizza box, undefined is like calling a pizza place that doesn't exist",
+    funnyExplanationGeneral: "Null is like an empty pizza box, undefined is like calling a pizza place that doesn't exist",
+    funnyExplanationTamil: "Null is like saying 'I have no money', undefined is like opening your wallet and finding a moth flying out.",
     codeExample: "let forgotToAssign;\nlet emptyOnPurpose = null;\nconsole.log(forgotToAssign, emptyOnPurpose);",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -395,7 +414,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Truthy/Falsy Values",
     sticker: "🎭",
-    funnyExplanation: "Truthy values are like a fully charged phone, but falsy values are like a dead battery—you're not going anywhere",
+    funnyExplanationGeneral: "Truthy values are like a fully charged phone, but falsy values are like a dead battery—you're not going anywhere",
+    funnyExplanationTamil: "Truthy values are like a 'mass' hero entry—everyone believes it. Falsy values are like the villain's henchmen—completely useless.",
     codeExample: "if ('false') { console.log('This runs because string is truthy!'); }\nif (0) { console.log('This won\\'t run'); }",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -415,7 +435,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Basic Debugging",
     sticker: "🐛",
-    funnyExplanation: "Debugging is like searching for a missing sock—you know it's somewhere, but finding it is a whole different story",
+    funnyExplanationGeneral: "Debugging is like searching for a missing sock—you know it's somewhere, but finding it is a whole different story",
+    funnyExplanationTamil: "Debugging is like ACP Raghavan finding the killer in Vettaiyaadu Vilaiyaadu—you look at every console log until the culprit is caught.",
     codeExample: "let codeWorks = false;\n// console.log('Trying to find the bug...');\nconsole.log('Found it! Typo.');",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -435,7 +456,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Switch Statements",
     sticker: "🕹️",
-    funnyExplanation: "Switch statements are like phone notifications—you think you're handling each case individually, but really you're just swiping through them all to get to the one that matters",
+    funnyExplanationGeneral: "Switch statements are like phone notifications—you think you're handling each case individually, but really you're just swiping through them all to get to the one that matters",
+    funnyExplanationTamil: "Switch statements are like going to a Saravana Bhavan—you have 10 cases (idli, dosa, pongal) and a default (just coffee).",
     codeExample: "let day = 3;\nswitch(day) {\n  case 1: console.log('Monday'); break;\n  case 3: console.log('Wednesday'); break;\n  default: console.log('Other day');\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -455,7 +477,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Nested Loops",
     sticker: "🪆",
-    funnyExplanation: "Nested loops are like traffic circles—you think you're making progress, but you're just ending up back where you started",
+    funnyExplanationGeneral: "Nested loops are like traffic circles—you think you're making progress, but you're just ending up back where you started",
+    funnyExplanationTamil: "Nested loops are like a Tamil serial plot—loops inside loops inside loops, and it runs for 5 years.",
     codeExample: "for (let i = 1; i <= 2; i++) {\n  for (let j = 1; j <= 2; j++) {\n    console.log(`i=${i}, j=${j}`);\n  }\n}",
     gifKeyword: "going in circles",
     miniQuizQuestion: {
@@ -475,7 +498,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Array Push/Pop Methods",
     sticker: "🛒",
-    funnyExplanation: "Array push/pop is like a cafeteria lunch line—you add or remove people and hope the food doesn't run out",
+    funnyExplanationGeneral: "Array push/pop is like a cafeteria lunch line—you add or remove people and hope the food doesn't run out",
+    funnyExplanationTamil: "Push/Pop is like boarding a crowded Chennai local train—someone gets pushed in at the back, and someone else pops out at the next station.",
     codeExample: "let cart = ['Apples', 'Milk'];\ncart.push('Cookies'); // Add to end\ncart.pop(); // Remove last (Cookies)\nconsole.log(cart);",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -495,7 +519,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "String Slice/Split Methods",
     sticker: "🔪",
-    funnyExplanation: "String slice/split methods are like autocorrecting a text message—you think you're fixing it, but now it's worse",
+    funnyExplanationGeneral: "String slice/split methods are like autocorrecting a text message—you think you're fixing it, but now it's worse",
+    funnyExplanationTamil: "String slice/split methods are like autocorrecting a text message—you think you're fixing it, but now it's worse",
     codeExample: "let word = 'JavaScript';\nconsole.log(word.slice(0, 4)); // Java\nconsole.log(word.split('S')); // ['Java', 'cript']",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -515,7 +540,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Basics Builder",
     sticker: "🏋️",
-    funnyExplanation: "Coding is like a treadmill—you run a lot but sometimes feel like you're getting nowhere",
+    funnyExplanationGeneral: "Coding is like a treadmill—you run a lot but sometimes feel like you're getting nowhere",
+    funnyExplanationTamil: "Coding is like climbing the Palani steps—you start with energy, but halfway through you're wondering why you started.",
     codeExample: "// Create a variable 'playerName' and print a greeting.",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -535,7 +561,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Logic & Flow",
     sticker: "🏋️",
-    funnyExplanation: "Workout logic is like a phone notification—you think you've silenced it, but it keeps popping up to remind you of your next set",
+    funnyExplanationGeneral: "Workout logic is like a phone notification—you think you've silenced it, but it keeps popping up to remind you of your next set",
+    funnyExplanationTamil: "Workout logic is like a Surya training montage—lots of sweat, background music, and eventually you get the six-pack (solution).",
     codeExample: "// Write a loop that counts down from 3, then says 'GO!'",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -555,7 +582,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Data Mastery",
     sticker: "🏋️",
-    funnyExplanation: "Mastering data is like having a strong WiFi signal—you finally get a connection and then your battery dies",
+    funnyExplanationGeneral: "Mastering data is like having a strong WiFi signal—you finally get a connection and then your battery dies",
+    funnyExplanationTamil: "Mastering data is like packing for a trip to native—you try to fit a grinder, 3 sarees, and a TV into one array.",
     codeExample: "// Create an inventory array and add items to it using a loop.",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -575,7 +603,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Function Architect",
     sticker: "🏋️",
-    funnyExplanation: "Workout routines are like phone notifications—you get reminded to do them daily, but you often swipe them away",
+    funnyExplanationGeneral: "Workout routines are like phone notifications—you get reminded to do them daily, but you often swipe them away",
+    funnyExplanationTamil: "Function architect is like being a director—you call the shots, pass the script (parameters), and hope the actors don't throw an error.",
     codeExample: "// Create a function that calculates total damage.",
     gifKeyword: "procrastination mode",
     miniQuizQuestion: {
@@ -595,7 +624,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Bug Hunter",
     sticker: "🏋️",
-    funnyExplanation: "Bug hunter is like a personal trainer for code—you yell at it until it gets its act together",
+    funnyExplanationGeneral: "Bug hunter is like a personal trainer for code—you yell at it until it gets its act together",
+    funnyExplanationTamil: "Bug hunter is like being a CID—you investigate the missing semicolon while the rest of the code plays dead.",
     codeExample: "// Write a safe function that handles missing data.",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -615,7 +645,8 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Final Workout: The Ultimate Trial",
     sticker: "🔥",
-    funnyExplanation: "Final workout is like a never-ending phone notification—you think you're done, but it just keeps going",
+    funnyExplanationGeneral: "Final workout is like a never-ending phone notification—you think you're done, but it just keeps going",
+    funnyExplanationTamil: "Final workout is the climax fight scene—you vs the compiler, flying cars, exploding objects, and only one will survive.",
     codeExample: "// Combine everything to build a mini-game logic.",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
