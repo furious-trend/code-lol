@@ -4,9 +4,10 @@
  * agent-notes: { ctx: "Settings page — fully wired to Supabase", deps: ["lib/supabase/client.ts"], state: active, last: "sato@2026-08-27" }
  */
 
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import debounce from "lodash.debounce";
 
 type HumorPref = 'general' | 'tamil';
 
@@ -21,6 +22,46 @@ export default function Settings() {
   const [isSaving, setIsSaving] = useState(false);
   const [toast, setToast] = useState<Toast>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [usernameError, setUsernameError] = useState<string>('');
+
+  const calculateStrength = (pw: string) => {
+    if (!pw) return { label: '', color: 'bg-zinc-800' };
+    if (pw.length < 6) return { label: 'Weak', color: 'bg-red-500' };
+    if (pw.length >= 8 && /[A-Z]/.test(pw) && /[0-9]/.test(pw)) return { label: 'Strong', color: 'bg-emerald-500' };
+    return { label: 'Medium', color: 'bg-yellow-500' };
+  };
+  const pwStrength = calculateStrength(password);
+
+  const checkUsername = async (name: string, uid: string) => {
+    if (!name.trim()) {
+      setUsernameError('');
+      return;
+    }
+    const supabase = createClient();
+    const { data: existingUser } = await supabase
+      .from('profiles')
+      .select('id')
+      .ilike('display_name', name.trim())
+      .limit(1);
+
+    const isTaken = existingUser && existingUser.length > 0 && existingUser[0].id !== uid;
+    if (isTaken) {
+      setUsernameError('Username is already taken');
+    } else {
+      setUsernameError('');
+    }
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedCheckUsername = useCallback(
+    debounce((name: string, uid: string) => checkUsername(name, uid), 500),
+    []
+  );
+
+  const handleUsernameChange = (val: string) => {
+    setDisplayName(val);
+    if (userId) debouncedCheckUsername(val, userId);
+  };
 
   // ── Load real profile on mount ──────────────────────────────────────────────
   useEffect(() => {
@@ -154,9 +195,12 @@ export default function Settings() {
                   id="settings-username"
                   type="text"
                   value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  onChange={(e) => handleUsernameChange(e.target.value)}
+                  className={`w-full bg-zinc-950/50 border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${usernameError ? 'border-red-500' : 'border-zinc-800'}`}
                 />
+                {usernameError && (
+                  <p className="text-red-500 text-xs mt-1">{usernameError}</p>
+                )}
               </div>
 
               {/* Password — only shown for email/password accounts */}
@@ -173,6 +217,14 @@ export default function Settings() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                   />
+                  {password && (
+                    <div className="mt-2 flex items-center justify-between text-xs">
+                      <span className="text-zinc-400">Password Strength: <span className="font-bold text-white">{pwStrength.label}</span></span>
+                      <div className="w-1/2 h-1 bg-zinc-800 rounded-full overflow-hidden">
+                        <div data-testid="strength-bar" className={`h-full transition-all duration-300 ${pwStrength.color}`} style={{ width: pwStrength.label === 'Weak' ? '33%' : pwStrength.label === 'Medium' ? '66%' : '100%' }} />
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <p className="text-sm text-zinc-600 italic">
@@ -210,6 +262,25 @@ export default function Settings() {
                 <div className="font-semibold mb-1">Tamil Comedy Sense</div>
                 <div className="text-sm text-zinc-500">Vadivelu, Goundamani, Kollywood</div>
               </button>
+            </div>
+            
+            <div className="mt-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-950/80">
+              <h3 className="text-sm font-semibold text-zinc-400 mb-2">Live Meme Preview</h3>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={humorPref}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="p-3 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-300 italic"
+                  data-testid="meme-preview"
+                >
+                  {humorPref === 'general' ? 
+                    '"Coffee Overdose: My code works, I have no idea why." - General Dev Humor' : 
+                    '"Vadivelu Counters: Enna da idhu, code ah idhu?" - Tamil Tech Trolls'
+                  }
+                </motion.div>
+              </AnimatePresence>
             </div>
           </section>
 

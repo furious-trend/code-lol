@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { AmbientJoke } from "@/components/AmbientJoke";
 import { ConditionalLayout } from "@/components/ConditionalLayout";
+import RouteTransition from "@/components/RouteTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +32,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col text-zinc-50 relative bg-zinc-950">
+        <div data-testid="scanline-overlay" className="pointer-events-none fixed inset-0 z-50 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:18px_18px] opacity-35" />
         <ConditionalLayout>
           <Navbar />
         </ConditionalLayout>
         
-        {children}
+        <RouteTransition>
+          {children}
+        </RouteTransition>
         
         <ConditionalLayout>
           <AmbientJoke />

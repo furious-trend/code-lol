@@ -21,7 +21,7 @@ vi.mock('framer-motion', async () => {
     ...actual,
     AnimatePresence: ({ children }: any) => <>{children}</>,
     motion: {
-      div: require('react').forwardRef(({ children, ...props }: any, ref: any) => <div ref={ref} {...props}>{children}</div>),
+      div: require('react').forwardRef(({ children, layoutId, ...props }: any, ref: any) => <div ref={ref} data-layoutid={layoutId} {...props}>{children}</div>),
       button: require('react').forwardRef(({ children, ...props }: any, ref: any) => <button ref={ref} {...props}>{children}</button>),
       input: require('react').forwardRef(({ ...props }: any, ref: any) => <input ref={ref} {...props} />),
       span: require('react').forwardRef(({ children, ...props }: any, ref: any) => <span ref={ref} {...props}>{children}</span>),
@@ -66,18 +66,22 @@ describe('Login Page', () => {
     expect(screen.getByText(/Forgot password\?/i)).toBeTruthy();
   });
 
-  it('renders signup tab with ONLY Google OAuth and supporting text', () => {
+  it('renders signup tab with Google and Facebook OAuth, username, password, and Humor Selector', () => {
     render(<Login />);
     
     // Switch to Signup tab
-    fireEvent.click(screen.getByRole('button', { name: 'Signup' }));
+    fireEvent.click(screen.getByRole('button', { name: /Join Arena/i }));
     
     expect(screen.getByText(/Continue with Google/i)).toBeTruthy();
-    expect(screen.getByText(/We'll get you set up in a few quick steps/i)).toBeTruthy();
+    expect(screen.getByText(/Continue with Facebook/i)).toBeTruthy();
     
-    // Should NOT show any input fields in signup tab
-    expect(screen.queryByPlaceholderText(/Username or Email/i)).toBeNull();
-    expect(screen.queryByPlaceholderText(/Password/i)).toBeNull();
+    // Should show input fields in signup tab now
+    expect(screen.getByPlaceholderText(/Username/i)).toBeTruthy();
+    expect(screen.getByPlaceholderText(/Password/i)).toBeTruthy();
+
+    // Should show Humor Selector cards
+    expect(screen.getByText(/Global Dev/i)).toBeTruthy();
+    expect(screen.getByText(/Tamil Sense/i)).toBeTruthy();
   });
 
   it('calls signInWithOAuth for Google signup/login', async () => {
@@ -160,6 +164,49 @@ describe('Login Page', () => {
     await waitFor(() => {
       expect(screen.getByText(/No account found with that username/i)).toBeTruthy();
       expect(mockSignInWithPassword).not.toHaveBeenCalled();
+    });
+  });
+
+  it('calls signUp with email, password, and humor_preference when submitting signup form', async () => {
+    const mockSignUp = vi.fn().mockResolvedValue({ error: null });
+    (createClient as any).mockReturnValue({
+      auth: {
+        signInWithPassword: mockSignInWithPassword,
+        signInWithOAuth: mockSignInWithOAuth,
+        signUp: mockSignUp,
+      },
+      rpc: mockRpc,
+    });
+
+    render(<Login />);
+    
+    // Switch to Signup tab
+    fireEvent.click(screen.getByRole('button', { name: /Join Arena/i }));
+    
+    // Select Tamil Sense humor
+    fireEvent.click(screen.getByText(/Tamil Sense/i));
+    
+    // Fill form
+    fireEvent.change(screen.getByPlaceholderText(/Username/i), { target: { value: 'newuser' } });
+    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'new@example.com' } });
+    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'securepass123' } });
+    
+    // Submit
+    const submitButtons = screen.getAllByRole('button', { name: /Join Arena/i });
+    const submitButton = submitButtons[submitButtons.length - 1]; // The actual submit button is the last one
+    fireEvent.click(submitButton);
+    
+    await waitFor(() => {
+      expect(mockSignUp).toHaveBeenCalledWith({
+        email: 'new@example.com',
+        password: 'securepass123',
+        options: {
+          data: {
+            username: 'newuser',
+            humor_preference: 'tamil'
+          }
+        }
+      });
     });
   });
 });

@@ -14,6 +14,7 @@ import { getRandomLoadingMessage, getRandomSuccessMessage, getRandomNudgeMessage
 import { MilestoneCelebration } from '@/components/MilestoneCelebration';
 import ReactMarkdown from 'react-markdown';
 import { createClient } from '@/lib/supabase/client';
+import confetti from 'canvas-confetti';
 
 export default function ProblemSolverPage() {
   const params = useParams();
@@ -231,6 +232,15 @@ let _log = [];
             setSuccessMsg(getRandomSuccessMessage());
             setNudgeMsg(getRandomNudgeMessage());
             const playedSound = playMemeSound(true, humorPref);
+            
+            // Trigger confetti
+            confetti({
+              particleCount: 100,
+              spread: 70,
+              origin: { y: 0.6 },
+              colors: ['#10b981', '#22c55e', '#34d399']
+            });
+            
             // Trigger the happy roast (meme/joke) on success
             handleRoast(code, data.output, true, playedSound, humorPref);
           } else {
@@ -358,13 +368,27 @@ let _log = [];
         </div>
         
         {/* Editor Area (Fixed bottom height) */}
-        <div className="h-96 flex flex-col p-6 bg-zinc-900 border-t border-zinc-800 shrink-0">
+        <motion.div 
+          data-testid="editor-wrapper"
+          animate={
+            testResults && testResults.passed !== testResults.total 
+              ? { x: [-8, 8, -6, 6, -3, 3, 0] } 
+              : { x: 0 }
+          }
+          transition={{ duration: 0.35 }}
+          className={`h-96 flex flex-col p-6 bg-zinc-900 border-t shrink-0 transition-shadow duration-300 ${
+            testResults && testResults.passed !== testResults.total 
+              ? 'shadow-[0_0_15px_rgba(239,68,68,0.5)] border-red-500/50' 
+              : 'border-zinc-800'
+          }`}
+        >
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-zinc-400">Solution.js</h3>
             <div className="flex gap-3">
               <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.025, boxShadow: "0 0 24px rgba(6, 182, 212, 0.35)" }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 420, damping: 18 }}
                 onClick={handleSubmit}
                 disabled={isSubmitting || isRoasting}
                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl text-sm transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2 disabled:opacity-50"
@@ -382,14 +406,21 @@ let _log = [];
             spellCheck={false}
             className="flex-1 w-full bg-zinc-950 text-zinc-300 font-mono p-4 rounded-2xl border border-zinc-800 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 resize-none shadow-inner"
           />
-        </div>
+        </motion.div>
       </div>
 
       {/* Right Panel: Output & Roast */}
       <div className="w-full lg:w-1/2 flex flex-col h-auto lg:h-[calc(100vh-4rem)]">
         
         {/* Output Panel (Takes full height) */}
-        <div className="flex-1 bg-zinc-950 p-6 md:p-10 overflow-y-auto">
+        <div 
+          data-testid="terminal-wrapper"
+          className={`flex-1 bg-zinc-950 p-6 md:p-10 overflow-y-auto transition-shadow duration-500 ${
+            testResults && testResults.passed === testResults.total 
+              ? 'shadow-[inset_0_0_20px_rgba(34,197,94,0.3)] border border-green-500/30' 
+              : ''
+          }`}
+        >
           <h3 className="font-bold text-zinc-500 mb-6 uppercase tracking-wider text-sm border-b border-zinc-800 pb-2">Execution Output & Roast</h3>
           
           {(isRoasting || roastError || roastData) && (
