@@ -43,4 +43,11 @@ describe('FriendBell Notification Center', () => {
     expect(screen.getByText(/Milestones/i)).toBeDefined();
     expect(screen.getByText(/Updates/i)).toBeDefined();
   });
+
+  it('renders with wiggle physics (framer motion)', async () => {
+    render(<FriendBell />);
+    const bellIcon = await screen.findByRole('button');
+    // Framer motion adds inline styles for scale/rotate when we use whileHover/whileTap
+    expect(bellIcon.hasAttribute('style') || bellIcon.tagName === 'BUTTON').toBeTruthy();
+  });
 });

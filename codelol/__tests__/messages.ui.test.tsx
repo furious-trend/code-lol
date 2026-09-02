@@ -75,6 +75,11 @@ describe('Messages Page UI', () => {
     // Chat thread should now be open
     await waitFor(() => {
       expect(screen.getByText('Hey!')).toBeTruthy();
+      expect(screen.getByRole('button', { name: /⚡ Challenge to Battle/i })).toBeTruthy();
+      
+      // Since we added framer-motion, the message bubble should be wrapped in an element with inline styles or be a motion.div
+      const msgBubble = screen.getByText('Hey!').closest('div[style]');
+      expect(msgBubble).toBeTruthy(); // This verifies framer-motion is applied
     });
   });
 });

@@ -41,9 +41,11 @@ export function FriendBell() {
 
   return (
     <div className="relative">
-      <button 
+      <motion.button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-zinc-400 hover:text-white transition-colors outline-none"
+        whileHover={{ scale: 1.1, rotate: [0, -10, 10, -10, 10, 0], transition: { duration: 0.4 } }}
+        whileTap={{ scale: 0.9 }}
+        className="relative p-2 text-zinc-400 hover:text-white transition-colors outline-none origin-top"
       >
         <span className="text-xl">🔔</span>
         {count > 0 && (
@@ -51,7 +53,7 @@ export function FriendBell() {
             {count}
           </span>
         )}
-      </button>
+      </motion.button>
 
       <AnimatePresence>
         {isOpen && (

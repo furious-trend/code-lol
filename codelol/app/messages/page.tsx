@@ -5,6 +5,7 @@ import { getFriends, FriendRequest } from '@/lib/friends';
 import { useMessages } from '@/hooks/useMessages';
 import { Bugsy } from '@/components/Bugsy';
 import { createClient } from '@/lib/supabase/client';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function MessagesPage() {
   const [friends, setFriends] = useState<FriendRequest[]>([]);
@@ -106,11 +107,20 @@ export default function MessagesPage() {
             ) : (
               <>
                 {/* Chat Header */}
-                <div className="p-4 border-b border-zinc-800 flex items-center gap-4 bg-zinc-950/50">
-                  <div className="w-10 h-10 rounded-full bg-indigo-900 flex items-center justify-center font-bold text-indigo-300">
-                    {selectedFriend?.display_name?.charAt(0).toUpperCase() || '?'}
+                <div className="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/50">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-indigo-900 flex items-center justify-center font-bold text-indigo-300">
+                      {selectedFriend?.display_name?.charAt(0).toUpperCase() || '?'}
+                    </div>
+                    <h2 className="font-bold text-lg">{selectedFriend?.display_name || 'Friend'}</h2>
                   </div>
-                  <h2 className="font-bold text-lg">{selectedFriend?.display_name || 'Friend'}</h2>
+                  <motion.button
+                    whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(234, 179, 8, 0.5)" }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-yellow-500 text-black font-bold px-4 py-2 rounded-xl transition-all shadow-lg flex items-center gap-2"
+                  >
+                    <span>⚡</span> Challenge to Battle
+                  </motion.button>
                 </div>
 
                 {/* Messages Area */}
@@ -124,25 +134,33 @@ export default function MessagesPage() {
                       <p>Say hi to {selectedFriend?.display_name || 'your friend'}!</p>
                     </div>
                   ) : (
-                    messages.map((msg) => {
-                      const isMe = msg.sender_id === currentUserId;
-                      return (
-                        <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                          <div
-                            className={`max-w-[70%] p-3 rounded-2xl ${
-                              isMe 
-                                ? 'bg-indigo-600 text-white rounded-br-none' 
-                                : 'bg-zinc-800 text-zinc-200 rounded-bl-none'
-                            }`}
+                    <AnimatePresence>
+                      {messages.map((msg) => {
+                        const isMe = msg.sender_id === currentUserId;
+                        return (
+                          <motion.div
+                            key={msg.id}
+                            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                            className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
                           >
-                            <p className="break-words">{msg.content}</p>
-                            <div className={`text-[10px] mt-1 ${isMe ? 'text-indigo-200' : 'text-zinc-500'}`}>
-                              {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            <div
+                              className={`max-w-[70%] p-3 rounded-2xl ${
+                                isMe 
+                                  ? 'bg-indigo-600 text-white rounded-br-none' 
+                                  : 'bg-zinc-800 text-zinc-200 rounded-bl-none'
+                              }`}
+                            >
+                              <p className="break-words">{msg.content}</p>
+                              <div className={`text-[10px] mt-1 ${isMe ? 'text-indigo-200' : 'text-zinc-500'}`}>
+                                {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      );
-                    })
+                          </motion.div>
+                        );
+                      })}
+                    </AnimatePresence>
                   )}
                   <div ref={messagesEndRef} />
                 </div>
