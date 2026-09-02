@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd codelol && npm install && npm run build",
+  "outputDirectory": "codelol/.next",
+  "framework": null
+}
