@@ -20,7 +20,6 @@ export default function Login() {
   const supabase = createClient();
   
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
-  const [signupEmail, setSignupEmail] = useState('');
   const [signupUsername, setSignupUsername] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
 
@@ -44,7 +43,7 @@ export default function Login() {
     setError('');
 
     const { error: signUpError } = await supabase.auth.signUp({
-      email: signupEmail.trim(),
+      email: signupUsername.trim(),
       password: signupPassword,
       options: {
         data: {
@@ -450,18 +449,8 @@ export default function Login() {
             <form onSubmit={handleSignupSubmit} className="space-y-4">
               <motion.input 
                 whileFocus={{ scale: 1.01, boxShadow: "0px 0px 12px rgba(59, 130, 246, 0.3)" }}
-                type="email" 
-                placeholder="Email"
-                value={signupEmail}
-                onChange={(e) => setSignupEmail(e.target.value)}
-                required
-                className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
-              />
-              
-              <motion.input 
-                whileFocus={{ scale: 1.01, boxShadow: "0px 0px 12px rgba(59, 130, 246, 0.3)" }}
                 type="text" 
-                placeholder="Username"
+                placeholder="Choose Username"
                 value={signupUsername}
                 onChange={(e) => setSignupUsername(e.target.value)}
                 required
@@ -471,7 +460,7 @@ export default function Login() {
               <motion.input 
                 whileFocus={{ scale: 1.01, boxShadow: "0px 0px 12px rgba(59, 130, 246, 0.3)" }}
                 type="password" 
-                placeholder="Password (min 6 chars)" 
+                placeholder="Set Password" 
                 value={signupPassword}
                 onChange={(e) => setSignupPassword(e.target.value)}
                 required
@@ -495,7 +484,7 @@ export default function Login() {
                         </svg>
                       </motion.div>
                     )}
-                    <h3 className="text-sm font-bold text-white mb-1">☕ Global Dev</h3>
+                    <h3 className="text-sm font-bold text-white mb-1">☕ General Dev Meme</h3>
                     <p className="text-[10px] text-zinc-400 leading-tight">Dev Memes, Coffee Overdose & StackOverflow Nightmares</p>
                   </motion.div>
                   
@@ -512,7 +501,7 @@ export default function Login() {
                         </svg>
                       </motion.div>
                     )}
-                    <h3 className="text-sm font-bold text-white mb-1">⚡ Tamil Sense</h3>
+                    <h3 className="text-sm font-bold text-white mb-1">⚡ Tamil Comedy Sense</h3>
                     <p className="text-[10px] text-zinc-400 leading-tight">Vadivelu Counters, Goundamani Roasts & Tech Trolls</p>
                   </motion.div>
                 </div>
@@ -554,7 +543,7 @@ export default function Login() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                     >
-                      Join Arena
+                      Create Account
                     </motion.span>
                   )}
                 </AnimatePresence>

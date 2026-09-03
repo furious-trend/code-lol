@@ -77,7 +77,7 @@ export default function ResetPassword() {
       >
         <motion.div variants={itemVariants} className="text-center mb-8">
           <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-emerald-400">
-            Set New Password
+            Reset Password
           </h1>
           <p className="text-zinc-400 mt-2 text-sm">
             Enter your new password below.

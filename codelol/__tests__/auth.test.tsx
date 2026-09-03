@@ -73,7 +73,16 @@ describe("Authentication Flow Integration", () => {
     fireEvent.click(screen.getByRole("button", { name: /Create Account/i }));
     
     await waitFor(() => {
-      expect(mockSignUp).toHaveBeenCalledWith({ email: "newcoder", password: "password123" }); // Note: Using username as email placeholder if no @
+      expect(mockSignUp).toHaveBeenCalledWith({
+        email: "newcoder",
+        password: "password123",
+        options: {
+          data: {
+            username: "newcoder",
+            humor_preference: "tamil"
+          }
+        }
+      });
     });
   });
 });

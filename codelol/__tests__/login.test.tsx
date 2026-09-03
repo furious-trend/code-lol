@@ -80,8 +80,8 @@ describe('Login Page', () => {
     expect(screen.getByPlaceholderText(/Password/i)).toBeTruthy();
 
     // Should show Humor Selector cards
-    expect(screen.getByText(/Global Dev/i)).toBeTruthy();
-    expect(screen.getByText(/Tamil Sense/i)).toBeTruthy();
+    expect(screen.getByText(/General Dev Meme/i)).toBeTruthy();
+    expect(screen.getByText(/Tamil Comedy Sense/i)).toBeTruthy();
   });
 
   it('calls signInWithOAuth for Google signup/login', async () => {
@@ -183,23 +183,20 @@ describe('Login Page', () => {
     // Switch to Signup tab
     fireEvent.click(screen.getByRole('button', { name: /Join Arena/i }));
     
-    // Select Tamil Sense humor
-    fireEvent.click(screen.getByText(/Tamil Sense/i));
+    // Select Tamil Comedy Sense humor
+    fireEvent.click(screen.getByText(/Tamil Comedy Sense/i));
     
     // Fill form
-    fireEvent.change(screen.getByPlaceholderText(/Username/i), { target: { value: 'newuser' } });
-    fireEvent.change(screen.getByPlaceholderText(/Email/i), { target: { value: 'new@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'securepass123' } });
+    fireEvent.change(screen.getByPlaceholderText(/Choose Username/i), { target: { value: 'newuser' } });
+    fireEvent.change(screen.getByPlaceholderText(/Set Password/i), { target: { value: 'password123' } });
     
     // Submit
-    const submitButtons = screen.getAllByRole('button', { name: /Join Arena/i });
-    const submitButton = submitButtons[submitButtons.length - 1]; // The actual submit button is the last one
-    fireEvent.click(submitButton);
+    fireEvent.click(screen.getByRole('button', { name: /Create Account/i }));
     
     await waitFor(() => {
       expect(mockSignUp).toHaveBeenCalledWith({
-        email: 'new@example.com',
-        password: 'securepass123',
+        email: 'newuser',
+        password: 'password123',
         options: {
           data: {
             username: 'newuser',

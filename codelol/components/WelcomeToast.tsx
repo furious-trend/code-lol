@@ -9,7 +9,7 @@ function ToastContent() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    if (searchParams.get('toast') === 'welcome-back') {
+    if (searchParams?.get('toast') === 'welcome-back') {
       setShow(true);
       const newUrl = window.location.pathname;
       window.history.replaceState({}, '', newUrl);

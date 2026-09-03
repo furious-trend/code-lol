@@ -1,0 +1,118 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v4.1.11 /home/shafi/projects/code lol/codelol
+
+ ✓ __tests__/projectVerifier.test.ts (5 tests) 175ms
+stderr | __tests__/reset-password.test.tsx > Reset Password Page > renders reset password form with password and confirm password inputs
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+stderr | __tests__/settings.test.tsx > Settings Page — Supabase Integration > loads display_name from Supabase — no hardcoded default
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+stderr | __tests__/login.test.tsx > Login Page > renders login tab by default with Username or Email and Password fields, plus Google login and Forgot Password link
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileFocus` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilefocus` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+stderr | __tests__/forgot-password.test.tsx > Forgot Password Page > renders forgot password form with email input and submit button
+React does not recognize the `whileFocus` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilefocus` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+stderr | __tests__/auth.test.tsx > Authentication Flow Integration > renders Sign In mode by default
+React does not recognize the `layoutId` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `layoutid` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileFocus` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilefocus` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+stderr | __tests__/onboarding.test.tsx > Onboarding 3-Step Wizard > renders Step 1 (Choose Username) by default with progress indicator
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ ✓ __tests__/forgot-password.test.tsx (2 tests) 621ms
+     ✓ renders forgot password form with email input and submit button  454ms
+ ✓ __tests__/reset-password.test.tsx (3 tests) 821ms
+     ✓ validates password length and match  585ms
+ ✓ __tests__/friends.ui.test.tsx (2 tests) 585ms
+     ✓ renders Friends page and allows searching  459ms
+ ✓ __tests__/messages.ui.test.tsx (2 tests) 767ms
+     ✓ renders Messages page with empty inbox state when no friend selected  436ms
+     ✓ clicking a friend opens chat thread and displays messages  322ms
+ ✓ __tests__/auth.test.tsx (3 tests) 1274ms
+     ✓ renders Sign In mode by default  675ms
+     ✓ allows selection of humor preference and submission for signup  329ms
+ ✓ __tests__/useBattle.test.tsx (2 tests) 1356ms
+     ✓ creates a battle and navigates to the room  848ms
+     ✓ joins a battle and navigates to the room  500ms
+ ✓ __tests__/page.test.tsx (1 test) 727ms
+   ✓ renders Learn option on the home page  722ms
+ ✓ __tests__/settings.test.tsx (13 tests) 1885ms
+     ✓ loads humor_preference from Supabase (tamil)  465ms
+ ✓ __tests__/onboarding.test.tsx (7 tests) 1859ms
+     ✓ renders Step 1 (Choose Username) by default with progress indicator  569ms
+     ✓ validates minimum 8 characters and matching password in Step 2  337ms
+ ✓ __tests__/useRoast.test.ts (2 tests) 165ms
+ ✓ __tests__/CuriosityHook.test.tsx (3 tests) 1088ms
+     ✓ renders the "Discover a Fact" button initially  694ms
+ ✓ __tests__/login.test.tsx (7 tests) 3679ms
+     ✓ renders signup tab with Google and Facebook OAuth, username, password, and Humor Selector  514ms
+     ✓ logs in with email directly when input contains @  1346ms
+     ✓ looks up email by username when input does NOT contain @ and logs in with found email  1198ms
+stderr | __tests__/leaderboard.test.tsx > Leaderboard Page > shows loading state initially
+An update to Leaderboard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Leaderboard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ __tests__/SkillTreeView.test.tsx (2 tests) 480ms
+ ✓ __tests__/leaderboard.test.tsx (4 tests) 203ms
+ ✓ __tests__/useMemeSound.test.ts (4 tests) 75ms
+ ✓ __tests__/friendbell.ui.test.tsx (3 tests) 575ms
+     ✓ opens a slide-in drawer on click with match invites and updates  373ms
+ ✓ __tests__/RouteTransition.test.tsx (1 test) 79ms
+stderr | __tests__/layout.test.tsx > RootLayout > renders children, Navbar, AmbientJoke, and the scanline overlay
+In HTML, <html> cannot be a child of <div>.
+This will cause a hydration error.
+
+ ✓ __tests__/quizzes.test.ts (5 tests) 126ms
+ ✓ __tests__/layout.test.tsx (1 test) 120ms
+stderr | __tests__/problems.ui.test.tsx > ProblemSolverPage - Execution Feedback > triggers neon green aura on success
+Error saving problem completion: TypeError: supabase.from(...).upsert is not a function
+    at saveProblemCompletion [90m(/home/shafi/projects/code lol/codelol/[39mlib/progress.ts:13:50[90m)[39m
+    at handleSubmit [90m(/home/shafi/projects/code lol/codelol/[39mapp/problems/[id]/page.tsx:222:13[90m)[39m
+
+ ✓ __tests__/problems.ui.test.tsx (2 tests) 252ms
+ ✓ __tests__/auth-callback.test.ts (4 tests) 15ms
+ ✓ __tests__/useMicroCelebration.test.ts (4 tests) 53ms
+ ✓ __tests__/roast.route.test.ts (2 tests) 24ms
+ ✓ __tests__/battles.test.ts (3 tests) 14ms
+ ✓ __tests__/fallbackRoasts.test.ts (6 tests) 6ms
+ ✓ __tests__/messages.test.ts (2 tests) 5ms
+ ✓ __tests__/friends.test.ts (2 tests) 6ms
+ ✓ __tests__/localGifs.test.ts (2 tests) 3ms
+
+ Test Files  29 passed (29)
+      Tests  99 passed (99)
+   Start at  10:04:15
+   Duration  9.34s (transform 5.07s, setup 0ms, import 16.54s, tests 17.04s, environment 51.95s)
+

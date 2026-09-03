@@ -1,0 +1,1410 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/home/shafi/projects/code lol/codelol[39m
+
+[90mstderr[2m | __tests__/settings.test.tsx[2m > [22m[2mSettings Page — Supabase Integration[2m > [22m[2mloads display_name from Supabase — no hardcoded default
+[22m[39mReact does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | __tests__/reset-password.test.tsx[2m > [22m[2mReset Password Page[2m > [22m[2mrenders reset password form with password and confirm password inputs
+[22m[39mReact does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | __tests__/onboarding.test.tsx[2m > [22m[2mOnboarding 3-Step Wizard[2m > [22m[2mrenders Step 1 (Choose Username) by default with progress indicator
+[22m[39mReact does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | __tests__/login.test.tsx[2m > [22m[2mLogin Page[2m > [22m[2mrenders login tab by default with Username or Email and Password fields, plus Google login and Forgot Password link
+[22m[39mReact does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileFocus` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilefocus` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | __tests__/auth.test.tsx[2m > [22m[2mAuthentication Flow Integration[2m > [22m[2mrenders Sign In mode by default
+[22m[39mReact does not recognize the `layoutId` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `layoutid` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileFocus` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilefocus` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32m✓[39m __tests__/reset-password.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 760[2mms[22m[39m
+     [33m[2m✓[22m[39m validates password length and match [33m 510[2mms[22m[39m
+ [32m✓[39m __tests__/CuriosityHook.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 834[2mms[22m[39m
+     [33m[2m✓[22m[39m renders the "Discover a Fact" button initially [33m 481[2mms[22m[39m
+ [32m✓[39m __tests__/friends.ui.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 657[2mms[22m[39m
+     [33m[2m✓[22m[39m renders Friends page and allows searching [33m 540[2mms[22m[39m
+ [32m✓[39m __tests__/messages.ui.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 805[2mms[22m[39m
+     [33m[2m✓[22m[39m renders Messages page with empty inbox state when no friend selected [33m 465[2mms[22m[39m
+     [33m[2m✓[22m[39m clicking a friend opens chat thread and displays messages [33m 332[2mms[22m[39m
+ [32m✓[39m __tests__/page.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 882[2mms[22m[39m
+   [33m[2m✓[22m[39m renders Learn option on the home page [33m 877[2mms[22m[39m
+ [32m✓[39m __tests__/useBattle.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1531[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a battle and navigates to the room [33m 1019[2mms[22m[39m
+     [33m[2m✓[22m[39m joins a battle and navigates to the room [33m 501[2mms[22m[39m
+ [32m✓[39m __tests__/settings.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1861[2mms[22m[39m
+     [33m[2m✓[22m[39m loads humor_preference from Supabase (tamil) [33m 451[2mms[22m[39m
+ [31m❯[39m __tests__/auth.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2394[2mms[22m[39m
+     [33m[2m✓[22m[39m renders Sign In mode by default [33m 762[2mms[22m[39m
+     [32m✓[39m renders Join Arena mode with registration fields and Humor Selector[32m 272[2mms[22m[39m
+[31m     [31m×[31m allows selection of humor preference and submission for signup[39m[33m 1355[2mms[22m[39m
+ [31m❯[39m __tests__/onboarding.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2974[2mms[22m[39m
+     [33m[2m✓[22m[39m renders Step 1 (Choose Username) by default with progress indicator [33m 513[2mms[22m[39m
+     [32m✓[39m shows error on Step 1 if username is already taken[32m 201[2mms[22m[39m
+     [32m✓[39m proceeds from Step 1 to Step 2 when unique username is provided[32m 158[2mms[22m[39m
+[31m     [31m×[31m validates minimum 8 characters and matching password in Step 2[39m[33m 1278[2mms[22m[39m
+     [32m✓[39m updates user password and navigates to Step 3 on valid password[32m 275[2mms[22m[39m
+     [32m✓[39m preserves state when navigating Back and Next between steps[32m 149[2mms[22m[39m
+     [33m[2m✓[22m[39m completes Step 3 by saving profile with display_name, humor_preference, email, onboarding_complete=true and redirects home [33m 395[2mms[22m[39m
+ [31m❯[39m __tests__/login.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 3764[2mms[22m[39m
+     [32m✓[39m renders login tab by default with Username or Email and Password fields, plus Google login and Forgot Password link[32m 136[2mms[22m[39m
+[31m     [31m×[31m renders signup tab with Google and Facebook OAuth, username, password, and Humor Selector[39m[33m 731[2mms[22m[39m
+     [32m✓[39m calls signInWithOAuth for Google signup/login[32m 55[2mms[22m[39m
+     [33m[2m✓[22m[39m logs in with email directly when input contains @ [33m 1186[2mms[22m[39m
+     [33m[2m✓[22m[39m looks up email by username when input does NOT contain @ and logs in with found email [33m 1273[2mms[22m[39m
+     [32m✓[39m shows error if username is not found in profiles[32m 198[2mms[22m[39m
+[31m     [31m×[31m calls signUp with email, password, and humor_preference when submitting signup form[39m[32m 176[2mms[22m[39m
+[90mstderr[2m | __tests__/leaderboard.test.tsx[2m > [22m[2mLeaderboard Page[2m > [22m[2mshows loading state initially
+[22m[39mAn update to Leaderboard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Leaderboard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | __tests__/forgot-password.test.tsx[2m > [22m[2mForgot Password Page[2m > [22m[2mrenders forgot password form with email input and submit button
+[22m[39mReact does not recognize the `whileFocus` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilefocus` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileHover` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whilehover` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `whileTap` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `whiletap` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32m✓[39m __tests__/leaderboard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 257[2mms[22m[39m
+ [32m✓[39m __tests__/forgot-password.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 806[2mms[22m[39m
+     [33m[2m✓[22m[39m renders forgot password form with email input and submit button [33m 538[2mms[22m[39m
+ [32m✓[39m __tests__/friendbell.ui.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 799[2mms[22m[39m
+     [33m[2m✓[22m[39m opens a slide-in drawer on click with match invites and updates [33m 548[2mms[22m[39m
+ [32m✓[39m __tests__/SkillTreeView.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 789[2mms[22m[39m
+     [33m[2m✓[22m[39m renders tiers correctly based on lessons [33m 454[2mms[22m[39m
+     [33m[2m✓[22m[39m allows clicking on unlocked lessons and blocks locked ones [33m 329[2mms[22m[39m
+ [32m✓[39m __tests__/quizzes.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+[90mstderr[2m | __tests__/problems.ui.test.tsx[2m > [22m[2mProblemSolverPage - Execution Feedback[2m > [22m[2mtriggers neon green aura on success
+[22m[39mError saving problem completion: TypeError: supabase.from(...).upsert is not a function
+    at saveProblemCompletion [90m(/home/shafi/projects/code lol/codelol/[39mlib/progress.ts:13:50[90m)[39m
+    at handleSubmit [90m(/home/shafi/projects/code lol/codelol/[39mapp/problems/[id]/page.tsx:222:13[90m)[39m
+
+ [32m✓[39m __tests__/problems.ui.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 492[2mms[22m[39m
+     [33m[2m✓[22m[39m triggers failure shake and red pulse on failed execution [33m 363[2mms[22m[39m
+[90mstderr[2m | __tests__/layout.test.tsx[2m > [22m[2mRootLayout[2m > [22m[2mrenders children, Navbar, AmbientJoke, and the scanline overlay
+[22m[39mIn HTML, <html> cannot be a child of <div>.
+This will cause a hydration error.
+
+ [32m✓[39m __tests__/layout.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 172[2mms[22m[39m
+ [32m✓[39m __tests__/useRoast.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 189[2mms[22m[39m
+ [32m✓[39m __tests__/useMemeSound.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 125[2mms[22m[39m
+ [32m✓[39m __tests__/RouteTransition.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 96[2mms[22m[39m
+ [32m✓[39m __tests__/auth-callback.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m __tests__/useMicroCelebration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m __tests__/battles.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m __tests__/roast.route.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m __tests__/friends.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m __tests__/messages.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m __tests__/fallbackRoasts.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m __tests__/localGifs.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [31m❯[39m __tests__/projectVerifier.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 25057[2mms[22m[39m
+[31m     [31m×[31m should pass function_exists requirement when function is defined[39m[33m 5026[2mms[22m[39m
+[31m     [31m×[31m should fail function_exists requirement when function is missing[39m[33m 5003[2mms[22m[39m
+[31m     [31m×[31m should pass output_contains requirement when output matches[39m[33m 5002[2mms[22m[39m
+[31m     [31m×[31m should pass custom_assertion requirement[39m[33m 5008[2mms[22m[39m
+[31m     [31m×[31m should catch runtime errors and return failed[39m[33m 5005[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 9 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m __tests__/auth.test.tsx[2m > [22mAuthentication Flow Integration[2m > [22mallows selection of humor preference and submission for signup
+[31m[1mAssertionError[22m[39m: expected "vi.fn()" to be called with arguments: [ { email: 'newcoder', …(1) } ][90m
+
+Number of calls: [1m0[22m
+[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"min-h-screen flex items-center justify-center bg-zinc-950 text-white overflow-hidden p-4 relative"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33manimate[39m=[32m"[object Object]"[39m
+          [33mclass[39m=[32m"absolute inset-0 z-0 opacity-30 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900 via-zinc-950 to-zinc-950"[39m
+          [33mtransition[39m=[32m"[object Object]"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33manimate[39m=[32m"visible"[39m
+          [33mclass[39m=[32m"relative z-10 w-full max-w-md p-8 rounded-3xl bg-zinc-900/60 backdrop-blur-2xl border border-zinc-800/50 shadow-2xl"[39m
+          [33minitial[39m=[32m"hidden"[39m
+          [33mvariants[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-col items-center mb-8 relative"[39m
+            [33mvariants[39m=[32m"[object Object]"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"absolute -top-14 -left-8 z-20"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mdata-testid[39m=[32m"bugsy"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-emerald-400 text-center relative z-10"[39m
+            [36m>[39m
+              [0mCodeLOL[0m
+            [36m</h1>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex bg-zinc-950/50 rounded-xl p-1 mb-8 relative border border-zinc-800/50"[39m
+            [33mvariants[39m=[32m"[object Object]"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex w-full relative z-10"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"flex-1 py-2.5 text-sm font-semibold transition-colors z-10 relative text-zinc-500 hover:text-zinc-300"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mSign In[0m
+              [36m</button>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"flex-1 py-2.5 text-sm font-semibold transition-colors z-10 relative text-white"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"absolute inset-0 bg-zinc-800 rounded-lg shadow-sm -z-10"[39m
+                  [33mlayoutid[39m=[32m"authTabPill"[39m
+                  [33mtransition[39m=[32m"[object Object]"[39m
+                [36m/>[39m
+                [0mJoin Arena[0m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33manimate[39m=[32m"[object Object]"[39m
+            [33mclass[39m=[32m"space-y-6 text-center py-4"[39m
+            [33minitial[39m=[32m"[object Object]"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-2"[39m
+            [36m>[39m
+              [36m<h2[39m
+                [33mclass[39m=[32m"text-xl font-bold text-zinc-100"[39m
+              [36m>[39m
+                [0mCreate your account[0m
+              [36m</h2>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-3"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"group relative w-full py-3.5 px-4 flex items-center justify-center gap-3 bg-zinc-100 text-zinc-900 rounded-xl font-bold shadow-lg shadow-zinc-100/10 transition-all disabled:opacity-50 overflow-hidden"[39m
+                [33mtype[39m=[32m"button"[39m
+                [33mwhilehover[39m=[32m"[object Object]"[39m
+                [33mwhiletap[39m=[32m"[object Object]"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mclass[39m=[32m"w-5 h-5 relative z-10"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"[39m
+                    [33mfill[39m=[32m"#4285F4"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"[39m
+                    [33mfill[39m=[32m"#34A853"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"[39m
+                    [33mfill[39m=[32m"#FBBC05"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"[39m
+                    [33mfill[39m=[32m"#EA4335"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"relative z-10"[39m
+                [36m>[39m
+                  [0mContinue with Google[0m
+                [36m</span>[39m
+              [36m</button>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"group relative w-full py-3.5 px-4 flex items-center justify-center gap-3 bg-[#1877F2] text-white rounded-xl font-bold shadow-lg shadow-[#1877F2]/20 transition-all disabled:opacity-50 overflow-hidden"[39m
+                [33mtype[39m=[32m"button"[39m
+                [33mwhilehover[39m=[32m"[object Object]"[39m
+                [33mwhiletap[39m=[32m"[object Object]"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mclass[39m=[32m"w-5 h-5 relative z-10"[39m
+                  [33mfill[39m=[32m"currentColor"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"relative z-10"[39m
+                [36m>[39m
+                  [0mContinue with Facebook[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative flex items-center py-2"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex-grow border-t border-zinc-800/80"[39m
+              [36m/>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"flex-shrink-0 mx-4 text-zinc-600 text-xs font-semibold uppercase tracking-wider"[39m
+              [36m>[39m
+                [0mor sign up with email[0m
+              [36m</span>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex-grow border-t border-zinc-800/80"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<form[39m
+              [33mclass[39m=[32m"space-y-4"[39m
+            [36m>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+                [33mplaceholder[39m=[32m"Email"[39m
+                [33mrequired[39m=[32m""[39m
+                [33mtype[39m=[32m"email"[39m
+                [33mvalue[39m=[32m""[39m
+                [33mwhilefocus[39m=[32m"[object Object]"[39m
+              [36m/>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+                [33mplaceholder[39m=[32m"Choose Username"[39m
+                [33mrequired[39m=[32m""[39m
+                [33mtype[39m=[32m"text"[39m
+                [33mvalue[39m=[32m"newcoder"[39m
+                [33mwhilefocus[39m=[32m"[object Object]"[39m
+              [36m/>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+                [33mminlength[39m=[32m"6"[39m
+                [33mplaceholder[39m=[32m"Set Password"[39m
+                [33mrequired[39m=[32m""[39m
+                [33mtype[39m=[32m"password"[39m
+                [33mvalue[39m=[32m"password123"[39m
+                [33mwhilefocus[39m=[32m"[object Object]"[39m
+              [36m/>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"pt-2 pb-2"[39m
+              [36m>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-sm font-semibold text-zinc-300 text-left mb-3"[39m
+                [36m>[39m
+                  [0mSelect your humor vibe:[0m
+                [36m</p>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"grid grid-cols-2 gap-3"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"cursor-pointer p-3 rounded-xl border relative transition-all bg-zinc-950/50 border-zinc-800 hover:border-zinc-700"[39m
+                    [33mwhilehover[39m=[32m"[object Object]"[39m
+                    [33mwhiletap[39m=[32m"[object Object]"[39m
+                  [36m>[39m
+                    [36m<h3[39m
+                      [33mclass[39m=[32m"text-sm font-bold text-white mb-1"[39m
+                    [36m>[39m
+                      [0m☕ General Dev Meme[0m
+                    [36m</h3>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"text-[10px] text-zinc-400 leading-tight"[39m
+                    [36m>[39m
+                      [0mDev Memes, Coffee Overdose & StackOverflow Nightmares[0m
+                    [36m</p>[39m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"cursor-pointer p-3 rounded-xl border relative transition-all bg-emerald-900/20 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]"[39m
+                    [33mwhilehover[39m=[32m"[object Object]"[39m
+                    [33mwhiletap[39m=[32m"[object Object]"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33manimate[39m=[32m"[object Object]"[39m
+                      [33mclass[39m=[32m"absolute -top-2 -right-2 bg-emerald-500 rounded-full p-1 shadow-lg"[39m
+                      [33minitial[39m=[32m"[object Object]"[39m
+                    [36m>[39m
+                      [36m<svg[39m
+                        [33mclass[39m=[32m"w-3 h-3 text-white"[39m
+                        [33mfill[39m=[32m"none"[39m
+                        [33mstroke[39m=[32m"currentColor"[39m
+                        [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [36m>[39m
+                        [36m<path[39m
+                          [33md[39m=[32m"M5 13l4 4L19 7"[39m
+                          [33mstroke-linecap[39m=[32m"round"[39m
+                          [33mstroke-linejoin[39m=[32m"round"[39m
+                          [33mstroke-width[39m=[32m"3"[39m
+                        [36m/>[39m
+                      [36m</svg>[39m
+                    [36m</div>[39m
+                    [36m<h3[39m
+                      [33mclass[39m=[32m"text-sm font-bold text-white mb-1"[39m
+                    [36m>[39m
+                      [0m⚡ Tamil Comedy Sense[0m
+                    [36m</h3>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"text-[10px] text-zinc-400 leading-tight"[39m
+                    [36m>[39m
+                      [0mVadivelu Counters, Goundamani Roasts & Tech Trolls[0m
+                    [36m</p>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"w-full h-12 bg-gradient-to-r from-blue-600 to-emerald-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/20 disabled:opacity-80 relative flex items-center justify-center overflow-hidden mt-4"[39m
+                [33mtransition[39m=[32m"[object Object]"[39m
+                [33mtype[39m=[32m"submit"[39m
+                [33mwhilehover[39m=[32m"[object Object]"[39m
+                [33mwhiletap[39m=[32m"[object Object]"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33manimate[39m=[32m"[object Object]"[39m
+                  [33mexit[39m=[32m"[object Object]"[39m
+                  [33minitial[39m=[32m"[object Object]"[39m
+                [36m>[39m
+                  [0mCreate Account[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</form>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+[36m [2m❯[22m __tests__/auth.test.tsx:[2m76:26[22m[39m
+    [90m 74|[39m
+    [90m 75|[39m     [35mawait[39m [34mwaitFor[39m(() [33m=>[39m {
+    [90m 76|[39m       expect(mockSignUp).toHaveBeenCalledWith({ email: "newcoder", pas…
+    [90m   |[39m                          [31m^[39m
+    [90m 77|[39m     })[33m;[39m
+    [90m 78|[39m   })[33m;[39m
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m __tests__/login.test.tsx[2m > [22mLogin Page[2m > [22mrenders signup tab with Google and Facebook OAuth, username, password, and Humor Selector
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: /Global Dev/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen flex items-center justify-center bg-zinc-950 text-white overflow-hidden p-4 relative"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33manimate[39m=[32m"[object Object]"[39m
+        [33mclass[39m=[32m"absolute inset-0 z-0 opacity-30 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900 via-zinc-950 to-zinc-950"[39m
+        [33mtransition[39m=[32m"[object Object]"[39m
+      [36m/>[39m
+      [36m<div[39m
+        [33manimate[39m=[32m"visible"[39m
+        [33mclass[39m=[32m"relative z-10 w-full max-w-md p-8 rounded-3xl bg-zinc-900/60 backdrop-blur-2xl border border-zinc-800/50 shadow-2xl"[39m
+        [33minitial[39m=[32m"hidden"[39m
+        [33mvariants[39m=[32m"[object Object]"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex flex-col items-center mb-8 relative"[39m
+          [33mvariants[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"absolute -top-14 -left-8 z-20"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mdata-testid[39m=[32m"bugsy"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<h1[39m
+            [33mclass[39m=[32m"text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-emerald-400 text-center relative z-10"[39m
+          [36m>[39m
+            [0mCodeLOL[0m
+          [36m</h1>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex bg-zinc-950/50 rounded-xl p-1 mb-8 relative border border-zinc-800/50"[39m
+          [33mvariants[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex w-full relative z-10"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"flex-1 py-2.5 text-sm font-semibold transition-colors z-10 relative text-zinc-500 hover:text-zinc-300"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [0mSign In[0m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"flex-1 py-2.5 text-sm font-semibold transition-colors z-10 relative text-white"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"absolute inset-0 bg-zinc-800 rounded-lg shadow-sm -z-10"[39m
+                [33mdata-layoutid[39m=[32m"authTabPill"[39m
+                [33mtransition[39m=[32m"[object Object]"[39m
+              [36m/>[39m
+              [0mJoin Arena[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33manimate[39m=[32m"[object Object]"[39m
+          [33mclass[39m=[32m"space-y-6 text-center py-4"[39m
+          [33minitial[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mclass[39m=[32m"text-xl font-bold text-zinc-100"[39m
+            [36m>[39m
+              [0mCreate your account[0m
+            [36m</h2>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-3"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"group relative w-full py-3.5 px-4 flex items-center justify-center gap-3 bg-zinc-100 text-zinc-900 rounded-xl font-bold shadow-lg shadow-zinc-100/10 transition-all disabled:opacity-50 overflow-hidden"[39m
+              [33mtype[39m=[32m"button"[39m
+              [33mwhilehover[39m=[32m"[object Object]"[39m
+              [33mwhiletap[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"w-5 h-5 relative z-10"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"[39m
+                  [33mfill[39m=[32m"#4285F4"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"[39m
+                  [33mfill[39m=[32m"#34A853"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"[39m
+                  [33mfill[39m=[32m"#FBBC05"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"[39m
+                  [33mfill[39m=[32m"#EA4335"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"relative z-10"[39m
+              [36m>[39m
+                [0mContinue with Google[0m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"group relative w-full py-3.5 px-4 flex items-center justify-center gap-3 bg-[#1877F2] text-white rounded-xl font-bold shadow-lg shadow-[#1877F2]/20 transition-all disabled:opacity-50 overflow-hidden"[39m
+              [33mtype[39m=[32m"button"[39m
+              [33mwhilehover[39m=[32m"[object Object]"[39m
+              [33mwhiletap[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"w-5 h-5 relative z-10"[39m
+                [33mfill[39m=[32m"currentColor"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"relative z-10"[39m
+              [36m>[39m
+                [0mContinue with Facebook[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"relative flex items-center py-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex-grow border-t border-zinc-800/80"[39m
+            [36m/>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"flex-shrink-0 mx-4 text-zinc-600 text-xs font-semibold uppercase tracking-wider"[39m
+            [36m>[39m
+              [0mor sign up with email[0m
+            [36m</span>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex-grow border-t border-zinc-800/80"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<form[39m
+            [33mclass[39m=[32m"space-y-4"[39m
+          [36m>[39m
+            [36m<input[39m
+              [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+              [33mplaceholder[39m=[32m"Email"[39m
+              [33mrequired[39m=[32m""[39m
+              [33mtype[39m=[32m"email"[39m
+              [33mvalue[39m=[32m""[39m
+              [33mwhilefocus[39m=[32m"[object Object]"[39m
+            [36m/>[39m
+            [36m<input[39m
+              [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+              [33mplaceholder[39m=[32m"Choose Username"[39m
+              [33mrequired[39m=[32m""[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+              [33mwhilefocus[39m=[32m"[object Object]"[39m
+            [36m/>[39m
+            [36m<input[39m
+              [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+              [33mminlength[39m=[32m"6"[39m
+              [33mplaceholder[39m=[32m"Set Password"[39m
+              [33mrequired[39m=[32m""[39m
+              [33mtype[39m=[32m"password"[39m
+              [33mvalue[39m=[32m""[39m
+              [33mwhilefocus[39m=[32m"[object Object]"[39m
+            [36m/>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"pt-2 pb-2"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-sm font-semibold text-zinc-300 text-left mb-3"[39m
+              [36m>[39m
+                [0mSelect your humor vibe:[0m
+              [36m</p>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"grid grid-cols-2 gap-3"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"cursor-pointer p-3 rounded-xl border relative transition-all bg-blue-900/20 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]"[39m
+                  [33mwhilehover[39m=[32m"[object Object]"[39m
+                  [33mwhiletap[39m=[32m"[object Object]"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33manimate[39m=[32m"[object Object]"[39m
+                    [33mclass[39m=[32m"absolute -top-2 -right-2 bg-blue-500 rounded-full p-1 shadow-lg"[39m
+                    [33minitial[39m=[32m"[object Object]"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33mclass[39m=[32m"w-3 h-3 text-white"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M5 13l4 4L19 7"[39m
+                        [33mstroke-linecap[39m=[32m"round"[39m
+                        [33mstroke-linejoin[39m=[32m"round"[39m
+                        [33mstroke-width[39m=[32m"3"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</div>[39m
+                  [36m<h3[39m
+                    [33mclass[39m=[32m"text-sm font-bold text-white mb-1"[39m
+                  [36m>[39m
+                    [0m☕ General Dev Meme[0m
+                  [36m</h3>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-[10px] text-zinc-400 leading-tight"[39m
+                  [36m>[39m
+                    [0mDev Memes, Coffee Overdose & StackOverflow Nightmares[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"cursor-pointer p-3 rounded-xl border relative transition-all bg-zinc-950/50 border-zinc-800 hover:border-zinc-700"[39m
+                  [33mwhilehover[39m=[32m"[object Object]"[39m
+                  [33mwhiletap[39m=[32m"[object Object]"[39m
+                [36m>[39m
+                  [36m<h3[39m
+                    [33mclass[39m=[32m"text-sm font-bold text-white mb-1"[39m
+                  [36m>[39m
+                    [0m⚡ Tamil Comedy Sense[0m
+                  [36m</h3>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-[10px] text-zinc-400 leading-tight"[39m
+                  [36m>[39m
+                    [0mVadivelu Counters, Goundamani Roasts & Tech Trolls[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"w-full h-12 bg-gradient-to-r from-blue-600 to-emerald-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/20 disabled:opacity-80 relative flex items-center justify-center overflow-hidden mt-4"[39m
+              [33mtransition[39m=[32m"[object Object]"[39m
+              [33mtype[39m=[32m"submit"[39m
+              [33mwhilehover[39m=[32m"[object Object]"[39m
+              [33mwhiletap[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33manimate[39m=[32m"[object Object]"[39m
+                [33mexit[39m=[32m"[object Object]"[39m
+                [33minitial[39m=[32m"[object Object]"[39m
+              [36m>[39m
+                [0mCreate Account[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</form>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m __tests__/login.test.tsx:[2m83:19[22m[39m
+    [90m 81|[39m
+    [90m 82|[39m     [90m// Should show Humor Selector cards[39m
+    [90m 83|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/Global Dev/i[39m))[33m.[39m[34mtoBeTruthy[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 84|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/Tamil Sense/i[39m))[33m.[39m[34mtoBeTruthy[39m()[33m;[39m
+    [90m 85|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m __tests__/login.test.tsx[2m > [22mLogin Page[2m > [22mcalls signUp with email, password, and humor_preference when submitting signup form
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: /Tamil Sense/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen flex items-center justify-center bg-zinc-950 text-white overflow-hidden p-4 relative"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33manimate[39m=[32m"[object Object]"[39m
+        [33mclass[39m=[32m"absolute inset-0 z-0 opacity-30 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900 via-zinc-950 to-zinc-950"[39m
+        [33mtransition[39m=[32m"[object Object]"[39m
+      [36m/>[39m
+      [36m<div[39m
+        [33manimate[39m=[32m"visible"[39m
+        [33mclass[39m=[32m"relative z-10 w-full max-w-md p-8 rounded-3xl bg-zinc-900/60 backdrop-blur-2xl border border-zinc-800/50 shadow-2xl"[39m
+        [33minitial[39m=[32m"hidden"[39m
+        [33mvariants[39m=[32m"[object Object]"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex flex-col items-center mb-8 relative"[39m
+          [33mvariants[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"absolute -top-14 -left-8 z-20"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mdata-testid[39m=[32m"bugsy"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<h1[39m
+            [33mclass[39m=[32m"text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-emerald-400 text-center relative z-10"[39m
+          [36m>[39m
+            [0mCodeLOL[0m
+          [36m</h1>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex bg-zinc-950/50 rounded-xl p-1 mb-8 relative border border-zinc-800/50"[39m
+          [33mvariants[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex w-full relative z-10"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"flex-1 py-2.5 text-sm font-semibold transition-colors z-10 relative text-zinc-500 hover:text-zinc-300"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [0mSign In[0m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"flex-1 py-2.5 text-sm font-semibold transition-colors z-10 relative text-white"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"absolute inset-0 bg-zinc-800 rounded-lg shadow-sm -z-10"[39m
+                [33mdata-layoutid[39m=[32m"authTabPill"[39m
+                [33mtransition[39m=[32m"[object Object]"[39m
+              [36m/>[39m
+              [0mJoin Arena[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33manimate[39m=[32m"[object Object]"[39m
+          [33mclass[39m=[32m"space-y-6 text-center py-4"[39m
+          [33minitial[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mclass[39m=[32m"text-xl font-bold text-zinc-100"[39m
+            [36m>[39m
+              [0mCreate your account[0m
+            [36m</h2>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-3"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"group relative w-full py-3.5 px-4 flex items-center justify-center gap-3 bg-zinc-100 text-zinc-900 rounded-xl font-bold shadow-lg shadow-zinc-100/10 transition-all disabled:opacity-50 overflow-hidden"[39m
+              [33mtype[39m=[32m"button"[39m
+              [33mwhilehover[39m=[32m"[object Object]"[39m
+              [33mwhiletap[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"w-5 h-5 relative z-10"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"[39m
+                  [33mfill[39m=[32m"#4285F4"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"[39m
+                  [33mfill[39m=[32m"#34A853"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"[39m
+                  [33mfill[39m=[32m"#FBBC05"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"[39m
+                  [33mfill[39m=[32m"#EA4335"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"relative z-10"[39m
+              [36m>[39m
+                [0mContinue with Google[0m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"group relative w-full py-3.5 px-4 flex items-center justify-center gap-3 bg-[#1877F2] text-white rounded-xl font-bold shadow-lg shadow-[#1877F2]/20 transition-all disabled:opacity-50 overflow-hidden"[39m
+              [33mtype[39m=[32m"button"[39m
+              [33mwhilehover[39m=[32m"[object Object]"[39m
+              [33mwhiletap[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"w-5 h-5 relative z-10"[39m
+                [33mfill[39m=[32m"currentColor"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"relative z-10"[39m
+              [36m>[39m
+                [0mContinue with Facebook[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"relative flex items-center py-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex-grow border-t border-zinc-800/80"[39m
+            [36m/>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"flex-shrink-0 mx-4 text-zinc-600 text-xs font-semibold uppercase tracking-wider"[39m
+            [36m>[39m
+              [0mor sign up with email[0m
+            [36m</span>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex-grow border-t border-zinc-800/80"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<form[39m
+            [33mclass[39m=[32m"space-y-4"[39m
+          [36m>[39m
+            [36m<input[39m
+              [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+              [33mplaceholder[39m=[32m"Email"[39m
+              [33mrequired[39m=[32m""[39m
+              [33mtype[39m=[32m"email"[39m
+              [33mvalue[39m=[32m""[39m
+              [33mwhilefocus[39m=[32m"[object Object]"[39m
+            [36m/>[39m
+            [36m<input[39m
+              [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+              [33mplaceholder[39m=[32m"Choose Username"[39m
+              [33mrequired[39m=[32m""[39m
+              [33mtype[39m=[32m"text"[39m
+              [33mvalue[39m=[32m""[39m
+              [33mwhilefocus[39m=[32m"[object Object]"[39m
+            [36m/>[39m
+            [36m<input[39m
+              [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"[39m
+              [33mminlength[39m=[32m"6"[39m
+              [33mplaceholder[39m=[32m"Set Password"[39m
+              [33mrequired[39m=[32m""[39m
+              [33mtype[39m=[32m"password"[39m
+              [33mvalue[39m=[32m""[39m
+              [33mwhilefocus[39m=[32m"[object Object]"[39m
+            [36m/>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"pt-2 pb-2"[39m
+            [36m>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-sm font-semibold text-zinc-300 text-left mb-3"[39m
+              [36m>[39m
+                [0mSelect your humor vibe:[0m
+              [36m</p>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"grid grid-cols-2 gap-3"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"cursor-pointer p-3 rounded-xl border relative transition-all bg-blue-900/20 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]"[39m
+                  [33mwhilehover[39m=[32m"[object Object]"[39m
+                  [33mwhiletap[39m=[32m"[object Object]"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33manimate[39m=[32m"[object Object]"[39m
+                    [33mclass[39m=[32m"absolute -top-2 -right-2 bg-blue-500 rounded-full p-1 shadow-lg"[39m
+                    [33minitial[39m=[32m"[object Object]"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33mclass[39m=[32m"w-3 h-3 text-white"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M5 13l4 4L19 7"[39m
+                        [33mstroke-linecap[39m=[32m"round"[39m
+                        [33mstroke-linejoin[39m=[32m"round"[39m
+                        [33mstroke-width[39m=[32m"3"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</div>[39m
+                  [36m<h3[39m
+                    [33mclass[39m=[32m"text-sm font-bold text-white mb-1"[39m
+                  [36m>[39m
+                    [0m☕ General Dev Meme[0m
+                  [36m</h3>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-[10px] text-zinc-400 leading-tight"[39m
+                  [36m>[39m
+                    [0mDev Memes, Coffee Overdose & StackOverflow Nightmares[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"cursor-pointer p-3 rounded-xl border relative transition-all bg-zinc-950/50 border-zinc-800 hover:border-zinc-700"[39m
+                  [33mwhilehover[39m=[32m"[object Object]"[39m
+                  [33mwhiletap[39m=[32m"[object Object]"[39m
+                [36m>[39m
+                  [36m<h3[39m
+                    [33mclass[39m=[32m"text-sm font-bold text-white mb-1"[39m
+                  [36m>[39m
+                    [0m⚡ Tamil Comedy Sense[0m
+                  [36m</h3>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-[10px] text-zinc-400 leading-tight"[39m
+                  [36m>[39m
+                    [0mVadivelu Counters, Goundamani Roasts & Tech Trolls[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"w-full h-12 bg-gradient-to-r from-blue-600 to-emerald-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/20 disabled:opacity-80 relative flex items-center justify-center overflow-hidden mt-4"[39m
+              [33mtransition[39m=[32m"[object Object]"[39m
+              [33mtype[39m=[32m"submit"[39m
+              [33mwhilehover[39m=[32m"[object Object]"[39m
+              [33mwhiletap[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33manimate[39m=[32m"[object Object]"[39m
+                [33mexit[39m=[32m"[object Object]"[39m
+                [33minitial[39m=[32m"[object Object]"[39m
+              [36m>[39m
+                [0mCreate Account[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</form>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m __tests__/login.test.tsx:[2m187:28[22m[39m
+    [90m185|[39m
+    [90m186|[39m     [90m// Select Tamil Sense humor[39m
+    [90m187|[39m     fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByText[39m([36m/Tamil Sense/i[39m))[33m;[39m
+    [90m   |[39m                            [31m^[39m
+    [90m188|[39m
+    [90m189|[39m     [90m// Fill form[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m __tests__/onboarding.test.tsx[2m > [22mOnboarding 3-Step Wizard[2m > [22mvalidates minimum 8 characters and matching password in Step 2
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: /Password must be at least 8 characters/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen flex items-center justify-center bg-zinc-950 text-white overflow-hidden p-4 relative"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33manimate[39m=[32m"[object Object]"[39m
+        [33mclass[39m=[32m"absolute inset-0 z-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900 via-zinc-950 to-zinc-950"[39m
+        [33mtransition[39m=[32m"[object Object]"[39m
+      [36m/>[39m
+      [36m<div[39m
+        [33manimate[39m=[32m"visible"[39m
+        [33mclass[39m=[32m"relative z-10 w-full max-w-md p-8 rounded-3xl bg-zinc-900/60 backdrop-blur-2xl border border-zinc-800/50 shadow-2xl"[39m
+        [33minitial[39m=[32m"hidden"[39m
+        [33mvariants[39m=[32m"[object Object]"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex flex-col items-center mb-6 relative"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"absolute -top-14 -left-8 z-20"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mdata-testid[39m=[32m"bugsy"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center justify-between w-full px-2 mb-3"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-xs font-bold uppercase tracking-wider text-indigo-400"[39m
+            [36m>[39m
+              [0mStep [0m
+              [0m2[0m
+              [0m of 3[0m
+            [36m</span>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-1.5"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"h-2 rounded-full transition-all duration-300 w-2 bg-emerald-500"[39m
+              [36m/>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"h-2 rounded-full transition-all duration-300 w-6 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]"[39m
+              [36m/>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"h-2 rounded-full transition-all duration-300 w-2 bg-zinc-800"[39m
+              [36m/>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<h1[39m
+            [33mclass[39m=[32m"text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 text-center"[39m
+          [36m>[39m
+            [0mSet a Password[0m
+          [36m</h1>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"text-zinc-400 mt-1 text-xs text-center font-medium"[39m
+          [36m>[39m
+            [0mEnables you to log in via username/email + password[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33manimate[39m=[32m"[object Object]"[39m
+          [33mclass[39m=[32m"bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-xl text-sm font-medium text-center mb-4"[39m
+          [33mexit[39m=[32m"[object Object]"[39m
+          [33minitial[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [0mPassword must be at least 6 characters[0m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative overflow-hidden min-h-[220px]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33manimate[39m=[32m"center"[39m
+            [33mclass[39m=[32m"space-y-4 pt-1"[39m
+            [33mcustom[39m=[32m"1"[39m
+            [33mexit[39m=[32m"exit"[39m
+            [33minitial[39m=[32m"enter"[39m
+            [33mtransition[39m=[32m"[object Object]"[39m
+            [33mvariants[39m=[32m"[object Object]"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-xs font-semibold text-zinc-400 uppercase tracking-wider ml-1"[39m
+              [36m>[39m
+                [0mPassword[0m
+              [36m</label>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"[39m
+                [33mplaceholder[39m=[32m"Password"[39m
+                [33mrequired[39m=[32m""[39m
+                [33mtype[39m=[32m"password"[39m
+                [33mvalue[39m=[32m"123"[39m
+              [36m/>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"pt-1"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex items-center justify-between text-xs text-zinc-400 mb-1"[39m
+                [36m>[39m
+                  [36m<span>[39m
+                    [0mStrength[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"font-semibold text-zinc-300"[39m
+                  [36m>[39m
+                    [0mWeak[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden flex gap-1"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"h-full rounded-full transition-all duration-300 bg-red-500"[39m
+                    [33mstyle[39m=[32m"width: 33.3%;"[39m
+                  [36m/>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"h-full rounded-full transition-all duration-300 bg-transparent"[39m
+                    [33mstyle[39m=[32m"width: 33.3%;"[39m
+                  [36m/>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"h-full rounded-full transition-all duration-300 bg-transparent"[39m
+                    [33mstyle[39m=[32m"width: 33.3%;"[39m
+                  [36m/>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5 pt-1"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-xs font-semibold text-zinc-400 uppercase tracking-wider ml-1"[39m
+              [36m>[39m
+                [0mConfirm Password[0m
+              [36m</label>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"[39m
+                [33mplaceholder[39m=[32m"Confirm Password"[39m
+                [33mrequired[39m=[32m""[39m
+                [33mtype[39m=[32m"password"[39m
+                [33mvalue[39m=[32m"123"[39m
+              [36m/>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center gap-3 pt-6"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"px-5 h-12 rounded-xl border border-zinc-800 text-sm font-semibold transition-all text-zinc-300 hover:bg-zinc-800 hover:text-white"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mBack[0m
+          [36m</button>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"flex-1 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg shadow-purple-500/20 disabled:opacity-70 flex items-center justify-center transition-all overflow-hidden"[39m
+            [33mtype[39m=[32m"button"[39m
+            [33mwhilehover[39m=[32m"[object Object]"[39m
+            [33mwhiletap[39m=[32m"[object Object]"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33manimate[39m=[32m"[object Object]"[39m
+              [33mexit[39m=[32m"[object Object]"[39m
+              [33minitial[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [0mNext[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"min-h-screen flex items-center justify-center bg-zinc-950 text-white overflow-hidden p-4 relative"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33manimate[39m=[32m"[object Object]"[39m
+          [33mclass[39m=[32m"absolute inset-0 z-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900 via-zinc-950 to-zinc-950"[39m
+          [33mtransition[39m=[32m"[object Object]"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33manimate[39m=[32m"visible"[39m
+          [33mclass[39m=[32m"relative z-10 w-full max-w-md p-8 rounded-3xl bg-zinc-900/60 backdrop-blur-2xl border border-zinc-800/50 shadow-2xl"[39m
+          [33minitial[39m=[32m"hidden"[39m
+          [33mvariants[39m=[32m"[object Object]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-col items-center mb-6 relative"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"absolute -top-14 -left-8 z-20"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mdata-testid[39m=[32m"bugsy"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center justify-between w-full px-2 mb-3"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"text-xs font-bold uppercase tracking-wider text-indigo-400"[39m
+              [36m>[39m
+                [0mStep [0m
+                [0m2[0m
+                [0m of 3[0m
+              [36m</span>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex items-center gap-1.5"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"h-2 rounded-full transition-all duration-300 w-2 bg-emerald-500"[39m
+                [36m/>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"h-2 rounded-full transition-all duration-300 w-6 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]"[39m
+                [36m/>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"h-2 rounded-full transition-all duration-300 w-2 bg-zinc-800"[39m
+                [36m/>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 text-center"[39m
+            [36m>[39m
+              [0mSet a Password[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-zinc-400 mt-1 text-xs text-center font-medium"[39m
+            [36m>[39m
+              [0mEnables you to log in via username/email + password[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33manimate[39m=[32m"[object Object]"[39m
+            [33mclass[39m=[32m"bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-xl text-sm font-medium text-center mb-4"[39m
+            [33mexit[39m=[32m"[object Object]"[39m
+            [33minitial[39m=[32m"[object Object]"[39m
+          [36m>[39m
+            [0mPassword must be at least 6 characters[0m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"relative overflow-hidden min-h-[220px]"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33manimate[39m=[32m"center"[39m
+              [33mclass[39m=[32m"space-y-4 pt-1"[39m
+              [33mcustom[39m=[32m"1"[39m
+              [33mexit[39m=[32m"exit"[39m
+              [33minitial[39m=[32m"enter"[39m
+              [33mtransition[39m=[32m"[object Object]"[39m
+              [33mvariants[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"space-y-1.5"[39m
+              [36m>[39m
+                [36m<label[39m
+                  [33mclass[39m=[32m"text-xs font-semibold text-zinc-400 uppercase tracking-wider ml-1"[39m
+                [36m>[39m
+                  [0mPassword[0m
+                [36m</label>[39m
+                [36m<input[39m
+                  [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"[39m
+                  [33mplaceholder[39m=[32m"Password"[39m
+                  [33mrequired[39m=[32m""[39m
+                  [33mtype[39m=[32m"password"[39m
+                  [33mvalue[39m=[32m"123"[39m
+                [36m/>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"pt-1"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"flex items-center justify-between text-xs text-zinc-400 mb-1"[39m
+                  [36m>[39m
+                    [36m<span>[39m
+                      [0mStrength[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"font-semibold text-zinc-300"[39m
+                    [36m>[39m
+                      [0mWeak[0m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden flex gap-1"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"h-full rounded-full transition-all duration-300 bg-red-500"[39m
+                      [33mstyle[39m=[32m"width: 33.3%;"[39m
+                    [36m/>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"h-full rounded-full transition-all duration-300 bg-transparent"[39m
+                      [33mstyle[39m=[32m"width: 33.3%;"[39m
+                    [36m/>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"h-full rounded-full transition-all duration-300 bg-transparent"[39m
+                      [33mstyle[39m=[32m"width: 33.3%;"[39m
+                    [36m/>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"space-y-1.5 pt-1"[39m
+              [36m>[39m
+                [36m<label[39m
+                  [33mclass[39m=[32m"text-xs font-semibold text-zinc-400 uppercase tracking-wider ml-1"[39m
+                [36m>[39m
+                  [0mConfirm Password[0m
+                [36m</label>[39m
+                [36m<input[39m
+                  [33mclass[39m=[32m"w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"[39m
+                  [33mplaceholder[39m=[32m"Confirm Password"[39m
+                  [33mrequired[39m=[32m""[39m
+                  [33mtype[39m=[32m"password"[39m
+                  [33mvalue[39m=[32m"123"[39m
+                [36m/>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-3 pt-6"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"px-5 h-12 rounded-xl border border-zinc-800 text-sm font-semibold transition-all text-zinc-300 hover:bg-zinc-800 hover:text-white"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [0mBack[0m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"flex-1 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg shadow-purple-500/20 disabled:opacity-70 flex items-center justify-center transition-all overflow-hidden"[39m
+              [33mtype[39m=[32m"button"[39m
+              [33mwhilehover[39m=[32m"[object Object]"[39m
+              [33mwhiletap[39m=[32m"[object Object]"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33manimate[39m=[32m"[object Object]"[39m
+                [33mexit[39m=[32m"[object Object]"[39m
+                [33minitial[39m=[32m"[object Object]"[39m
+              [36m>[39m
+                [0mNext[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+[90m [2m❯[22m Proxy.waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[36m [2m❯[22m __tests__/onboarding.test.tsx:[2m144:11[22m[39m
+    [90m142|[39m     fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [36m/Next/i[39m }))[33m;[39m
+    [90m143|[39m
+    [90m144|[39m     [35mawait[39m [34mwaitFor[39m(() [33m=>[39m {
+    [90m   |[39m           [31m^[39m
+    [90m145|[39m       expect(screen.getByText(/Password must be at least 8 characters/…
+    [90m146|[39m     })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m __tests__/projectVerifier.test.ts[2m > [22mprojectVerifier[2m > [22mshould pass function_exists requirement when function is defined
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m __tests__/projectVerifier.test.ts:[2m7:3[22m[39m
+    [90m  5|[39m
+    [90m  6|[39m [34mdescribe[39m([32m'projectVerifier'[39m[33m,[39m () [33m=>[39m {
+    [90m  7|[39m   it('should pass function_exists requirement when function is defined…
+    [90m   |[39m   [31m^[39m
+    [90m  8|[39m     [35mconst[39m req[33m:[39m [33mRequirement[39m [33m=[39m {
+    [90m  9|[39m       id[33m:[39m [32m'req-1'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m __tests__/projectVerifier.test.ts[2m > [22mprojectVerifier[2m > [22mshould fail function_exists requirement when function is missing
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m __tests__/projectVerifier.test.ts:[2m21:3[22m[39m
+    [90m 19|[39m   })[33m;[39m
+    [90m 20|[39m
+    [90m 21|[39m   it('should fail function_exists requirement when function is missing…
+    [90m   |[39m   [31m^[39m
+    [90m 22|[39m     [35mconst[39m req[33m:[39m [33mRequirement[39m [33m=[39m {
+    [90m 23|[39m       id[33m:[39m [32m'req-1'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m __tests__/projectVerifier.test.ts[2m > [22mprojectVerifier[2m > [22mshould pass output_contains requirement when output matches
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m __tests__/projectVerifier.test.ts:[2m34:3[22m[39m
+    [90m 32|[39m   })[33m;[39m
+    [90m 33|[39m
+    [90m 34|[39m   it('should pass output_contains requirement when output matches', as…
+    [90m   |[39m   [31m^[39m
+    [90m 35|[39m     [35mconst[39m req[33m:[39m [33mRequirement[39m [33m=[39m {
+    [90m 36|[39m       id[33m:[39m [32m'req-2'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m __tests__/projectVerifier.test.ts[2m > [22mprojectVerifier[2m > [22mshould pass custom_assertion requirement
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m __tests__/projectVerifier.test.ts:[2m47:3[22m[39m
+    [90m 45|[39m   })[33m;[39m
+    [90m 46|[39m
+    [90m 47|[39m   [34mit[39m([32m'should pass custom_assertion requirement'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   |[39m   [31m^[39m
+    [90m 48|[39m     [35mconst[39m req[33m:[39m [33mRequirement[39m [33m=[39m {
+    [90m 49|[39m       id[33m:[39m [32m'req-3'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m __tests__/projectVerifier.test.ts[2m > [22mprojectVerifier[2m > [22mshould catch runtime errors and return failed
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m __tests__/projectVerifier.test.ts:[2m60:3[22m[39m
+    [90m 58|[39m   })[33m;[39m
+    [90m 59|[39m
+    [90m 60|[39m   [34mit[39m([32m'should catch runtime errors and return failed'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   |[39m   [31m^[39m
+    [90m 61|[39m     [35mconst[39m req[33m:[39m [33mRequirement[39m [33m=[39m {
+    [90m 62|[39m       id[33m:[39m [32m'req-4'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m25 passed[39m[22m[90m (29)[39m
+[2m      Tests [22m [1m[31m9 failed[39m[22m[2m | [22m[1m[32m90 passed[39m[22m[90m (99)[39m
+[2m   Start at [22m 09:54:16
+[2m   Duration [22m 27.98s[2m (transform 5.31s, setup 0ms, import 18.75s, tests 45.55s, environment 59.67s)[22m
+
