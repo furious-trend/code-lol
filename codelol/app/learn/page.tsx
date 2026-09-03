@@ -11,11 +11,18 @@ import { executeCodeInBrowser } from '@/lib/executor';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { saveLessonProgress } from '@/lib/progress';
 import confetti from 'canvas-confetti';
+import { motion, AnimatePresence } from 'framer-motion';
+import SkillTreeView from '@/components/SkillTreeView';
+import CuriosityHook from '@/components/CuriosityHook';
+import { Map, LayoutList } from 'lucide-react';
+import { useMicroCelebration } from '@/hooks/useMicroCelebration';
 
 function LearnPageContent() {
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [isInitializing, setIsInitializing] = useState(true);
+  const [viewMode, setViewMode] = useState<'lesson' | 'map'>('lesson');
+  const [isLoadingLevel, setIsLoadingLevel] = useState(false);
   const supabase = createClient();
 
   // Load progress on mount
@@ -47,7 +54,71 @@ function LearnPageContent() {
     return <div className="flex h-screen items-center justify-center bg-zinc-950 text-white">Loading your progress...</div>;
   }
 
-  return <LessonView currentLevel={currentLevel} setCurrentLevel={setCurrentLevel} humorPref={humorPref} />;
+  const handleSelectLevel = (level: number) => {
+    setIsLoadingLevel(true);
+    setTimeout(() => {
+      setCurrentLevel(level);
+      setViewMode('lesson');
+      setIsLoadingLevel(false);
+    }, 1500); // 1.5s loading transition
+  };
+
+  const getTierFlavorText = (level: number) => {
+    const lesson = allLessons[level - 1];
+    if (!lesson) return "Loading...";
+    switch(lesson.tier) {
+      case 'Beginner': return "Warming up the engines...";
+      case 'Intermediate': return "Things are getting interesting...";
+      case 'Expert': return "Brain melting sequence initiated 🤯";
+      case 'Interview': return "Advanced territory ahead 🔥";
+      default: return "Loading next challenge...";
+    }
+  };
+
+  return (
+    <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-50 relative">
+      {/* View Toggle */}
+      <div className="absolute top-4 right-4 z-50 flex bg-zinc-900 border border-zinc-700 rounded-lg p-1 shadow-lg">
+        <button 
+          onClick={() => setViewMode('lesson')}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'lesson' ? 'bg-[var(--color-discovery-teal)] text-black' : 'text-zinc-400 hover:text-zinc-200'}`}
+        >
+          <LayoutList size={16} /> Lesson
+        </button>
+        <button 
+          onClick={() => setViewMode('map')}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'map' ? 'bg-[var(--color-discovery-teal)] text-black' : 'text-zinc-400 hover:text-zinc-200'}`}
+        >
+          <Map size={16} /> Map
+        </button>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {isLoadingLevel ? (
+          <motion.div 
+            key="loading"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex-1 flex flex-col items-center justify-center gap-4"
+          >
+            <div className="w-16 h-16 border-4 border-[var(--color-discovery-teal)] border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-xl font-bold text-[var(--color-discovery-teal)] animate-pulse">{getTierFlavorText(currentLevel)}</p>
+          </motion.div>
+        ) : viewMode === 'map' ? (
+          <motion.div key="map" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }} className="flex-1 flex flex-col h-full w-full absolute inset-0 pt-16">
+            <SkillTreeView currentLevel={currentLevel} onSelectLevel={handleSelectLevel} />
+          </motion.div>
+        ) : (
+          <motion.div key="lesson" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="flex-1 flex flex-col pt-12">
+            <LessonView 
+              currentLevel={currentLevel} 
+              setCurrentLevel={handleSelectLevel} 
+              humorPref={humorPref} 
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }
 
 function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel: number, setCurrentLevel: (level: number) => void, humorPref: 'general' | 'tamil' }) {
@@ -72,6 +143,9 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
   
   // Tier Completion State
   const [showTierComplete, setShowTierComplete] = useState(false);
+
+  // Micro celebrations
+  const { triggerCelebration: triggerFirstRoast } = useMicroCelebration('first_roast');
 
   const fetchLessonGif = async (keyword: string) => {
     setLessonGif(null);
@@ -143,6 +217,7 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
         setOutput(errorOutput);
         
         await handleRoast(code, errorOutput, false, '', humorPref);
+        triggerFirstRoast();
         playMemeSound(false, humorPref);
       }
     } catch {
@@ -204,8 +279,8 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
     switch (tier) {
       case 'Beginner': return 'text-green-400 border-green-500 bg-green-950/30';
       case 'Intermediate': return 'text-blue-400 border-blue-500 bg-blue-950/30';
-      case 'Advanced': return 'text-purple-400 border-purple-500 bg-purple-950/30';
       case 'Expert': return 'text-red-400 border-red-500 bg-red-950/30';
+      case 'Interview': return 'text-purple-400 border-purple-500 bg-purple-950/30';
       default: return 'text-zinc-400 border-zinc-500 bg-zinc-900';
     }
   };
@@ -228,7 +303,7 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
   }
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] p-4 md:p-6 gap-6 bg-zinc-950 text-zinc-50 font-sans w-full mx-auto">
+    <div className="flex flex-col flex-1 p-4 md:p-6 gap-6 font-sans w-full mx-auto overflow-y-auto">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-zinc-800 pb-4">
@@ -292,6 +367,8 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
                  onDismiss={clearRoast}
                />
             )}
+
+            <CuriosityHook />
           </div>
         </div>
 

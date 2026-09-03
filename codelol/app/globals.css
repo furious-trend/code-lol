@@ -27,6 +27,29 @@
   
   --color-solar-amber: #f59e0b;
   --color-crimson: #ef4444;
+
+  /* Discovery Colors for Curiosity Hooks */
+  --color-discovery-teal: #00e5ff;
+  --color-discovery-glow: rgba(0, 229, 255, 0.4);
+
+  --animate-color-shift: color-shift 3s ease-in-out infinite alternate;
+  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes color-shift {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(45deg); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 10px var(--color-discovery-glow);
+    }
+    50% {
+      opacity: .7;
+      box-shadow: 0 0 25px var(--color-discovery-glow);
+    }
+  }
 }
 
 body {
