@@ -15,6 +15,7 @@ import { MilestoneCelebration } from '@/components/MilestoneCelebration';
 import ReactMarkdown from 'react-markdown';
 import { createClient } from '@/lib/supabase/client';
 import confetti from 'canvas-confetti';
+import { getResultGif } from '@/lib/localGifs';
 
 export default function ProblemSolverPage() {
   const params = useParams();
@@ -43,6 +44,7 @@ export default function ProblemSolverPage() {
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const startTimeRef = useRef<number | null>(null);
   const supabase = createClient();
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
 
@@ -113,6 +115,9 @@ export default function ProblemSolverPage() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!startTimeRef.current) {
+      startTimeRef.current = Date.now();
+    }
     if (e.key === 'Tab') {
       e.preventDefault();
       const target = e.target as HTMLTextAreaElement;
@@ -126,6 +131,13 @@ export default function ProblemSolverPage() {
         }
       }, 0);
     }
+  };
+
+  const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!startTimeRef.current) {
+      startTimeRef.current = Date.now();
+    }
+    setCode(e.target.value);
   };
 
   const handleSubmit = async () => {
@@ -213,13 +225,38 @@ let _log = [];
           setTestResults(parsedResults);
           
           if (parsedResults.passed === parsedResults.total) {
+            // Calculate solve time
+            const solveTimeMs = startTimeRef.current ? Date.now() - startTimeRef.current : 0;
+            
             // Check milestone before save
             const savedBefore = localStorage.getItem('completedProblems');
             const completedBefore = savedBefore ? JSON.parse(savedBefore) : [];
             const isNew = !completedBefore.includes(problem.id);
             
+            // Fetch AI complexity estimation
+            let timeComplexity = 'O(?)';
+            let spaceComplexity = 'O(?)';
+            try {
+              const res = await fetch('/api/analyze-complexity', {
+                method: 'POST',
+                body: JSON.stringify({ code })
+              });
+              if (res.ok) {
+                const complexity = await res.json();
+                timeComplexity = complexity.timeComplexity;
+                spaceComplexity = complexity.spaceComplexity;
+              }
+            } catch (err) {
+              console.error('Error fetching complexity:', err);
+            }
+
             // Save completion via helper
-            await saveProblemCompletion(problem.id);
+            await saveProblemCompletion(problem.id, {
+              solveTimeMs,
+              timeComplexity,
+              spaceComplexity,
+              pointsAwarded: 100 // Fixed base points for now
+            });
             
             if (isNew && (completedBefore.length + 1) % 5 === 0) {
               setMilestoneData({
@@ -348,16 +385,16 @@ let _log = [];
                   
                   {quizAnswered === problem.miniQuizQuestion.correctAnswerIndex && (
                     <img 
-                      src="https://media.giphy.com/media/d3mlE7uhX8KFgEmY/giphy.gif" 
-                      alt="Roll Safe Big Brain" 
+                      src={getResultGif(true, humorPref)} 
+                      alt="Success GIF" 
                       className="w-64 rounded-xl border border-green-500/30 shadow-[0_0_30px_rgba(74,222,128,0.2)]"
                     />
                   )}
 
                   {quizAnswered !== problem.miniQuizQuestion.correctAnswerIndex && (
                     <img 
-                      src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3N2c2t3NXl3ZW9xNXY0amw0cjBpeTNwaDZtcXZrOTZ2NXF1aHM3bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/h36vh423PiV9K/giphy.gif" 
-                      alt="Gordon Ramsay Disappointed" 
+                      src={getResultGif(false, humorPref)} 
+                      alt="Fail GIF" 
                       className="w-64 rounded-xl border border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.2)]"
                     />
                   )}
@@ -401,7 +438,7 @@ let _log = [];
           <textarea
             ref={textareaRef}
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={handleCodeChange}
             onKeyDown={handleKeyDown}
             spellCheck={false}
             className="flex-1 w-full bg-zinc-950 text-zinc-300 font-mono p-4 rounded-2xl border border-zinc-800 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 resize-none shadow-inner"

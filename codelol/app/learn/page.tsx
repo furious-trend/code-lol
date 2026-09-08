@@ -150,9 +150,9 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
   const fetchLessonGif = async (keyword: string) => {
     setLessonGif(null);
     try {
-      const gifRes = await fetch(`/api/gif?keyword=${encodeURIComponent(keyword)}`);
-      const gifData = await gifRes.json();
-      if (gifRes.ok && gifData.url) setLessonGif(gifData.url);
+      const { getResultGif } = await import('@/lib/localGifs');
+      // For lessons, we show a random funny/roast gif to set the mood
+      setLessonGif(getResultGif(false, humorPref));
     } catch {
       console.error("Failed to load lesson gif");
     }

@@ -43,12 +43,12 @@ describe('Messages Page UI', () => {
     expect(screen.getByRole('heading', { name: 'Messages', level: 1 })).toBeTruthy();
     
     // Verify Bugsy empty state shows when no friend selected
-    await waitFor(() => {
-      expect(screen.getByText(/Select a friend from the sidebar to start chatting/i)).toBeTruthy();
-    });
+    expect(screen.getByText(/Select a friend from the sidebar to start chatting/i)).toBeTruthy();
 
     // Check friend is in the list
-    expect(screen.getByText('Bugsy')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('Bugsy')).toBeTruthy();
+    });
   });
 
   it('clicking a friend opens chat thread and displays messages', async () => {

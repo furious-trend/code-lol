@@ -33,8 +33,14 @@ describe('Leaderboard Page', () => {
           order: mockOrder.mockReturnValue({
             limit: mockLimit,
           })
-        })
+        }),
+        eq: vi.fn().mockReturnThis()
       }),
+      channel: vi.fn(() => ({
+        on: vi.fn().mockReturnThis(),
+        subscribe: vi.fn().mockReturnThis(),
+      })),
+      removeChannel: vi.fn(),
     };
     (createClient as any).mockReturnValue(mockSupabase);
   });

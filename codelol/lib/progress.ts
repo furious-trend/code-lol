@@ -1,10 +1,17 @@
 import { createClient } from './supabase/client';
 
+interface CompletionOptions {
+  solveTimeMs?: number;
+  timeComplexity?: string;
+  spaceComplexity?: string;
+  pointsAwarded?: number;
+}
+
 /**
  * Marks a problem as completed for the current user.
  * Falls back to localStorage if the user is not logged in.
  */
-export async function saveProblemCompletion(problemId: string) {
+export async function saveProblemCompletion(problemId: string, options?: CompletionOptions) {
   try {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -13,7 +20,11 @@ export async function saveProblemCompletion(problemId: string) {
       await supabase.from('problem_completions').upsert({
         user_id: user.id,
         problem_id: problemId,
-        completed_at: new Date().toISOString()
+        completed_at: new Date().toISOString(),
+        ...(options?.solveTimeMs !== undefined && { solve_time_ms: options.solveTimeMs }),
+        ...(options?.timeComplexity && { time_complexity: options.timeComplexity }),
+        ...(options?.spaceComplexity && { space_complexity: options.spaceComplexity }),
+        ...(options?.pointsAwarded !== undefined && { points_awarded: options.pointsAwarded }),
       }, { onConflict: 'user_id, problem_id' });
     }
 
