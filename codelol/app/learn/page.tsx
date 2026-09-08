@@ -28,23 +28,28 @@ function LearnPageContent() {
   // Load progress on mount
   useEffect(() => {
     async function loadProgress() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('current_level, humor_preference')
-          .eq('id', user.id)
-          .single();
-        if (profile?.current_level) {
-          // Ensure we don't go out of bounds if they completed everything
-          const maxLevel = Math.min(profile.current_level, allLessons.length);
-          setCurrentLevel(Math.max(1, maxLevel));
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('current_level, humor_preference')
+            .eq('id', user.id)
+            .single();
+          if (profile?.current_level) {
+            // Ensure we don't go out of bounds if they completed everything
+            const maxLevel = Math.min(profile.current_level, allLessons.length);
+            setCurrentLevel(Math.max(1, maxLevel));
+          }
+          if (profile?.humor_preference) {
+            setHumorPref(profile.humor_preference);
+          }
         }
-        if (profile?.humor_preference) {
-          setHumorPref(profile.humor_preference);
-        }
+      } catch (err) {
+        console.error("Error loading progress:", err);
+      } finally {
+        setIsInitializing(false);
       }
-      setIsInitializing(false);
     }
     loadProgress();
     // eslint-disable-next-line react-hooks/exhaustive-deps

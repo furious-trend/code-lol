@@ -12,21 +12,25 @@ export function useBattle(roomCode: string | null) {
     if (!roomCode) return;
     setLoading(true);
     
-    const supabase = createClient();
-    const { data } = await supabase.auth.getUser();
-    if (data.user) {
-      setCurrentUserId(data.user.id);
-    }
+    try {
+      const supabase = createClient();
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
+        setCurrentUserId(data.user.id);
+      }
 
-    const b = await getBattleByRoomCode(roomCode);
-    setBattle(b);
-    
-    if (b) {
-      const p = await getBattleParticipants(b.id);
-      setParticipants(p);
+      const b = await getBattleByRoomCode(roomCode);
+      setBattle(b);
+      
+      if (b) {
+        const p = await getBattleParticipants(b.id);
+        setParticipants(p);
+      }
+    } catch (err) {
+      console.error("Error loading battle data:", err);
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   }, [roomCode]);
 
   useEffect(() => {

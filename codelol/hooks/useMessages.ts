@@ -10,10 +10,15 @@ export function useMessages(friendId: string | null) {
   const loadMessages = useCallback(async () => {
     if (!friendId) return;
     setLoading(true);
-    const msgs = await getMessages(friendId);
-    setMessages(msgs);
-    await markAsRead(friendId);
-    setLoading(false);
+    try {
+      const msgs = await getMessages(friendId);
+      setMessages(msgs);
+      await markAsRead(friendId);
+    } catch (err) {
+      console.error("Error loading messages:", err);
+    } finally {
+      setLoading(false);
+    }
   }, [friendId]);
 
   useEffect(() => {

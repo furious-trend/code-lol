@@ -66,30 +66,35 @@ export default function Settings() {
   // ── Load real profile on mount ──────────────────────────────────────────────
   useEffect(() => {
     async function loadProfile() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setIsLoading(false); return; }
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) { return; }
 
-      setUserId(user.id);
-      // Check if user has an email/password identity (vs OAuth-only)
-      const hasEmailIdentity = user.identities?.some(
-        (id: { provider: string }) => id.provider === 'email'
-      ) ?? false;
-      setIsPasswordUser(hasEmailIdentity);
+        setUserId(user.id);
+        // Check if user has an email/password identity (vs OAuth-only)
+        const hasEmailIdentity = user.identities?.some(
+          (id: { provider: string }) => id.provider === 'email'
+        ) ?? false;
+        setIsPasswordUser(hasEmailIdentity);
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('display_name, humor_preference')
-        .eq('id', user.id)
-        .single();
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('display_name, humor_preference')
+          .eq('id', user.id)
+          .single();
 
-      if (profile) {
-        setDisplayName(profile.display_name ?? '');
-        if (profile.humor_preference === 'tamil' || profile.humor_preference === 'general') {
-          setHumorPref(profile.humor_preference);
+        if (profile) {
+          setDisplayName(profile.display_name ?? '');
+          if (profile.humor_preference === 'tamil' || profile.humor_preference === 'general') {
+            setHumorPref(profile.humor_preference);
+          }
         }
+      } catch (err) {
+        console.error("Error loading profile:", err);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     loadProfile();
   }, []);

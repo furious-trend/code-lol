@@ -37,40 +37,50 @@ export default function Leaderboard() {
     
     const fetchGlobal = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('id, display_name, rank_points')
-        .order('rank_points', { ascending: false })
-        .limit(100);
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, display_name, rank_points')
+          .order('rank_points', { ascending: false })
+          .limit(100);
 
-      if (isMounted) {
-        if (error) setError(error.message);
-        else setGlobalUsers(data || []);
-        setLoading(false);
+        if (isMounted) {
+          if (error) setError(error.message);
+          else setGlobalUsers(data || []);
+        }
+      } catch (err) {
+        if (isMounted) setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
 
     const fetchProblem = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('problem_completions')
-        .select(`
-          user_id,
-          problem_id,
-          solve_time_ms,
-          time_complexity,
-          space_complexity,
-          points_awarded,
-          profiles ( display_name )
-        `)
-        .eq('problem_id', selectedProblemId)
-        .order('points_awarded', { ascending: false })
-        .limit(100);
+      try {
+        const { data, error } = await supabase
+          .from('problem_completions')
+          .select(`
+            user_id,
+            problem_id,
+            solve_time_ms,
+            time_complexity,
+            space_complexity,
+            points_awarded,
+            profiles ( display_name )
+          `)
+          .eq('problem_id', selectedProblemId)
+          .order('points_awarded', { ascending: false })
+          .limit(100);
 
-      if (isMounted) {
-        if (error) setError(error.message);
-        else setProblemCompletions((data as any) || []);
-        setLoading(false);
+        if (isMounted) {
+          if (error) setError(error.message);
+          else setProblemCompletions((data as any) || []);
+        }
+      } catch (err) {
+        if (isMounted) setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
 
