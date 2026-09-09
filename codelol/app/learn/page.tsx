@@ -138,7 +138,6 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
   // Auto-roast state handled by hook
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
-  const [lessonGif, setLessonGif] = useState<string | null>(null);
 
   // Quiz State
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -152,17 +151,6 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
   // Micro celebrations
   const { triggerCelebration: triggerFirstRoast } = useMicroCelebration('first_roast');
 
-  const fetchLessonGif = async (keyword: string) => {
-    setLessonGif(null);
-    try {
-      const { getResultGif } = await import('@/lib/localGifs');
-      // For lessons, we show a random funny/roast gif to set the mood
-      setLessonGif(getResultGif(false, humorPref));
-    } catch {
-      console.error("Failed to load lesson gif");
-    }
-  };
-
   // Reset state when lesson changes
   useEffect(() => {
     if (!lesson) return;
@@ -175,9 +163,6 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
     setQuizState('idle');
     setQuizGif(null);
     setShowTierComplete(false);
-    
-    // Fetch context GIF for lesson
-    fetchLessonGif(lesson.gifKeyword);
   }, [lesson]);
 
   if (!lesson) {
@@ -195,6 +180,19 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
     setOutput('Running...');
     clearRoast();
     
+    // 1. Syntax Checks
+    if (lesson.verificationChecks) {
+      const syntaxChecks = lesson.verificationChecks.filter(c => c.type === 'requires_syntax');
+      for (const check of syntaxChecks) {
+        if (check.pattern && !new RegExp(check.pattern).test(code)) {
+          setOutput(`Check Failed: ${check.expectedMessage}`);
+          setHasRunSuccessfully(false);
+          setIsRunning(false);
+          return;
+        }
+      }
+    }
+
     if (lesson.topicRequirement) {
       const regex = new RegExp(lesson.topicRequirement.pattern);
       if (!regex.test(code)) {
@@ -208,10 +206,51 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
     }
     
     try {
-      const data = await executeCodeInBrowser('javascript', code);
+      // 2. Instrument code for requires_call_count
+      let codeToExecute = code;
+      const assertions: { id: string, code: string }[] = [];
+      let expectsCallCount = false;
+      let expectedCallCountMsg = "";
+
+      if (lesson.verificationChecks) {
+        const callCountChecks = lesson.verificationChecks.filter(c => c.type === 'requires_call_count');
+        if (callCountChecks.length > 0) {
+          expectsCallCount = true;
+          expectedCallCountMsg = callCountChecks[0].expectedMessage;
+          codeToExecute = codeToExecute.replace(/(for|while|do)\s*\(.*?\)\s*\{/g, "$&\n  window.__loopCount = (window.__loopCount || 0) + 1;\n");
+          assertions.push({ id: 'call_count', code: 'window.__loopCount > 1' });
+        }
+      }
+
+      const data = await executeCodeInBrowser('javascript', codeToExecute, assertions);
       
       if (!data.error) {
         const finalOutput = data.output || 'Code ran successfully with no output.';
+        
+        // 3. Output Checks
+        if (lesson.verificationChecks) {
+          const outputChecks = lesson.verificationChecks.filter(c => c.type === 'requires_output');
+          for (const check of outputChecks) {
+            if (check.pattern && !new RegExp(check.pattern).test(finalOutput)) {
+              setOutput(`${finalOutput}\n\nCheck Failed: ${check.expectedMessage}`);
+              setHasRunSuccessfully(false);
+              setIsRunning(false);
+              return;
+            }
+          }
+        }
+
+        // 4. Verification Results from Executor
+        if (expectsCallCount && data.verificationResults) {
+          const callCountResult = data.verificationResults.find((r: {id: string, passed: boolean}) => r.id === 'call_count');
+          if (!callCountResult || !callCountResult.passed) {
+            setOutput(`${finalOutput}\n\nCheck Failed: ${expectedCallCountMsg}`);
+            setHasRunSuccessfully(false);
+            setIsRunning(false);
+            return;
+          }
+        }
+
         setOutput(finalOutput);
         
         await handleRoast(code, finalOutput, true, '', humorPref);
@@ -224,11 +263,13 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
         await handleRoast(code, errorOutput, false, '', humorPref);
         triggerFirstRoast();
         playMemeSound(false, humorPref);
+        setHasRunSuccessfully(false);
       }
     } catch {
       setOutput('Failed to execute code. Check your connection.');
       await handleRoast(code, 'Failed to execute code.', false, '', humorPref);
       playMemeSound(false, humorPref);
+      setHasRunSuccessfully(false);
     } finally {
       setIsRunning(false);
     }
@@ -343,11 +384,6 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
             <p className="text-zinc-300 leading-relaxed text-lg mb-6">
               {humorPref === 'tamil' ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}
             </p>
-
-            {lessonGif && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={lessonGif} alt="Lesson Context" className="w-full h-48 object-cover rounded-xl shadow-lg border border-zinc-700 bg-zinc-800 mb-6" />
-            )}
 
             {/* Auto Roast Area */}
             {isRoasting && (

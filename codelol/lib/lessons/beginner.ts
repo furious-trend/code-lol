@@ -16,16 +16,19 @@ export const beginnerLessons: Lesson[] = [
       options: ["const", "let", "make", "variable"],
       correctAnswerIndex: 1
     },
-    topicRequirement: {
-      pattern: "(?:let|const)\\s+",
-      errorMessage: "You should declare a variable using 'let' or 'const' in this exercise."
-    },
     examples: [
       { explanation: "Using let to declare a changeable variable, simulating a fridge surprise.", code: "let sweetBox = 'Cookies';\nconsole.log('Opening sweet box...');\nsweetBox = 'Sewing Kit';\nconsole.log('Result:', sweetBox);\nconsole.log('Trust issues level increased.');" },
       { explanation: "Using const for things that never change, like Mom's rules.", code: "const TUPPERWARE = 'Moms Favorite Box';\nlet borrower = 'Me';\nconsole.log('I borrowed:', TUPPERWARE);\nborrower = 'My Friend';\nconsole.log('Now who has it?', borrower);\nconsole.log('Mom is going to be mad.');" },
       { explanation: "Declaring multiple items at once to prepare a full meal.", code: "let dinner1 = 'Rice', dinner2 = 'Dal', drink = 'Water';\nconsole.log('Menu tonight:');\nconsole.log(dinner1);\nconsole.log(dinner2);\nconsole.log(drink);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:let|const|var)\\s+",
+              expectedMessage: "Your code runs, but it doesn't actually declare a variable. Use 'let' or 'const'."
+            }
+          ]
+},
   {
     id: 2,
     chapter: "Chapter 1: The Absolute Basics",
@@ -45,8 +48,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Strings for text.", code: "let name = 'Batman';\nconsole.log(name);" },
       { explanation: "Numbers for math.", code: "let price = 99.99;\nconsole.log(price * 2);" },
       { explanation: "Booleans for logic.", code: "let isHungry = true;\nif (isHungry) console.log('Eat!');" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "typeof\\s+",
+              expectedMessage: "Your code runs, but doesn't seem to check any data types. Try using the 'typeof' operator!"
+            }
+          ]
+},
   {
     id: 3,
     chapter: "Chapter 3: Data Structures",
@@ -66,8 +76,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Accessing items by index.", code: "let colors = ['Red', 'Green', 'Blue'];\nconsole.log(colors[1]); // Green" },
       { explanation: "Updating an item in an array.", code: "let scores = [10, 20];\nscores[1] = 99;\nconsole.log(scores);" },
       { explanation: "Getting the length of an array.", code: "let pets = ['Dog', 'Cat', 'Fish'];\nconsole.log(pets.length); // 3" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\[.*\\]",
+              expectedMessage: "Your code runs, but it doesn't look like you created or used an array [] yet."
+            }
+          ]
+},
   {
     id: 4,
     chapter: "Chapter 3: Data Structures",
@@ -87,8 +104,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Dot notation to access properties.", code: "let car = { make: 'Ford', speed: 100 };\nconsole.log(car.speed);" },
       { explanation: "Bracket notation (useful for dynamic keys).", code: "let user = { 'first name': 'John' };\nconsole.log(user['first name']);" },
       { explanation: "Adding new properties.", code: "let robot = {};\nrobot.power = 'Laser';\nconsole.log(robot);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\{.*\\}",
+              expectedMessage: "Your code runs, but you didn't define an object {} yet."
+            }
+          ]
+},
   {
     id: 5,
     chapter: "Chapter 2: Logic & Control Flow",
@@ -104,16 +128,23 @@ export const beginnerLessons: Lesson[] = [
       options: ["start, stop, pause", "initialization, condition, increment", "begin, middle, end", "let, const, var"],
       correctAnswerIndex: 1
     },
-    topicRequirement: {
-      pattern: "for\\s*\\(",
-      errorMessage: "You must use a 'for' loop in this exercise to practice the topic!"
-    },
     examples: [
       { explanation: "Basic counting loop.", code: "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}" },
       { explanation: "Looping over an array.", code: "let items = ['A', 'B', 'C'];\nfor (let i = 0; i < items.length; i++) {\n  console.log(items[i]);\n}" },
       { explanation: "Counting backwards.", code: "for (let i = 3; i > 0; i--) {\n  console.log('Countdown:', i);\n}" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "for\\s*\\(",
+              expectedMessage: "Your code runs, but it doesn't actually use a 'for' loop yet — give it another shot!"
+            },
+            {
+              type: "requires_call_count",
+              expectedMessage: "Your loop didn't seem to iterate multiple times. Make sure your loop condition allows it to run more than once!"
+            }
+          ]
+},
   {
     id: 6,
     chapter: "Chapter 2: Logic & Control Flow",
@@ -133,8 +164,19 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Basic while loop.", code: "let count = 0;\nwhile (count < 3) {\n  console.log(count);\n  count++;\n}" },
       { explanation: "Waiting for a condition.", code: "let ready = false;\nlet checks = 0;\nwhile (!ready) {\n  if (++checks > 2) ready = true;\n  console.log('Checking...');\n}" },
       { explanation: "Do-while (runs at least once).", code: "let x = 10;\ndo {\n  console.log('Ran once!');\n} while (x < 5);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "while\\s*\\(",
+              expectedMessage: "Your code runs, but it doesn't actually use a 'while' loop yet — give it another shot!"
+            },
+            {
+              type: "requires_call_count",
+              expectedMessage: "Your loop didn't seem to iterate multiple times. Check your condition!"
+            }
+          ]
+},
   {
     id: 7,
     chapter: "Chapter 2: Logic & Control Flow",
@@ -154,8 +196,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Basic if statement.", code: "if (5 > 3) {\n  console.log('Math works!');\n}" },
       { explanation: "If / Else.", code: "let rain = true;\nif (rain) console.log('Umbrella');\nelse console.log('Sunglasses');" },
       { explanation: "Else If chain.", code: "let score = 85;\nif (score > 90) console.log('A');\nelse if (score > 80) console.log('B');\nelse console.log('C');" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "if\\s*\\(",
+              expectedMessage: "Your code runs, but you didn't use an 'if' statement to make a decision."
+            }
+          ]
+},
   {
     id: 8,
     chapter: "Chapter 4: Functions & Scope",
@@ -175,8 +224,20 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Basic function declaration.", code: "function sayHi() {\n  console.log('Hi!');\n}\nsayHi();" },
       { explanation: "Function with parameters.", code: "function add(a, b) {\n  return a + b;\n}\nconsole.log(add(2, 3));" },
       { explanation: "Function expression (assigned to a variable).", code: "const greet = function(name) {\n  return 'Hello ' + name;\n};\nconsole.log(greet('John'));" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:function\\s+|=>)",
+              expectedMessage: "Your code runs, but you need to define a function to complete this lesson."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "return\\s+",
+              expectedMessage: "Make sure your function returns a value using the 'return' keyword."
+            }
+          ]
+},
   {
     id: 9,
     chapter: "Chapter 6: Essential Syntax",
@@ -196,8 +257,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Arithmetic operators.", code: "console.log(10 + 5);\nconsole.log(10 - 2);\nconsole.log(10 * 3);\nconsole.log(10 / 2);" },
       { explanation: "Comparison operators.", code: "console.log(5 > 3); // true\nconsole.log(10 <= 10); // true\nconsole.log(1 !== 2); // true" },
       { explanation: "Logical operators (AND / OR).", code: "console.log(true && false); // false\nconsole.log(true || false); // true" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:==|===|!=|!==|>|<|>=|<=)",
+              expectedMessage: "Try using a comparison operator like == or === to compare values."
+            }
+          ]
+},
   {
     id: 10,
     chapter: "Chapter 6: Essential Syntax",
@@ -217,8 +285,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Single vs Double quotes.", code: "let single = 'Hi';\nlet double = \"Hello\";\nconsole.log(single, double);" },
       { explanation: "String length.", code: "let word = 'JavaScript';\nconsole.log(word.length); // 10" },
       { explanation: "Getting a specific character.", code: "let text = 'Code';\nconsole.log(text[0]); // C" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\+",
+              expectedMessage: "Try concatenating (adding) two strings together using the + operator."
+            }
+          ]
+},
   {
     id: 11,
     chapter: "Chapter 1: The Absolute Basics",
@@ -238,8 +313,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Single line comment.", code: "let a = 1; // This is one\nconsole.log(a);" },
       { explanation: "Multi line comment.", code: "/* \n  Big block \n  of text \n*/\nlet b = 2;" },
       { explanation: "Commenting out code to disable it temporarily.", code: "let c = 3;\n// c = 4;\nconsole.log(c); // still 3" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:\\/\\/|\\/\\*)",
+              expectedMessage: "Your code runs, but it looks like you forgot to write a comment!"
+            }
+          ]
+},
   {
     id: 12,
     chapter: "Chapter 5: The Weird Parts",
@@ -259,8 +341,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Converting string to number safely.", code: "let num = Number('42');\nconsole.log(typeof num); // number" },
       { explanation: "Converting number to string.", code: "let str = String(100);\nconsole.log(typeof str); // string" },
       { explanation: "Implicit coercion (JS doing weird things automatically).", code: "console.log('5' * 2); // 10 (string becomes number for math)" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:Number\\(|String\\()",
+              expectedMessage: "Try explicitly converting a type using Number() or String()."
+            }
+          ]
+},
   {
     id: 13,
     chapter: "Chapter 1: The Absolute Basics",
@@ -280,8 +369,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Basic logging.", code: "console.log('Just testing!');" },
       { explanation: "Logging errors and warnings.", code: "console.warn('Careful!');\nconsole.error('Too late!');" },
       { explanation: "Logging tables for objects/arrays.", code: "let arr = [{id: 1}, {id: 2}];\nconsole.table(arr);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "console\\.(?:log|warn|error|table)",
+              expectedMessage: "You need to print something using console.log() or similar."
+            }
+          ]
+},
   {
     id: 14,
     chapter: "Chapter 4: Functions & Scope",
@@ -301,8 +397,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Global Scope.", code: "let x = 10;\nfunction show() { console.log(x); }\nshow();" },
       { explanation: "Local/Function Scope.", code: "function local() {\n  let y = 5;\n}\n// console.log(y); // Error! y is not defined" },
       { explanation: "Block Scope (let and const).", code: "if (true) {\n  let z = 100;\n}\n// console.log(z); // Error! z is trapped in the block" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "let\\s+",
+              expectedMessage: "Try declaring a local variable using 'let' inside a function or block."
+            }
+          ]
+},
   {
     id: 15,
     chapter: "Chapter 4: Functions & Scope",
@@ -322,8 +425,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Cannot reassign const primitives.", code: "const speedOfLight = 299792458;\n// speedOfLight = 0; // TypeError" },
       { explanation: "Objects in const CAN be mutated!", code: "const obj = { name: 'A' };\nobj.name = 'B'; // Allowed!\nconsole.log(obj);" },
       { explanation: "Arrays in const CAN be mutated!", code: "const arr = [1];\narr.push(2); // Allowed!\nconsole.log(arr);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "const\\s+",
+              expectedMessage: "Make sure you declare a constant using 'const'."
+            }
+          ]
+},
   {
     id: 16,
     chapter: "Chapter 6: Essential Syntax",
@@ -343,8 +453,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Addition and Subtraction.", code: "console.log(10 + 5);\nconsole.log(10 - 5);" },
       { explanation: "Multiplication and Division.", code: "console.log(10 * 5);\nconsole.log(10 / 5);" },
       { explanation: "Modulo (Remainder).", code: "console.log(10 % 3); // 1" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "%",
+              expectedMessage: "Use the modulo operator (%) to find the remainder."
+            }
+          ]
+},
   {
     id: 17,
     chapter: "Chapter 6: Essential Syntax",
@@ -364,8 +481,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Basic ternary.", code: "let isRaining = true;\nlet action = isRaining ? 'Stay inside' : 'Go outside';\nconsole.log(action);" },
       { explanation: "Inline rendering (common in React).", code: "let loggedIn = false;\nconsole.log(loggedIn ? 'Welcome!' : 'Please log in');" },
       { explanation: "Nested ternaries (please don't do this).", code: "let score = 90;\nlet grade = score > 80 ? 'A' : score > 60 ? 'B' : 'C';\nconsole.log(grade);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\?.*:",
+              expectedMessage: "Your code runs, but you need to use the ternary operator (? :) for this exercise."
+            }
+          ]
+},
   {
     id: 18,
     chapter: "Chapter 6: Essential Syntax",
@@ -385,8 +509,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Basic interpolation.", code: "let age = 30;\nconsole.log(`I am ${age} years old`);" },
       { explanation: "Math inside interpolation.", code: "console.log(`2 + 2 is ${2 + 2}`);" },
       { explanation: "Multi-line strings without \\n.", code: "let poem = `Roses are red\nViolets are blue`;\nconsole.log(poem);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\`.*\\$\\{.*\\}.*\\`",
+              expectedMessage: "Try using backticks (`) and ${} to insert a variable into your string."
+            }
+          ]
+},
   {
     id: 19,
     chapter: "Chapter 5: The Weird Parts",
@@ -406,8 +537,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Undefined by default.", code: "let x;\nconsole.log(x); // undefined" },
       { explanation: "Setting null explicitly.", code: "let user = null;\nconsole.log(user); // null" },
       { explanation: "They are loose equals but not strict equals.", code: "console.log(null == undefined); // true\nconsole.log(null === undefined); // false" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:null|undefined)",
+              expectedMessage: "Try explicitly using 'null' or checking for 'undefined'."
+            }
+          ]
+},
   {
     id: 20,
     chapter: "Chapter 5: The Weird Parts",
@@ -427,8 +565,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Falsy values.", code: "if (!0 && !'') {\n  console.log('Both are falsy');\n}" },
       { explanation: "Truthy values (even empty arrays!).", code: "if ([] && {}) {\n  console.log('Objects and arrays are ALWAYS truthy');\n}" },
       { explanation: "Using OR (||) for default values.", code: "let name = '';\nlet displayName = name || 'Anonymous';\nconsole.log(displayName);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "if\\s*\\(",
+              expectedMessage: "Use an 'if' statement to test if a value is truthy or falsy."
+            }
+          ]
+},
   {
     id: 21,
     chapter: "Chapter 5: The Weird Parts",
@@ -448,8 +593,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Using console.log.", code: "let total = 50;\nconsole.log('Total is:', total);" },
       { explanation: "Using the debugger keyword.", code: "function test() {\n  debugger; // Browser will pause here!\n  return 1;\n}\ntest();" },
       { explanation: "Typo example.", code: "let myName = 'Alice';\n// console.log(myname); // ReferenceError!" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:console\\.log|debugger)",
+              expectedMessage: "Try using console.log() to debug!"
+            }
+          ]
+},
   {
     id: 22,
     chapter: "Chapter 2: Logic & Control Flow",
@@ -469,8 +621,20 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Basic Switch.", code: "let fruit = 'Apple';\nswitch(fruit) {\n  case 'Apple': console.log('Red'); break;\n  case 'Banana': console.log('Yellow'); break;\n}" },
       { explanation: "Default case (fallback).", code: "let color = 'Purple';\nswitch(color) {\n  case 'Red': console.log('Stop'); break;\n  default: console.log('Go');\n}" },
       { explanation: "Fall-through (forgetting break).", code: "let val = 1;\nswitch(val) {\n  case 1:\n  case 2: console.log('1 or 2'); break;\n}" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "switch\\s*\\(",
+              expectedMessage: "Your code runs, but it doesn't use a 'switch' statement."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "case\\s+",
+              expectedMessage: "Make sure you have at least one 'case' in your switch block."
+            }
+          ]
+},
   {
     id: 23,
     chapter: "Chapter 6: Essential Syntax",
@@ -490,8 +654,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Basic nested loop.", code: "for (let i=0; i<2; i++) {\n  for (let j=0; j<2; j++) {\n    console.log(i, j);\n  }\n}" },
       { explanation: "Creating a grid.", code: "let grid = '';\nfor (let r=0; r<3; r++) {\n  for (let c=0; c<3; c++) {\n    grid += '* ';\n  }\n  grid += '\\n';\n}\nconsole.log(grid);" },
       { explanation: "Nested loop over an array of arrays.", code: "let matrix = [[1, 2], [3, 4]];\nfor (let i=0; i<matrix.length; i++) {\n  for (let j=0; j<matrix[i].length; j++) {\n    console.log(matrix[i][j]);\n  }\n}" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:for|while).*\\{.*(?:for|while)",
+              expectedMessage: "You need a loop inside another loop for this exercise."
+            }
+          ]
+},
   {
     id: 24,
     chapter: "Chapter 3: Data Structures",
@@ -511,8 +682,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Pushing items.", code: "let arr = [];\narr.push(1);\narr.push(2, 3);\nconsole.log(arr); // [1, 2, 3]" },
       { explanation: "Popping items.", code: "let arr = [1, 2, 3];\nlet last = arr.pop();\nconsole.log(last); // 3\nconsole.log(arr); // [1, 2]" },
       { explanation: "Combining both for a Stack (LIFO).", code: "let stack = [];\nstack.push('A');\nstack.push('B');\nconsole.log(stack.pop()); // B" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\.(?:push|pop)\\s*\\(",
+              expectedMessage: "Try using the .push() or .pop() methods on an array."
+            }
+          ]
+},
   {
     id: 25,
     chapter: "Chapter 3: Data Structures",
@@ -532,8 +710,15 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Slice a piece of string.", code: "let str = 'Hello World';\nconsole.log(str.slice(0, 5)); // Hello" },
       { explanation: "Split a string by spaces.", code: "let sentence = 'I love code';\nlet words = sentence.split(' ');\nconsole.log(words); // ['I', 'love', 'code']" },
       { explanation: "Split by every character.", code: "let word = 'Cat';\nconsole.log(word.split('')); // ['C', 'a', 't']" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\.(?:slice|split)\\s*\\(",
+              expectedMessage: "Use the .slice() or .split() methods on a string."
+            }
+          ]
+},
   {
     id: 101,
     chapter: "Chapter 1: The Absolute Basics",
@@ -553,8 +738,20 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Step 1: Declare a variable for a player's name.", code: "let playerName = 'NoobMaster69';" },
       { explanation: "Step 2: Declare a constant for their starting health.", code: "const STARTING_HEALTH = 100;" },
       { explanation: "Step 3: Print a welcome message.", code: "console.log('Welcome ' + playerName + '! Health: ' + STARTING_HEALTH);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "(?:let|const)\\s+",
+              expectedMessage: "Start by declaring a variable using let or const."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "console\\.log",
+              expectedMessage: "Don't forget to print the greeting using console.log."
+            }
+          ]
+},
   {
     id: 102,
     chapter: "Chapter 2: Logic & Control Flow",
@@ -574,8 +771,24 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Step 1: Setup a loop that counts backwards.", code: "for (let i = 3; i > 0; i--) {\n  console.log(i);\n}" },
       { explanation: "Step 2: Add an if statement inside the loop.", code: "for (let i = 3; i > 0; i--) {\n  if (i === 1) {\n    console.log('Almost there...');\n  }\n  console.log(i);\n}" },
       { explanation: "Step 3: Print GO! at the end.", code: "console.log('GO!');" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "for\\s*\\(",
+              expectedMessage: "Use a for loop to count down."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "if\\s*\\(",
+              expectedMessage: "Use an if statement inside the loop."
+            },
+            {
+              type: "requires_call_count",
+              expectedMessage: "Make sure your loop runs multiple times."
+            }
+          ]
+},
   {
     id: 103,
     chapter: "Chapter 3: Data Structures",
@@ -595,8 +808,25 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Step 1: Create an array of loot.", code: "let loot = ['Sword', 'Shield', 'Potion'];" },
       { explanation: "Step 2: Loop through the loot and print it.", code: "for (let i = 0; i < loot.length; i++) {\n  console.log('Found: ' + loot[i]);\n}" },
       { explanation: "Step 3: Remove the last item and add 'Gold'.", code: "loot.pop();\nloot.push('Gold');\nconsole.log(loot);" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\[.*\\]",
+              expectedMessage: "Create an array for your inventory."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "(?:for|while)",
+              expectedMessage: "Use a loop to go through your inventory."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "\\.push",
+              expectedMessage: "Use .push to add an item to the array."
+            }
+          ]
+},
   {
     id: 104,
     chapter: "Chapter 4: Functions & Scope",
@@ -616,8 +846,20 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Step 1: Write a function taking parameters.", code: "function attack(base, bonus) {\n  return base + bonus;\n}" },
       { explanation: "Step 2: Use an array inside the function.", code: "function totalDamage(hits) {\n  let total = 0;\n  for(let i=0; i<hits.length; i++) total += hits[i];\n  return total;\n}" },
       { explanation: "Step 3: Call the function and print the result.", code: "let myHits = [10, 20, 15];\nconsole.log('Total DMG:', totalDamage(myHits));" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "function\\s+",
+              expectedMessage: "Define a function to calculate the total."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "return\\s+",
+              expectedMessage: "Make sure your function returns the total damage."
+            }
+          ]
+},
   {
     id: 105,
     chapter: "Chapter 5: The Weird Parts",
@@ -637,8 +879,20 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Step 1: Check for undefined.", code: "function greetUser(name) {\n  if (!name) return 'Who are you?';\n  return 'Hi ' + name;\n}" },
       { explanation: "Step 2: Use falsy checks for safe math.", code: "function safeAdd(a, b) {\n  let numA = Number(a) || 0;\n  let numB = Number(b) || 0;\n  return numA + numB;\n}" },
       { explanation: "Step 3: Test with weird inputs.", code: "console.log(safeAdd('5', null)); // 5" }
-    ]
-  },
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "function\\s+",
+              expectedMessage: "Create a safe function."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "(?:if|\\|\\|)",
+              expectedMessage: "Check for missing or undefined data!"
+            }
+          ]
+},
   {
     id: 106,
     chapter: "Chapter 6: Essential Syntax",
@@ -658,6 +912,23 @@ export const beginnerLessons: Lesson[] = [
       { explanation: "Step 1: Setup player and enemy objects.", code: "let player = { hp: 100, name: 'Hero' };\nlet enemy = { hp: 50, name: 'Slime' };" },
       { explanation: "Step 2: Create a battle function using ternary operators and loops.", code: "function battle(p, e) {\n  while(p.hp > 0 && e.hp > 0) {\n    e.hp -= 20;\n    if (e.hp > 0) p.hp -= 10;\n  }\n  return p.hp > 0 ? `${p.name} Wins!` : `${e.name} Wins!`;\n}" },
       { explanation: "Step 3: Execute the game.", code: "console.log(battle(player, enemy));" }
-    ]
-  }
+    ],
+      verificationChecks: [
+            {
+              type: "requires_syntax",
+              pattern: "\\{.*\\}",
+              expectedMessage: "Create objects for the player and enemy."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "(?:for|while)",
+              expectedMessage: "Use a loop for the battle sequence."
+            },
+            {
+              type: "requires_syntax",
+              pattern: "\\?.*:",
+              expectedMessage: "Use a ternary operator to decide the winner."
+            }
+          ]
+}
 ];

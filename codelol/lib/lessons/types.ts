@@ -11,6 +11,12 @@ export type LessonExample = {
   code: string;
 };
 
+export type VerificationCheck = {
+  type: "requires_syntax" | "requires_output" | "requires_call_count";
+  pattern?: string;
+  expectedMessage: string;
+};
+
 export type Lesson = {
   id: number;
   chapter: string;
@@ -26,5 +32,6 @@ export type Lesson = {
     pattern: string;
     errorMessage: string;
   };
+  verificationChecks?: VerificationCheck[];
   examples?: LessonExample[];
 };
