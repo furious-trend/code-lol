@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { quizzes, QuizQuestion } from '@/lib/quizzes';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { saveQuizProgress } from '@/lib/progress';
+import { createClient } from '@/lib/supabase/client';
+import { getRandomFallback } from '@/lib/fallbackRoasts';
 
 export default function QuizPage() {
   const [topic, setTopic] = useState<string | null>(null);
@@ -11,11 +13,29 @@ export default function QuizPage() {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [gifUrl, setGifUrl] = useState<string | null>(null);
+  const [roastText, setRoastText] = useState<string | null>(null);
   const [isFinished, setIsFinished] = useState(false);
   const [score, setScore] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+  const supabase = createClient();
 
-
+  useEffect(() => {
+    async function loadPref() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('humor_preference')
+          .eq('id', user.id)
+          .single();
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
+        }
+      }
+    }
+    loadPref();
+  }, [supabase]);
 
   const handleStart = (selectedTopic: string) => {
     setTopic(selectedTopic);
@@ -23,6 +43,7 @@ export default function QuizPage() {
     setSelectedOption(null);
     setIsAnswered(false);
     setGifUrl(null);
+    setRoastText(null);
     setIsFinished(false);
     setScore(0);
   };
@@ -43,10 +64,15 @@ export default function QuizPage() {
     if (isCorrect) setScore(s => s + 1);
 
     // Play the sound immediately
-    playMemeSound(isCorrect);
+    playMemeSound(isCorrect, humorPref);
+    
+    // Set fallback roast
+    const fallback = getRandomFallback(isCorrect, humorPref);
+    setRoastText(fallback.roast);
+
     try {
       const { getResultGif } = await import('@/lib/localGifs');
-      setGifUrl(getResultGif(isCorrect));
+      setGifUrl(getResultGif(isCorrect, humorPref));
     } catch (e) {
       console.error('Failed to fetch local GIF', e);
       setGifUrl('error');
@@ -59,6 +85,7 @@ export default function QuizPage() {
       setSelectedOption(null);
       setIsAnswered(false);
       setGifUrl(null);
+      setRoastText(null);
     } else {
       setIsFinished(true);
       await completeQuiz();
@@ -218,7 +245,7 @@ export default function QuizPage() {
               
               <div className="flex-1 flex flex-col justify-center">
                 <h3 className={`text-2xl font-bold mb-2 ${selectedOption === currentQuestion.correctIndex ? 'text-green-400' : 'text-red-400'}`}>
-                  {selectedOption === currentQuestion.correctIndex ? 'Nailed it!' : 'Oops, not quite.'}
+                  {roastText || (selectedOption === currentQuestion.correctIndex ? 'Nailed it!' : 'Oops, not quite.')}
                 </h3>
                 <p className="text-zinc-300 mb-6 leading-relaxed">
                   {currentQuestion.explanation}
