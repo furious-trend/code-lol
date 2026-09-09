@@ -5,6 +5,7 @@ import Editor from '@monaco-editor/react';
 import { createClient } from '@/lib/supabase/client';
 import { allLessons } from '@/lib/lessons';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { executeCodeInBrowser } from '@/lib/executor';
@@ -23,6 +24,7 @@ function LearnPageContent() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [viewMode, setViewMode] = useState<'lesson' | 'map'>('lesson');
   const [isLoadingLevel, setIsLoadingLevel] = useState(false);
+  const pathname = usePathname();
   const supabase = createClient();
 
   // Load progress on mount
@@ -53,7 +55,7 @@ function LearnPageContent() {
     }
     loadProgress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pathname]);
 
   if (isInitializing) {
     return <div className="flex h-screen items-center justify-center bg-zinc-950 text-white">Loading your progress...</div>;

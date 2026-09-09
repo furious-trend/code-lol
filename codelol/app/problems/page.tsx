@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { problems, Difficulty } from '@/lib/problems';
 
 export default function ProblemsDashboard() {
   const [activeDifficulty, setActiveDifficulty] = useState<Difficulty>('Beginner');
   const [completedProblems, setCompletedProblems] = useState<string[]>([]);
+  const pathname = usePathname();
 
   useEffect(() => {
     const saved = localStorage.getItem('completedProblems');
@@ -18,7 +20,7 @@ export default function ProblemsDashboard() {
         console.error('Failed to parse completed problems', e);
       }
     }
-  }, []);
+  }, [pathname]);
 
   const filteredProblems = problems.filter(p => p.difficulty === activeDifficulty);
 

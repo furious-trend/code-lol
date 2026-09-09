@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { searchUsers, sendFriendRequest, acceptFriendRequest, getPendingRequests, getFriends, Profile, FriendRequest } from '@/lib/friends';
 import Link from 'next/link';
 import debounce from 'lodash.debounce';
+import { usePathname } from 'next/navigation';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 
 export default function FriendsPage() {
@@ -13,10 +14,11 @@ export default function FriendsPage() {
   const [friends, setFriends] = useState<FriendRequest[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [requestStatus, setRequestStatus] = useState<Record<string, 'sent' | 'failed' | null>>({});
+  const pathname = usePathname();
 
   useEffect(() => {
     loadFriendsData();
-  }, []);
+  }, [pathname]);
 
   const loadFriendsData = async () => {
     const [pending, accepted] = await Promise.all([

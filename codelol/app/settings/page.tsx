@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import debounce from "lodash.debounce";
+import { usePathname } from "next/navigation";
 
 type HumorPref = 'general' | 'tamil';
 
@@ -23,6 +24,7 @@ export default function Settings() {
   const [toast, setToast] = useState<Toast>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [usernameError, setUsernameError] = useState<string>('');
+  const pathname = usePathname();
 
   const calculateStrength = (pw: string) => {
     if (!pw) return { label: '', color: 'bg-zinc-800' };
@@ -97,7 +99,7 @@ export default function Settings() {
       }
     }
     loadProfile();
-  }, []);
+  }, [pathname]);
 
   // ── Save all changes to Supabase ───────────────────────────────────────────
   const saveSettings = async () => {
