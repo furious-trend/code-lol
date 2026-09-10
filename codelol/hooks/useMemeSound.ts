@@ -4,12 +4,21 @@ export function useMemeSound() {
   const playMemeSound = useCallback((isSuccess: boolean, humorPref: 'general' | 'tamil' = 'general') => {
     if (typeof window === 'undefined') return '';
 
+    const isMuted = localStorage.getItem('sound_muted') === 'true';
+    if (isMuted) return ''; // Do not play if muted
+
+    let baseVolume = 1.0;
+    const storedVolume = localStorage.getItem('sound_volume');
+    if (storedVolume !== null) {
+      baseVolume = parseFloat(storedVolume);
+    }
+
     // Create 2 parallel audio players as was done in playground
     const audioPlayer = new Audio();
-    audioPlayer.volume = 0.6;
+    audioPlayer.volume = Math.min(1, Math.max(0, 0.6 * baseVolume));
     
     const audioPlayer2 = new Audio();
-    audioPlayer2.volume = 0.8;
+    audioPlayer2.volume = Math.min(1, Math.max(0, 0.8 * baseVolume));
 
     const generalFailSounds = [
       "/sounds/general/wrong/faaah.mp3",

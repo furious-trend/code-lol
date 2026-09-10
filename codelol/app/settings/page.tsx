@@ -18,6 +18,8 @@ export default function Settings() {
   const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
   const [humorPref, setHumorPref] = useState<HumorPref>('general');
+  const [soundMuted, setSoundMuted] = useState(false);
+  const [soundVolume, setSoundVolume] = useState(1.0);
   const [isPasswordUser, setIsPasswordUser] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -74,6 +76,14 @@ export default function Settings() {
         if (!user) { return; }
 
         setUserId(user.id);
+        
+        // Read local audio settings
+        const storedMuted = localStorage.getItem('sound_muted');
+        if (storedMuted !== null) setSoundMuted(storedMuted === 'true');
+        
+        const storedVolume = localStorage.getItem('sound_volume');
+        if (storedVolume !== null) setSoundVolume(parseFloat(storedVolume));
+
         // Check if user has an email/password identity (vs OAuth-only)
         const hasEmailIdentity = user.identities?.some(
           (id: { provider: string }) => id.provider === 'email'
@@ -161,6 +171,10 @@ export default function Settings() {
         return;
       }
     }
+
+    // Save audio settings to local storage
+    localStorage.setItem('sound_muted', String(soundMuted));
+    localStorage.setItem('sound_volume', String(soundVolume));
 
     setToast({ type: 'success', msg: 'Settings saved successfully!' });
     setPassword(''); // clear password field after save
@@ -288,6 +302,44 @@ export default function Settings() {
                   }
                 </motion.div>
               </AnimatePresence>
+            </div>
+          </section>
+
+          {/* ── Audio Settings ─────────────────────────────────────── */}
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-zinc-300">Audio Settings</h2>
+            <p className="text-sm text-zinc-500 mb-4">Control the volume of memes and celebrations.</p>
+
+            <div className="space-y-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-950/80">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-semibold text-white">Mute Sound</div>
+                  <div className="text-sm text-zinc-500">Disable all meme and celebration sounds</div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={soundMuted} onChange={(e) => setSoundMuted(e.target.checked)} />
+                  <div className="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                </label>
+              </div>
+
+              {!soundMuted && (
+                <div>
+                  <div className="flex justify-between mb-2 mt-4">
+                    <label htmlFor="volume-slider" className="text-sm font-semibold text-zinc-300">Volume</label>
+                    <span className="text-sm text-zinc-400">{Math.round(soundVolume * 100)}%</span>
+                  </div>
+                  <input 
+                    id="volume-slider" 
+                    type="range" 
+                    min="0" 
+                    max="1" 
+                    step="0.05" 
+                    value={soundVolume}
+                    onChange={(e) => setSoundVolume(parseFloat(e.target.value))}
+                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
+                  />
+                </div>
+              )}
             </div>
           </section>
 
