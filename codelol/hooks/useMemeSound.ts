@@ -1,5 +1,12 @@
 import { useCallback } from 'react';
 
+// Singletons to prevent overlapping audio if played rapidly
+let globalAudioPlayer: HTMLAudioElement | null = null;
+
+export const __resetGlobalAudioPlayer = () => {
+  globalAudioPlayer = null;
+};
+
 export function useMemeSound() {
   const playMemeSound = useCallback((isSuccess: boolean, humorPref: 'general' | 'tamil' = 'general') => {
     if (typeof window === 'undefined') return '';
@@ -13,12 +20,15 @@ export function useMemeSound() {
       baseVolume = parseFloat(storedVolume);
     }
 
-    // Create 2 parallel audio players as was done in playground
-    const audioPlayer = new Audio();
-    audioPlayer.volume = Math.min(1, Math.max(0, 0.6 * baseVolume));
+    if (!globalAudioPlayer) {
+      globalAudioPlayer = new Audio();
+    }
     
-    const audioPlayer2 = new Audio();
-    audioPlayer2.volume = Math.min(1, Math.max(0, 0.8 * baseVolume));
+    // Stop any currently playing sound
+    globalAudioPlayer.pause();
+    globalAudioPlayer.currentTime = 0;
+
+    globalAudioPlayer.volume = Math.min(1, Math.max(0, 0.6 * baseVolume));
 
     const generalFailSounds = [
       "/sounds/general/wrong/faaah.mp3",
@@ -61,40 +71,17 @@ export function useMemeSound() {
     const list = isSuccess ? successSounds : failSounds;
     const soundUrl = list[Math.floor(Math.random() * list.length)];
     
-    const playWithLimit = (p: HTMLAudioElement, src: string, maxRepeats: number = 0) => {
-      p.src = src;
-      if (maxRepeats > 0) {
-        p.loop = false;
-        let plays = 0;
-        const onEnded = () => {
-          plays++;
-          if (plays < maxRepeats) p.play().catch(() => {});
-          else p.removeEventListener('ended', onEnded);
-        };
-        p.addEventListener('ended', onEnded);
-        p.play().catch(e => console.error('Audio playback prevented by browser:', e));
-      } else {
-        p.loop = true;
-        p.play().catch(e => console.error('Audio playback prevented by browser:', e));
-      }
-      setTimeout(() => {
-        p.pause();
-        p.currentTime = 0;
-      }, 10000); // 10s absolute maximum limit
-    };
+    // Play exactly once and do not loop
+    globalAudioPlayer.src = soundUrl;
+    globalAudioPlayer.loop = false;
+    globalAudioPlayer.play().catch(e => console.error('Audio playback prevented by browser:', e));
 
-    // Synchronously create and unlock TWO audio players on click
-    const unlockAudio = (p: HTMLAudioElement) => {
-        p.src = "data:audio/mp3;base64,//OwgAAAAAAAAAAAAAAAWGluZwAAAA8AAAAFAAAJwAAMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw";
-        p.play().catch(() => {});
-    };
-    unlockAudio(audioPlayer);
-    unlockAudio(audioPlayer2);
-    
-    // Slight delay to allow unlock to process before setting actual source
+    // Hard cutoff at 10 seconds in case the file is longer
     setTimeout(() => {
-        playWithLimit(audioPlayer, soundUrl, 1);
-    }, 50);
+      if (globalAudioPlayer) {
+        globalAudioPlayer.pause();
+      }
+    }, 10000);
 
     return soundUrl;
   }, []);

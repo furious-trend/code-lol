@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { useMemeSound } from '../hooks/useMemeSound';
+import { useMemeSound, __resetGlobalAudioPlayer } from '../hooks/useMemeSound';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('useMemeSound', () => {
@@ -7,6 +7,7 @@ describe('useMemeSound', () => {
   let pauseStub: any;
 
   beforeEach(() => {
+    __resetGlobalAudioPlayer();
     vi.useFakeTimers();
     playStub = vi.fn().mockResolvedValue(undefined);
     pauseStub = vi.fn();
@@ -90,7 +91,9 @@ describe('useMemeSound', () => {
     
     // Wait for initial setTimeout
     vi.advanceTimersByTime(50);
-    
+    // Clear the mock because it is called synchronously on init to stop previous sounds
+    pauseStub.mockClear();
+
     expect(pauseStub).not.toHaveBeenCalled();
     
     // Advance to just before 10 seconds
