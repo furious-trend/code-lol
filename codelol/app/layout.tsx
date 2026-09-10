@@ -4,7 +4,6 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { AmbientJoke } from "@/components/AmbientJoke";
 import { ConditionalLayout } from "@/components/ConditionalLayout";
-import RouteTransition from "@/components/RouteTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,11 +35,9 @@ export default function RootLayout({
         <ConditionalLayout>
           <Navbar />
         </ConditionalLayout>
-        
-        <RouteTransition>
+        <main className="flex-1 w-full flex flex-col">
           {children}
-        </RouteTransition>
-        
+        </main>
         <ConditionalLayout>
           <AmbientJoke />
         </ConditionalLayout>
