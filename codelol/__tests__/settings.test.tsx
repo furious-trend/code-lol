@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import Settings from '../app/settings/page';
+import SettingsPageClient from '../app/settings/SettingsPageClient';
 import { createClient } from '@/lib/supabase/client';
 
 vi.mock('lodash.debounce', () => ({
@@ -71,32 +71,25 @@ describe('Settings Page — Supabase Integration', () => {
     (createClient as ReturnType<typeof vi.fn>).mockReturnValue(sb);
   });
 
-  // ─── Load real data on mount ───────────────────────────────────────────────
+  // ─── Load real data from props ───────────────────────────────────────────────
 
-  it('loads display_name from Supabase — no hardcoded default', async () => {
-    render(<Settings />);
-    await waitFor(() => {
-      const input = screen.getByLabelText(/username/i) as HTMLInputElement;
-      expect(input.value).toBe('testuser');
-    });
+  it('loads display_name from props — no hardcoded default', () => {
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
+    const input = screen.getByLabelText(/username/i) as HTMLInputElement;
+    expect(input.value).toBe('testuser');
     expect(screen.queryByDisplayValue('current_user')).toBeNull();
   });
 
-  it('loads humor_preference from Supabase (tamil)', async () => {
-    sb = makeSupabase(makeProfile({ humor_preference: 'tamil' }));
-    (createClient as ReturnType<typeof vi.fn>).mockReturnValue(sb);
-    render(<Settings />);
-    await waitFor(() => {
-      const btn = screen.getByRole('button', { name: /tamil comedy/i });
-      expect(btn.className).toMatch(/emerald/);
-    });
+  it('loads humor_preference from props (tamil)', () => {
+    render(<SettingsPageClient initialProfile={makeProfile({ humor_preference: 'tamil' })} userId="user-123" isPasswordUser={true} />);
+    const btn = screen.getByRole('button', { name: /tamil comedy/i });
+    expect(btn.className).toMatch(/emerald/);
   });
 
   // ─── Username update ───────────────────────────────────────────────────────
 
   it('calls profiles.update with new display_name on Save', async () => {
-    render(<Settings />);
-    await waitFor(() => screen.getByLabelText(/username/i));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
 
     fireEvent.change(screen.getByLabelText(/username/i), { target: { value: 'newname' } });
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
@@ -109,9 +102,8 @@ describe('Settings Page — Supabase Integration', () => {
   });
 
   it('debounces username uniqueness check and shows error if taken', async () => {
-    sb._ilikeLimit.mockResolvedValueOnce({ data: [{ id: 'other-user' }], error: null }); // mock limit returning an existing user
-    render(<Settings />);
-    await waitFor(() => screen.getByLabelText(/username/i));
+    sb._ilikeLimit.mockResolvedValueOnce({ data: [{ id: 'other-user' }], error: null }); 
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
 
     fireEvent.change(screen.getByLabelText(/username/i), { target: { value: 'takenname' } });
     
@@ -124,8 +116,7 @@ describe('Settings Page — Supabase Integration', () => {
   // ─── Password update ───────────────────────────────────────────────────────
 
   it('calls auth.updateUser with password when field filled', async () => {
-    render(<Settings />);
-    await waitFor(() => screen.getByPlaceholderText(/new password/i));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
 
     fireEvent.change(screen.getByPlaceholderText(/new password/i), {
       target: { value: 'supersecret123' },
@@ -138,8 +129,7 @@ describe('Settings Page — Supabase Integration', () => {
   });
 
   it('shows password strength indicator when typing password', async () => {
-    render(<Settings />);
-    await waitFor(() => screen.getByPlaceholderText(/new password/i));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
 
     fireEvent.change(screen.getByPlaceholderText(/new password/i), {
       target: { value: 'weak' },
@@ -157,20 +147,14 @@ describe('Settings Page — Supabase Integration', () => {
   });
 
   it('does NOT call auth.updateUser when password field is empty', async () => {
-    render(<Settings />);
-    await waitFor(() => screen.getByLabelText(/username/i));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
     await waitFor(() => screen.getByText(/saved successfully/i));
     expect(sb.auth.updateUser).not.toHaveBeenCalled();
   });
 
-  it('hides password field for OAuth-only users', async () => {
-    sb.auth.getUser = vi.fn().mockResolvedValue({
-      data: { user: { id: 'u', identities: [{ provider: 'google' }] } },
-      error: null,
-    });
-    render(<Settings />);
-    await waitFor(() => screen.getByLabelText(/username/i));
+  it('hides password field for OAuth-only users', () => {
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={false} />);
     expect(screen.queryByPlaceholderText(/new password/i)).toBeNull();
     // Shows a note about Google sign-in
     expect(screen.getByText(/google/i)).toBeTruthy();
@@ -179,8 +163,7 @@ describe('Settings Page — Supabase Integration', () => {
   // ─── Humor preference ─────────────────────────────────────────────────────
 
   it('saves humor_preference to Supabase — not localStorage', async () => {
-    render(<Settings />);
-    await waitFor(() => screen.getByRole('button', { name: /tamil comedy/i }));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
 
     fireEvent.click(screen.getByRole('button', { name: /tamil comedy/i }));
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
@@ -194,8 +177,7 @@ describe('Settings Page — Supabase Integration', () => {
   });
 
   it('updates meme preview card when humor preference is toggled', async () => {
-    render(<Settings />);
-    await waitFor(() => screen.getByRole('button', { name: /tamil comedy/i }));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
 
     const previewCard = screen.getByTestId('meme-preview');
     expect(previewCard.textContent).toContain('Coffee Overdose'); // General dev humor by default
@@ -220,8 +202,7 @@ describe('Settings Page — Supabase Integration', () => {
       }),
     });
 
-    render(<Settings />);
-    await waitFor(() => screen.getByLabelText(/username/i));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
     const savingBtn = screen.getByRole('button', { name: /saving/i });
@@ -233,8 +214,7 @@ describe('Settings Page — Supabase Integration', () => {
   });
 
   it('shows success toast after confirmed write', async () => {
-    render(<Settings />);
-    await waitFor(() => screen.getByLabelText(/username/i));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() =>
@@ -247,8 +227,7 @@ describe('Settings Page — Supabase Integration', () => {
       eq: vi.fn().mockResolvedValue({ error: { message: 'DB write error' } }),
     });
 
-    render(<Settings />);
-    await waitFor(() => screen.getByLabelText(/username/i));
+    render(<SettingsPageClient initialProfile={makeProfile()} userId="user-123" isPasswordUser={true} />);
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() =>

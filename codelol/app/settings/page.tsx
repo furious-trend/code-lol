@@ -1,375 +1,49 @@
-"use client";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+import SettingsPageClient from "./SettingsPageClient";
+import { redirect } from "next/navigation";
 
-/**
- * agent-notes: { ctx: "Settings page — fully wired to Supabase", deps: ["lib/supabase/client.ts"], state: active, last: "sato@2026-08-27" }
- */
+export default async function Settings() {
+  const cookieStore = await cookies();
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { createClient } from "@/lib/supabase/client";
-import debounce from "lodash.debounce";
-import { usePathname } from "next/navigation";
-
-type HumorPref = 'general' | 'tamil';
-
-type Toast = { type: 'success' | 'error'; msg: string } | null;
-
-export default function Settings() {
-  const [displayName, setDisplayName] = useState('');
-  const [password, setPassword] = useState('');
-  const [humorPref, setHumorPref] = useState<HumorPref>('general');
-  const [soundMuted, setSoundMuted] = useState(false);
-  const [soundVolume, setSoundVolume] = useState(1.0);
-  const [isPasswordUser, setIsPasswordUser] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [toast, setToast] = useState<Toast>(null);
-  const [userId, setUserId] = useState<string | null>(null);
-  const [usernameError, setUsernameError] = useState<string>('');
-  const pathname = usePathname();
-
-  const calculateStrength = (pw: string) => {
-    if (!pw) return { label: '', color: 'bg-zinc-800' };
-    if (pw.length < 6) return { label: 'Weak', color: 'bg-red-500' };
-    if (pw.length >= 8 && /[A-Z]/.test(pw) && /[0-9]/.test(pw)) return { label: 'Strong', color: 'bg-emerald-500' };
-    return { label: 'Medium', color: 'bg-yellow-500' };
-  };
-  const pwStrength = calculateStrength(password);
-
-  const checkUsername = async (name: string, uid: string) => {
-    if (!name.trim()) {
-      setUsernameError('');
-      return;
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          // This is a Server Component, so we can't set cookies directly here 
+          // without triggering an error if the headers are already sent,
+          // but we can pass it for reading.
+        },
+      },
     }
-    const supabase = createClient();
-    const { data: existingUser } = await supabase
-      .from('profiles')
-      .select('id')
-      .ilike('display_name', name.trim())
-      .limit(1);
-
-    const isTaken = existingUser && existingUser.length > 0 && existingUser[0].id !== uid;
-    if (isTaken) {
-      setUsernameError('Username is already taken');
-    } else {
-      setUsernameError('');
-    }
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedCheckUsername = useCallback(
-    debounce((name: string, uid: string) => checkUsername(name, uid), 500),
-    []
   );
 
-  const handleUsernameChange = (val: string) => {
-    setDisplayName(val);
-    if (userId) debouncedCheckUsername(val, userId);
-  };
+  const { data: { user } } = await supabase.auth.getUser();
 
-  // ── Load real profile on mount ──────────────────────────────────────────────
-  useEffect(() => {
-    async function loadProfile() {
-      try {
-        const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) { return; }
-
-        setUserId(user.id);
-        
-        // Read local audio settings
-        const storedMuted = localStorage.getItem('sound_muted');
-        if (storedMuted !== null) setSoundMuted(storedMuted === 'true');
-        
-        const storedVolume = localStorage.getItem('sound_volume');
-        if (storedVolume !== null) setSoundVolume(parseFloat(storedVolume));
-
-        // Check if user has an email/password identity (vs OAuth-only)
-        const hasEmailIdentity = user.identities?.some(
-          (id: { provider: string }) => id.provider === 'email'
-        ) ?? false;
-        setIsPasswordUser(hasEmailIdentity);
-
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('display_name, humor_preference')
-          .eq('id', user.id)
-          .single();
-
-        if (profile) {
-          setDisplayName(profile.display_name ?? '');
-          if (profile.humor_preference === 'tamil' || profile.humor_preference === 'general') {
-            setHumorPref(profile.humor_preference);
-          }
-        }
-      } catch (err) {
-        console.error("Error loading profile:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    loadProfile();
-  }, [pathname]);
-
-  // ── Save all changes to Supabase ───────────────────────────────────────────
-  const saveSettings = async () => {
-    if (!userId) return;
-    setIsSaving(true);
-    setToast(null);
-
-    const supabase = createClient();
-    const trimmedName = displayName.trim();
-
-    if (!trimmedName) {
-      setToast({ type: 'error', msg: 'Username cannot be empty' });
-      setIsSaving(false);
-      return;
-    }
-
-    // Check if username is already taken by someone else
-    const { data: existingUser, error: checkError } = await supabase
-      .from('profiles')
-      .select('id')
-      .ilike('display_name', trimmedName)
-      .limit(1);
-
-    if (checkError) {
-      setToast({ type: 'error', msg: 'Error checking username availability' });
-      setIsSaving(false);
-      return;
-    }
-
-    const isTaken = existingUser && existingUser.length > 0 && existingUser[0].id !== userId;
-    if (isTaken) {
-      setToast({ type: 'error', msg: 'That username is already taken — try another' });
-      setIsSaving(false);
-      return;
-    }
-
-    // Always update profile (display_name + humor_preference together)
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .update({ display_name: trimmedName, humor_preference: humorPref })
-      .eq('id', userId);
-
-    if (profileError) {
-      if (profileError.code === '23505') {
-        setToast({ type: 'error', msg: 'That username is already taken — try another' });
-      } else {
-        setToast({ type: 'error', msg: profileError.message });
-      }
-      setIsSaving(false);
-      return;
-    }
-
-    // Update password only if field is non-empty and user has email identity
-    if (password && isPasswordUser) {
-      const { error: pwError } = await supabase.auth.updateUser({ password });
-      if (pwError) {
-        setToast({ type: 'error', msg: pwError.message });
-        setIsSaving(false);
-        return;
-      }
-    }
-
-    // Save audio settings to local storage
-    localStorage.setItem('sound_muted', String(soundMuted));
-    localStorage.setItem('sound_volume', String(soundVolume));
-
-    setToast({ type: 'success', msg: 'Settings saved successfully!' });
-    setPassword(''); // clear password field after save
-    setIsSaving(false);
-    setTimeout(() => setToast(null), 4000);
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-zinc-400">
-        Loading profile…
-      </div>
-    );
+  if (!user) {
+    redirect("/login");
   }
 
+  const hasEmailIdentity = user.identities?.some(
+    (id: { provider: string }) => id.provider === 'email'
+  ) ?? false;
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('display_name, humor_preference')
+    .eq('id', user.id)
+    .single();
+
   return (
-    <div className="min-h-screen flex items-start justify-center bg-zinc-950 text-white p-8 pt-24 relative overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-600 via-zinc-950 to-zinc-950" />
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-2xl bg-zinc-900/40 backdrop-blur-2xl border border-zinc-800/50 rounded-3xl p-8 shadow-2xl"
-      >
-        <h1 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400">
-          Settings Profile
-        </h1>
-
-        <div className="space-y-8">
-          {/* ── Account Details ──────────────────────────────────────── */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-zinc-300">Account Details</h2>
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="settings-username" className="block text-sm text-zinc-500 mb-1">
-                  Username
-                </label>
-                <input
-                  id="settings-username"
-                  type="text"
-                  value={displayName}
-                  onChange={(e) => handleUsernameChange(e.target.value)}
-                  className={`w-full bg-zinc-950/50 border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${usernameError ? 'border-red-500' : 'border-zinc-800'}`}
-                />
-                {usernameError && (
-                  <p className="text-red-500 text-xs mt-1">{usernameError}</p>
-                )}
-              </div>
-
-              {/* Password — only shown for email/password accounts */}
-              {isPasswordUser ? (
-                <div>
-                  <label htmlFor="settings-password" className="block text-sm text-zinc-500 mb-1">
-                    Update Password
-                  </label>
-                  <input
-                    id="settings-password"
-                    type="password"
-                    placeholder="New password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                  />
-                  {password && (
-                    <div className="mt-2 flex items-center justify-between text-xs">
-                      <span className="text-zinc-400">Password Strength: <span className="font-bold text-white">{pwStrength.label}</span></span>
-                      <div className="w-1/2 h-1 bg-zinc-800 rounded-full overflow-hidden">
-                        <div data-testid="strength-bar" className={`h-full transition-all duration-300 ${pwStrength.color}`} style={{ width: pwStrength.label === 'Weak' ? '33%' : pwStrength.label === 'Medium' ? '66%' : '100%' }} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <p className="text-sm text-zinc-600 italic">
-                  Password change is not available for Google sign-in accounts.
-                </p>
-              )}
-            </div>
-          </section>
-
-          {/* ── Humor Preference ─────────────────────────────────────── */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-zinc-300">Humor Preference</h2>
-            <p className="text-sm text-zinc-500 mb-4">Choose your meme flavor for victories and defeats.</p>
-
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                onClick={() => setHumorPref('general')}
-                className={`p-4 rounded-xl border text-left transition-all ${
-                  humorPref === 'general'
-                    ? 'border-blue-500 bg-blue-500/10'
-                    : 'border-zinc-800 bg-zinc-950/50 hover:border-zinc-700'
-                }`}
-              >
-                <div className="font-semibold mb-1">General Meme Sense</div>
-                <div className="text-sm text-zinc-500">Global Dev Memes, StackOverflow</div>
-              </button>
-              <button
-                onClick={() => setHumorPref('tamil')}
-                className={`p-4 rounded-xl border text-left transition-all ${
-                  humorPref === 'tamil'
-                    ? 'border-emerald-500 bg-emerald-500/10'
-                    : 'border-zinc-800 bg-zinc-950/50 hover:border-zinc-700'
-                }`}
-              >
-                <div className="font-semibold mb-1">Tamil Comedy Sense</div>
-                <div className="text-sm text-zinc-500">Vadivelu, Goundamani, Kollywood</div>
-              </button>
-            </div>
-            
-            <div className="mt-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-950/80">
-              <h3 className="text-sm font-semibold text-zinc-400 mb-2">Live Meme Preview</h3>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={humorPref}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="p-3 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-300 italic"
-                  data-testid="meme-preview"
-                >
-                  {humorPref === 'general' ? 
-                    '"Coffee Overdose: My code works, I have no idea why." - General Dev Humor' : 
-                    '"Vadivelu Counters: Enna da idhu, code ah idhu?" - Tamil Tech Trolls'
-                  }
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </section>
-
-          {/* ── Audio Settings ─────────────────────────────────────── */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-zinc-300">Audio Settings</h2>
-            <p className="text-sm text-zinc-500 mb-4">Control the volume of memes and celebrations.</p>
-
-            <div className="space-y-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-950/80">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-semibold text-white">Mute Sound</div>
-                  <div className="text-sm text-zinc-500">Disable all meme and celebration sounds</div>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={soundMuted} onChange={(e) => setSoundMuted(e.target.checked)} />
-                  <div className="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                </label>
-              </div>
-
-              {!soundMuted && (
-                <div>
-                  <div className="flex justify-between mb-2 mt-4">
-                    <label htmlFor="volume-slider" className="text-sm font-semibold text-zinc-300">Volume</label>
-                    <span className="text-sm text-zinc-400">{Math.round(soundVolume * 100)}%</span>
-                  </div>
-                  <input 
-                    id="volume-slider" 
-                    type="range" 
-                    min="0" 
-                    max="1" 
-                    step="0.05" 
-                    value={soundVolume}
-                    onChange={(e) => setSoundVolume(parseFloat(e.target.value))}
-                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
-                  />
-                </div>
-              )}
-            </div>
-          </section>
-
-          {/* ── Save Button ──────────────────────────────────────────── */}
-          <div className="pt-6 border-t border-zinc-800/50 flex justify-end">
-            <motion.button
-              whileHover={isSaving ? {} : { scale: 1.05 }}
-              whileTap={isSaving ? {} : { scale: 0.95 }}
-              onClick={saveSettings}
-              disabled={isSaving}
-              className="bg-white text-black font-semibold px-6 py-3 rounded-xl shadow-lg shadow-white/10 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity"
-            >
-              {isSaving ? 'Saving…' : 'Save Changes'}
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* ── Toast Notification ─────────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: toast ? 1 : 0, y: toast ? 0 : 50 }}
-        className={`fixed bottom-8 right-8 px-6 py-3 rounded-xl shadow-lg font-medium text-white ${
-          toast?.type === 'error' ? 'bg-red-500' : 'bg-emerald-500'
-        }`}
-        role="status"
-        aria-live="polite"
-      >
-        {toast?.msg ?? ''}
-      </motion.div>
-    </div>
+    <SettingsPageClient 
+      initialProfile={profile ?? {}} 
+      userId={user.id} 
+      isPasswordUser={hasEmailIdentity} 
+    />
   );
 }

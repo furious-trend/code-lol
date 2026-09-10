@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import FriendsPage from '../app/friends/page';
+import FriendsPageClient from '../app/friends/FriendsPageClient';
 import * as friendsLib from '../lib/friends';
 
 vi.mock('../lib/friends', () => ({
@@ -25,7 +25,7 @@ describe('Friends Page UI', () => {
   it('renders Friends page and allows searching', async () => {
     (friendsLib.searchUsers as any).mockResolvedValue([{ id: '1', display_name: 'Bugsy' }]);
     
-    render(<FriendsPage />);
+    render(<FriendsPageClient initialFriends={[]} initialPendingRequests={[]} />);
     
     expect(screen.getByRole('heading', { name: 'Friends', level: 1 })).toBeTruthy();
     
@@ -41,7 +41,7 @@ describe('Friends Page UI', () => {
   it('renders 3D tilt hover profile cards and relationship state buttons', async () => {
     (friendsLib.searchUsers as any).mockResolvedValue([{ id: '1', display_name: 'Bugsy' }]);
     
-    render(<FriendsPage />);
+    render(<FriendsPageClient initialFriends={[]} initialPendingRequests={[]} />);
     const searchInput = screen.getByPlaceholderText(/Search for friends/i);
     fireEvent.change(searchInput, { target: { value: 'Bug' } });
 
