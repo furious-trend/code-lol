@@ -1,0 +1,12 @@
+{
+  "name": "codelol-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix codelol run dev",
+    "build": "npm --prefix codelol run build",
+    "start": "npm --prefix codelol run start",
+    "test": "npm --prefix codelol run test",
+    "lint": "npm --prefix codelol run lint"
+  }
+}

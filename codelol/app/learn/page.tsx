@@ -1,27 +1,13 @@
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+// agent-notes: { ctx: "Server Component for learn page prefetching initial progress", deps: ["@/lib/supabase/server", "./LearnPageClient"], state: active, last: "sato@2026-09-23" }
+import { createClient } from "@/lib/supabase/server";
 import LearnPageClient from "./LearnPageClient";
 import { allLessons } from "@/lib/lessons";
 import { Suspense } from "react";
 import Loading from "./loading";
 
 export default async function LearnPage() {
-  const cookieStore = await cookies();
+  const supabase = await createClient();
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          // This is a Server Component, so we can't set cookies directly here
-        },
-      },
-    }
-  );
 
   let currentLevel = 1;
   let humorPref: 'general' | 'tamil' = 'general';

@@ -1,25 +1,12 @@
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+// agent-notes: { ctx: "Server Component for problems dashboard prefetching user completions", deps: ["@/lib/supabase/server", "./ProblemsDashboardClient"], state: active, last: "sato@2026-09-23" }
+import { createClient } from "@/lib/supabase/server";
 import ProblemsDashboardClient from "./ProblemsDashboardClient";
 import { Suspense } from "react";
 import Loading from "./loading";
 
 export default async function ProblemsDashboard() {
-  const cookieStore = await cookies();
+  const supabase = await createClient();
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-        },
-      },
-    }
-  );
 
   let completedProblems: string[] = [];
 

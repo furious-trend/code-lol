@@ -1,64 +1,9 @@
-import { createServerClient } from '@supabase/ssr';
-import { NextResponse, type NextRequest } from 'next/server';
+// agent-notes: { ctx: "Next.js 16 proxy replacing middleware for Supabase session update", deps: ["./lib/supabase/middleware.ts"], state: active, last: "sato@2026-09-23" }
+import { type NextRequest } from 'next/server';
+import { updateSession } from '@/lib/supabase/middleware';
 
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          response = NextResponse.next({
-            request,
-          });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
-
-  // 1. Allow public routes & assets to pass through unconditionally
-  const isPublicRoute =
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/auth') ||
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/gifs') ||
-    pathname.includes('.');
-
-  // 2. Unauthenticated user trying to access protected route -> redirect to /login
-  if (!user && !isPublicRoute) {
-    const loginUrl = new URL('/login', request.url);
-    return NextResponse.redirect(loginUrl);
-  }
-
-  // 3. Authenticated user trying to access /login -> redirect to dashboard / home
-  if (user && pathname === '/login') {
-    const homeUrl = new URL('/', request.url);
-    return NextResponse.redirect(homeUrl);
-  }
-
-  return response;
+  return await updateSession(request);
 }
 
 export const config = {
@@ -73,3 +18,4 @@ export const config = {
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
+

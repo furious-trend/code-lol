@@ -1,16 +1,9 @@
-'use client';
-
-import { motion } from 'framer-motion';
-
+// agent-notes: { ctx: "Root route template wrapper with safe CSS page transition", deps: ["./globals.css"], state: active, last: "sato@2026-09-23" }
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12, scale: 0.99 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      className="flex-1 w-full flex flex-col"
-    >
+    <div className="flex-1 w-full flex flex-col page-enter">
       {children}
-    </motion.div>
+    </div>
   );
 }
+
