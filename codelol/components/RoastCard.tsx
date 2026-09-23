@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Comic speech-bubble card displaying Bugsy, roast, fix, and gif", deps: ["@/lib/moodToGif", "@/components/Bugsy"], state: active, last: "sato@2026-09-23" }
 import { RoastMood } from '@/lib/moodToGif';
 import Editor from '@monaco-editor/react';
 import { Bugsy } from './Bugsy';
@@ -19,7 +20,7 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
       
       {/* Bugsy Avatar */}
       <div className="hidden sm:flex flex-col items-center gap-2 pt-4">
-        <Bugsy size={80} mood={gifUrl ? 'laughing' : 'thinking'} />
+        <Bugsy size={80} mood={fix ? 'laughing' : 'happy'} />
       </div>
 
       {/* Speech Bubble Card */}
@@ -30,9 +31,9 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
 
         <div className="bg-amber-950/30 border-b-2 border-amber-500/20 p-2 px-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
-            <span className="sm:hidden"><Bugsy size={24} mood="laughing" /></span>
+            <span className="sm:hidden"><Bugsy size={24} mood={fix ? 'laughing' : 'happy'} /></span>
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-              {(!fix && !gifUrl) ? '✅ Bugsy Says...' : '🔥 Roast Time!'}
+              {!fix ? '✅ Bugsy Says...' : '🔥 Roast Time!'}
             </span>
           </div>
           <div className="flex gap-4">
@@ -61,6 +62,13 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
                 src={gifUrl} 
                 alt="Reaction GIF" 
                 className="w-full h-auto object-contain max-h-[300px]" 
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  const match = target.src.match(/\/gifs\/.+/);
+                  if (match && target.src !== match[0]) {
+                    target.src = match[0];
+                  }
+                }}
               />
             </div>
           )}

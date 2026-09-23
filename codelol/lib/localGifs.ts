@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Helper to fetch local and CDN reaction gifs for humor prefs", deps: ["./gifManifest.json"], state: active, last: "sato@2026-09-23" }
 import manifest from './gifManifest.json';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://brxautcammfkxupmweyc.supabase.co';
@@ -21,7 +22,7 @@ export function getResultGif(isCorrect: boolean, humorPref: 'general' | 'tamil' 
     if (humorPref === 'tamil') {
       return toSupabaseUrl(isCorrect ? "/gifs/tamil/right/placeholder.gif" : "/gifs/tamil/wrong/placeholder.gif");
     }
-    return toSupabaseUrl(isCorrect ? "/gifs/general/right/placeholder.gif" : "/gifs/general/wrong/placeholder.gif");
+    return toSupabaseUrl(isCorrect ? "/gifs/happy/happy_5.gif" : "/gifs/roasting/roasting_1.gif");
   }
   const randomIndex = Math.floor(Math.random() * array.length);
   return array[randomIndex];

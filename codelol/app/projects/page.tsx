@@ -1,7 +1,9 @@
+// agent-notes: { ctx: "Community projects idea catalog with humorous roast previews", deps: ["@/hooks/useRoast", "@/components/RoastCard"], state: active, last: "sato@2026-09-23" }
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
 
 type Project = {
   id: string;
@@ -57,6 +59,25 @@ function ProjectCard({ project }: { project: Project }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
+  const supabase = createClient();
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+
+  useEffect(() => {
+    async function loadPref() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('humor_preference')
+          .eq('id', user.id)
+          .single();
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
+        }
+      }
+    }
+    loadPref();
+  }, [supabase]);
 
   const handleExpand = async () => {
     if (isExpanded) {
@@ -71,8 +92,8 @@ function ProjectCard({ project }: { project: Project }) {
 
     // Crafting a pseudo-code string to roast the project idea itself
     const pseudoCode = `// Project Idea: ${project.title}\n// ${project.description}\n// Concepts: ${project.concepts}\n// TODO: Actually write the code.`;
-    await handleRoast(pseudoCode);
-    playMemeSound(false);
+    await handleRoast(pseudoCode, undefined, false, '', humorPref);
+    playMemeSound(false, humorPref);
   };
 
   return (

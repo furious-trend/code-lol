@@ -339,7 +339,7 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
                  roast={roastData.roast}
                  fix={roastData.fix}
                  mood={roastData.mood}
-                 gifUrl=""
+                 gifUrl={roastData.gifUrl}
                  onDismiss={clearRoast}
                />
             )}

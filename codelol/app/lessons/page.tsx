@@ -90,7 +90,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
                     <pre><code>{lesson.codeExample}</code></pre>
                   </div>
                   <button 
-                    onClick={() => handleRoast(lesson.codeExample)}
+                    onClick={() => handleRoast(lesson.codeExample, undefined, true, '', humorPref)}
                     disabled={isRoasting}
                     className="absolute top-2 right-2 bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold py-1 px-3 rounded-lg opacity-80 hover:opacity-100 transition-opacity disabled:opacity-50"
                   >
@@ -103,8 +103,8 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
                   <div className="mt-4 pt-4 border-t border-zinc-800 animate-in fade-in slide-in-from-top-4 duration-500">
                     {isRoasting && (
                       <div className="flex flex-col items-center gap-4 py-6 text-amber-400">
-                        <Bugsy size={64} mood="dizzy" />
-                        <span className="animate-pulse font-bold tracking-widest">{roastStatus}</span>
+                        <Bugsy size={60} mood="dizzy" />
+                        <span className="animate-pulse font-bold tracking-widest text-lg">{roastStatus || 'Bugsy is reading your code...'}</span>
                       </div>
                     )}
                     {roastError && <div className="text-red-400 text-sm">{roastError}</div>}
@@ -113,7 +113,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
                          roast={roastData.roast}
                          fix={roastData.fix}
                          mood={roastData.mood}
-                         gifUrl=""
+                         gifUrl={roastData.gifUrl}
                          onDismiss={() => clearRoast()}
                        />
                     )}

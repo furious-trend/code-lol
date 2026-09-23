@@ -1,7 +1,41 @@
 {
   "general": {
-    "right": [],
-    "wrong": []
+    "right": [
+      "/gifs/happy/0fe05031.gif",
+      "/gifs/happy/687e2920.gif",
+      "/gifs/happy/c0017218.gif",
+      "/gifs/happy/c211afe9.gif",
+      "/gifs/happy/d0029cdd.gif",
+      "/gifs/happy/happy_12.gif",
+      "/gifs/happy/happy_17.gif",
+      "/gifs/happy/happy_19.gif",
+      "/gifs/happy/happy_5.gif",
+      "/gifs/happy/happy_9.gif"
+    ],
+    "wrong": [
+      "/gifs/roasting/roasting_1.gif",
+      "/gifs/roasting/roasting_10.gif",
+      "/gifs/roasting/roasting_11.gif",
+      "/gifs/roasting/roasting_12.gif",
+      "/gifs/roasting/roasting_13.gif",
+      "/gifs/roasting/roasting_14.gif",
+      "/gifs/roasting/roasting_15.gif",
+      "/gifs/roasting/roasting_16.gif",
+      "/gifs/roasting/roasting_17.gif",
+      "/gifs/roasting/roasting_18.gif",
+      "/gifs/roasting/roasting_19.gif",
+      "/gifs/roasting/roasting_2.gif",
+      "/gifs/roasting/roasting_20.gif",
+      "/gifs/roasting/roasting_21.gif",
+      "/gifs/roasting/roasting_22.gif",
+      "/gifs/roasting/roasting_24.gif",
+      "/gifs/roasting/roasting_3.gif",
+      "/gifs/roasting/roasting_4.gif",
+      "/gifs/roasting/roasting_6.gif",
+      "/gifs/roasting/roasting_7.gif",
+      "/gifs/roasting/roasting_8.gif",
+      "/gifs/roasting/roasting_9.gif"
+    ]
   },
   "tamil": {
     "right": [

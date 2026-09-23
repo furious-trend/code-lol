@@ -193,7 +193,7 @@ export default function LessonExplanationPage() {
                        roast={roastData.roast}
                        fix={roastData.fix}
                        mood={roastData.mood}
-                       gifUrl=""
+                       gifUrl={roastData.gifUrl}
                        onDismiss={() => clearRoast()}
                        onReplayAudio={() => playMemeSound(false, humorPref)}
                      />

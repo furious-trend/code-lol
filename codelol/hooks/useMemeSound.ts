@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Hook to trigger meme audio sound effects for code execution and quiz", deps: [], state: active, last: "sato@2026-09-23" }
 import { useCallback } from 'react';
 
 // Singletons to prevent overlapping audio if played rapidly
@@ -36,7 +37,8 @@ export function useMemeSound() {
       "/sounds/general/wrong/tf_nemesis.mp3",
       "/sounds/general/wrong/directed-by-robert-b_voI2Z4T.mp3",
       "/sounds/general/wrong/dexter-meme.mp3",
-      "/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3"
+      "/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3",
+      "/sounds/general/wrong/let-her-go.mp3"
     ];
     
     const tamilFailSounds = [
@@ -62,7 +64,8 @@ export function useMemeSound() {
       "/sounds/tamil/right/evalavo_pannitom.mp3",
       "/sounds/tamil/right/if_you_are_bad.mp3",
       "/sounds/tamil/right/vadivelu_bomb.mp3",
-      "/sounds/tamil/right/vadivelu.mp3"
+      "/sounds/tamil/right/vadivelu.mp3",
+      "/sounds/tamil/right/seeman-buhaha.mp3"
     ];
 
     const failSounds = humorPref === 'tamil' ? tamilFailSounds : generalFailSounds;
