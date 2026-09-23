@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Individual lesson deep-dive explanation page with interactive concepts and code", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-09-23" }
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -8,6 +9,7 @@ import { allLessons } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { useMemeSound } from '@/hooks/useMemeSound';
+
 
 export default function LessonExplanationPage() {
   const params = useParams();
@@ -191,7 +193,7 @@ export default function LessonExplanationPage() {
                        roast={roastData.roast}
                        fix={roastData.fix}
                        mood={roastData.mood}
-                       gifUrl={roastData.gifUrl}
+                       gifUrl=""
                        onDismiss={() => clearRoast()}
                        onReplayAudio={() => playMemeSound(false, humorPref)}
                      />

@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Client component for interactive lesson workspace and code execution", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-09-23" }
 'use client'
 
 import { useState, useEffect } from 'react';
@@ -106,10 +107,6 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
 
-  // Quiz State
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [quizState, setQuizState] = useState<'idle' | 'correct' | 'wrong'>('idle');
-  const [quizGif, setQuizGif] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   
   // Tier Completion State
@@ -124,11 +121,9 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
     setCode(lesson.codeExample);
     setOutput('');
     setHasRunSuccessfully(false);
-    setSelectedOption(null);
-    setQuizState('idle');
-    setQuizGif(null);
     setShowTierComplete(false);
   }, [lesson]);
+
 
   if (!lesson) {
     return (
@@ -221,6 +216,14 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
         await handleRoast(code, finalOutput, true, '', humorPref);
         playMemeSound(true, humorPref);
         setHasRunSuccessfully(true);
+        if (currentLevel === 1) {
+          confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+        await handleLevelComplete();
       } else {
         const errorOutput = `Error: ${data.error}`;
         setOutput(errorOutput);
@@ -240,32 +243,6 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
     }
   };
 
-  const handleQuizAnswer = async (index: number) => {
-    if (quizState === 'correct') return;
-    
-    setSelectedOption(index);
-    const isCorrect = index === lesson.miniQuizQuestion.correctAnswerIndex;
-    
-    setQuizState(isCorrect ? 'correct' : 'wrong');
-    setQuizGif(null);
-    
-    try {
-      const { getResultGif } = await import('@/lib/localGifs');
-      setQuizGif(getResultGif(isCorrect));
-    } catch {}
-
-    if (isCorrect) {
-      if (currentLevel === 1) {
-        confetti({
-          particleCount: 150,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-        playMemeSound(true, humorPref);
-      }
-      await handleLevelComplete();
-    }
-  };
 
   const handleLevelComplete = async () => {
     setIsSaving(true);
@@ -362,7 +339,7 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
                  roast={roastData.roast}
                  fix={roastData.fix}
                  mood={roastData.mood}
-                 gifUrl={roastData.gifUrl}
+                 gifUrl=""
                  onDismiss={clearRoast}
                />
             )}
@@ -420,73 +397,20 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
           </div>
 
           {hasRunSuccessfully && (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl animate-in fade-in slide-in-from-bottom-8 duration-700">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <span className="text-2xl">🧠</span> Time for a Mini-Quiz!
-              </h3>
-              <p className="text-zinc-300 font-medium mb-4 text-lg">{lesson.miniQuizQuestion.question}</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                {lesson.miniQuizQuestion.options.map((opt, idx) => {
-                  let btnClass = "bg-zinc-950 border-zinc-800 hover:border-blue-500 text-zinc-300";
-                  if (quizState !== 'idle') {
-                    if (idx === lesson.miniQuizQuestion.correctAnswerIndex) {
-                      btnClass = "bg-green-900/30 border-green-500 text-green-300";
-                    } else if (idx === selectedOption) {
-                      btnClass = "bg-red-900/30 border-red-500 text-red-300";
-                    } else {
-                      btnClass = "bg-zinc-950 border-zinc-800 opacity-50";
-                    }
-                  }
-
-                  return (
-                    <button
-                      key={idx}
-                      onClick={() => handleQuizAnswer(idx)}
-                      disabled={quizState === 'correct'}
-                      className={`p-3 rounded-xl border text-left font-medium transition-all ${btnClass}`}
-                    >
-                      <span className="mr-3 font-bold opacity-50">{String.fromCharCode(65 + idx)}.</span>
-                      {opt}
-                    </button>
-                  );
-                })}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl animate-in fade-in slide-in-from-bottom-8 duration-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <h4 className="text-green-400 font-bold text-xl flex items-center gap-2">
+                  <span>🎉</span> Great Job! Code Executed Successfully!
+                </h4>
+                <p className="text-zinc-400 text-sm mt-1">You&apos;re ready for the next lesson challenge.</p>
               </div>
-
-              {quizState !== 'idle' && (
-                <div className="flex items-center gap-6 p-4 rounded-xl bg-zinc-950/50 border border-zinc-800/50 animate-in fade-in zoom-in duration-300">
-                  {quizGif && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={quizGif} alt="Reaction" className="w-24 h-24 object-cover rounded-lg shrink-0" />
-                  )}
-                  <div className="flex-1">
-                    {quizState === 'correct' ? (
-                      <div>
-                        <h4 className="text-green-400 font-bold text-lg mb-1">Nailed it! 🎉</h4>
-                        <p className="text-zinc-400 text-sm mb-4">You&apos;re ready for the next challenge.</p>
-                        <button 
-                          onClick={nextLevel}
-                          disabled={isSaving}
-                          className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center gap-2"
-                        >
-                          {isSaving ? 'Saving...' : 'Next Level ➔'}
-                        </button>
-                      </div>
-                    ) : (
-                      <div>
-                        <h4 className="text-red-400 font-bold text-lg mb-1">Oops, that&apos;s not it! 🤦‍♂️</h4>
-                        <p className="text-zinc-400 text-sm mb-3">Try again. I believe in you!</p>
-                        <button 
-                          onClick={() => { setQuizState('idle'); setSelectedOption(null); setQuizGif(null); }}
-                          className="bg-zinc-800 hover:bg-zinc-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
-                        >
-                          Retry Quiz
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+              <button 
+                onClick={nextLevel}
+                disabled={isSaving}
+                className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-green-600/20 flex items-center gap-2 shrink-0 disabled:opacity-50"
+              >
+                {isSaving ? 'Saving...' : 'Next Level ➔'}
+              </button>
             </div>
           )}
         </div>

@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Lessons library directory page grouped by chapters and tiers", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-09-23" }
 'use client'
 
 import { useState, useEffect } from 'react';
@@ -11,7 +12,6 @@ import { Bugsy } from '@/components/Bugsy';
 function LessonCard({ lesson }: { lesson: Lesson }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [quizAnswered, setQuizAnswered] = useState<number | null>(null);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const supabase = createClient();
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
@@ -36,11 +36,11 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
   const handleExpand = () => {
     if (!isExpanded) {
       setCurrentSlide(0);
-      setQuizAnswered(null);
       clearRoast();
     }
     setIsExpanded(!isExpanded);
   };
+
 
   const nextSlide = () => setCurrentSlide(prev => Math.min(prev + 1, 1));
   const prevSlide = () => setCurrentSlide(prev => Math.max(prev - 1, 0));
@@ -113,7 +113,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
                          roast={roastData.roast}
                          fix={roastData.fix}
                          mood={roastData.mood}
-                         gifUrl={roastData.gifUrl}
+                         gifUrl=""
                          onDismiss={() => clearRoast()}
                        />
                     )}
