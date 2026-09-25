@@ -74,7 +74,6 @@ export default async function Home() {
         {/* User Progress Card */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-lg col-span-1 md:col-span-2 relative overflow-hidden">
            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-500"></div>
-          {user ? (
             <div className="h-full flex flex-col justify-center gap-6">
               <h3 className="text-blue-400 font-bold uppercase tracking-wider text-sm">Your Progress</h3>
               <div className="grid grid-cols-2 gap-4">
@@ -97,25 +96,6 @@ export default async function Home() {
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center gap-6 py-6">
-              <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center text-3xl mb-2">
-                🔒
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold mb-2">Save Your Progress</h3>
-                <p className="text-zinc-400 max-w-md mx-auto">
-                  Don&apos;t lose your streak! Sign up to track your learning, earn badges, and compete with friends.
-                </p>
-              </div>
-              <Link 
-                href="/login" 
-                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-full transition-transform hover:scale-105 active:scale-95"
-              >
-                Sign up now
-              </Link>
-            </div>
-          )}
         </div>
 
       </div>

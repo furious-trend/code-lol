@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Login from '../app/login/page';
 import { createClient } from '@/lib/supabase/client';
@@ -37,54 +37,26 @@ vi.mock('@/components/Bugsy', () => ({
 
 describe('Login Page', () => {
   const mockPush = vi.fn();
-  const mockSignInWithPassword = vi.fn();
   const mockSignInWithOAuth = vi.fn();
-  const mockRpc = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     (useRouter as any).mockReturnValue({ push: mockPush });
     
-    mockRpc.mockResolvedValue({ data: null, error: null });
-
     const mockSupabase = {
       auth: {
-        signInWithPassword: mockSignInWithPassword,
         signInWithOAuth: mockSignInWithOAuth,
       },
-      rpc: mockRpc,
     };
     (createClient as any).mockReturnValue(mockSupabase);
   });
 
-  it('renders login tab by default with Username or Email and Password fields, plus Google login and Forgot Password link', () => {
+  it('renders Google login button', () => {
     render(<Login />);
-    
     expect(screen.getByText(/Continue with Google/i)).toBeTruthy();
-    expect(screen.getByPlaceholderText(/Username or Email/i)).toBeTruthy();
-    expect(screen.getByPlaceholderText(/Password/i)).toBeTruthy();
-    expect(screen.getByText(/Forgot password\?/i)).toBeTruthy();
   });
 
-  it('renders signup tab with Google and Facebook OAuth, username, password, and Humor Selector', () => {
-    render(<Login />);
-    
-    // Switch to Signup tab
-    fireEvent.click(screen.getByRole('button', { name: /Join Arena/i }));
-    
-    expect(screen.getByText(/Continue with Google/i)).toBeTruthy();
-    expect(screen.getByText(/Continue with Facebook/i)).toBeTruthy();
-    
-    // Should show input fields in signup tab now
-    expect(screen.getByPlaceholderText(/Username/i)).toBeTruthy();
-    expect(screen.getByPlaceholderText(/Password/i)).toBeTruthy();
-
-    // Should show Humor Selector cards
-    expect(screen.getByText(/General Dev Meme/i)).toBeTruthy();
-    expect(screen.getByText(/Tamil Comedy Sense/i)).toBeTruthy();
-  });
-
-  it('calls signInWithOAuth for Google signup/login', async () => {
+  it('calls signInWithOAuth for Google login', async () => {
     mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
     
     render(<Login />);
@@ -97,113 +69,6 @@ describe('Login Page', () => {
       options: {
         redirectTo: expect.stringContaining('/auth/callback'),
       },
-    });
-  });
-
-  it('logs in with email directly when input contains @', async () => {
-    mockSignInWithPassword.mockResolvedValueOnce({ error: null, data: { user: { id: 'u1' } } });
-    
-    render(<Login />);
-    
-    fireEvent.change(screen.getByPlaceholderText(/Username or Email/i), { target: { value: 'user@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'secretpass' } });
-    
-    const submitButton = screen.getByRole('button', { name: /Enter Arena/i });
-    fireEvent.click(submitButton);
-    
-    await waitFor(() => {
-      expect(mockSignInWithPassword).toHaveBeenCalledWith({
-        email: 'user@example.com',
-        password: 'secretpass',
-      });
-      expect(mockPush).toHaveBeenCalledWith('/');
-    }, { timeout: 2000 });
-  });
-
-  it('looks up email by username when input does NOT contain @ and logs in with found email', async () => {
-    // Mock rpc query finding the user
-    mockRpc.mockResolvedValueOnce({
-      data: 'resolved@example.com',
-      error: null,
-    });
-    mockSignInWithPassword.mockResolvedValueOnce({ error: null, data: { user: { id: 'u2' } } });
-
-    render(<Login />);
-    
-    fireEvent.change(screen.getByPlaceholderText(/Username or Email/i), { target: { value: 'testdev' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'secretpass' } });
-    
-    const submitButton = screen.getByRole('button', { name: /Enter Arena/i });
-    fireEvent.click(submitButton);
-    
-    await waitFor(() => {
-      expect(mockRpc).toHaveBeenCalledWith('get_email_by_username', { p_username: 'testdev' });
-      expect(mockSignInWithPassword).toHaveBeenCalledWith({
-        email: 'resolved@example.com',
-        password: 'secretpass',
-      });
-      expect(mockPush).toHaveBeenCalledWith('/');
-    }, { timeout: 2000 });
-  });
-
-  it('shows error if username is not found in profiles', async () => {
-    // Mock rpc query returning null
-    mockRpc.mockResolvedValueOnce({
-      data: null,
-      error: null,
-    });
-
-    render(<Login />);
-    
-    fireEvent.change(screen.getByPlaceholderText(/Username or Email/i), { target: { value: 'nonexistentuser' } });
-    fireEvent.change(screen.getByPlaceholderText(/Password/i), { target: { value: 'secretpass' } });
-    
-    const submitButton = screen.getByRole('button', { name: /Enter Arena/i });
-    fireEvent.click(submitButton);
-    
-    await waitFor(() => {
-      expect(screen.getByText(/No account found with that username/i)).toBeTruthy();
-      expect(mockSignInWithPassword).not.toHaveBeenCalled();
-    });
-  });
-
-  it('calls signUp with email, password, and humor_preference when submitting signup form', async () => {
-    const mockSignUp = vi.fn().mockResolvedValue({ error: null });
-    (createClient as any).mockReturnValue({
-      auth: {
-        signInWithPassword: mockSignInWithPassword,
-        signInWithOAuth: mockSignInWithOAuth,
-        signUp: mockSignUp,
-      },
-      rpc: mockRpc,
-    });
-
-    render(<Login />);
-    
-    // Switch to Signup tab
-    fireEvent.click(screen.getByRole('button', { name: /Join Arena/i }));
-    
-    // Select Tamil Comedy Sense humor
-    fireEvent.click(screen.getByText(/Tamil Comedy Sense/i));
-    
-    // Fill form
-    fireEvent.change(screen.getByPlaceholderText(/Choose Username/i), { target: { value: 'newuser' } });
-    fireEvent.change(screen.getByPlaceholderText(/Set Password/i), { target: { value: 'password123' } });
-    
-    // Submit
-    fireEvent.click(screen.getByRole('button', { name: /Create Account/i }));
-    
-    await waitFor(() => {
-      expect(mockSignUp).toHaveBeenCalledWith({
-        email: 'newuser',
-        password: 'password123',
-        options: {
-          data: {
-            username: 'newuser',
-            humor_preference: 'tamil'
-          }
-        }
-      });
     });
   });
 });

@@ -6,19 +6,6 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bugsy } from '@/components/Bugsy';
 
-function calculatePasswordStrength(pass: string): { score: number; label: string; color: string } {
-  if (!pass) return { score: 0, label: '', color: 'bg-zinc-700' };
-  let score = 0;
-  if (pass.length >= 8) score += 1;
-  if (/[A-Z]/.test(pass) && /[a-z]/.test(pass)) score += 1;
-  if (/\d/.test(pass)) score += 1;
-  if (/[^A-Za-z0-9]/.test(pass)) score += 1;
-
-  if (score <= 1) return { score: 1, label: 'Weak', color: 'bg-red-500' };
-  if (score === 2 || score === 3) return { score: 2, label: 'Medium', color: 'bg-amber-500' };
-  return { score: 3, label: 'Strong', color: 'bg-emerald-500' };
-}
-
 const slideVariants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 80 : -80,
@@ -51,7 +38,7 @@ const CONFETTI_PARTICLES = Array.from({ length: 24 }, (_, i) => {
 });
 
 export default function Onboarding() {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2>(1);
   const [direction, setDirection] = useState(1);
 
   // Step 1 State
@@ -60,10 +47,6 @@ export default function Onboarding() {
   const [isUsernameAvailable, setIsUsernameAvailable] = useState<boolean | null>(null);
 
   // Step 2 State
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  // Step 3 State
   const [humorPref, setHumorPref] = useState<'general' | 'tamil' | null>(null);
 
   // General State
@@ -73,8 +56,6 @@ export default function Onboarding() {
 
   const router = useRouter();
   const supabase = createClient();
-
-  const strength = calculatePasswordStrength(password);
 
   // Check username availability
   const checkUsernameUniqueness = async (name: string): Promise<boolean> => {
@@ -136,43 +117,7 @@ export default function Onboarding() {
     setStep(2);
   };
 
-  const handleStep2Next = async () => {
-    setError('');
-
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const { error: updateError } = await supabase.auth.updateUser({
-        password,
-      });
-
-      if (updateError) {
-        setError(updateError.message);
-        setLoading(false);
-        return;
-      }
-
-      setLoading(false);
-      setDirection(1);
-      setStep(3);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to update password';
-      setError(message);
-      setLoading(false);
-    }
-  };
-
-  const handleStep3Finish = async () => {
+  const handleStep2Finish = async () => {
     if (!humorPref) {
       setError('Please select a vibe');
       return;
@@ -225,7 +170,7 @@ export default function Onboarding() {
     if (step > 1) {
       setError('');
       setDirection(-1);
-      setStep((prev) => (prev - 1) as 1 | 2 | 3);
+      setStep((prev) => (prev - 1) as 1 | 2);
     }
   };
 
@@ -255,23 +200,23 @@ export default function Onboarding() {
         {/* Top Header with Bugsy and Progress */}
         <div className="flex flex-col items-center mb-6 relative">
           <div className="absolute -top-14 -left-8 z-20">
-            <Bugsy mood={success ? "laughing" : step === 3 ? "happy" : "idle"} size={64} />
+            <Bugsy mood={success ? "laughing" : step === 2 ? "happy" : "idle"} size={64} />
           </div>
 
           <div className="flex items-center justify-between w-full px-2 mb-3">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
-              Step {step} of 3
+              Step {step} of 2
             </span>
             <div className="flex items-center gap-1.5">
-              {[1, 2, 3].map((i) => (
+              {[1, 2].map((i) => (
                 <div
                   key={i}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     i === step
-                      ? 'w-6 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]'
+                      ? 'w-10 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]'
                       : i < step
-                      ? 'w-2 bg-emerald-500'
-                      : 'w-2 bg-zinc-800'
+                      ? 'w-4 bg-emerald-500'
+                      : 'w-4 bg-zinc-800'
                   }`}
                 />
               ))}
@@ -279,13 +224,11 @@ export default function Onboarding() {
           </div>
 
           <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 text-center">
-            {step === 1 ? 'Choose Username' : step === 2 ? 'Set a Password' : 'Pick Your Vibe'}
+            {step === 1 ? 'Choose Username' : 'Pick Your Vibe'}
           </h1>
           <p className="text-zinc-400 mt-1 text-xs text-center font-medium">
             {step === 1
               ? 'This is how other coders will see you in arenas'
-              : step === 2
-              ? 'Enables you to log in via username/email + password'
               : 'Choose the humor style that fits you best'}
           </p>
         </div>
@@ -368,75 +311,6 @@ export default function Onboarding() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.35, ease: "easeInOut" }}
-                className="space-y-4 pt-1"
-              >
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider ml-1">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
-                  />
-                  {password && (
-                    <div className="pt-1">
-                      <div className="flex items-center justify-between text-xs text-zinc-400 mb-1">
-                        <span>Strength</span>
-                        <span className="font-semibold text-zinc-300">{strength.label}</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden flex gap-1">
-                        <motion.div
-                          className={`h-full rounded-full transition-all duration-300 ${
-                            strength.score >= 1 ? strength.color : 'bg-transparent'
-                          }`}
-                          style={{ width: '33.3%' }}
-                        />
-                        <motion.div
-                          className={`h-full rounded-full transition-all duration-300 ${
-                            strength.score >= 2 ? strength.color : 'bg-transparent'
-                          }`}
-                          style={{ width: '33.3%' }}
-                        />
-                        <motion.div
-                          className={`h-full rounded-full transition-all duration-300 ${
-                            strength.score >= 3 ? strength.color : 'bg-transparent'
-                          }`}
-                          style={{ width: '33.3%' }}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-1.5 pt-1">
-                  <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider ml-1">
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
-                  />
-                </div>
-              </motion.div>
-            )}
-
-            {step === 3 && (
-              <motion.div
-                key="step3"
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.35, ease: "easeInOut" }}
                 className="space-y-3 pt-1"
               >
                 <button 
@@ -485,7 +359,7 @@ export default function Onboarding() {
 
           <motion.button
             type="button"
-            onClick={step === 1 ? handleStep1Next : step === 2 ? handleStep2Next : handleStep3Finish}
+            onClick={step === 1 ? handleStep1Next : handleStep2Finish}
             disabled={loading || checkingUsername}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -519,7 +393,7 @@ export default function Onboarding() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                 >
-                  {step === 3 ? 'Finish' : 'Next'}
+                  {step === 2 ? 'Finish' : 'Next'}
                 </motion.span>
               )}
             </AnimatePresence>

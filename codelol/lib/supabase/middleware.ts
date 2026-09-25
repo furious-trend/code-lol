@@ -42,13 +42,43 @@ export async function updateSession(request: NextRequest) {
     // refreshing the auth token
     const { data: { user } } = await supabase.auth.getUser()
 
-    const protectedRoutes: string[] = [] // Auth is currently deprioritized
-    const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))
+    const pathname = request.nextUrl.pathname
+    const isLogin = pathname === '/login'
+    const isAuthCallback = pathname.startsWith('/auth') || pathname.startsWith('/api/auth')
+    const isOnboarding = pathname === '/onboarding'
 
-    if (isProtectedRoute && !user) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/login'
-      return NextResponse.redirect(url)
+    if (!user) {
+      // If no session exists, redirect everything to /login except the allowed public paths
+      if (!isLogin && !isAuthCallback && !isOnboarding) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/login'
+        return NextResponse.redirect(url)
+      }
+    } else {
+      // User is logged in, check if onboarding is complete
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('onboarding_complete')
+        .eq('id', user.id)
+        .single()
+
+      const onboardingComplete = profile?.onboarding_complete
+
+      if (!onboardingComplete) {
+        // Enforce onboarding for logged-in users who haven't finished it
+        if (!isOnboarding && !isAuthCallback) {
+          const url = request.nextUrl.clone()
+          url.pathname = '/onboarding'
+          return NextResponse.redirect(url)
+        }
+      } else {
+        // Onboarding is complete, don't let them back into /login or /onboarding
+        if (isLogin || isOnboarding) {
+          const url = request.nextUrl.clone()
+          url.pathname = '/'
+          return NextResponse.redirect(url)
+        }
+      }
     }
   } catch (err) {
     console.error('Middleware updateSession warning:', err)

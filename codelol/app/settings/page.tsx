@@ -25,25 +25,16 @@ export default async function Settings() {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  const hasEmailIdentity = user.identities?.some(
-    (id: { provider: string }) => id.provider === 'email'
-  ) ?? false;
-
   const { data: profile } = await supabase
     .from('profiles')
     .select('display_name, humor_preference')
-    .eq('id', user.id)
+    .eq('id', user!.id)
     .single();
 
   return (
     <SettingsPageClient 
       initialProfile={profile ?? {}} 
-      userId={user.id} 
-      isPasswordUser={hasEmailIdentity} 
+      userId={user!.id} 
     />
   );
 }

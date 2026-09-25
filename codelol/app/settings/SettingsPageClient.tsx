@@ -17,12 +17,10 @@ interface ProfileData {
 interface SettingsPageClientProps {
   initialProfile: ProfileData;
   userId: string;
-  isPasswordUser: boolean;
 }
 
-export default function SettingsPageClient({ initialProfile, userId, isPasswordUser }: SettingsPageClientProps) {
+export default function SettingsPageClient({ initialProfile, userId }: SettingsPageClientProps) {
   const [displayName, setDisplayName] = useState(initialProfile.display_name ?? '');
-  const [password, setPassword] = useState('');
   
   const initialHumorPref = (initialProfile.humor_preference === 'tamil' || initialProfile.humor_preference === 'general') 
     ? initialProfile.humor_preference as HumorPref 
@@ -45,14 +43,6 @@ export default function SettingsPageClient({ initialProfile, userId, isPasswordU
     const storedVolume = localStorage.getItem('sound_volume');
     if (storedVolume !== null) setSoundVolume(parseFloat(storedVolume));
   }, []);
-
-  const calculateStrength = (pw: string) => {
-    if (!pw) return { label: '', color: 'bg-zinc-800' };
-    if (pw.length < 6) return { label: 'Weak', color: 'bg-red-500' };
-    if (pw.length >= 8 && /[A-Z]/.test(pw) && /[0-9]/.test(pw)) return { label: 'Strong', color: 'bg-emerald-500' };
-    return { label: 'Medium', color: 'bg-yellow-500' };
-  };
-  const pwStrength = calculateStrength(password);
 
   const checkUsername = async (name: string, uid: string) => {
     if (!name.trim()) {
@@ -136,22 +126,11 @@ export default function SettingsPageClient({ initialProfile, userId, isPasswordU
       return;
     }
 
-    // Update password only if field is non-empty and user has email identity
-    if (password && isPasswordUser) {
-      const { error: pwError } = await supabase.auth.updateUser({ password });
-      if (pwError) {
-        setToast({ type: 'error', msg: pwError.message });
-        setIsSaving(false);
-        return;
-      }
-    }
-
     // Save audio settings to local storage
     localStorage.setItem('sound_muted', String(soundMuted));
     localStorage.setItem('sound_volume', String(soundVolume));
 
     setToast({ type: 'success', msg: 'Settings saved successfully!' });
-    setPassword(''); // clear password field after save
     setIsSaving(false);
     setTimeout(() => setToast(null), 4000);
   };
@@ -189,35 +168,6 @@ export default function SettingsPageClient({ initialProfile, userId, isPasswordU
                   <p className="text-red-500 text-xs mt-1">{usernameError}</p>
                 )}
               </div>
-
-              {/* Password — only shown for email/password accounts */}
-              {isPasswordUser ? (
-                <div>
-                  <label htmlFor="settings-password" className="block text-sm text-zinc-500 mb-1">
-                    Update Password
-                  </label>
-                  <input
-                    id="settings-password"
-                    type="password"
-                    placeholder="New password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-zinc-950/50 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                  />
-                  {password && (
-                    <div className="mt-2 flex items-center justify-between text-xs">
-                      <span className="text-zinc-400">Password Strength: <span className="font-bold text-white">{pwStrength.label}</span></span>
-                      <div className="w-1/2 h-1 bg-zinc-800 rounded-full overflow-hidden">
-                        <div data-testid="strength-bar" className={`h-full transition-all duration-300 ${pwStrength.color}`} style={{ width: pwStrength.label === 'Weak' ? '33%' : pwStrength.label === 'Medium' ? '66%' : '100%' }} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <p className="text-sm text-zinc-600 italic">
-                  Password change is not available for Google sign-in accounts.
-                </p>
-              )}
             </div>
           </section>
 
