@@ -38,7 +38,7 @@ const CONFETTI_PARTICLES = Array.from({ length: 24 }, (_, i) => {
 });
 
 export default function Onboarding() {
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [direction, setDirection] = useState(1);
 
   // Step 1 State
@@ -48,6 +48,9 @@ export default function Onboarding() {
 
   // Step 2 State
   const [humorPref, setHumorPref] = useState<'general' | 'tamil' | null>(null);
+
+  // Step 3 State
+  const [langPref, setLangPref] = useState<'javascript' | 'python' | null>(null);
 
   // General State
   const [loading, setLoading] = useState(false);
@@ -117,9 +120,19 @@ export default function Onboarding() {
     setStep(2);
   };
 
-  const handleStep2Finish = async () => {
+  const handleStep2Next = () => {
     if (!humorPref) {
       setError('Please select a vibe');
+      return;
+    }
+    setError('');
+    setDirection(1);
+    setStep(3);
+  };
+
+  const handleStep3Finish = async () => {
+    if (!langPref) {
+      setError('Please select a language');
       return;
     }
 
@@ -141,6 +154,7 @@ export default function Onboarding() {
           id: user.id,
           display_name: username.trim(),
           humor_preference: humorPref,
+          learning_language: langPref,
           onboarding_complete: true,
         }, { onConflict: 'id' });
 
@@ -170,7 +184,7 @@ export default function Onboarding() {
     if (step > 1) {
       setError('');
       setDirection(-1);
-      setStep((prev) => (prev - 1) as 1 | 2);
+      setStep((prev) => (prev - 1) as 1 | 2 | 3);
     }
   };
 
@@ -205,10 +219,10 @@ export default function Onboarding() {
 
           <div className="flex items-center justify-between w-full px-2 mb-3">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
-              Step {step} of 2
+              Step {step} of 3
             </span>
             <div className="flex items-center gap-1.5">
-              {[1, 2].map((i) => (
+              {[1, 2, 3].map((i) => (
                 <div
                   key={i}
                   className={`h-2 rounded-full transition-all duration-300 ${
@@ -224,12 +238,14 @@ export default function Onboarding() {
           </div>
 
           <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 text-center">
-            {step === 1 ? 'Choose Username' : 'Pick Your Vibe'}
+            {step === 1 ? 'Choose Username' : step === 2 ? 'Pick Your Vibe' : 'Choose Your Language'}
           </h1>
           <p className="text-zinc-400 mt-1 text-xs text-center font-medium">
             {step === 1
               ? 'This is how other coders will see you in arenas'
-              : 'Choose the humor style that fits you best'}
+              : step === 2
+              ? 'Choose the humor style that fits you best'
+              : 'What language do you want to master first?'}
           </p>
         </div>
 
@@ -341,6 +357,46 @@ export default function Onboarding() {
                 </button>
               </motion.div>
             )}
+
+            {step === 3 && (
+              <motion.div
+                key="step3"
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                className="space-y-3 pt-1"
+              >
+                <button 
+                  type="button"
+                  onClick={() => { setLangPref('javascript'); setError(''); }}
+                  className={`p-4 rounded-xl border transition-all text-left flex items-center justify-between w-full ${langPref === 'javascript' ? 'border-yellow-500 bg-yellow-500/10 shadow-[0_0_20px_rgba(234,179,8,0.2)]' : 'border-zinc-800 bg-zinc-950/50 text-zinc-400 hover:border-zinc-700'}`}
+                >
+                  <div>
+                    <div className={`text-base font-bold mb-0.5 ${langPref === 'javascript' ? 'text-yellow-400' : 'text-zinc-300'}`}>JavaScript (JS)</div>
+                    <div className="text-xs opacity-70">The language of the web. Build interactive sites.</div>
+                  </div>
+                  {langPref === 'javascript' && (
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-4 h-4 rounded-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
+                  )}
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => { setLangPref('python'); setError(''); }}
+                  className={`p-4 rounded-xl border transition-all text-left flex items-center justify-between w-full ${langPref === 'python' ? 'border-blue-500 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.2)]' : 'border-zinc-800 bg-zinc-950/50 text-zinc-400 hover:border-zinc-700'}`}
+                >
+                  <div>
+                    <div className={`text-base font-bold mb-0.5 ${langPref === 'python' ? 'text-blue-400' : 'text-zinc-300'}`}>Python</div>
+                    <div className="text-xs opacity-70">Great for beginners, data science, and AI.</div>
+                  </div>
+                  {langPref === 'python' && (
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                  )}
+                </button>
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
 
@@ -359,7 +415,7 @@ export default function Onboarding() {
 
           <motion.button
             type="button"
-            onClick={step === 1 ? handleStep1Next : handleStep2Finish}
+            onClick={step === 1 ? handleStep1Next : step === 2 ? handleStep2Next : handleStep3Finish}
             disabled={loading || checkingUsername}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -393,7 +449,7 @@ export default function Onboarding() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                 >
-                  {step === 2 ? 'Finish' : 'Next'}
+                  {step === 3 ? 'Finish' : 'Next'}
                 </motion.span>
               )}
             </AnimatePresence>

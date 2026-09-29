@@ -12,6 +12,7 @@ type Toast = { type: 'success' | 'error'; msg: string } | null;
 interface ProfileData {
   display_name?: string | null;
   humor_preference?: string | null;
+  learning_language?: string | null;
 }
 
 interface SettingsPageClientProps {
@@ -27,6 +28,8 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
     : 'general';
     
   const [humorPref, setHumorPref] = useState<HumorPref>(initialHumorPref);
+  
+  const [langPref, setLangPref] = useState<'javascript' | 'python'>(initialProfile.learning_language === 'python' ? 'python' : 'javascript');
   
   const [soundMuted, setSoundMuted] = useState(false);
   const [soundVolume, setSoundVolume] = useState(1.0);
@@ -110,10 +113,10 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
       return;
     }
 
-    // Always update profile (display_name + humor_preference together)
+    // Always update profile (display_name + humor_preference + learning_language together)
     const { error: profileError } = await supabase
       .from('profiles')
-      .update({ display_name: trimmedName, humor_preference: humorPref })
+      .update({ display_name: trimmedName, humor_preference: humorPref, learning_language: langPref })
       .eq('id', userId);
 
     if (profileError) {
@@ -218,6 +221,37 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
                   }
                 </motion.div>
               </AnimatePresence>
+            </div>
+          </section>
+
+          {/* ── Language Preference ─────────────────────────────────────── */}
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-zinc-300">Learning Language</h2>
+            <p className="text-sm text-zinc-500 mb-4">Choose the primary language you want to learn and battle in.</p>
+
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                onClick={() => setLangPref('javascript')}
+                className={`p-4 rounded-xl border text-left transition-all ${
+                  langPref === 'javascript'
+                    ? 'border-yellow-500 bg-yellow-500/10'
+                    : 'border-zinc-800 bg-zinc-950/50 hover:border-zinc-700'
+                }`}
+              >
+                <div className="font-semibold mb-1">JavaScript</div>
+                <div className="text-sm text-zinc-500">The language of the web</div>
+              </button>
+              <button
+                onClick={() => setLangPref('python')}
+                className={`p-4 rounded-xl border text-left transition-all ${
+                  langPref === 'python'
+                    ? 'border-blue-500 bg-blue-500/10'
+                    : 'border-zinc-800 bg-zinc-950/50 hover:border-zinc-700'
+                }`}
+              >
+                <div className="font-semibold mb-1">Python</div>
+                <div className="text-sm text-zinc-500">Data, AI, and simplicity</div>
+              </button>
             </div>
           </section>
 

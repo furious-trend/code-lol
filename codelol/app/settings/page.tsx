@@ -27,7 +27,7 @@ export default async function Settings() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('display_name, humor_preference')
+    .select('display_name, humor_preference, learning_language')
     .eq('id', user!.id)
     .single();
 
