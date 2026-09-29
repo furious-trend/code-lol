@@ -67,7 +67,7 @@ describe('Onboarding 2-Step Wizard', () => {
   it('renders Step 1 (Choose Username) by default with progress indicator', () => {
     render(<Onboarding />);
 
-    expect(screen.getByText(/Step 1 of 2/i)).toBeTruthy();
+    expect(screen.getByText(/Step 1 of 3/i)).toBeTruthy();
     expect(screen.getByText(/Choose Username/i)).toBeTruthy();
     expect(screen.getByPlaceholderText(/Enter your username/i)).toBeTruthy();
     
@@ -97,7 +97,7 @@ describe('Onboarding 2-Step Wizard', () => {
       expect(screen.getByText(/That username is already taken — try another/i)).toBeTruthy();
     });
     // Should still be on Step 1
-    expect(screen.getByText(/Step 1 of 2/i)).toBeTruthy();
+    expect(screen.getByText(/Step 1 of 3/i)).toBeTruthy();
   });
 
   it('proceeds from Step 1 to Step 2 when unique username is provided', async () => {
@@ -113,7 +113,7 @@ describe('Onboarding 2-Step Wizard', () => {
     fireEvent.click(nextBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(/Step 2 of 2/i)).toBeTruthy();
+      expect(screen.getByText(/Step 2 of 3/i)).toBeTruthy();
       expect(screen.getByText(/Pick Your Vibe/i)).toBeTruthy();
     });
   });
@@ -135,13 +135,13 @@ describe('Onboarding 2-Step Wizard', () => {
     fireEvent.click(screen.getByRole('button', { name: /Back/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Step 1 of 2/i)).toBeTruthy();
+      expect(screen.getByText(/Step 1 of 3/i)).toBeTruthy();
       const input = screen.getByPlaceholderText(/Enter your username/i) as HTMLInputElement;
       expect(input.value).toBe('my_unique_user');
     });
   });
 
-  it('completes Step 2 by saving profile with display_name, humor_preference, onboarding_complete=true and redirects home', async () => {
+  it('completes Step 3 by saving profile with display_name, humor_preference, learning_language, onboarding_complete=true and redirects home', async () => {
     mockLimit.mockResolvedValue({ data: [], error: null });
 
     render(<Onboarding />);
@@ -156,6 +156,14 @@ describe('Onboarding 2-Step Wizard', () => {
 
     // Step 2
     fireEvent.click(screen.getByText(/Tamil Comedy Sense/i));
+    fireEvent.click(screen.getByRole('button', { name: /Next/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Choose Your Language/i)).toBeTruthy();
+    });
+
+    // Step 3
+    fireEvent.click(screen.getByText(/Python/i));
     fireEvent.click(screen.getByRole('button', { name: /Finish/i }));
 
     await waitFor(() => {
@@ -163,6 +171,7 @@ describe('Onboarding 2-Step Wizard', () => {
         id: 'test-user-id',
         display_name: 'ninja_coder',
         humor_preference: 'tamil',
+        learning_language: 'python',
         onboarding_complete: true,
       }, { onConflict: 'id' });
     });
