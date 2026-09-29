@@ -40,7 +40,7 @@ for (const element of lessons) {
       break;
     case 4: // Objects
       checks = [
-        { type: "requires_syntax", pattern: "\\{.*\\}", expectedMessage: "Your code runs, but you didn't define an object {} yet." }
+        { type: "requires_syntax", pattern: "\\{[\\s\\S]*\\}", expectedMessage: "Your code runs, but you didn't define an object {} yet." }
       ];
       break;
     case 5: // For Loops
@@ -186,7 +186,7 @@ for (const element of lessons) {
       break;
     case 106: // Workout: The Ultimate Trial
       checks = [
-        { type: "requires_syntax", pattern: "\\{.*\\}", expectedMessage: "Create objects for the player and enemy." },
+        { type: "requires_syntax", pattern: "\\{[\\s\\S]*\\}", expectedMessage: "Create objects for the player and enemy." },
         { type: "requires_syntax", pattern: "(?:for|while)", expectedMessage: "Use a loop for the battle sequence." },
         { type: "requires_syntax", pattern: "\\?.*:", expectedMessage: "Use a ternary operator to decide the winner." }
       ];

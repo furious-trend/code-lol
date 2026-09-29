@@ -108,7 +108,7 @@ export const beginnerLessons: Lesson[] = [
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "\\{.*\\}",
+              pattern: "\\{[\\s\\S]*\\}",
               expectedMessage: "Your code runs, but you didn't define an object {} yet."
             }
           ]
