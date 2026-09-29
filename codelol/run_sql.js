@@ -43,7 +43,13 @@ $$ language plpgsql security definer;
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute procedure public.handle_new_user();
 
-ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS current_level integer DEFAULT 1, ADD COLUMN IF NOT EXISTS current_tier text DEFAULT 'Beginner';
+ALTER TABLE public.profiles 
+  ADD COLUMN IF NOT EXISTS current_level integer DEFAULT 1, 
+  ADD COLUMN IF NOT EXISTS current_tier text DEFAULT 'Beginner',
+  ADD COLUMN IF NOT EXISTS display_name text,
+  ADD COLUMN IF NOT EXISTS humor_preference text,
+  ADD COLUMN IF NOT EXISTS onboarding_complete boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS learning_language text DEFAULT 'javascript' CHECK (learning_language IN ('javascript', 'python'));
 UPDATE public.profiles SET current_level = COALESCE(levels_completed, 0) + 1 WHERE current_level IS NULL OR current_level = 1;
 UPDATE public.profiles SET current_tier = CASE WHEN current_level <= 25 THEN 'Beginner' WHEN current_level <= 50 THEN 'Intermediate' ELSE 'Expert' END;
 
