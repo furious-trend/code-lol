@@ -124,9 +124,22 @@ function PlaygroundContent() {
         </div>
         
         <div className="flex items-center gap-4 w-full sm:w-auto">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400">
-            JavaScript
-          </div>
+          <select 
+            value={language}
+            onChange={(e) => {
+              const newLang = e.target.value;
+              setLanguage(newLang);
+              if (code === '// Write your code here\\nconsole.log("Hello, World!");' && newLang === 'python') {
+                setCode('# Write your code here\\nprint("Hello, World!")');
+              } else if (code === '# Write your code here\\nprint("Hello, World!")' && newLang === 'javascript') {
+                setCode('// Write your code here\\nconsole.log("Hello, World!");');
+              }
+            }}
+            className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer"
+          >
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+          </select>
           
           <motion.button 
             whileHover={{ scale: 1.02 }}
