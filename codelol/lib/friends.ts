@@ -21,11 +21,20 @@ export interface FriendRequest {
 export async function searchUsers(query: string): Promise<Profile[]> {
   if (!query.trim()) return [];
   const supabase = createClient();
-  const { data, error } = await supabase
+  
+  const { data: userData } = await supabase.auth.getUser();
+
+  let dbQuery = supabase
     .from('profiles')
     .select('*')
     .ilike('display_name', `%${query}%`)
     .limit(10);
+    
+  if (userData?.user?.id) {
+    dbQuery = dbQuery.neq('id', userData.user.id);
+  }
+
+  const { data, error } = await dbQuery;
     
   if (error) {
     console.error('Error searching users:', JSON.stringify(error, null, 2));
@@ -36,10 +45,10 @@ export async function searchUsers(query: string): Promise<Profile[]> {
   return data as Profile[];
 }
 
-export async function sendFriendRequest(friendId: string): Promise<boolean> {
+export async function sendFriendRequest(friendId: string): Promise<{ success: boolean; error?: string }> {
   const supabase = createClient();
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return false;
+  if (!userData.user) return { success: false, error: 'Not authenticated' };
 
   const { error } = await supabase
     .from('friendships')
@@ -50,11 +59,22 @@ export async function sendFriendRequest(friendId: string): Promise<boolean> {
     });
 
   if (error) {
-    console.error('Error sending friend request:', error);
-    return false;
+    console.error('Error sending friend request:', JSON.stringify(error, null, 2));
+    
+    // Check for unique constraint violation (duplicate friend request)
+    if (error.code === '23505') {
+      return { success: false, error: 'Friend request already sent' };
+    }
+    
+    // Check for RLS policy violation
+    if (error.code === '42501') {
+      return { success: false, error: 'Row-level security policy violation (Migrations not pushed?)' };
+    }
+    
+    return { success: false, error: error.message };
   }
 
-  return true;
+  return { success: true };
 }
 
 export async function acceptFriendRequest(requestId: string): Promise<boolean> {

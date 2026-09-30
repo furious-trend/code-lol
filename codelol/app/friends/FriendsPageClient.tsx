@@ -52,8 +52,11 @@ export default function FriendsPageClient({ initialPendingRequests, initialFrien
   };
 
   const handleSendRequest = async (userId: string) => {
-    const success = await sendFriendRequest(userId);
+    const { success, error } = await sendFriendRequest(userId);
     setRequestStatus(prev => ({ ...prev, [userId]: success ? 'sent' : 'failed' }));
+    if (!success && error) {
+      alert(`Failed to send friend request: ${error}`);
+    }
     if (success) setTimeout(() => setRequestStatus(prev => ({ ...prev, [userId]: null })), 3000);
   };
 
