@@ -423,7 +423,7 @@ export default function Onboarding() {
             className="flex-1 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg shadow-purple-500/20 disabled:opacity-70 flex items-center justify-center transition-all overflow-hidden"
           >
             <AnimatePresence mode="wait">
-              {loading ? (
+              {loading || checkingUsername ? (
                 <motion.div 
                   key="loading"
                   initial={{ opacity: 0, scale: 0.8 }}

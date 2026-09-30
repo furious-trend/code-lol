@@ -1,6 +1,6 @@
 import { Lesson } from './types';
 
-export expertLessons: Lesson[] = [
+export const pythonExpertLessons: Lesson[] = [
   {
     id: 201,
     chapter: "Chapter 1: Trees",

@@ -1,6 +1,6 @@
 import { Lesson } from './types';
 
-export interviewLessons: Lesson[] = [
+export const pythonInterviewLessons: Lesson[] = [
   {
     id: 301,
     chapter: "Chapter 1: The CTCI Framework",

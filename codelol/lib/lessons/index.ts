@@ -11,9 +11,9 @@ import { pythonInterviewLessons } from './interview-python';
 // Default export (JS)
 export const allLessons: Lesson[] = [
   ...beginnerLessons,
-  ...pythonIntermediateLessons,
-  ...pythonExpertLessons,
-  ...pythonInterviewLessons
+  ...intermediateLessons,
+  ...expertLessons,
+  ...interviewLessons
 ];
 
 export const pythonAllLessons: Lesson[] = [

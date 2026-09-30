@@ -137,6 +137,7 @@ function PlaygroundContent() {
             onChange={(e) => {
               const newLang = e.target.value;
               setLanguage(newLang);
+              setLearningLanguage(newLang);
               if (code === '// Write your code here\\nconsole.log("Hello, World!");' && newLang === 'python') {
                 setCode('# Write your code here\\nprint("Hello, World!")');
               } else if (code === '# Write your code here\\nprint("Hello, World!")' && newLang === 'javascript') {

@@ -1,6 +1,6 @@
 import { Lesson } from './types';
 
-export intermediateLessons: Lesson[] = [
+export const pythonIntermediateLessons: Lesson[] = [
   {
     id: 101,
     chapter: "Chapter 1: The Big O",
