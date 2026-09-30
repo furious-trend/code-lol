@@ -2,22 +2,25 @@ import { Lesson } from './types';
 import { beginnerLessons } from './beginner';
 import { pythonBeginnerLessons } from './beginner-python';
 import { intermediateLessons } from './intermediate';
+import { pythonIntermediateLessons } from './intermediate-python';
 import { expertLessons } from './expert';
+import { pythonExpertLessons } from './expert-python';
 import { interviewLessons } from './interview';
+import { pythonInterviewLessons } from './interview-python';
 
 // Default export (JS)
 export const allLessons: Lesson[] = [
   ...beginnerLessons,
-  ...intermediateLessons,
-  ...expertLessons,
-  ...interviewLessons
+  ...pythonIntermediateLessons,
+  ...pythonExpertLessons,
+  ...pythonInterviewLessons
 ];
 
 export const pythonAllLessons: Lesson[] = [
   ...pythonBeginnerLessons,
-  ...intermediateLessons,
-  ...expertLessons,
-  ...interviewLessons
+  ...pythonIntermediateLessons,
+  ...pythonExpertLessons,
+  ...pythonInterviewLessons
 ];
 
 export const getLessonCategories = (lang: string = 'javascript') => {
@@ -33,19 +36,19 @@ export const getLessonCategories = (lang: string = 'javascript') => {
       id: 'intermediate',
       name: 'Intermediate',
       sticker: '🟡',
-      lessons: intermediateLessons // TODO: Translate these
+      lessons: isPython ? pythonIntermediateLessons : intermediateLessons
     },
     {
       id: 'expert',
       name: 'Expert',
       sticker: '🔴',
-      lessons: expertLessons // TODO: Translate these
+      lessons: isPython ? pythonExpertLessons : expertLessons
     },
     {
       id: 'interview',
       name: 'Interview Prep',
       sticker: '👔',
-      lessons: interviewLessons // TODO: Translate these
+      lessons: isPython ? pythonInterviewLessons : interviewLessons
     }
   ];
 };
