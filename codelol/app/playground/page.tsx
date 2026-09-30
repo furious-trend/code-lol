@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Editor from '@monaco-editor/react';
-import { lessonCategories } from '@/lib/lessons';
+import { getAllLessons } from '@/lib/lessons/index';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { Bugsy } from '@/components/Bugsy';
@@ -28,6 +28,7 @@ function PlaygroundContent() {
   const { playMemeSound } = useMemeSound();
   const supabase = createClient();
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+  const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
 
   useEffect(() => {
     async function loadPref() {
@@ -35,16 +36,25 @@ function PlaygroundContent() {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('humor_preference')
+          .select('humor_preference, learning_language')
           .eq('id', user.id)
           .single();
         if (profile?.humor_preference) {
           setHumorPref(profile.humor_preference);
         }
+        if (profile?.learning_language) {
+          setLearningLanguage(profile.learning_language);
+          if (!snippetId) {
+            setLanguage(profile.learning_language);
+            if (profile.learning_language === 'python') {
+              setCode('# Write your code here\nprint("Hello, World!")');
+            }
+          }
+        }
       }
     }
     loadPref();
-  }, [supabase]);
+  }, [supabase, snippetId]);
 
   useEffect(() => {
     setEmptyMsg(getRandomEmptyMessage());
@@ -53,21 +63,19 @@ function PlaygroundContent() {
   useEffect(() => {
     if (snippetId) {
       let lesson = null;
-      for (const category of lessonCategories) {
-        const found = category.lessons.find(l => l.id.toString() === snippetId);
-        if (found) {
-          lesson = found;
-          break;
-        }
+      const lessons = getAllLessons(learningLanguage);
+      const found = lessons.find(l => l.id.toString() === snippetId);
+      if (found) {
+        lesson = found;
       }
       
       if (lesson) {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setCode(lesson.codeExample);
-        setLanguage('javascript');
+        setLanguage(learningLanguage);
       }
     }
-  }, [snippetId]);
+  }, [snippetId, learningLanguage]);
 
   const handleRunAndRoast = async () => {
 

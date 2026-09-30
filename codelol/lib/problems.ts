@@ -12,6 +12,7 @@ export interface Problem {
   difficulty: Difficulty;
   description: string;
   starterCode: string;
+  starterCodePython?: string;
   testCases: TestCase[];
   miniQuizQuestion?: {
     question: string;
@@ -36,6 +37,9 @@ Output: 5
   // Write your code here
   
 }`,
+    starterCodePython: `def addNumbers(a, b):
+    # Write your code here
+    pass`,
     testCases: [
       { input: [2, 3], expected: 5 },
       { input: [-1, 5], expected: 4 }
@@ -55,6 +59,9 @@ Output: 5
   // Write your code here
   
 }`,
+    starterCodePython: `def getStringLength(str):
+    # Write your code here
+    pass`,
     testCases: [
       { input: ["hello"], expected: 5 },
       { input: [""], expected: 0 },
@@ -75,6 +82,9 @@ Output: true
   // Write your code here
   
 }`,
+    starterCodePython: `def isEven(n):
+    # Write your code here
+    pass`,
     testCases: [
       { input: [4], expected: true },
       { input: [7], expected: false }
@@ -87,6 +97,9 @@ Output: true
   // Write your code here
   
 }`,
+    starterCodePython: `def multiplyByTen(n):
+    # Write your code here
+    pass`,
     testCases: [
       { input: [5], expected: 50 },
       { input: [0], expected: 0 }
@@ -103,6 +116,9 @@ Output: true
   // Write your code here
   
 }`,
+    starterCodePython: `def fizzBuzz(n):
+    # Write your code here
+    pass`,
     testCases: [
       { input: [3], expected: ["1", "2", "Fizz"] },
       { input: [5], expected: ["1", "2", "Fizz", "4", "Buzz"] }
@@ -115,6 +131,9 @@ Output: true
   // Write your code here
   
 }`,
+    starterCodePython: `def reverseString(s):
+    # Write your code here
+    pass`,
     testCases: [
       { input: [["h","e","l","l","o"]], expected: ["o","l","l","e","h"] }
     ]
@@ -126,6 +145,9 @@ Output: true
   // Write your code here
   
 }`,
+    starterCodePython: `def isPalindrome(s):
+    # Write your code here
+    pass`,
     testCases: [
       { input: ["A man, a plan, a canal: Panama"], expected: true },
       { input: ["race a car"], expected: false }
@@ -138,6 +160,9 @@ Output: true
   // Write your code here
   
 }`,
+    starterCodePython: `def fib(n):
+    # Write your code here
+    pass`,
     testCases: [
       { input: [2], expected: 1 },
       { input: [4], expected: 3 }
@@ -165,6 +190,7 @@ categories.forEach(difficulty => {
         title: handCrafted.title!,
         description: handCrafted.description!,
         starterCode: handCrafted.starterCode!,
+        starterCodePython: handCrafted.starterCodePython!,
         testCases: handCrafted.testCases!
       });
     } else if (i % 10 === 0) {
@@ -177,6 +203,7 @@ categories.forEach(difficulty => {
           title: `Level ${i}: Calculator Application`,
           description: `**Boss Battle!** Build a simple Calculator class.\\n\\nImplement the \`Calculator\` class with the following methods:\\n- \`add(n)\`: adds \`n\` to the internal value.\\n- \`subtract(n)\`: subtracts \`n\` from the internal value.\\n- \`getValue()\`: returns the current internal value (starts at 0).`,
           starterCode: `function runCalculator(operations) {\n  const calc = new Calculator();\n  for (const op of operations) {\n    if (op[0] === 'add') calc.add(op[1]);\n    if (op[0] === 'subtract') calc.subtract(op[1]);\n  }\n  return calc.getValue();\n}\n\nclass Calculator {\n  constructor() {\n    this.value = 0;\n  }\n  // Write your methods here!\n  \n}`,
+          starterCodePython: `def runCalculator(operations):\n    calc = Calculator()\n    for op in operations:\n        if op[0] == 'add': calc.add(op[1])\n        if op[0] == 'subtract': calc.subtract(op[1])\n    return calc.getValue()\n\nclass Calculator:\n    def __init__(self):\n        self.value = 0\n    # Write your methods here!\n    pass`,
           testCases: [
             { input: [[['add', 10], ['subtract', 3]]], expected: 7 },
             { input: [[['add', 5], ['add', 15], ['subtract', 10]]], expected: 10 }
@@ -195,6 +222,7 @@ categories.forEach(difficulty => {
           title: `Level ${i}: Todo List Application`,
           description: `**Boss Battle!** Build a Todo List manager.\\n\\nImplement the \`TodoList\` class with:\\n- \`add(task)\`: adds a string to the list.\\n- \`remove(task)\`: removes the exact string from the list.\\n- \`getItems()\`: returns an array of all current tasks.`,
           starterCode: `function runTodoList(commands) {\n  const todo = new TodoList();\n  for (const cmd of commands) {\n    if (cmd[0] === 'add') todo.add(cmd[1]);\n    if (cmd[0] === 'remove') todo.remove(cmd[1]);\n  }\n  return todo.getItems();\n}\n\nclass TodoList {\n  // Implement your class here!\n  \n}`,
+          starterCodePython: `def runTodoList(commands):\n    todo = TodoList()\n    for cmd in commands:\n        if cmd[0] == 'add': todo.add(cmd[1])\n        if cmd[0] == 'remove': todo.remove(cmd[1])\n    return todo.getItems()\n\nclass TodoList:\n    # Implement your class here!\n    pass`,
           testCases: [
             { input: [[['add', 'apple'], ['add', 'banana'], ['remove', 'apple']]], expected: ['banana'] },
             { input: [[['add', 'code'], ['add', 'sleep']]], expected: ['code', 'sleep'] }
@@ -213,6 +241,7 @@ categories.forEach(difficulty => {
           title: `Level ${i}: Key-Value Database`,
           description: `**Boss Battle!** Build an In-Memory Database.\\n\\nImplement the \`SimpleDB\` class with:\\n- \`set(key, val)\`: stores the value.\\n- \`get(key)\`: returns the value, or null if it doesn't exist.\\n- \`delete(key)\`: removes the key.`,
           starterCode: `function runDB(commands) {\n  const db = new SimpleDB();\n  let results = [];\n  for (const cmd of commands) {\n    if (cmd[0] === 'set') db.set(cmd[1], cmd[2]);\n    if (cmd[0] === 'get') results.push(db.get(cmd[1]));\n    if (cmd[0] === 'delete') db.delete(cmd[1]);\n  }\n  return results;\n}\n\nclass SimpleDB {\n  // Implement your class here!\n  \n}`,
+          starterCodePython: `def runDB(commands):\n    db = SimpleDB()\n    results = []\n    for cmd in commands:\n        if cmd[0] == 'set': db.set(cmd[1], cmd[2])\n        if cmd[0] == 'get': results.append(db.get(cmd[1]))\n        if cmd[0] == 'delete': db.delete(cmd[1])\n    return results\n\nclass SimpleDB:\n    # Implement your class here!\n    pass`,
           testCases: [
             { input: [[['set', 'a', 1], ['get', 'a'], ['delete', 'a'], ['get', 'a']]], expected: [1, null] }
           ],
@@ -233,6 +262,7 @@ categories.forEach(difficulty => {
           title: `Level ${i}: Basic Math`,
           description: `This is a basic ${difficulty} challenge for Level ${i}.\\n\\nGiven a number \`n\`, return \`n + ${i}\`.`,
           starterCode: `function solveLevel${i}(n) {\n  // Return n + ${i}\n  \n}`,
+          starterCodePython: `def solveLevel${i}(n):\n    # Return n + ${i}\n    pass`,
           testCases: [ { input: [10], expected: 10 + i }, { input: [0], expected: i } ],
           miniQuizQuestion: {
             question: `What is the expected return value for this level?`,
@@ -248,6 +278,7 @@ categories.forEach(difficulty => {
           title: `Level ${i}: Array Mapping`,
           description: `This is an intermediate challenge for Level ${i}.\\n\\nGiven an array of numbers, return a new array where every number is multiplied by \`${i}\`.`,
           starterCode: `function solveLevel${i}(arr) {\n  // Return mapped array\n  \n}`,
+          starterCodePython: `def solveLevel${i}(arr):\n    # Return mapped array\n    pass`,
           testCases: [ { input: [[1, 2, 3]], expected: [1 * i, 2 * i, 3 * i] } ],
           miniQuizQuestion: {
             question: `Which array method is best suited for multiplying every element and returning a new array?`,
@@ -263,6 +294,7 @@ categories.forEach(difficulty => {
           title: `Level ${i}: Advanced Logic`,
           description: `This is an expert challenge for Level ${i}.\\n\\nGiven a number \`n\`, return \`n * ${i * i}\`.`,
           starterCode: `function solveLevel${i}(n) {\n  // Write your logic here\n  \n}`,
+          starterCodePython: `def solveLevel${i}(n):\n    # Write your logic here\n    pass`,
           testCases: [ { input: [2], expected: 2 * (i * i) }, { input: [5], expected: 5 * (i * i) } ],
           miniQuizQuestion: {
             question: `If you wanted to do this recursively, what would you need?`,

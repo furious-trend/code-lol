@@ -168,6 +168,7 @@ export default function Onboarding() {
         }
         setLoading(false);
       } else {
+        setLoading(false);
         setSuccess(true);
         setTimeout(() => {
           router.push('/');

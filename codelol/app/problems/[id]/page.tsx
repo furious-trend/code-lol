@@ -47,6 +47,7 @@ export default function ProblemSolverPage() {
   const startTimeRef = useRef<number | null>(null);
   const supabase = createClient();
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+  const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
 
   useEffect(() => {
     async function loadPref() {
@@ -54,11 +55,14 @@ export default function ProblemSolverPage() {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('humor_preference')
+          .select('humor_preference, learning_language')
           .eq('id', user.id)
           .single();
         if (profile?.humor_preference) {
           setHumorPref(profile.humor_preference);
+        }
+        if (profile?.learning_language) {
+          setLearningLanguage(profile.learning_language);
         }
       }
     }
@@ -68,10 +72,13 @@ export default function ProblemSolverPage() {
   // Sync state if problem loads
   useEffect(() => {
     if (problem) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCode(problem.starterCode);
+      if (learningLanguage === 'python' && problem.starterCodePython) {
+        setCode(problem.starterCodePython);
+      } else {
+        setCode(problem.starterCode);
+      }
     }
-  }, [problem]);
+  }, [problem, learningLanguage]);
 
   if (!problem) {
     return (
@@ -147,12 +154,48 @@ export default function ProblemSolverPage() {
     setRawOutput('');
     clearRoast();
 
-    // Extract function name from starter code to call it dynamically
-    const funcNameMatch = problem.starterCode.match(/function\s+([a-zA-Z0-9_]+)/);
-    const functionName = funcNameMatch ? funcNameMatch[1] : 'solution';
+    let functionName = 'solution';
+    if (learningLanguage === 'python') {
+       const funcNameMatch = (problem.starterCodePython || problem.starterCode).match(/def\s+([a-zA-Z0-9_]+)/);
+       if (funcNameMatch) functionName = funcNameMatch[1];
+    } else {
+       const funcNameMatch = problem.starterCode.match(/function\s+([a-zA-Z0-9_]+)/);
+       if (funcNameMatch) functionName = funcNameMatch[1];
+    }
 
-    // Inject hidden testing logic
-    const testSuite = `
+    let testSuite = '';
+    
+    if (learningLanguage === 'python') {
+      testSuite = `
+${code}
+
+import json
+_tc = json.loads('${JSON.stringify(problem.testCases).replace(/'/g, "\\'")}')
+_passed = 0
+_log = []
+
+for i, tc in enumerate(_tc):
+    try:
+        if '${functionName}' not in globals():
+            _log.append("Test " + str(i+1) + ": ERROR (Function '${functionName}' not found. Did you rename it or change its definition?)")
+            continue
+            
+        fn = globals()['${functionName}']
+        result = fn(*tc['input'])
+        
+        if result == tc['expected']:
+            _passed += 1
+            _log.append("Test " + str(i+1) + ": PASS")
+        else:
+            _log.append("Test " + str(i+1) + ": FAIL (Expected " + json.dumps(tc['expected']) + ", got " + json.dumps(result) + ")")
+    except Exception as e:
+        _log.append("Test " + str(i+1) + ": ERROR (" + str(e) + ")")
+
+print('===TEST_RESULTS===')
+print(json.dumps({'passed': _passed, 'total': len(_tc), 'log': _log}))
+`;
+    } else {
+      testSuite = `
 ${code}
 
 const _tc = ${JSON.stringify(problem.testCases)};
@@ -202,9 +245,10 @@ let _log = [];
   console.log(JSON.stringify({ passed: _passed, total: _tc.length, log: _log }));
 })();
 `;
+    }
 
     try {
-      const data = await executeCodeInBrowser('javascript', testSuite);
+      const data = await executeCodeInBrowser(learningLanguage, testSuite);
       
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);

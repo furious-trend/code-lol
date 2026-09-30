@@ -16,14 +16,16 @@ export default function LessonExplanationPage() {
   const router = useRouter();
   const id = Number(params.id);
   
-  const lesson = allLessons.find(l => l.id === id);
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+  const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
+  const [lesson, setLesson] = useState<any>(null);
+
   const examples = lesson?.examples || [];
   
   const [currentSlide, setCurrentSlide] = useState(0);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
   const supabase = createClient();
-  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
 
   useEffect(() => {
     async function loadPref() {
@@ -31,16 +33,26 @@ export default function LessonExplanationPage() {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('humor_preference')
+          .select('humor_preference, learning_language')
           .eq('id', user.id)
           .single();
         if (profile?.humor_preference) {
           setHumorPref(profile.humor_preference);
         }
+        if (profile?.learning_language) {
+          setLearningLanguage(profile.learning_language);
+        }
       }
     }
     loadPref();
   }, [supabase]);
+
+  useEffect(() => {
+    import('@/lib/lessons').then(module => {
+      const allLessons = module.getAllLessons(learningLanguage);
+      setLesson(allLessons.find(l => l.id === id));
+    });
+  }, [id, learningLanguage]);
 
   const handleExplain = async (code: string) => {
     if (!code) return;
@@ -208,7 +220,7 @@ export default function LessonExplanationPage() {
             
             {/* Desktop page indicator */}
             <div className="hidden lg:flex gap-2">
-              {examples.map((_, idx) => (
+              {examples.map((_: any, idx: number) => (
                 <div 
                   key={idx} 
                   className={`w-2 h-2 rounded-full transition-all ${currentSlide === idx ? 'bg-pink-500 scale-125' : 'bg-zinc-800'}`}

@@ -11,10 +11,13 @@ import { Bugsy } from '@/components/Bugsy';
 import Link from 'next/link';
 import Confetti from 'react-confetti';
 
+import { createClient } from '@/lib/supabase/client';
+
 export default function BattleRoomPage() {
   const params = useParams();
   const router = useRouter();
   const roomCode = params.room_code as string;
+  const supabase = createClient();
   
   const { battle, participants, loading, currentUserId } = useBattle(roomCode);
   
@@ -24,6 +27,24 @@ export default function BattleRoomPage() {
   const [rawOutput, setRawOutput] = useState('');
   const [testResults, setTestResults] = useState<{passed: number, total: number, log: string[]} | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
+
+  useEffect(() => {
+    async function loadPref() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('learning_language')
+          .eq('id', user.id)
+          .single();
+        if (profile?.learning_language) {
+          setLearningLanguage(profile.learning_language);
+        }
+      }
+    }
+    loadPref();
+  }, [supabase]);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const problem = battle ? problems.find(p => p.id === battle.problem_id) : null;
@@ -34,11 +55,15 @@ export default function BattleRoomPage() {
   // Sync starter code
   useEffect(() => {
     if (problem && !code && !myParticipantRecord?.submission_code) {
-      setCode(problem.starterCode);
+      if (learningLanguage === 'python' && problem.starterCodePython) {
+        setCode(problem.starterCodePython);
+      } else {
+        setCode(problem.starterCode);
+      }
     } else if (myParticipantRecord?.submission_code && !code) {
       setCode(myParticipantRecord.submission_code);
     }
-  }, [problem, myParticipantRecord, code]);
+  }, [problem, myParticipantRecord, code, learningLanguage]);
 
   // Timer logic
   useEffect(() => {
@@ -121,10 +146,48 @@ export default function BattleRoomPage() {
     setRawOutput('');
     setTestResults(null);
 
-    const funcNameMatch = problem.starterCode.match(/function\s+([a-zA-Z0-9_]+)/);
-    const functionName = funcNameMatch ? funcNameMatch[1] : 'solution';
+    let functionName = 'solution';
+    if (learningLanguage === 'python') {
+       const funcNameMatch = (problem.starterCodePython || problem.starterCode).match(/def\s+([a-zA-Z0-9_]+)/);
+       if (funcNameMatch) functionName = funcNameMatch[1];
+    } else {
+       const funcNameMatch = problem.starterCode.match(/function\s+([a-zA-Z0-9_]+)/);
+       if (funcNameMatch) functionName = funcNameMatch[1];
+    }
 
-    const testSuite = `
+    let testSuite = '';
+    
+    if (learningLanguage === 'python') {
+      testSuite = `
+${code}
+
+import json
+_tc = json.loads('${JSON.stringify(problem.testCases).replace(/'/g, "\\'")}')
+_passed = 0
+_log = []
+
+for i, tc in enumerate(_tc):
+    try:
+        if '${functionName}' not in globals():
+            _log.append("Test " + str(i+1) + ": ERROR (Function '${functionName}' not found)")
+            continue
+            
+        fn = globals()['${functionName}']
+        result = fn(*tc['input'])
+        
+        if result == tc['expected']:
+            _passed += 1
+            _log.append("Test " + str(i+1) + ": PASS")
+        else:
+            _log.append("Test " + str(i+1) + ": FAIL")
+    except Exception as e:
+        _log.append("Test " + str(i+1) + ": ERROR (" + str(e) + ")")
+
+print('===TEST_RESULTS===')
+print(json.dumps({'passed': _passed, 'total': len(_tc), 'log': _log}))
+`;
+    } else {
+      testSuite = `
 ${code}
 
 const _tc = ${JSON.stringify(problem.testCases)};
@@ -169,9 +232,10 @@ let _log = [];
   console.log(JSON.stringify({ passed: _passed, total: _tc.length, log: _log }));
 })();
 `;
+    }
 
     try {
-      const data = await executeCodeInBrowser('javascript', testSuite);
+      const data = await executeCodeInBrowser(learningLanguage, testSuite);
       
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);

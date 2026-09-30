@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { allLessons, Lesson, Tier } from '@/lib/lessons';
+import { getAllLessons, Lesson, Tier } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { Bugsy } from '@/components/Bugsy';
@@ -183,7 +183,27 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
 
 export default function LessonsPage() {
   const [activeTier, setActiveTier] = useState<Tier>('Beginner');
+  const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
+  const supabase = createClient();
 
+  useEffect(() => {
+    async function loadLanguage() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('learning_language')
+          .eq('id', user.id)
+          .single();
+        if (profile?.learning_language) {
+          setLearningLanguage(profile.learning_language);
+        }
+      }
+    }
+    loadLanguage();
+  }, [supabase]);
+
+  const allLessons = getAllLessons(learningLanguage);
   const filteredLessons = allLessons.filter(lesson => lesson.tier === activeTier);
 
   // Group lessons by chapter

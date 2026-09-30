@@ -49,7 +49,8 @@ describe('useMemeSound', () => {
       "/sounds/tamil/right/evalavo_pannitom.mp3",
       "/sounds/tamil/right/if_you_are_bad.mp3",
       "/sounds/tamil/right/vadivelu_bomb.mp3",
-      "/sounds/tamil/right/vadivelu.mp3"
+      "/sounds/tamil/right/vadivelu.mp3",
+      "/sounds/tamil/right/seeman-buhaha.mp3"
     ];
 
     expect(expectedSuccessSounds).toContain(soundUrl);
@@ -79,7 +80,8 @@ describe('useMemeSound', () => {
       "/sounds/general/wrong/tf_nemesis.mp3",
       "/sounds/general/wrong/directed-by-robert-b_voI2Z4T.mp3",
       "/sounds/general/wrong/dexter-meme.mp3",
-      "/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3"
+      "/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3",
+      "/sounds/general/wrong/let-her-go.mp3"
     ];
 
     expect(expectedFailSounds).toContain(soundUrl);

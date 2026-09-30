@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
-import { allLessons } from '@/lib/lessons';
+import { getAllLessons } from '@/lib/lessons';
 import Link from 'next/link';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
@@ -20,13 +20,16 @@ import { useMicroCelebration } from '@/hooks/useMicroCelebration';
 interface LearnPageClientProps {
   initialLevel: number;
   initialHumorPref: 'general' | 'tamil';
+  learningLanguage?: string;
 }
 
-export default function LearnPageClient({ initialLevel, initialHumorPref }: LearnPageClientProps) {
+export default function LearnPageClient({ initialLevel, initialHumorPref, learningLanguage = 'javascript' }: LearnPageClientProps) {
   const [currentLevel, setCurrentLevel] = useState<number>(initialLevel);
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>(initialHumorPref);
   const [viewMode, setViewMode] = useState<'lesson' | 'map'>('lesson');
   const [isLoadingLevel, setIsLoadingLevel] = useState(false);
+  
+  const allLessons = getAllLessons(learningLanguage);
 
   const handleSelectLevel = (level: number) => {
     setIsLoadingLevel(true);
@@ -86,6 +89,8 @@ export default function LearnPageClient({ initialLevel, initialHumorPref }: Lear
               currentLevel={currentLevel} 
               setCurrentLevel={handleSelectLevel} 
               humorPref={humorPref} 
+              learningLanguage={learningLanguage}
+              allLessons={allLessons}
             />
           </motion.div>
         )}
@@ -94,7 +99,7 @@ export default function LearnPageClient({ initialLevel, initialHumorPref }: Lear
   );
 }
 
-function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel: number, setCurrentLevel: (level: number) => void, humorPref: 'general' | 'tamil' }) {
+function LessonView({ currentLevel, setCurrentLevel, humorPref, learningLanguage, allLessons }: { currentLevel: number, setCurrentLevel: (level: number) => void, humorPref: 'general' | 'tamil', learningLanguage: string, allLessons: any[] }) {
   const lesson = allLessons[currentLevel - 1];
   
   // Editor & Run State
@@ -142,7 +147,7 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
     
     // 1. Syntax Checks
     if (lesson.verificationChecks) {
-      const syntaxChecks = lesson.verificationChecks.filter(c => c.type === 'requires_syntax');
+      const syntaxChecks = lesson.verificationChecks.filter((c: any) => c.type === 'requires_syntax');
       for (const check of syntaxChecks) {
         if (check.pattern && !new RegExp(check.pattern).test(code)) {
           setOutput(`Check Failed: ${check.expectedMessage}`);
@@ -173,7 +178,7 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
       let expectedCallCountMsg = "";
 
       if (lesson.verificationChecks) {
-        const callCountChecks = lesson.verificationChecks.filter(c => c.type === 'requires_call_count');
+        const callCountChecks = lesson.verificationChecks.filter((c: any) => c.type === 'requires_call_count');
         if (callCountChecks.length > 0) {
           expectsCallCount = true;
           expectedCallCountMsg = callCountChecks[0].expectedMessage;
@@ -182,14 +187,14 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
         }
       }
 
-      const data = await executeCodeInBrowser('javascript', codeToExecute, assertions);
+      const data = await executeCodeInBrowser(learningLanguage, codeToExecute, assertions);
       
       if (!data.error) {
         const finalOutput = data.output || 'Code ran successfully with no output.';
         
         // 3. Output Checks
         if (lesson.verificationChecks) {
-          const outputChecks = lesson.verificationChecks.filter(c => c.type === 'requires_output');
+          const outputChecks = lesson.verificationChecks.filter((c: any) => c.type === 'requires_output');
           for (const check of outputChecks) {
             if (check.pattern && !new RegExp(check.pattern).test(finalOutput)) {
               setOutput(`${finalOutput}\n\nCheck Failed: ${check.expectedMessage}`);
@@ -367,7 +372,7 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref }: { currentLevel
             <div className="flex-1 relative">
               <Editor
                 height="100%"
-                language="javascript"
+                language={learningLanguage === 'python' ? 'python' : 'javascript'}
                 theme="vs-dark"
                 value={code}
                 onChange={(value) => setCode(value || '')}
