@@ -24,8 +24,8 @@ export const pythonBeginnerLessons: Lesson[] = [
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "(?:let|const|var)\\s+",
-              expectedMessage: "Your code runs, but it doesn't actually declare a variable. Use 'let' or 'const'."
+              pattern: "^[a-zA-Z_]\\\\w*\\\\s*=",
+              expectedMessage: "Your code runs, but it doesn't actually declare a variable. Use variable assignment."
             }
           ]
 },
@@ -37,7 +37,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "📊",
     funnyExplanationGeneral: "Data types are like phone notifications—they pop up everywhere and you're not always sure what they mean",
     funnyExplanationTamil: "Data types are like the cast in a Hari movie—you've got the hero (string), the comedian (boolean), and a hundred side actors (numbers) doing their own thing.",
-    codeExample: "status = 'It\\'s Complicated'\nsingles = 1\nisHappy = False\nprint(type(status, type(singles, type(isHappy)",
+    codeExample: "status = 'It\\'s Complicated'\nsingles = 1\nisHappy = False\nprint(type(status), type(singles), type(isHappy))",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "Which of these is a Boolean?",
@@ -47,13 +47,13 @@ export const pythonBeginnerLessons: Lesson[] = [
     examples: [
       { explanation: "Strings for text.", code: "name = 'Batman'\nprint(name)" },
       { explanation: "Numbers for math.", code: "price = 99.99\nprint(price * 2)" },
-      { explanation: "Booleans for logic.", code: "isHungry = True\nif (isHungry) print('Eat!')" }
+      { explanation: "Booleans for logic.", code: "isHungry = True\nif isHungry:\n  print('Eat!')" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "typeof\\s+",
-              expectedMessage: "Your code runs, but doesn't seem to check any data types. Try using the 'typeof' operator!"
+              pattern: "type\\\\(",
+              expectedMessage: "Your code runs, but doesn't seem to check any data types. Try using the 'type()' function!"
             }
           ]
 },
@@ -75,7 +75,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     examples: [
       { explanation: "Accessing items by index.", code: "colors = ['Red', 'Green', 'Blue']\nprint(colors[1]) # Green" },
       { explanation: "Updating an item in an array.", code: "scores = [10, 20]\nscores[1] = 99\nprint(scores)" },
-      { explanation: "Getting the length of an array.", code: "pets = ['Dog', 'Cat', 'Fish']\nprint(pets.__len__()) # 3" }
+      { explanation: "Getting the length of an array.", code: "pets = ['Dog', 'Cat', 'Fish']\nprint(len(pets)) # 3" }
     ],
       verificationChecks: [
             {
@@ -121,7 +121,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "🔁",
     funnyExplanationGeneral: "For loops are like autocorrect on your phone—it keeps repeating the same mistake over and over",
     funnyExplanationTamil: "For loops are like a Vijay movie dance step—repeat the same 'Dappankuthu' 100 times until the director says cut!",
-    codeExample: "for (minutes = 1 minutes <= 5 minutes++) {\n  print('Scrolling reel #' + minutes)\n}",
+    codeExample: "for minutes in range(1, 6):\n  print('Scrolling reel #' + str(minutes))",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "What are the three parts of a standard for loop?",
@@ -129,14 +129,14 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Basic counting loop.", code: "for (i = 0 i < 3 i++) {\n  print(i)\n}" },
-      { explanation: "Looping over an array.", code: "items = ['A', 'B', 'C']\nfor (i = 0 i < items.__len__() i++) {\n  print(items[i])\n}" },
-      { explanation: "Counting backwards.", code: "for (i = 3 i > 0 i--) {\n  print('Countdown:', i)\n}" }
+      { explanation: "Basic counting loop.", code: "for i in range(3):\n  print(i)" },
+      { explanation: "Looping over an array.", code: "items = ['A', 'B', 'C']\nfor item in items:\n  print(item)" },
+      { explanation: "Counting backwards.", code: "for i in range(3, 0, -1):\n  print('Countdown:', i)" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "for\\s*\\(",
+              pattern: "for\\s+",
               expectedMessage: "Your code runs, but it doesn't actually use a 'for' loop yet — give it another shot!"
             },
             {
@@ -153,7 +153,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "☕",
     funnyExplanationGeneral: "While loops are like checking your phone for a text from someone—you keep going back hoping something new is there, but it's always the same",
     funnyExplanationTamil: "While loops are like waiting for an Ajith movie update—you just keep looping and waiting until the condition (producer tweets) finally becomes True.",
-    codeExample: "broke = False\ncups = 0\nwhile (!broke && cups < 3) {\n  print('One more chai!')\n  cups++\n}",
+    codeExample: "broke = False\ncups = 0\nwhile not broke and cups < 3:\n  print('One more chai!')\n  cups += 1",
     gifKeyword: "waiting forever",
     miniQuizQuestion: {
       question: "When does a while loop stop executing?",
@@ -161,14 +161,14 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Basic while loop.", code: "count = 0\nwhile (count < 3) {\n  print(count)\n  count++\n}" },
-      { explanation: "Waiting for a condition.", code: "ready = False\nchecks = 0\nwhile (!ready) {\n  if (++checks > 2) ready = True\n  print('Checking...')\n}" },
-      { explanation: "Do-while (runs at least once).", code: "x = 10\ndo {\n  print('Ran once!')\n} while (x < 5)" }
+      { explanation: "Basic while loop.", code: "count = 0\nwhile count < 3:\n  print(count)\n  count += 1" },
+      { explanation: "Waiting for a condition.", code: "ready = False\nchecks = 0\nwhile not ready:\n  checks += 1\n  if checks > 2: ready = True\n  print('Checking...')" },
+      { explanation: "Do-while (runs at least once).", code: "x = 10\nwhile True:\n  print('Ran once!')\n  if x >= 5: break" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "while\\s*\\(",
+              pattern: "while\\s+",
               expectedMessage: "Your code runs, but it doesn't actually use a 'while' loop yet — give it another shot!"
             },
             {
@@ -185,7 +185,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "🔀",
     funnyExplanationGeneral: "Conditionals are like your phone's low battery warning: if you charge it, you're good, else you're calling your mom to pick you up",
     funnyExplanationTamil: "Conditionals are like dealing with a strict dad: 'If (marks > 90) get a bike, Else get an umbrella for walking'.",
-    codeExample: "isBored = True\nif (isBored) {\n  print('Opening Insta...')\n} else {\n  print('Writing code!')\n}",
+    codeExample: "isBored = True\nif isBored:\n  print('Opening Insta...')\nelse:\n  print('Writing code!')",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
       question: "What happens if the condition in an `if` statement is False?",
@@ -193,14 +193,14 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Basic if statement.", code: "if (5 > 3) {\n  print('Math works!')\n}" },
-      { explanation: "If / Else.", code: "rain = True\nif (rain) print('Umbrella')\nelse print('Sunglasses')" },
-      { explanation: "Else If chain.", code: "score = 85\nif (score > 90) print('A')\nelse if (score > 80) print('B')\nelse print('C')" }
+      { explanation: "Basic if statement.", code: "if 5 > 3:\n  print('Math works!')" },
+      { explanation: "If / Else.", code: "rain = True\nif rain:\n  print('Umbrella')\nelse:\n  print('Sunglasses')" },
+      { explanation: "Else If chain.", code: "score = 85\nif score > 90:\n  print('A')\nelif score > 80:\n  print('B')\nelse:\n  print('C')" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "if\\s*\\(",
+              pattern: "if\\s+",
               expectedMessage: "Your code runs, but you didn't use an 'if' statement to make a decision."
             }
           ]
@@ -213,7 +213,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "🤖",
     funnyExplanationGeneral: "Functions are like phone notifications—you think they're helpful, but sometimes they just keep popping up and interrupting everything",
     funnyExplanationTamil: "Functions are like calling Vadivelu for help—you pass in the problem, and he returns an epic disaster, but at least it's reusable!",
-    codeExample: "def orderBiryani(isSpicy):\n  if (isSpicy) return '🔥 Spicy Biryani'\n  return 'Normal Biryani'\n}\nprint(orderBiryani(True))",
+    codeExample: "def orderBiryani(isSpicy):\n  if isSpicy:\n    return '🔥 Spicy Biryani'\n  return 'Normal Biryani'\nprint(orderBiryani(True))",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "What keyword is used to send a value back out of a function?",
@@ -221,14 +221,14 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 2
     },
     examples: [
-      { explanation: "Basic function declaration.", code: "def sayHi():\n  print('Hi!')\n}\nsayHi()" },
-      { explanation: "Function with parameters.", code: "def add(a, b):\n  return a + b\n}\nprint(add(2, 3))" },
-      { explanation: "Function expression (assigned to a variable).", code: "greet = function(name) {\n  return 'Hello ' + name\n}\nprint(greet('John'))" }
+      { explanation: "Basic function declaration.", code: "def sayHi():\n  print('Hi!')\nsayHi()" },
+      { explanation: "Function with parameters.", code: "def add(a, b):\n  return a + b\nprint(add(2, 3))" },
+      { explanation: "Function expression (assigned to a variable).", code: "greet = lambda name: 'Hello ' + name\nprint(greet('John'))" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "(?:function\\s+|=>)",
+              pattern: "def\\s+",
               expectedMessage: "Your code runs, but you need to define a function to complete this lesson."
             },
             {
@@ -256,7 +256,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     examples: [
       { explanation: "Arithmetic operators.", code: "print(10 + 5)\nprint(10 - 2)\nprint(10 * 3)\nprint(10 / 2)" },
       { explanation: "Comparison operators.", code: "print(5 > 3) # True\nprint(10 <= 10) # True\nprint(1 != 2) # True" },
-      { explanation: "Logical operators (AND / OR).", code: "print(True && False) # False\nprint(True || False) # True" }
+      { explanation: "Logical operators (AND / OR).", code: "print(True and False) # False\nprint(True or False) # True" }
     ],
       verificationChecks: [
             {
@@ -283,7 +283,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     },
     examples: [
       { explanation: "Single vs Double quotes.", code: "single = 'Hi'\ndouble = \"Hello\"\nprint(single, double)" },
-      { explanation: "String length.", code: "word = 'JavaScript'\nprint(word.__len__()) # 10" },
+      { explanation: "String length.", code: "word = 'JavaScript'\nprint(len(word)) # 10" },
       { explanation: "Getting a specific character.", code: "text = 'Code'\nprint(text[0]) # C" }
     ],
       verificationChecks: [
@@ -386,7 +386,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "🔭",
     funnyExplanationGeneral: "Variables are like phone notifications—they can pop up anywhere and change everything",
     funnyExplanationTamil: "Variable scope is like local rowdy vs international don—a local 'let' has no power outside its own street (block).",
-    codeExample: "globalGossip = 'Everyone knows'\ndef myHouse():\n  secret = 'Only I know'\n  print(globalGossip)\n}\nmyHouse()",
+    codeExample: "globalGossip = 'Everyone knows'\ndef myHouse():\n  secret = 'Only I know'\n  print(globalGossip)\nmyHouse()",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "If a variable is declared inside a function using `let`, can it be accessed outside?",
@@ -395,7 +395,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     },
     examples: [
       { explanation: "Global Scope.", code: "x = 10\ndef show(): print(x) }\nshow()" },
-      { explanation: "Local/Function Scope.", code: "def local():\n  y = 5\n}\n# print(y) # Error! y is not defined" },
+      { explanation: "Local/Function Scope.", code: "def local():\n  y = 5\n# print(y) # Error! y is not defined" },
       { explanation: "Block Scope (and const).", code: "if (True) {\n  z = 100\n}\n# print(z) # Error! z is trapped in the block" }
     ],
       verificationChecks: [
@@ -470,7 +470,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "❓",
     funnyExplanationGeneral: "Ternary operator is like a traffic light—it's either go or stop, with no annoying yellow phase",
     funnyExplanationTamil: "Ternary operator is like a quick punch dialogue—short, sharp, and hits you with either 'Success' or 'Failure' in one line.",
-    codeExample: "marks = 85\nresult = (marks > 40) ? 'Pass 🎉' : 'Fail 💀'\nprint(result)",
+    codeExample: "marks = 85\nresult = 'Pass 🎉' if marks > 40 else 'Fail 💀'\nprint(result)",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
       question: "Which symbol separates the 'True' outcome from the 'False' outcome in a ternary operator?",
@@ -478,14 +478,14 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 2
     },
     examples: [
-      { explanation: "Basic ternary.", code: "isRaining = True\naction = isRaining ? 'Stay inside' : 'Go outside'\nprint(action)" },
-      { explanation: "Inline rendering (common in React).", code: "loggedIn = False\nprint(loggedIn ? 'Welcome!' : 'Please log in')" },
-      { explanation: "Nested ternaries (please don't do this).", code: "score = 90\ngrade = score > 80 ? 'A' : score > 60 ? 'B' : 'C'\nprint(grade)" }
+      { explanation: "Basic ternary.", code: "isRaining = True\naction = 'Stay inside' if isRaining else 'Go outside'\nprint(action)" },
+      { explanation: "Inline rendering (common in React).", code: "loggedIn = False\nprint('Welcome!' if loggedIn else 'Please log in')" },
+      { explanation: "Nested ternaries (please don't do this).", code: "score = 90\ngrade = 'A' if score > 80 else ('B' if score > 60 else 'C')\nprint(grade)" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "\\?.*:",
+              pattern: "if\\s+.*\\s+else",
               expectedMessage: "Your code runs, but you need to use the ternary operator (? :) for this exercise."
             }
           ]
@@ -498,7 +498,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "📝",
     funnyExplanationGeneral: "Template literals are like phone notifications - they fill in the blanks, but sometimes with embarrassing results",
     funnyExplanationTamil: "Template literals are like a Harris Jayaraj song—you just plug in some random English words \`\${here}\` and it sounds beautiful.",
-    codeExample: "name = 'Batman'\ncity = 'Gotham'\nprint(`${name} protects ${city}`)",
+    codeExample: "name = 'Batman'\ncity = 'Gotham'\nprint(f'{name} protects {city}')",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
       question: "Which character is used to create a template literal?",
@@ -506,8 +506,8 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 2
     },
     examples: [
-      { explanation: "Basic interpolation.", code: "age = 30\nprint(`I am ${age} years old`)" },
-      { explanation: "Math inside interpolation.", code: "print(`2 + 2 is ${2 + 2}`)" },
+      { explanation: "Basic interpolation.", code: "age = 30\nprint(f'I am {age} years old')" },
+      { explanation: "Math inside interpolation.", code: "print(f'2 + 2 is {2 + 2}')" },
       { explanation: "Multi-line strings without \\n.", code: "poem = `Roses are red\nViolets are blue`\nprint(poem)" }
     ],
       verificationChecks: [
@@ -554,7 +554,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "🎭",
     funnyExplanationGeneral: "Truthy values are like a fully charged phone, but falsy values are like a dead battery—you're not going anywhere",
     funnyExplanationTamil: "Truthy values are like a 'mass' hero entry—everyone believes it. Falsy values are like the villain's henchmen—completely useless.",
-    codeExample: "if ('False') { print('This runs because string is truthy!') }\nif (0) { print('This won\\'t run') }",
+    codeExample: "if 'False':\n  print('This runs because string is truthy!')\nif 0:\n  print('This won\\'t run')",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
       question: "Which of the following is considered a 'truthy' value?",
@@ -562,14 +562,14 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 3
     },
     examples: [
-      { explanation: "Falsy values.", code: "if (!0 && !'') {\n  print('Both are falsy')\n}" },
-      { explanation: "Truthy values (even empty arrays!).", code: "if ([] && {}) {\n  print('Objects and arrays are ALWAYS truthy')\n}" },
+      { explanation: "Falsy values.", code: "if (not 0 and not '') {\n  print('Both are falsy')\n}" },
+      { explanation: "Truthy values (even empty arrays!).", code: "if ([] and {}) {\n  print('Objects and arrays are ALWAYS truthy')\n}" },
       { explanation: "Using OR (||) for default values.", code: "name = ''\ndisplayName = name || 'Anonymous'\nprint(displayName)" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "if\\s*\\(",
+              pattern: "if\\s+",
               expectedMessage: "Use an 'if' statement to test if a value is truthy or falsy."
             }
           ]
@@ -610,7 +610,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "🕹️",
     funnyExplanationGeneral: "Switch statements are like phone notifications—you think you're handling each case individually, but really you're just swiping through them all to get to the one that matters",
     funnyExplanationTamil: "Switch statements are like going to a Saravana Bhavan—you have 10 cases (idli, dosa, pongal) and a default (just coffee).",
-    codeExample: "day = 3\nswitch(day) {\n  case 1: print('Monday') break\n  case 3: print('Wednesday') break\n  default: print('Other day')\n}",
+    codeExample: "day = 3\nmatch day:\n  case 1:\n    print('Monday')\n  case 3:\n    print('Wednesday')\n  case _:\n    print('Other day')",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "What keyword is used to stop a `switch` statement from executing the next cases?",
@@ -618,14 +618,14 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 3
     },
     examples: [
-      { explanation: "Basic Switch.", code: "fruit = 'Apple'\nswitch(fruit) {\n  case 'Apple': print('Red') break\n  case 'Banana': print('Yellow') break\n}" },
-      { explanation: "Default case (fallback).", code: "color = 'Purple'\nswitch(color) {\n  case 'Red': print('Stop') break\n  default: print('Go')\n}" },
-      { explanation: "Fall-through (forgetting break).", code: "val = 1\nswitch(val) {\n  case 1:\n  case 2: print('1 or 2') break\n}" }
+      { explanation: "Basic Switch.", code: "fruit = 'Apple'\nmatch fruit:\n  case 'Apple':\n    print('Red')\n  case 'Banana':\n    print('Yellow')" },
+      { explanation: "Default case (fallback).", code: "color = 'Purple'\nmatch color:\n  case 'Red':\n    print('Stop')\n  case _:\n    print('Go')" },
+      { explanation: "Fall-through (forgetting break).", code: "val = 1\nmatch val:\n  case 1 | 2:\n    print('1 or 2')" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "switch\\s*\\(",
+              pattern: "match\\s+",
               expectedMessage: "Your code runs, but it doesn't use a 'switch' statement."
             },
             {
@@ -643,7 +643,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     sticker: "🪆",
     funnyExplanationGeneral: "Nested loops are like traffic circles—you think you're making progress, but you're just ending up back where you started",
     funnyExplanationTamil: "Nested loops are like a Tamil serial plot—loops inside loops inside loops, and it runs for 5 years.",
-    codeExample: "for (i = 1 i <= 2 i++) {\n  for (j = 1 j <= 2 j++) {\n    print(`i=${i}, j=${j}`)\n  }\n}",
+    codeExample: "for i in range(1, 3):\n  for j in range(1, 3):\n    print(f'i={i}, j={j}')",
     gifKeyword: "going in circles",
     miniQuizQuestion: {
       question: "If an outer loop runs 3 times and an inner loop runs 4 times, how many total times does the inner code run?",
@@ -651,9 +651,9 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Basic nested loop.", code: "for (i=0 i<2 i++) {\n  for (j=0 j<2 j++) {\n    print(i, j)\n  }\n}" },
-      { explanation: "Creating a grid.", code: "grid = ''\nfor (r=0 r<3 r++) {\n  for (c=0 c<3 c++) {\n    grid += '* '\n  }\n  grid += '\\n'\n}\nprint(grid)" },
-      { explanation: "Nested loop over an array of arrays.", code: "matrix = [[1, 2], [3, 4]]\nfor (i=0 i<matrix.__len__() i++) {\n  for (j=0 j<matrix[i].__len__() j++) {\n    print(matrix[i][j])\n  }\n}" }
+      { explanation: "Basic nested loop.", code: "for i in range(2):\n  for j in range(2):\n    print(i, j)" },
+      { explanation: "Creating a grid.", code: "grid = ''\nfor r in range(3):\n  for c in range(3):\n    grid += '* '\n  grid += '\\n'\nprint(grid)" },
+      { explanation: "Nested loop over an array of arrays.", code: "matrix = [[1, 2], [3, 4]]\nfor row in matrix:\n  for col in row:\n    print(col)" }
     ],
       verificationChecks: [
             {
@@ -768,19 +768,19 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 0
     },
     examples: [
-      { explanation: "Step 1: Setup a loop that counts backwards.", code: "for (i = 3 i > 0 i--) {\n  print(i)\n}" },
-      { explanation: "Step 2: Add an if statement inside the loop.", code: "for (i = 3 i > 0 i--) {\n  if (i == 1) {\n    print('Almost there...')\n  }\n  print(i)\n}" },
+      { explanation: "Step 1: Setup a loop that counts backwards.", code: "for i in range(3, 0, -1):\n  print(i)" },
+      { explanation: "Step 2: Add an if statement inside the loop.", code: "for i in range(3, 0, -1):\n  if i == 1:\n    print('Almost there...')\n  print(i)" },
       { explanation: "Step 3: Print GO! at the end.", code: "print('GO!')" }
     ],
       verificationChecks: [
             {
               type: "requires_syntax",
-              pattern: "for\\s*\\(",
+              pattern: "for\\s+",
               expectedMessage: "Use a for loop to count down."
             },
             {
               type: "requires_syntax",
-              pattern: "if\\s*\\(",
+              pattern: "if\\s+",
               expectedMessage: "Use an if statement inside the loop."
             },
             {
@@ -806,7 +806,7 @@ export const pythonBeginnerLessons: Lesson[] = [
     },
     examples: [
       { explanation: "Step 1: Create an array of loot.", code: "loot = ['Sword', 'Shield', 'Potion']" },
-      { explanation: "Step 2: Loop through the loot and print it.", code: "for (i = 0 i < loot.__len__() i++) {\n  print('Found: ' + loot[i])\n}" },
+      { explanation: "Step 2: Loop through the loot and print it.", code: "for (i = 0 i < len(loot) i++) {\n  print('Found: ' + loot[i])\n}" },
       { explanation: "Step 3: Remove the last item and add 'Gold'.", code: "loot.pop()\nloot.append('Gold')\nprint(loot)" }
     ],
       verificationChecks: [
@@ -822,8 +822,8 @@ export const pythonBeginnerLessons: Lesson[] = [
             },
             {
               type: "requires_syntax",
-              pattern: "\\.push",
-              expectedMessage: "Use .push to add an item to the array."
+              pattern: "\\.append",
+              expectedMessage: "Use .append() to add an item to the array."
             }
           ]
 },
@@ -843,8 +843,8 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 0
     },
     examples: [
-      { explanation: "Step 1: Write a function taking parameters.", code: "def attack(base, bonus):\n  return base + bonus\n}" },
-      { explanation: "Step 2: Use an array inside the function.", code: "def totalDamage(hits):\n  total = 0\n  for(i=0 i<hits.__len__() i++) total += hits[i]\n  return total\n}" },
+      { explanation: "Step 1: Write a function taking parameters.", code: "def attack(base, bonus):\n  return base + bonus" },
+      { explanation: "Step 2: Use an array inside the function.", code: "def totalDamage(hits):\n  total = 0\n  for(i=0 i<len(hits) i++) total += hits[i]\n  return total\n}" },
       { explanation: "Step 3: Call the function and print the result.", code: "myHits = [10, 20, 15]\nprint('Total DMG:', totalDamage(myHits))" }
     ],
       verificationChecks: [
@@ -876,8 +876,8 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 0
     },
     examples: [
-      { explanation: "Step 1: Check for None.", code: "def greetUser(name):\n  if (!name) return 'Who are you?'\n  return 'Hi ' + name\n}" },
-      { explanation: "Step 2: Use falsy checks for safe math.", code: "def safeAdd(a, b):\n  numA = Number(a) || 0\n  numB = Number(b) || 0\n  return numA + numB\n}" },
+      { explanation: "Step 1: Check for None.", code: "def greetUser(name=None):\n  if not name:\n    return 'Who are you?'\n  return 'Hi ' + name" },
+      { explanation: "Step 2: Use falsy checks for safe math.", code: "def safeAdd(a=None, b=None):\n  numA = int(a) if a else 0\n  numB = int(b) if b else 0\n  return numA + numB" },
       { explanation: "Step 3: Test with weird inputs.", code: "print(safeAdd('5', None)) # 5" }
     ],
       verificationChecks: [
@@ -909,8 +909,8 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 0
     },
     examples: [
-      { explanation: "Step 1: Setup player and enemy objects.", code: "player = { hp: 100, name: 'Hero' }\nenemy = { hp: 50, name: 'Slime' }" },
-      { explanation: "Step 2: Create a battle function using ternary operators and loops.", code: "def battle(p, e):\n  while(p.hp > 0 && e.hp > 0) {\n    e.hp -= 20\n    if (e.hp > 0) p.hp -= 10\n  }\n  return p.hp > 0 ? `${p.name} Wins!` : `${e.name} Wins!`\n}" },
+      { explanation: "Step 1: Setup player and enemy objects.", code: "player = { 'hp': 100, 'name': 'Hero' }\nenemy = { 'hp': 50, 'name': 'Slime' }" },
+      { explanation: "Step 2: Create a battle function using ternary operators and loops.", code: "def battle(p, e):\n  while p['hp'] > 0 and e['hp'] > 0:\n    e['hp'] -= 20\n    if e['hp'] > 0:\n      p['hp'] -= 10\n  return f\"{p['name']} Wins!\" if p['hp'] > 0 else f\"{e['name']} Wins!\"" },
       { explanation: "Step 3: Execute the game.", code: "print(battle(player, enemy))" }
     ],
       verificationChecks: [
@@ -926,7 +926,7 @@ export const pythonBeginnerLessons: Lesson[] = [
             },
             {
               type: "requires_syntax",
-              pattern: "\\?.*:",
+              pattern: "if\\s+.*\\s+else",
               expectedMessage: "Use a ternary operator to decide the winner."
             }
           ]
