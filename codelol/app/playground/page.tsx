@@ -85,7 +85,7 @@ function PlaygroundContent() {
     clearRoast();
     
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const data = await executeCodeInBrowser(language, code);
 
       if (!data.error) {

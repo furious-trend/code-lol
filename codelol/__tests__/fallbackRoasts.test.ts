@@ -5,6 +5,7 @@ import {
   generalProudFallbacks, 
   tamilProudFallbacks 
 } from '../lib/fallbackRoasts';
+import { describe, it, expect } from 'vitest';
 
 describe('fallbackRoasts', () => {
   it('should have 4 distinct arrays', () => {

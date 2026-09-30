@@ -252,7 +252,7 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref, learningLanguage
   const handleLevelComplete = async () => {
     setIsSaving(true);
     try {
-      await saveLessonProgress(currentLevel);
+      await saveLessonProgress(currentLevel, learningLanguage);
     } catch (e) {
       console.error("Error saving progress", e);
     } finally {

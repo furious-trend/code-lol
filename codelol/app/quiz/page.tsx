@@ -18,6 +18,7 @@ export default function QuizPage() {
   const [score, setScore] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+  const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const supabase = createClient();
 
   useEffect(() => {
@@ -26,11 +27,14 @@ export default function QuizPage() {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('humor_preference')
+          .select('humor_preference, learning_language')
           .eq('id', user.id)
           .single();
         if (profile?.humor_preference) {
           setHumorPref(profile.humor_preference);
+        }
+        if (profile?.learning_language) {
+          setLearningLanguage(profile.learning_language);
         }
       }
     }
@@ -95,7 +99,7 @@ export default function QuizPage() {
   const completeQuiz = async () => {
     setIsSaving(true);
     try {
-      await saveQuizProgress();
+      await saveQuizProgress(learningLanguage);
     } catch (err: unknown) {
       console.error('Unexpected error saving progress:', (err as Error)?.message || err);
     } finally {

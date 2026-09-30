@@ -39,7 +39,7 @@ describe('FriendBell Notification Center', () => {
     const bellIcon = await screen.findByRole('button');
     fireEvent.click(bellIcon);
     
-    expect(screen.getByText(/Match Invites/i)).toBeDefined();
+    expect(screen.getByText(/Friend Requests/i)).toBeDefined();
     expect(screen.getByText(/Milestones/i)).toBeDefined();
     expect(screen.getByText(/Updates/i)).toBeDefined();
   });

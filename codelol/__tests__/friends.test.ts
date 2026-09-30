@@ -23,7 +23,8 @@ describe('Friends API', () => {
   it('searchUsers searches profiles by display_name', async () => {
     const mockSelect = vi.fn().mockReturnThis();
     const mockIlike = vi.fn().mockReturnThis();
-    const mockLimit = vi.fn().mockResolvedValue({ data: [{ id: '1', display_name: 'Bugsy' }], error: null });
+    const mockNeq = vi.fn().mockResolvedValue({ data: [{ id: '1', display_name: 'Bugsy' }], error: null });
+    const mockLimit = vi.fn().mockReturnValue({ neq: mockNeq });
     
     const client = createClient();
     (client.from as any).mockReturnValue({
@@ -45,12 +46,12 @@ describe('Friends API', () => {
     });
 
     const success = await sendFriendRequest('friend-123');
-    expect(client.from).toHaveBeenCalledWith('friends');
+    expect(client.from).toHaveBeenCalledWith('friendships');
     expect(mockInsert).toHaveBeenCalledWith({
       user_id: 'test-user-id',
       friend_id: 'friend-123',
       status: 'pending'
     });
-    expect(success).toBe(true);
+    expect(success.success).toBe(true);
   });
 });

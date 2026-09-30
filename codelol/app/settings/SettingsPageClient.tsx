@@ -41,9 +41,11 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
   useEffect(() => {
     // Read local audio settings
     const storedMuted = localStorage.getItem('sound_muted');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedMuted !== null) setSoundMuted(storedMuted === 'true');
     
     const storedVolume = localStorage.getItem('sound_volume');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedVolume !== null) setSoundVolume(parseFloat(storedVolume));
   }, []);
 
@@ -69,6 +71,7 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedCheckUsername = useCallback(
+    // eslint-disable-next-line react-hooks/use-memo
     debounce((name: string, uid: string) => checkUsername(name, uid), 500),
     []
   );

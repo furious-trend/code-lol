@@ -8,6 +8,7 @@ export function AmbientJoke() {
 
   useEffect(() => {
     // Only select the joke on the client to avoid hydration mismatch
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setJoke(getRandomJoke());
   }, []);
 

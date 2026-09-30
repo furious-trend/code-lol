@@ -22,6 +22,7 @@ export function useMessages(friendId: string | null) {
   }, [friendId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadMessages();
   }, [loadMessages]);
 

@@ -10,6 +10,7 @@ function ToastContent() {
 
   useEffect(() => {
     if (searchParams?.get('toast') === 'welcome-back') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShow(true);
       const newUrl = window.location.pathname;
       window.history.replaceState({}, '', newUrl);

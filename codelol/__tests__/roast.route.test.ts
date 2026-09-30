@@ -1,6 +1,7 @@
 import { POST } from '../app/api/roast/route';
 import { NextRequest } from 'next/server';
 import { checkRateLimit } from '../lib/rateLimit';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // Mock dependencies
 vi.mock('../lib/rateLimit', () => ({

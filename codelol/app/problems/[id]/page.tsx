@@ -270,6 +270,7 @@ let _log = [];
           
           if (parsedResults.passed === parsedResults.total) {
             // Calculate solve time
+            // eslint-disable-next-line
             const solveTimeMs = startTimeRef.current ? Date.now() - startTimeRef.current : 0;
             
             // Check milestone before save
@@ -300,7 +301,7 @@ let _log = [];
               timeComplexity,
               spaceComplexity,
               pointsAwarded: 100 // Fixed base points for now
-            });
+            }, learningLanguage);
             
             if (isNew && (completedBefore.length + 1) % 5 === 0) {
               setMilestoneData({

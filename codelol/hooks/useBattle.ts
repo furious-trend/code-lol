@@ -34,6 +34,7 @@ export function useBattle(roomCode: string | null) {
   }, [roomCode]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
   }, [loadData]);
 

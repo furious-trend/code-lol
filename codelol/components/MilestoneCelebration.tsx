@@ -15,6 +15,7 @@ export function MilestoneCelebration({ milestone, type, onDismiss }: MilestoneCe
   const [windowDimension, setWindowDimension] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setWindowDimension({ width: window.innerWidth, height: window.innerHeight });
   }, []);
 

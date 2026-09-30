@@ -8,6 +8,7 @@ export function useMicroCelebration(featureKey: string) {
   useEffect(() => {
     const key = `codelol_celebrated_${featureKey}`;
     const didCelebrate = localStorage.getItem(key) === 'true';
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHasCelebrated(didCelebrate);
   }, [featureKey]);
 

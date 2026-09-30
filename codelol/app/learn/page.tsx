@@ -16,7 +16,7 @@ export default async function LearnPage() {
   if (user) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('current_level, humor_preference, learning_language')
+      .select('current_level, python_current_level, humor_preference, learning_language')
       .eq('id', user.id)
       .single();
       
@@ -24,9 +24,11 @@ export default async function LearnPage() {
       learningLanguage = profile.learning_language;
     }
 
-    if (profile?.current_level) {
+    const activeLevel = learningLanguage === 'python' ? profile?.python_current_level : profile?.current_level;
+
+    if (activeLevel) {
       const lessons = getAllLessons(learningLanguage);
-      const maxLevel = Math.min(profile.current_level, lessons.length);
+      const maxLevel = Math.min(activeLevel, lessons.length);
       currentLevel = Math.max(1, maxLevel);
     }
     if (profile?.humor_preference === 'tamil' || profile?.humor_preference === 'general') {

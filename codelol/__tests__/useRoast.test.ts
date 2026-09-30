@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { useRoast } from '../hooks/useRoast';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('useRoast', () => {
   let fetchMock: any;
