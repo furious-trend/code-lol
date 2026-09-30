@@ -1,24 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getPendingRequests } from '@/lib/friends';
+import { getPendingRequests, acceptFriendRequest, FriendRequest } from '@/lib/friends';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function FriendBell() {
-  const [count, setCount] = useState(0);
+  const [requests, setRequests] = useState<FriendRequest[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [streak, setStreak] = useState(0);
 
   useEffect(() => {
-    async function fetchCount() {
+    async function fetchRequests() {
       try {
         const pending = await getPendingRequests();
-        setCount(pending.length);
+        setRequests(pending);
       } catch (err) {
-        setCount(0);
+        setRequests([]);
       }
     }
-    fetchCount();
+    fetchRequests();
 
     const syncStreak = () => {
       const profileStr = localStorage.getItem('userProfile');
@@ -48,9 +48,9 @@ export function FriendBell() {
         className="relative p-2 text-zinc-400 hover:text-white transition-colors outline-none origin-top"
       >
         <span className="text-xl">🔔</span>
-        {count > 0 && (
+        {requests.length > 0 && (
           <span className="absolute top-0 right-0 bg-purple-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(168,85,247,0.8)] animate-pulse">
-            {count}
+            {requests.length}
           </span>
         )}
       </motion.button>
@@ -69,19 +69,28 @@ export function FriendBell() {
             </div>
             <div className="max-h-96 overflow-y-auto p-4 space-y-6">
               
-              {/* Match Invites Section */}
+              {/* Friend Requests Section */}
               <section>
-                <h4 className="text-xs uppercase font-bold text-zinc-500 mb-2">Match Invites</h4>
-                {count > 0 ? (
-                  <div className="bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/30 mb-2">
-                    <p className="text-sm font-medium text-white mb-2">New Battle Invite!</p>
-                    <div className="flex gap-2">
-                      <button className="flex-1 bg-green-500 hover:bg-green-400 text-white text-xs font-bold py-1.5 rounded-lg transition-colors">Accept</button>
-                      <button className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white text-xs font-bold py-1.5 rounded-lg transition-colors">Decline</button>
+                <h4 className="text-xs uppercase font-bold text-zinc-500 mb-2">Friend Requests</h4>
+                {requests.length > 0 ? (
+                  requests.map(req => (
+                    <div key={req.id} className="bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/30 mb-2">
+                      <p className="text-sm font-medium text-white mb-2">{req.profiles?.display_name || 'Someone'} wants to be friends!</p>
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={async () => {
+                            await acceptFriendRequest(req.id);
+                            setRequests(requests.filter(r => r.id !== req.id));
+                          }}
+                          className="flex-1 bg-green-500 hover:bg-green-400 text-white text-xs font-bold py-1.5 rounded-lg transition-colors">Accept</button>
+                        <button 
+                          onClick={() => setRequests(requests.filter(r => r.id !== req.id))}
+                          className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white text-xs font-bold py-1.5 rounded-lg transition-colors">Dismiss</button>
+                      </div>
                     </div>
-                  </div>
+                  ))
                 ) : (
-                  <p className="text-sm text-zinc-500">No new invites</p>
+                  <p className="text-sm text-zinc-500">No new requests</p>
                 )}
               </section>
 

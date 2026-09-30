@@ -42,7 +42,7 @@ export async function sendFriendRequest(friendId: string): Promise<boolean> {
   if (!userData.user) return false;
 
   const { error } = await supabase
-    .from('friends')
+    .from('friendships')
     .insert({
       user_id: userData.user.id,
       friend_id: friendId,
@@ -64,7 +64,7 @@ export async function acceptFriendRequest(requestId: string): Promise<boolean> {
 
   // We ensure the user accepting it is the friend_id via RLS, but it's safe to just update by ID
   const { error } = await supabase
-    .from('friends')
+    .from('friendships')
     .update({ status: 'accepted' })
     .eq('id', requestId)
     .eq('friend_id', userData.user.id);
@@ -84,10 +84,10 @@ export async function getPendingRequests(): Promise<FriendRequest[]> {
 
   // Get requests where I am the friend_id and status is pending
   const { data, error } = await supabase
-    .from('friends')
+    .from('friendships')
     .select(`
       *,
-      profiles!friends_user_id_fkey(*)
+      profiles!friendships_user_id_fkey(*)
     `)
     .eq('friend_id', userData.user.id)
     .eq('status', 'pending');
@@ -108,11 +108,11 @@ export async function getFriends(): Promise<FriendRequest[]> {
 
   // Get friends where I am either user_id or friend_id and status is accepted
   const { data, error } = await supabase
-    .from('friends')
+    .from('friendships')
     .select(`
       *,
-      user_profile:profiles!friends_user_id_fkey(*),
-      friend_profile:profiles!friends_friend_id_fkey(*)
+      user_profile:profiles!friendships_user_id_fkey(*),
+      friend_profile:profiles!friendships_friend_id_fkey(*)
     `)
     .eq('status', 'accepted')
     .or(`user_id.eq.${userData.user.id},friend_id.eq.${userData.user.id}`);
