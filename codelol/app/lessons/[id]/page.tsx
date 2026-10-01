@@ -77,7 +77,7 @@ export default function LessonExplanationPage() {
       clearRoast();
     } else {
       // Auto-transition to the execution page
-      router.push(`/playground?snippet=${lesson.id}`);
+      router.push(`/learn?level=${lesson.id}`);
     }
   };
 

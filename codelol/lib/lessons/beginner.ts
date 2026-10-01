@@ -10,6 +10,7 @@ export const beginnerLessons: Lesson[] = [
     funnyExplanationGeneral: "Variables are like phone notifications—you think you've cleared them all, but more just keep coming",
     funnyExplanationTamil: "Variables are like a Rajini movie intro—oru thadava sonna nooru thadava sonna mathiri, unless you use 'let' to change it!",
     codeExample: "let fridgeLabel = 'Leftover Biryani';\nlet actualFood = 'Frozen Dal';\nconsole.log('Label says:', fridgeLabel);\nconsole.log('Mom actually put:', actualFood);",
+    expectedOutput: "Label says: Leftover Biryani",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "What keyword do we use to declare a variable that can change later?",

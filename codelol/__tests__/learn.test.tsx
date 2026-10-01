@@ -38,7 +38,25 @@ vi.mock('@monaco-editor/react', () => ({
 
 describe('LearnPageClient', () => {
   it('loads level from props immediately', () => {
-    render(<LearnPageClient initialLevel={3} initialHumorPref="general" />);
+    render(<LearnPageClient initialLevel={3} highestUnlockedLevel={5} initialHumorPref="general" />);
     expect(screen.getByText(/Level 3 of 100/i)).toBeTruthy();
+  });
+
+  it('allows navigating to next level if unlocked', () => {
+    render(<LearnPageClient initialLevel={3} highestUnlockedLevel={5} initialHumorPref="general" />);
+    const nextBtn = screen.getByText(/Next Level →/i) as HTMLButtonElement;
+    expect(nextBtn.disabled).toBe(false);
+  });
+
+  it('disables next level button if at highest unlocked level', () => {
+    render(<LearnPageClient initialLevel={5} highestUnlockedLevel={5} initialHumorPref="general" />);
+    const nextBtn = screen.getByText(/Next Level →/i) as HTMLButtonElement;
+    expect(nextBtn.disabled).toBe(true);
+  });
+
+  it('disables previous level button on level 1', () => {
+    render(<LearnPageClient initialLevel={1} highestUnlockedLevel={5} initialHumorPref="general" />);
+    const prevBtn = screen.getByText(/← Previous Level/i) as HTMLButtonElement;
+    expect(prevBtn.disabled).toBe(true);
   });
 });

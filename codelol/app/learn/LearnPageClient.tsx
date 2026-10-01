@@ -19,11 +19,12 @@ import { useMicroCelebration } from '@/hooks/useMicroCelebration';
 
 interface LearnPageClientProps {
   initialLevel: number;
+  highestUnlockedLevel: number;
   initialHumorPref: 'general' | 'tamil';
   learningLanguage?: string;
 }
 
-export default function LearnPageClient({ initialLevel, initialHumorPref, learningLanguage = 'javascript' }: LearnPageClientProps) {
+export default function LearnPageClient({ initialLevel, highestUnlockedLevel, initialHumorPref, learningLanguage = 'javascript' }: LearnPageClientProps) {
   const [currentLevel, setCurrentLevel] = useState<number>(initialLevel);
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>(initialHumorPref);
   const [viewMode, setViewMode] = useState<'lesson' | 'map'>('lesson');
@@ -87,6 +88,7 @@ export default function LearnPageClient({ initialLevel, initialHumorPref, learni
           <motion.div key="lesson" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="flex-1 flex flex-col pt-12">
             <LessonView 
               currentLevel={currentLevel} 
+              highestUnlockedLevel={highestUnlockedLevel}
               setCurrentLevel={handleSelectLevel} 
               humorPref={humorPref} 
               learningLanguage={learningLanguage}
@@ -99,7 +101,7 @@ export default function LearnPageClient({ initialLevel, initialHumorPref, learni
   );
 }
 
-function LessonView({ currentLevel, setCurrentLevel, humorPref, learningLanguage, allLessons }: { currentLevel: number, setCurrentLevel: (level: number) => void, humorPref: 'general' | 'tamil', learningLanguage: string, allLessons: any[] }) {
+function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humorPref, learningLanguage, allLessons }: { currentLevel: number, highestUnlockedLevel: number, setCurrentLevel: (level: number) => void, humorPref: 'general' | 'tamil', learningLanguage: string, allLessons: any[] }) {
   const lesson = allLessons[currentLevel - 1];
   
   // Editor & Run State
@@ -193,16 +195,36 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref, learningLanguage
         const finalOutput = data.output || 'Code ran successfully with no output.';
         
         // 3. Output Checks
+        let mismatchError = '';
         if (lesson.verificationChecks) {
           const outputChecks = lesson.verificationChecks.filter((c: any) => c.type === 'requires_output');
           for (const check of outputChecks) {
             if (check.pattern && !new RegExp(check.pattern).test(finalOutput)) {
-              setOutput(`${finalOutput}\n\nCheck Failed: ${check.expectedMessage}`);
-              setHasRunSuccessfully(false);
-              setIsRunning(false);
-              return;
+              mismatchError = `❌ Output mismatch!\nExpected: ${check.expectedMessage}\nReceived: ${finalOutput}`;
+              break;
             }
           }
+        }
+
+        if (!mismatchError && lesson.expectedOutput) {
+           let matched = true;
+           if (typeof lesson.expectedOutput === 'string') {
+             matched = finalOutput.includes(lesson.expectedOutput);
+           } else if (lesson.expectedOutput instanceof RegExp) {
+             matched = lesson.expectedOutput.test(finalOutput);
+           }
+           if (!matched) {
+             mismatchError = `❌ Output mismatch!\nExpected: ${lesson.expectedOutput}\nReceived: ${finalOutput}`;
+           }
+        }
+
+        if (mismatchError) {
+           setOutput(mismatchError);
+           await handleRoast(code, mismatchError, false, '', humorPref);
+           playMemeSound(false, humorPref);
+           setHasRunSuccessfully(false);
+           setIsRunning(false);
+           return;
         }
 
         // 4. Verification Results from Executor
@@ -305,6 +327,22 @@ function LessonView({ currentLevel, setCurrentLevel, humorPref, learningLanguage
           <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${getTierColor(lesson.tier)}`}>
             {lesson.tier} 🔥
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+           <button 
+             onClick={() => setCurrentLevel(Math.max(1, currentLevel - 1))}
+             disabled={currentLevel === 1}
+             className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50 text-zinc-300 hover:text-white text-xs font-bold rounded-lg transition-colors border border-zinc-700"
+           >
+             ← Previous Level
+           </button>
+           <button 
+             onClick={() => setCurrentLevel(Math.min(highestUnlockedLevel, currentLevel + 1))}
+             disabled={currentLevel >= highestUnlockedLevel}
+             className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50 text-zinc-300 hover:text-white text-xs font-bold rounded-lg transition-colors border border-zinc-700"
+           >
+             Next Level →
+           </button>
         </div>
         <div className="text-sm font-medium text-zinc-500 flex gap-4">
           <Link href="/" className="hover:text-zinc-300 transition-colors">Home</Link>

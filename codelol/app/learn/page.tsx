@@ -4,11 +4,12 @@ import { getAllLessons } from "@/lib/lessons";
 import { Suspense } from "react";
 import Loading from "./loading";
 
-export default async function LearnPage() {
+export default async function LearnPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const supabase = await createClient();
-
+  const params = await searchParams;
 
   let currentLevel = 1;
+  let highestUnlockedLevel = 1;
   let humorPref: 'general' | 'tamil' = 'general';
   let learningLanguage = 'javascript';
 
@@ -29,7 +30,16 @@ export default async function LearnPage() {
     if (activeLevel) {
       const lessons = getAllLessons(learningLanguage);
       const maxLevel = Math.min(activeLevel, lessons.length);
-      currentLevel = Math.max(1, maxLevel);
+      highestUnlockedLevel = Math.max(1, maxLevel);
+      currentLevel = highestUnlockedLevel;
+      
+      // Override currentLevel if a valid level query param is provided and unlocked
+      if (params.level && typeof params.level === 'string') {
+        const requestedLevel = parseInt(params.level, 10);
+        if (!isNaN(requestedLevel) && requestedLevel >= 1 && requestedLevel <= highestUnlockedLevel) {
+          currentLevel = requestedLevel;
+        }
+      }
     }
     if (profile?.humor_preference === 'tamil' || profile?.humor_preference === 'general') {
       humorPref = profile.humor_preference;
@@ -40,6 +50,7 @@ export default async function LearnPage() {
     <Suspense fallback={<Loading />}>
       <LearnPageClient 
         initialLevel={currentLevel} 
+        highestUnlockedLevel={highestUnlockedLevel}
         initialHumorPref={humorPref}
         learningLanguage={learningLanguage}
       />

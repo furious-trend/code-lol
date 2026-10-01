@@ -26,6 +26,7 @@ export type Lesson = {
   funnyExplanationGeneral: string;
   funnyExplanationTamil: string;
   codeExample: string;
+  expectedOutput?: string | RegExp;
   gifKeyword: string;
   miniQuizQuestion: QuizQuestion;
   topicRequirement?: {

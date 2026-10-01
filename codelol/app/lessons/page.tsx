@@ -9,7 +9,7 @@ import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { Bugsy } from '@/components/Bugsy';
 
-function LessonCard({ lesson }: { lesson: Lesson }) {
+function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, isLearned: boolean, onToggleLearned: () => void }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
@@ -57,6 +57,11 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
           <div className="flex items-center gap-4 mb-4">
             <span className="text-4xl">{lesson.sticker}</span>
             <h3 className="text-2xl font-bold group-hover/header:text-pink-400 transition-colors">{lesson.title}</h3>
+            {isLearned && (
+              <span className="ml-auto text-xs uppercase tracking-widest font-bold text-green-400 border border-green-500 bg-green-900/40 px-3 py-1 rounded-full shadow-[0_0_15px_rgba(74,222,128,0.5)]">
+                Learned ✓
+              </span>
+            )}
           </div>
           <span className="text-zinc-500 bg-zinc-800 rounded-full w-8 h-8 flex items-center justify-center group-hover/header:bg-pink-500 group-hover/header:text-white transition-colors">
             {isExpanded ? '▲' : '▼'}
@@ -163,19 +168,33 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
         )}
       </div>
 
-      <div className="flex gap-4 mt-4">
-        <Link 
-          href={`/lessons/${lesson.id}`}
-          className={`flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold py-3 px-6 rounded-full transition-transform text-center flex items-center justify-center gap-2 ${isExpanded ? 'hover:scale-105 active:scale-95' : 'opacity-80 hover:opacity-100'}`}
-        >
-          Learn In Depth 📚
-        </Link>
-        <Link 
-          href={`/playground?snippet=${lesson.id}`}
-          className={`flex-1 bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-3 px-6 rounded-full transition-transform text-center flex items-center justify-center gap-2 ${isExpanded ? 'hover:scale-105 active:scale-95' : 'opacity-80 hover:opacity-100'}`}
-        >
-          Try It Out <span className="text-xl">🚀</span>
-        </Link>
+      <div className="flex flex-col gap-4 mt-4">
+        <label className="flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-zinc-950/50 hover:bg-zinc-800 transition-colors border border-zinc-800">
+          <input 
+            type="checkbox" 
+            checked={isLearned}
+            onChange={onToggleLearned}
+            className="w-5 h-5 rounded border-zinc-700 text-green-500 focus:ring-green-500 focus:ring-offset-zinc-900 bg-zinc-900 cursor-pointer"
+          />
+          <span className={`font-medium ${isLearned ? 'text-green-400' : 'text-zinc-400'}`}>
+            {isLearned ? 'Learned ✓' : 'Mark as Learned'}
+          </span>
+        </label>
+        
+        <div className="flex gap-4">
+          <Link 
+            href={`/lessons/${lesson.id}`}
+            className={`flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold py-3 px-6 rounded-full transition-transform text-center flex items-center justify-center gap-2 ${isExpanded ? 'hover:scale-105 active:scale-95' : 'opacity-80 hover:opacity-100'}`}
+          >
+            Learn In Depth 📚
+          </Link>
+          <Link 
+            href={`/learn?level=${lesson.id}`}
+            className={`flex-1 bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-3 px-6 rounded-full transition-transform text-center flex items-center justify-center gap-2 ${isExpanded ? 'hover:scale-105 active:scale-95' : 'opacity-80 hover:opacity-100'}`}
+          >
+            Practice in Arena 🚀
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -184,24 +203,51 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
 export default function LessonsPage() {
   const [activeTier, setActiveTier] = useState<Tier>('Beginner');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
+  const [learnedLessons, setLearnedLessons] = useState<number[]>([]);
   const supabase = createClient();
 
   useEffect(() => {
-    async function loadLanguage() {
+    async function loadData() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('learning_language')
+          .select('learning_language, learned_lessons')
           .eq('id', user.id)
           .single();
         if (profile?.learning_language) {
           setLearningLanguage(profile.learning_language);
         }
+        if (profile?.learned_lessons) {
+          setLearnedLessons(profile.learned_lessons);
+        }
+      } else {
+        const stored = localStorage.getItem('learned_lessons');
+        if (stored) {
+          try {
+            setLearnedLessons(JSON.parse(stored));
+          } catch (e) {}
+        }
       }
     }
-    loadLanguage();
+    loadData();
   }, [supabase]);
+
+  const handleToggleLearned = async (lessonId: number) => {
+    const isLearned = learnedLessons.includes(lessonId);
+    const newLessons = isLearned 
+      ? learnedLessons.filter(id => id !== lessonId)
+      : [...learnedLessons, lessonId];
+    
+    setLearnedLessons(newLessons);
+    
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from('profiles').update({ learned_lessons: newLessons }).eq('id', user.id);
+    } else {
+      localStorage.setItem('learned_lessons', JSON.stringify(newLessons));
+    }
+  };
 
   const allLessons = getAllLessons(learningLanguage);
   const filteredLessons = allLessons.filter(lesson => lesson.tier === activeTier);
@@ -264,7 +310,12 @@ export default function LessonsPage() {
               </h2>
               <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
                 {groupedLessons[chapterName].map(lesson => (
-                  <LessonCard key={lesson.id} lesson={lesson} />
+                  <LessonCard 
+                    key={lesson.id} 
+                    lesson={lesson} 
+                    isLearned={learnedLessons.includes(lesson.id)}
+                    onToggleLearned={() => handleToggleLearned(lesson.id)}
+                  />
                 ))}
               </div>
             </div>
