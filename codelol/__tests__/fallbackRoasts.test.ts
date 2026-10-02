@@ -3,7 +3,8 @@ import {
   generalRoastFallbacks, 
   tamilRoastFallbacks, 
   generalProudFallbacks, 
-  tamilProudFallbacks 
+  tamilProudFallbacks,
+  FallbackRoast
 } from '../lib/fallbackRoasts';
 import { describe, it, expect } from 'vitest';
 
@@ -17,7 +18,8 @@ describe('fallbackRoasts', () => {
     expect(generalRoastFallbacks.length).toBeGreaterThan(0);
     expect(tamilRoastFallbacks.length).toBeGreaterThan(0);
     expect(generalProudFallbacks.length).toBeGreaterThan(0);
-    expect(tamilProudFallbacks.length).toBeGreaterThan(0);
+    expect(tamilProudFallbacks.length).toBe(13); // Expected exactly 13 specific fallbacks
+    expect(tamilProudFallbacks.some(f => f.roast.includes("Bloody sweet... output vandhuruchu da!"))).toBe(true);
   });
 
   describe('getRandomFallback', () => {
@@ -47,6 +49,24 @@ describe('fallbackRoasts', () => {
       
       const resultTrue = getRandomFallback(true, 'invalid' as any);
       expect(generalProudFallbacks).toContainEqual(resultTrue);
+    });
+
+    it('returns a syntax error roast if errorType is syntax', () => {
+      const result = getRandomFallback(false, 'tamil', 'syntax');
+      expect(result.errorType).toBe('syntax');
+      expect(tamilRoastFallbacks).toContainEqual(result);
+    });
+
+    it('returns a runtime error roast if errorType is runtime', () => {
+      const result = getRandomFallback(false, 'tamil', 'runtime');
+      expect(result.errorType).toBe('runtime');
+      expect(tamilRoastFallbacks).toContainEqual(result);
+    });
+
+    it('returns a logic error roast if errorType is logic', () => {
+      const result = getRandomFallback(false, 'tamil', 'logic');
+      expect(result.errorType).toBe('logic');
+      expect(tamilRoastFallbacks).toContainEqual(result);
     });
   });
 });

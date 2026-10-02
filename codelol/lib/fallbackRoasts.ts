@@ -3,6 +3,7 @@ export interface FallbackRoast {
   fix: string;
   mood: string;
   gifKeyword: string;
+  errorType?: 'syntax' | 'runtime' | 'logic';
 }
 
 export const generalRoastFallbacks: FallbackRoast[] = [
@@ -105,6 +106,80 @@ export const generalProudFallbacks: FallbackRoast[] = [
 ];
 
 export const tamilRoastFallbacks: FallbackRoast[] = [
+  // Syntax Errors
+  {
+    roast: "Oru semicolon-ah poda theriyaadha loosu... compiler-e un laptop-ah thooki kuththu-kallu mela adichu unniyoda Aadhar card-ah block panruvan!",
+    fix: "Check your syntax, semicolon or brackets.",
+    mood: "facepalm",
+    gifKeyword: "vadivelu angry",
+    errorType: 'syntax'
+  },
+  {
+    roast: "Bracket close panna theriyaadha mandaya... un code-ah paathu C++ language-e innaiku 5th floor-la irundhu kudhichi suicide pannikum!",
+    fix: "Close all brackets properly.",
+    mood: "dead",
+    gifKeyword: "tamil crying meme",
+    errorType: 'syntax'
+  },
+  {
+    roast: "Spelling mistake-la kooda oru alavu irukku da... terminal-e unaku 'LKG A, B, C' primer text book-ah thooki anuppirum!",
+    fix: "Fix your typos.",
+    mood: "disaster",
+    gifKeyword: "vadivelu facepalm",
+    errorType: 'syntax'
+  },
+  {
+    roast: "Code start aagurathukku munnadiye... un computer ehh 'Enna da ivanuku ithu kooda theriyaala' shutdown panirum",
+    fix: "Basic syntax check needed.",
+    mood: "done",
+    gifKeyword: "computer crash meme",
+    errorType: 'syntax'
+  },
+  // Runtime Errors
+  {
+    roast: "Aaramikumpodhu sema mass-ah Anirudh BGM odum... aana pathila watermelon star akitiya da.",
+    fix: "Check for runtime exceptions.",
+    mood: "screaming",
+    gifKeyword: "vadivelu screaming",
+    errorType: 'runtime'
+  },
+  {
+    roast: "Padayappa style-la mass entry... aana climax-la Kaipulla maari thidirnu code crash aagi un screen-e unna paathu ennake sirippu varthu!",
+    fix: "Prevent code crash during execution.",
+    mood: "crying_laughing",
+    gifKeyword: "kaipulla meme",
+    errorType: 'runtime'
+  },
+  {
+    roast: "Nalla gethu-ah pona ipo vetha poche kumaru",
+    fix: "Make sure all variables are defined.",
+    mood: "mind_blown",
+    gifKeyword: "tamil comedy confused",
+    errorType: 'runtime'
+  },
+  // Logic Errors
+  {
+    roast: "katuna college fees lu arumaiya program paniruka da ",
+    fix: "Check your logic.",
+    mood: "facepalm",
+    gifKeyword: "tamil sad",
+    errorType: 'logic'
+  },
+  {
+    roast: "Compiler 'Green light' kaatuvan... aana result-ah paartha, 'Dei, un moolai-la pootile irukka' nu un laptop-e blue screen aagi sethurum!",
+    fix: "Logic is completely flawed.",
+    mood: "dead",
+    gifKeyword: "blue screen fail",
+    errorType: 'logic'
+  },
+  {
+    roast: "katuna college fees ku naalu cow vangirukalam da ",
+    fix: "Rewrite the logic from scratch.",
+    mood: "disaster",
+    gifKeyword: "vadivelu done meme",
+    errorType: 'logic'
+  },
+
   {
     roast: "Enna kodumai sir idhu! This syntax error is like Vadivelu's Nesamani head getting hit by a hammer.",
     fix: "Double-check your brackets or semi-colons.",
@@ -169,75 +244,99 @@ export const tamilRoastFallbacks: FallbackRoast[] = [
 
 export const tamilProudFallbacks: FallbackRoast[] = [
   {
-    roast: "Adade! First try pass. Idhu thalapathy intro song level mass!",
-    fix: "Zero bugs, 100% mass.",
+    roast: "Bloody sweet... output vandhuruchu da!",
+    fix: "",
     mood: "party",
-    gifKeyword: "thalapathy mass dance"
+    gifKeyword: "leo bloody sweet"
   },
   {
-    roast: "Code runs flawlessly. Neenga oru raththam therikka therikka code pandra don thambi!",
-    fix: "The compiler is terrified of your power.",
-    mood: "genius",
-    gifKeyword: "tamil don meme"
-  },
-  {
-    roast: "Zero errors! Thalaivaa, neenga vera ragam, vera level!",
-    fix: "Just keep being awesome.",
-    mood: "happy",
-    gifKeyword: "rajini salute"
-  },
-  {
-    roast: "Orey run la full success. Indha vishayatha Billa kittaye solli mass pannanum!",
-    fix: "Perfect execution.",
-    mood: "mind_blown",
-    gifKeyword: "billa style"
-  },
-  {
-    roast: "Code executed perfectly! Singam kooda thaniya varum, aana unga code error illama varudhu.",
-    fix: "Roar like a lion.",
+    roast: "Appa, unga pulla urupputturuchu pa!",
+    fix: "",
     mood: "relief",
-    gifKeyword: "surya singam roar"
+    gifKeyword: "tamil happy dad"
   },
   {
-    roast: "Aaha, enna oru logic! Padayappa padathula vara Neelambari mathiri getha irukku.",
-    fix: "Absolute pure logic.",
-    mood: "party",
-    gifKeyword: "ramyakrishnan gethu"
-  },
-  {
-    roast: "Semma! Your code runs like a perfectly timed Anirudh BGM.",
-    fix: "Feel the background score.",
-    mood: "happy",
-    gifKeyword: "anirudh bgm vibe"
-  },
-  {
-    roast: "Sathiyama solren, idha paatha apdiye thillalangadi thillalangadi nu aada thonudhu!",
-    fix: "Celebrate the zero errors.",
-    mood: "party",
-    gifKeyword: "vadivelu dance happy"
-  },
-  {
-    roast: "You wrote this? Idhu oru blockbuster hit padam madhiri pakka commercial success!",
-    fix: "Hit record shattered.",
+    roast: "Naangalaam coding poda koodadha da?!",
+    fix: "",
     mood: "genius",
-    gifKeyword: "blockbuster success tamil"
+    gifKeyword: "vadivelu gethu"
   },
   {
-    roast: "Kabali da! Your output is absolute fire.",
-    fix: "Next level coding.",
+    roast: "Chellam... andha bug sethurchu chellam!",
+    fix: "",
+    mood: "done",
+    gifKeyword: "ghilli chellam"
+  },
+  {
+    roast: "Evvalavo pannittom, idhu jujubi matter!",
+    fix: "",
     mood: "mind_blown",
-    gifKeyword: "kabali fire swag"
+    gifKeyword: "jujubi matter"
+  },
+  {
+    roast: "Aahaan! Ippo pesunga da paapom!",
+    fix: "",
+    mood: "party",
+    gifKeyword: "tamil success attitude"
+  },
+  {
+    roast: "College Fees-ku nyaayam kedachuruchu ma!",
+    fix: "",
+    mood: "relief",
+    gifKeyword: "tamil happy relief"
+  },
+  {
+    roast: "Compiler bayandhuduchu, namma thaan Leo!",
+    fix: "",
+    mood: "genius",
+    gifKeyword: "leo das mass"
+  },
+  {
+    roast: "Coding-la namma Red Dragon da!",
+    fix: "",
+    mood: "party",
+    gifKeyword: "red dragon mass"
+  },
+  {
+    roast: "Enakkum output vandhuruchu... vandhuruchu da!",
+    fix: "",
+    mood: "relief",
+    gifKeyword: "vadivelu crying happy"
+  },
+  {
+    roast: "Evvalo pannittom, idha panna maattoma?!",
+    fix: "",
+    mood: "mind_blown",
+    gifKeyword: "tamil confidence meme"
+  },
+  {
+    roast: "Andha bayam irukkanum da terminal-ku!",
+    fix: "",
+    mood: "done",
+    gifKeyword: "bayam irukkanum mass"
+  },
+  {
+    roast: "Singam single-ah vandhu run panniruchu!",
+    fix: "",
+    mood: "happy",
+    gifKeyword: "singam single mass"
   }
 ];
 
-export function getRandomFallback(isSuccess: boolean, humorPref: 'general' | 'tamil' = 'general'): FallbackRoast {
+export function getRandomFallback(isSuccess: boolean, humorPref: 'general' | 'tamil' = 'general', errorType?: 'syntax' | 'runtime' | 'logic'): FallbackRoast {
   const isTamil = humorPref === 'tamil';
   
   if (isSuccess) {
     const list = isTamil ? tamilProudFallbacks : generalProudFallbacks;
     return list[Math.floor(Math.random() * list.length)];
   } else {
-    const list = isTamil ? tamilRoastFallbacks : generalRoastFallbacks;
+    let list = isTamil ? tamilRoastFallbacks : generalRoastFallbacks;
+    if (errorType) {
+      const filteredList = list.filter(r => r.errorType === errorType);
+      if (filteredList.length > 0) {
+        list = filteredList;
+      }
+    }
     return list[Math.floor(Math.random() * list.length)];
   }
 }
