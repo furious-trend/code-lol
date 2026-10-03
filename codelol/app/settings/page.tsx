@@ -24,17 +24,22 @@ export default async function Settings() {
   );
 
   const { data: { user } } = await supabase.auth.getUser();
+  const userId = user?.id || 'local-guest';
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('display_name, humor_preference, learning_language')
-    .eq('id', user!.id)
-    .single();
+  let profile = null;
+  if (user) {
+    const { data } = await supabase
+      .from('profiles')
+      .select('display_name, humor_preference, learning_language')
+      .eq('id', userId)
+      .single();
+    profile = data;
+  }
 
   return (
     <SettingsPageClient 
       initialProfile={profile ?? {}} 
-      userId={user!.id} 
+      userId={userId} 
     />
   );
 }

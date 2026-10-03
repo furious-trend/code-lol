@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { quizzes, QuizQuestion } from '@/lib/quizzes';
+import { quizzes, QuizTopic } from '@/lib/quizzes';
+import { pythonQuizzes } from '@/lib/quizzes-python';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { saveQuizProgress } from '@/lib/progress';
 import { createClient } from '@/lib/supabase/client';
@@ -25,16 +26,23 @@ export default function QuizPage() {
     async function loadPref() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('humor_preference, learning_language')
-          .eq('id', user.id)
-          .single();
-        if (profile?.humor_preference) {
-          setHumorPref(profile.humor_preference);
-        }
-        if (profile?.learning_language) {
-          setLearningLanguage(profile.learning_language);
+        if (user.id === 'local-guest') {
+          const storedHumor = localStorage.getItem('guest_humor');
+          if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
+          const storedLang = localStorage.getItem('guest_lang');
+          if (storedLang === 'python' || storedLang === 'javascript') setLearningLanguage(storedLang);
+        } else {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('humor_preference, learning_language')
+            .eq('id', user.id)
+            .single();
+          if (profile?.humor_preference) {
+            setHumorPref(profile.humor_preference);
+          }
+          if (profile?.learning_language) {
+            setLearningLanguage(profile.learning_language);
+          }
         }
       }
     }
@@ -52,7 +60,8 @@ export default function QuizPage() {
     setScore(0);
   };
 
-  const currentTopic = topic ? quizzes[topic] : null;
+  const activeQuizzes = learningLanguage === 'python' ? pythonQuizzes : quizzes;
+  const currentTopic = topic ? activeQuizzes[topic] : null;
   const currentQuiz = currentTopic ? currentTopic.questions : [];
   const currentQuestion = currentQuiz[currentQuestionIndex];
 
@@ -108,10 +117,11 @@ export default function QuizPage() {
   };
 
   if (!topic) {
+    const activeQuizzes = learningLanguage === 'python' ? pythonQuizzes : quizzes;
     const tiers = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
     const groupedTopics = tiers.map(tier => ({
       tier,
-      topics: Object.values(quizzes).filter(t => t.tier === tier)
+      topics: Object.values(activeQuizzes).filter(t => t.tier === tier)
     })).filter(g => g.topics.length > 0);
 
     const tierColors: Record<string, string> = {

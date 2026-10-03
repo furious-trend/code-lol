@@ -17,15 +17,30 @@ export type VerificationCheck = {
   expectedMessage: string;
 };
 
+export interface BiteSizedHumor {
+  meaning: string;
+  meaningGeneral?: string;
+  funnyEgTamil: string;
+  funnyEgGeneral?: string;
+}
+
+export interface WorkoutStep {
+  stepNumber: number;
+  title: string;
+  code: string;
+  lineExplanation: string;
+  memeNote?: string;
+}
+
 export type Lesson = {
   id: number;
   chapter: string;
   tier: Tier;
   title: string;
   sticker: string;
-  funnyExplanationGeneral: string;
-  funnyExplanationTamil: string;
+  biteSized: BiteSizedHumor;
   codeExample: string;
+  workoutSteps?: WorkoutStep[];
   expectedOutput?: string | RegExp;
   gifKeyword: string;
   miniQuizQuestion: QuizQuestion;

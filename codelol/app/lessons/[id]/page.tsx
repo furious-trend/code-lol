@@ -19,8 +19,10 @@ export default function LessonExplanationPage() {
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const [lesson, setLesson] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const examples = lesson?.examples || [];
+  const examples = lesson?.workoutSteps || lesson?.examples || [];
+  const hasWorkoutSteps = !!lesson?.workoutSteps;
   
   const [currentSlide, setCurrentSlide] = useState(0);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
@@ -31,16 +33,23 @@ export default function LessonExplanationPage() {
     async function loadPref() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('humor_preference, learning_language')
-          .eq('id', user.id)
-          .single();
-        if (profile?.humor_preference) {
-          setHumorPref(profile.humor_preference);
-        }
-        if (profile?.learning_language) {
-          setLearningLanguage(profile.learning_language);
+        if (user.id === 'local-guest') {
+          const storedHumor = localStorage.getItem('guest_humor');
+          if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
+          const storedLang = localStorage.getItem('guest_lang');
+          if (storedLang === 'python' || storedLang === 'javascript') setLearningLanguage(storedLang);
+        } else {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('humor_preference, learning_language')
+            .eq('id', user.id)
+            .single();
+          if (profile?.humor_preference) {
+            setHumorPref(profile.humor_preference);
+          }
+          if (profile?.learning_language) {
+            setLearningLanguage(profile.learning_language);
+          }
         }
       }
     }
@@ -48,9 +57,11 @@ export default function LessonExplanationPage() {
   }, [supabase]);
 
   useEffect(() => {
+    setIsLoading(true);
     import('@/lib/lessons').then(module => {
       const allLessons = module.getAllLessons(learningLanguage);
       setLesson(allLessons.find(l => l.id === id));
+      setIsLoading(false);
     });
   }, [id, learningLanguage]);
 
@@ -60,7 +71,16 @@ export default function LessonExplanationPage() {
     playMemeSound(false, humorPref); // Play meme sound when roast finishes
   };
 
-  if (!lesson) {
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-50 p-6 text-center">
+        <div className="animate-spin text-4xl mb-4">⚙️</div>
+        <h1 className="text-2xl font-bold text-zinc-400">Loading lesson...</h1>
+      </div>
+    );
+  }
+
+  if (!lesson && !isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-50 p-6 text-center">
         <h1 className="text-4xl font-bold mb-4">Lesson not found 😢</h1>
@@ -120,11 +140,22 @@ export default function LessonExplanationPage() {
               </div>
             </div>
 
-            {currentSlide === 0 && (
-              <div className="mb-8 p-6 bg-zinc-950/50 rounded-2xl border border-zinc-800 border-dashed">
-                <p className="text-lg text-zinc-300 italic">
-                  &quot;{humorPref === 'tamil' && lesson.funnyExplanationTamil ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}&quot;
-                </p>
+            {currentSlide === 0 && lesson.biteSized && (
+              <div className="mb-8 space-y-6">
+                <div className="p-6 bg-zinc-950/50 rounded-2xl border border-zinc-800 border-dashed">
+                  <h3 className="text-xl font-bold text-white mb-2">Meaning</h3>
+                  <p className="text-zinc-300 leading-relaxed">
+                    {humorPref === 'general' && lesson.biteSized.meaningGeneral ? lesson.biteSized.meaningGeneral : lesson.biteSized.meaning}
+                  </p>
+                </div>
+                {((humorPref === 'tamil' && lesson.biteSized.funnyEgTamil) || (humorPref === 'general' && (lesson.biteSized.funnyEgGeneral || lesson.biteSized.funnyEgTamil))) && (
+                  <div className="p-6 bg-pink-950/20 rounded-2xl border border-pink-900/50">
+                    <h3 className="text-lg font-bold text-pink-400 mb-2">Funny Eg ({humorPref === 'tamil' ? 'Tamil' : 'General'})</h3>
+                    <p className="text-pink-200/90 leading-relaxed italic">
+                      &quot;{humorPref === 'general' && lesson.biteSized.funnyEgGeneral ? lesson.biteSized.funnyEgGeneral : lesson.biteSized.funnyEgTamil}&quot;
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -136,10 +167,26 @@ export default function LessonExplanationPage() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3 }}
               >
-                <h2 className="text-xl font-bold mb-4 text-white">The Concept</h2>
-                <p className="text-lg text-zinc-300 leading-relaxed font-medium">
-                  {currentExample?.explanation || "No explanation provided for this example."}
-                </p>
+                {hasWorkoutSteps ? (
+                  <>
+                    <h2 className="text-xl font-bold mb-4 text-white">{currentExample?.title || "Workout Step"}</h2>
+                    <p className="text-lg text-zinc-300 leading-relaxed font-medium">
+                      {currentExample?.lineExplanation}
+                    </p>
+                    {currentExample?.memeNote && (
+                      <p className="mt-4 text-sm text-yellow-400 italic font-mono">
+                        Note: {currentExample.memeNote}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-xl font-bold mb-4 text-white">The Concept</h2>
+                    <p className="text-lg text-zinc-300 leading-relaxed font-medium">
+                      {currentExample?.explanation || "No explanation provided for this example."}
+                    </p>
+                  </>
+                )}
               </motion.div>
             </AnimatePresence>
           </div>

@@ -53,16 +53,23 @@ export default function ProblemSolverPage() {
     async function loadPref() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('humor_preference, learning_language')
-          .eq('id', user.id)
-          .single();
-        if (profile?.humor_preference) {
-          setHumorPref(profile.humor_preference);
-        }
-        if (profile?.learning_language) {
-          setLearningLanguage(profile.learning_language);
+        if (user.id === 'local-guest') {
+          const storedHumor = localStorage.getItem('guest_humor');
+          if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
+          const storedLang = localStorage.getItem('guest_lang');
+          if (storedLang === 'python' || storedLang === 'javascript') setLearningLanguage(storedLang);
+        } else {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('humor_preference, learning_language')
+            .eq('id', user.id)
+            .single();
+          if (profile?.humor_preference) {
+            setHumorPref(profile.humor_preference);
+          }
+          if (profile?.learning_language) {
+            setLearningLanguage(profile.learning_language);
+          }
         }
       }
     }

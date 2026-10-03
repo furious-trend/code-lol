@@ -5,7 +5,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://brxautcammf
 const supabaseStorageUrl = `${supabaseUrl}/storage/v1/object/public/gifs`;
 
 const toSupabaseUrl = (path: string) => {
-  return path.replace(/^\/gifs/, supabaseStorageUrl);
+  // Always serve from the local public folder to avoid broken links
+  return path;
 };
 
 export const tamilHappyGifs = manifest.tamil.right.map(toSupabaseUrl);

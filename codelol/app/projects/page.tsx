@@ -119,7 +119,7 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
 
         <div className="w-full md:w-auto shrink-0 flex items-center justify-center pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-zinc-800 md:pl-6 pl-4">
-          <Link href={`/playground`} className="bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 px-6 rounded-full transition-colors whitespace-nowrap text-sm border border-zinc-700">
+          <Link href={`/projects/${project.id}`} className="bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 px-6 rounded-full transition-colors whitespace-nowrap text-sm border border-zinc-700">
             Build in Playground
           </Link>
         </div>

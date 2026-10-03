@@ -178,7 +178,7 @@ const categories: Difficulty[] = ['Beginner', 'Intermediate', 'Expert'];
 categories.forEach(difficulty => {
   const categoryPrefix = difficulty.toLowerCase();
   
-  for (let i = 1; i <= 100; i++) {
+  for (let i = 1; i <= 65; i++) {
     const id = `${categoryPrefix}-${i}`;
     const handCrafted = handCraftedProblems[id];
     

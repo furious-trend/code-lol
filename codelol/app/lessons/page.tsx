@@ -28,6 +28,11 @@ function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, is
         if (profile?.humor_preference) {
           setHumorPref(profile.humor_preference);
         }
+      } else {
+        const storedHumor = localStorage.getItem('guest_humor');
+        if (storedHumor === 'tamil' || storedHumor === 'general') {
+          setHumorPref(storedHumor);
+        }
       }
     }
     loadPref();
@@ -74,13 +79,32 @@ function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, is
             
             {/* Slide 0: The Concept */}
             {currentSlide === 0 && (
-              <div className="flex-1 flex flex-col justify-center animate-in fade-in duration-300">
+              <div className="flex-1 flex flex-col justify-center animate-in fade-in duration-300 overflow-y-auto max-h-[400px] pr-2">
                 <h4 className="text-pink-400 font-bold mb-4 uppercase tracking-wider text-sm flex items-center gap-2">
                   <span>📖</span> Step 1: The Concept
                 </h4>
-                <p className="text-zinc-200 text-lg leading-relaxed bg-zinc-950/50 p-6 rounded-xl border border-zinc-800/50 shadow-inner">
-                  {humorPref === 'tamil' && lesson.funnyExplanationTamil ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}
-                </p>
+                {lesson.biteSized ? (
+                  <div className="space-y-4">
+                    <div className="bg-zinc-950/50 p-6 rounded-xl border border-zinc-800/50 shadow-inner">
+                      <h5 className="text-zinc-400 text-xs font-bold uppercase mb-2">Meaning</h5>
+                      <p className="text-zinc-200 text-lg leading-relaxed">
+                        {humorPref === 'general' && lesson.biteSized.meaningGeneral ? lesson.biteSized.meaningGeneral : lesson.biteSized.meaning}
+                      </p>
+                    </div>
+                    {((humorPref === 'tamil' && lesson.biteSized.funnyEgTamil) || (humorPref === 'general' && (lesson.biteSized.funnyEgGeneral || lesson.biteSized.funnyEgTamil))) && (
+                      <div className="bg-pink-950/20 p-6 rounded-xl border border-pink-900/50 shadow-inner">
+                         <h5 className="text-pink-500 text-xs font-bold uppercase mb-2">Funny Eg ({humorPref === 'tamil' ? 'Tamil' : 'General'})</h5>
+                         <p className="text-pink-200 text-lg leading-relaxed italic">
+                           {humorPref === 'general' && lesson.biteSized.funnyEgGeneral ? lesson.biteSized.funnyEgGeneral : lesson.biteSized.funnyEgTamil}
+                         </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-zinc-200 text-lg leading-relaxed bg-zinc-950/50 p-6 rounded-xl border border-zinc-800/50 shadow-inner">
+                    Missing explanation data.
+                  </p>
+                )}
               </div>
             )}
 
@@ -159,7 +183,7 @@ function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, is
           /* Collapsed state preview */
           <div>
             <p className="text-zinc-400 leading-relaxed line-clamp-2">
-              {humorPref === 'tamil' && lesson.funnyExplanationTamil ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}
+              {humorPref === 'general' && lesson.biteSized?.meaningGeneral ? lesson.biteSized.meaningGeneral : lesson.biteSized?.meaning}
             </p>
             <div className="mt-4 text-pink-500 text-sm font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
               Click to start learning <span>→</span>
@@ -222,11 +246,16 @@ export default function LessonsPage() {
           setLearnedLessons(profile.learned_lessons);
         }
       } else {
-        const stored = localStorage.getItem('learned_lessons');
-        if (stored) {
+        const storedLessons = localStorage.getItem('learned_lessons');
+        if (storedLessons) {
           try {
-            setLearnedLessons(JSON.parse(stored));
+            setLearnedLessons(JSON.parse(storedLessons));
           } catch (e) {}
+        }
+        
+        const storedLang = localStorage.getItem('guest_lang');
+        if (storedLang === 'python' || storedLang === 'javascript') {
+          setLearningLanguage(storedLang);
         }
       }
     }

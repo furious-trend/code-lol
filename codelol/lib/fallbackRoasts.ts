@@ -137,7 +137,7 @@ export const tamilRoastFallbacks: FallbackRoast[] = [
   },
   // Runtime Errors
   {
-    roast: "Aaramikumpodhu sema mass-ah Anirudh BGM odum... aana pathila watermelon star akitiya da.",
+    roast: "Aaramikumpodhu sema mass-ah Anirudh BGM oda pona... aana pathila watermelon star akitiya da.",
     fix: "Check for runtime exceptions.",
     mood: "screaming",
     gifKeyword: "vadivelu screaming",
@@ -286,7 +286,7 @@ export const tamilProudFallbacks: FallbackRoast[] = [
     gifKeyword: "tamil happy relief"
   },
   {
-    roast: "Compiler bayandhuduchu, namma thaan Leo!",
+    roast: "Compiler bayandhuduchu, nee tha leo nu solla matean!",
     fix: "",
     mood: "genius",
     gifKeyword: "leo das mass"

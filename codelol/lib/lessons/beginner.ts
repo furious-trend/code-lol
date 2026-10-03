@@ -7,8 +7,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Variables",
     sticker: "📦",
-    funnyExplanationGeneral: "Variables are like phone notifications—you think you've cleared them all, but more just keep coming",
-    funnyExplanationTamil: "Variables are like a Rajini movie intro—oru thadava sonna nooru thadava sonna mathiri, unless you use 'let' to change it!",
     codeExample: "let fridgeLabel = 'Leftover Biryani';\nlet actualFood = 'Frozen Dal';\nconsole.log('Label says:', fridgeLabel);\nconsole.log('Mom actually put:', actualFood);",
     expectedOutput: "Label says: Leftover Biryani",
     gifKeyword: "screaming internally",
@@ -18,9 +16,9 @@ export const beginnerLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Using let to declare a changeable variable, simulating a fridge surprise.", code: "let sweetBox = 'Cookies';\nconsole.log('Opening sweet box...');\nsweetBox = 'Sewing Kit';\nconsole.log('Result:', sweetBox);\nconsole.log('Trust issues level increased.');" },
-      { explanation: "Using const for things that never change, like Mom's rules.", code: "const TUPPERWARE = 'Moms Favorite Box';\nlet borrower = 'Me';\nconsole.log('I borrowed:', TUPPERWARE);\nborrower = 'My Friend';\nconsole.log('Now who has it?', borrower);\nconsole.log('Mom is going to be mad.');" },
-      { explanation: "Declaring multiple items at once to prepare a full meal.", code: "let dinner1 = 'Rice', dinner2 = 'Dal', drink = 'Water';\nconsole.log('Menu tonight:');\nconsole.log(dinner1);\nconsole.log(dinner2);\nconsole.log(drink);" }
+      { explanation: "Using let for things that change, like Amma's Horlicks dabba.", code: "let horlicksDabba = 'Horlicks';\nconsole.log('Outside:', horlicksDabba);\nhorlicksDabba = 'Sambar Thool';\nconsole.log('Inside:', horlicksDabba);" },
+      { explanation: "Using const for things that never change, like Appa's TV remote.", code: "const APPA_REMOTE = 'News Channel';\nconsole.log('Watching:', APPA_REMOTE);\n// APPA_REMOTE = 'Cartoon Network'; // TypeError adi vizhum!" },
+      { explanation: "Declaring multiple items for a local tea stall.", code: "let item1 = 'Tea', item2 = 'Vada', parcel = 'Bonda';\nconsole.log(item1, item2, parcel);" }
     ],
       verificationChecks: [
             {
@@ -28,7 +26,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "(?:let|const|var)\\s+",
               expectedMessage: "Your code runs, but it doesn't actually declare a variable. Use 'let' or 'const'."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Value-va store panni vekkura memory dabba (Storage box with a label).",
+                    meaningGeneral: "A memory box to store values (like a storage box with a label).",
+                    funnyEgTamil: "Amma vechirukra Horlicks dabba maari—veliya label paatha \"Horlicks\", aana ulla eduthu paatha eppovume sambar thool dhaan irukkum!",
+                    funnyEgGeneral: "Like a cookie tin your mom keeps—outside the label says 'Butter Cookies', but if you open it, it's always filled with sewing supplies!"
+                  }
 },
   {
     id: 2,
@@ -36,8 +40,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Data Types",
     sticker: "📊",
-    funnyExplanationGeneral: "Data types are like phone notifications—they pop up everywhere and you're not always sure what they mean",
-    funnyExplanationTamil: "Data types are like the cast in a Hari movie—you've got the hero (string), the comedian (boolean), and a hundred side actors (numbers) doing their own thing.",
     codeExample: "let status = 'It\\'s Complicated';\nlet singles = 1;\nlet isHappy = false;\nconsole.log(typeof status, typeof singles, typeof isHappy);",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -56,7 +58,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "typeof\\s+",
               expectedMessage: "Your code runs, but doesn't seem to check any data types. Try using the 'typeof' operator!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "The specific category of data (Number, Text, True/False) so the computer knows how to handle it.",
+                    meaningGeneral: "The specific category of data (Number, Text, True/False) so the computer knows how to handle it.",
+                    funnyEgTamil: "Ration shop-la rice, kerosene, and sugar-ah orey dabba-la pottu mix panna koodaadhu la? Adhey dhaan!",
+                    funnyEgGeneral: "Like packing for a trip: you wouldn't put your wet swimsuit, laptop, and sandwiches all in the same plastic bag, right?"
+                  }
 },
   {
     id: 3,
@@ -64,8 +72,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Arrays",
     sticker: "📚",
-    funnyExplanationGeneral: "Arrays are like phone notifications—you can't ignore them and they just keep piling up",
-    funnyExplanationTamil: "Arrays are like the seats in a local bus—everyone is packed in order, and there's always that one guy taking up three indexes.",
     codeExample: "let family = ['Uncle', 'Aunty', 'Cousin'];\nconsole.log(family[0]); // Uncle is at index 0",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -84,7 +90,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\[.*\\]",
               expectedMessage: "Your code runs, but it doesn't look like you created or used an array [] yet."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "An ordered list holding multiple items under a single variable name.",
+                    funnyEgTamil: "College canteen bench-la varisaiya ukkandhirukura gang: 0th index-la topper, last index-la sleeper!",
+          meaningGeneral: "An ordered list holding multiple items under a single variable name.",
+          funnyEgGeneral: "The gang lined up on the college canteen bench: the 0th index has the topper, the last index has the sleeper!"
+    }
 },
   {
     id: 4,
@@ -92,8 +104,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Objects",
     sticker: "🏷️",
-    funnyExplanationGeneral: "Objects are like phone notifications—you think you've handled them all, but more just keep popping up",
-    funnyExplanationTamil: "Objects are like a typical Tamil mom's kitchen cabinet—everything is labeled, but only she knows what property holds the 'murukku'.",
     codeExample: "let person = {\n  name: 'Shafiq',\n  age: 21,\n  patience: 0\n};\nconsole.log(person.name);",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -112,7 +122,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\{[\\s\\S]*\\}",
               expectedMessage: "Your code runs, but you didn't define an object {} yet."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Data stored as labeled Key-Value pairs describing one single entity.",
+                    funnyEgTamil: "College ID card: { name: \"Mano\", dept: \"Mech\", arrears: 5, status: \"Vera Maari\" }.",
+          meaningGeneral: "Data stored as labeled Key-Value pairs describing one single entity.",
+          funnyEgGeneral: "College ID card: { name: \"Mano\", dept: \"Mechanical\", arrears: 5, status: \"In a league of his own\" }."
+    }
 },
   {
     id: 5,
@@ -120,8 +136,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "For Loops",
     sticker: "🔁",
-    funnyExplanationGeneral: "For loops are like autocorrect on your phone—it keeps repeating the same mistake over and over",
-    funnyExplanationTamil: "For loops are like a Vijay movie dance step—repeat the same 'Dappankuthu' 100 times until the director says cut!",
     codeExample: "for (let minutes = 1; minutes <= 5; minutes++) {\n  console.log('Scrolling reel #' + minutes);\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -144,7 +158,13 @@ export const beginnerLessons: Lesson[] = [
               type: "requires_call_count",
               expectedMessage: "Your loop didn't seem to iterate multiple times. Make sure your loop condition allows it to run more than once!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Code that repeats an exact, pre-determined number of times.",
+                    funnyEgTamil: "PET master: \"Ground-ah exact-ah 5 round adichitu vaa da\" nu whistle adikira punishment.",
+          meaningGeneral: "Code that repeats an exact, pre-determined number of times.",
+          funnyEgGeneral: "The gym teacher blowing his whistle and yelling, \"You! Run exactly 5 laps around the track!\" as a punishment."
+    }
 },
   {
     id: 6,
@@ -152,8 +172,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "While Loops",
     sticker: "☕",
-    funnyExplanationGeneral: "While loops are like checking your phone for a text from someone—you keep going back hoping something new is there, but it's always the same",
-    funnyExplanationTamil: "While loops are like waiting for an Ajith movie update—you just keep looping and waiting until the condition (producer tweets) finally becomes true.",
     codeExample: "let broke = false;\nlet cups = 0;\nwhile (!broke && cups < 3) {\n  console.log('One more chai!');\n  cups++;\n}",
     gifKeyword: "waiting forever",
     miniQuizQuestion: {
@@ -176,7 +194,13 @@ export const beginnerLessons: Lesson[] = [
               type: "requires_call_count",
               expectedMessage: "Your loop didn't seem to iterate multiple times. Check your condition!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Code that keeps repeating continuously until a specific condition stops it.",
+                    funnyEgTamil: "Amma plate-la saapaadu vechukitte irupaanga, \"Vayiru full aayiduchu\" nu neenga kaiya vechu thadukura varaikkum!",
+          meaningGeneral: "Code that keeps repeating continuously until a specific condition stops it.",
+          funnyEgGeneral: "Your mom will keep piling food on your plate until you put your hand up and finally say, 'I'm stuffed!'"
+    }
 },
   {
     id: 7,
@@ -184,8 +208,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Conditionals (if/else)",
     sticker: "🔀",
-    funnyExplanationGeneral: "Conditionals are like your phone's low battery warning: if you charge it, you're good, else you're calling your mom to pick you up",
-    funnyExplanationTamil: "Conditionals are like dealing with a strict dad: 'If (marks > 90) get a bike, Else get an umbrella for walking'.",
     codeExample: "let isBored = true;\nif (isBored) {\n  console.log('Opening Insta...');\n} else {\n  console.log('Writing code!');\n}",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -204,7 +226,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "if\\s*\\(",
               expectedMessage: "Your code runs, but you didn't use an 'if' statement to make a decision."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Branching decisions: do one action if a condition is true, otherwise do something else.",
+                    funnyEgTamil: "if (bus vandhuchu) college-ku po; else return room-ku poi bedsheet eduthu thoongu!",
+          meaningGeneral: "Branching decisions: do one action if a condition is true, otherwise do something else.",
+          funnyEgGeneral: "if (the bus arrives) head to class; else just go back to bed and sleep in!"
+    }
 },
   {
     id: 8,
@@ -212,8 +240,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Functions",
     sticker: "🤖",
-    funnyExplanationGeneral: "Functions are like phone notifications—you think they're helpful, but sometimes they just keep popping up and interrupting everything",
-    funnyExplanationTamil: "Functions are like calling Vadivelu for help—you pass in the problem, and he returns an epic disaster, but at least it's reusable!",
     codeExample: "function orderBiryani(isSpicy) {\n  if (isSpicy) return '🔥 Spicy Biryani';\n  return 'Normal Biryani';\n}\nconsole.log(orderBiryani(true));",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -237,7 +263,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "return\\s+",
               expectedMessage: "Make sure your function returns a value using the 'return' keyword."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A reusable mini-machine that takes inputs, does work, and returns an answer whenever called.",
+                    funnyEgTamil: "Hostel kettle: Thanni oothu, Maggi podu, 2 minutes-la saapadu ready. Whenever hungry, just call makeMaggi().",
+          meaningGeneral: "A reusable mini-machine that takes inputs, does work, and returns an answer whenever called.",
+          funnyEgGeneral: "Dorm kettle: Just add water and a ramen packet, and your meal's ready in 2 minutes. Whenever hunger strikes, just call makeRamen()."
+    }
 },
   {
     id: 9,
@@ -245,8 +277,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Operators",
     sticker: "➕",
-    funnyExplanationGeneral: "Operators are like traffic lights—you think they're controlling the flow, but sometimes they just stop everything",
-    funnyExplanationTamil: "Operators are like the fight scene gravity in Boyapati movies—they push, pull, and multiply things in ways that defy logic.",
     codeExample: "let score = 95;\nlet cousinScore = '95';\nconsole.log(score == cousinScore); // true (loose)\nconsole.log(score === cousinScore); // false (strict!)",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -265,7 +295,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "(?:==|===|!=|!==|>|<|>=|<=)",
               expectedMessage: "Try using a comparison operator like == or === to compare values."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Symbols that perform calculations or comparisons (+, -, *, &&, ===).",
+                    funnyEgTamil: "Canteen master bill potutu extra ₹10 add panra andha calculator keys maari.",
+          meaningGeneral: "Symbols that perform calculations or comparisons (+, -, *, &&, ===).",
+          funnyEgGeneral: "It's like the calculator keys a shop owner uses to 'accidentally' add an extra few dollars to your bill."
+    }
 },
   {
     id: 10,
@@ -273,8 +309,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "String Basics",
     sticker: "🧵",
-    funnyExplanationGeneral: "Strings are like autocorrected text messages—you type one thing, but it comes out as something entirely different",
-    funnyExplanationTamil: "Strings are like Dhanush singing 'Why This Kolaveri Di'—you just keep adding words together until it becomes a massive hit.",
     codeExample: "let msg = 'Hello';\nlet name = \"Shafiq\";\nconsole.log(msg + ' ' + name); // concatenation",
     gifKeyword: "facepalm",
     miniQuizQuestion: {
@@ -293,7 +327,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\+",
               expectedMessage: "Try concatenating (adding) two strings together using the + operator."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Wrapping letters and sentences safely inside quotes (\" \" or ' ').",
+                    funnyEgTamil: "Auto pinnadi ezhudhurukura evergreen dialogues: \"Thaai Paasam\", \"Kandupidi En Manadhai\".",
+          meaningGeneral: "Wrapping letters and sentences safely inside quotes (\" \" or ' ').",
+          funnyEgGeneral: "The classic sayings you see everywhere, from fridge magnets to decorative pillows: 'Live, Laugh, Love', 'Dream Big'."
+    }
 },
   {
     id: 11,
@@ -301,8 +341,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Comments",
     sticker: "🤫",
-    funnyExplanationGeneral: "Comments are like old phone notifications—you swipe them away but they keep coming back",
-    funnyExplanationTamil: "Comments are like the director's cut explanations—nobody reads them during the movie, but without them, you have no idea what's happening.",
     codeExample: "// This is a single line comment\nlet x = 10; /* This is a \nmulti-line comment */\nconsole.log(x);",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -321,7 +359,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "(?:\\/\\/|\\/\\*)",
               expectedMessage: "Your code runs, but it looks like you forgot to write a comment!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Secret notes inside code for human eyes only; the computer completely ignores them.",
+                    funnyEgTamil: "Question paper munnadi teacher paakaama friend-kku bit la ezhudhi pass panra dialogue maari.",
+          meaningGeneral: "Secret notes inside code for human eyes only; the computer completely ignores them.",
+          funnyEgGeneral: "Like discretely passing a tiny cheat sheet to a friend during an exam, which the teacher completely misses, but helps your friend get through it."
+    }
 },
   {
     id: 12,
@@ -329,8 +373,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Type Conversion",
     sticker: "🔄",
-    funnyExplanationGeneral: "Type conversion is like autocorrecting your text to your ex's name",
-    funnyExplanationTamil: "Type conversion is like Kamal Haasan's Dasavatharam—suddenly a number dresses up as a string and you're just confused about who is who.",
     codeExample: "let a = '5' + 1;\nlet b = '5' - 1;\nconsole.log('a = ' + a + ', b = ' + b);",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -349,7 +391,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "(?:Number\\(|String\\()",
               expectedMessage: "Try explicitly converting a type using Number() or String()."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Forcing data to switch from one type to another (e.g., text \"5\" into actual number 5).",
+                    funnyEgTamil: "Vadivelu comedy: \"Naan collector illa, auto driver\" nu makeup pottu vesham maarura maari!",
+          meaningGeneral: "Forcing data to switch from one type to another (e.g., text \"5\" into actual number 5).",
+          funnyEgGeneral: "It's like an actor, known for playing sophisticated characters, having to put on a silly costume and declare, 'I'm not a star, I'm just the pizza delivery guy!'"
+    }
 },
   {
     id: 13,
@@ -357,8 +405,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Input/Output Basics",
     sticker: "🖨️",
-    funnyExplanationGeneral: "Input/Output is like phone notifications—you think you're in control, but they just keep coming",
-    funnyExplanationTamil: "Input/Output is like a press meet—you throw a question (input) and get a pre-planned political answer (output) on the console.",
     codeExample: "let secret = 'I love coding';\nconsole.log('The secret is:', secret);",
     gifKeyword: "this is fine fire",
     miniQuizQuestion: {
@@ -377,7 +423,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "console\\.(?:log|warn|error|table)",
               expectedMessage: "You need to print something using console.log() or similar."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Input is data given to the computer; Output is the final result it prints back.",
+                    funnyEgTamil: "Sugar cane juice machine-la karumbu thalluradhu Input, glass-la chilled juice vara vekkuradhu Output.",
+          meaningGeneral: "Input is data given to the computer; Output is the final result it prints back.",
+          funnyEgGeneral: "Putting fruit into a juicer is the Input, and getting fresh juice in a glass is the Output."
+    }
 },
   {
     id: 14,
@@ -385,8 +437,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Variable Scope",
     sticker: "🔭",
-    funnyExplanationGeneral: "Variables are like phone notifications—they can pop up anywhere and change everything",
-    funnyExplanationTamil: "Variable scope is like local rowdy vs international don—a local 'let' has no power outside its own street (block).",
     codeExample: "let globalGossip = 'Everyone knows';\nfunction myHouse() {\n  let secret = 'Only I know';\n  console.log(globalGossip);\n}\nmyHouse();",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -405,7 +455,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "let\\s+",
               expectedMessage: "Try declaring a local variable using 'let' inside a function or block."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Boundary rules defining where a variable exists and where it cannot be accessed.",
+                    funnyEgTamil: "Veetukulla amma thitturadhu 'Local Scope' (room kulla mattum kekkum); theruvula loud-speaker 'Global Scope'!",
+          meaningGeneral: "Boundary rules defining where a variable exists and where it cannot be accessed.",
+          funnyEgGeneral: "Your mom scolding you inside the house is 'Local Scope' (it only reaches the living room); a bullhorn on the street is 'Global Scope'!"
+    }
 },
   {
     id: 15,
@@ -413,8 +469,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Constants vs Variables",
     sticker: "🛑",
-    funnyExplanationGeneral: "Constants are like your WiFi password—you set it once and then you're stuck with it forever.",
-    funnyExplanationTamil: "Constants are like the villain's promise in a masala film—it never changes until the hero breaks it (which throws a TypeError).",
     codeExample: "const PI = 3.14159;\n// PI = 3; // This would cause an error!\nconsole.log('PI is', PI);",
     gifKeyword: "wifi not working",
     miniQuizQuestion: {
@@ -433,7 +487,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "const\\s+",
               expectedMessage: "Make sure you declare a constant using 'const'."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "const is locked forever; let can be reassigned whenever you want.",
+                    funnyEgTamil: "Date of Birth eppovume const (maatha mudiyaadhu); Bank balance eppovume let (innaiku ₹500, naalaiku ₹2)!",
+          meaningGeneral: "const is locked forever; let can be reassigned whenever you want.",
+          funnyEgGeneral: "Your Date of Birth is always 'const' (you can't change it); your Bank balance is always 'let' (today it's healthy, tomorrow it might be a lot less)!"
+    }
 },
   {
     id: 16,
@@ -441,8 +501,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Basic Math Operations",
     sticker: "🧮",
-    funnyExplanationGeneral: "Division is like sharing fries with a friend who takes the biggest pieces",
-    funnyExplanationTamil: "Division is like sharing biryani with friends—someone always takes the 'leg piece' (remainder) and you use modulo to find who took it.",
     codeExample: "let slices = 5;\nlet friends = 2;\nlet leftover = slices % friends;\nconsole.log('Leftover slices:', leftover);",
     gifKeyword: "salty reaction",
     miniQuizQuestion: {
@@ -461,7 +519,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "%",
               expectedMessage: "Use the modulo operator (%) to find the remainder."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Standard arithmetic: addition, subtraction, division, and modulo (% for remainder).",
+                    funnyEgTamil: "Bill split-up: Motha canteen bill ₹150; 3 friends divide pannaa aalukku ₹50, meedhi irukaadhu!",
+          meaningGeneral: "Standard arithmetic: addition, subtraction, division, and modulo (% for remainder).",
+          funnyEgGeneral: "Bill split-up: Total restaurant bill is $150; if 3 friends divide it, each gets $50, with no remainder!"
+    }
 },
   {
     id: 17,
@@ -469,8 +533,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Ternary Operator",
     sticker: "❓",
-    funnyExplanationGeneral: "Ternary operator is like a traffic light—it's either go or stop, with no annoying yellow phase",
-    funnyExplanationTamil: "Ternary operator is like a quick punch dialogue—short, sharp, and hits you with either 'Success' or 'Failure' in one line.",
     codeExample: "let marks = 85;\nlet result = (marks > 40) ? 'Pass 🎉' : 'Fail 💀';\nconsole.log(result);",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -489,7 +551,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\?.*:",
               expectedMessage: "Your code runs, but you need to use the ternary operator (? :) for this exercise."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A compact, one-line shortcut for a basic if / else statement.",
+                    funnyEgTamil: "attendance >= 75 ? \"Exam Hall\" : \"HOD Room Condonation Fine\".",
+          meaningGeneral: "A compact, one-line shortcut for a basic if / else statement.",
+          funnyEgGeneral: "attendance >= 75 ? \"You're cleared for the exam!\" : \"Meeting with the academic advisor and a waiver fee.\""
+    }
 },
   {
     id: 18,
@@ -497,8 +565,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Template Literals",
     sticker: "📝",
-    funnyExplanationGeneral: "Template literals are like phone notifications - they fill in the blanks, but sometimes with embarrassing results",
-    funnyExplanationTamil: "Template literals are like a Harris Jayaraj song—you just plug in some random English words \`\${here}\` and it sounds beautiful.",
     codeExample: "let name = 'Batman';\nlet city = 'Gotham';\nconsole.log(`${name} protects ${city}`);",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -517,7 +583,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\`.*\\$\\{.*\\}.*\\`",
               expectedMessage: "Try using backticks (`) and ${} to insert a variable into your string."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Using backticks and ${} to cleanly drop variables directly inside sentences.",
+                    funnyEgTamil: "Invitation template: \"Dear ${crush_name}, un kooda tea kudikka ready-ah irukken!\"",
+          meaningGeneral: "Using backticks and ${} to cleanly drop variables directly inside sentences.",
+          funnyEgGeneral: "Invitation template: \"Dear ${crush_name}, I'm ready to grab coffee with you!\""
+    }
 },
   {
     id: 19,
@@ -525,8 +597,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Null vs Undefined",
     sticker: "🕳️",
-    funnyExplanationGeneral: "Null is like an empty pizza box, undefined is like calling a pizza place that doesn't exist",
-    funnyExplanationTamil: "Null is like saying 'I have no money', undefined is like opening your wallet and finding a moth flying out.",
     codeExample: "let forgotToAssign;\nlet emptyOnPurpose = null;\nconsole.log(forgotToAssign, emptyOnPurpose);",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -545,7 +615,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "(?:null|undefined)",
               expectedMessage: "Try explicitly using 'null' or checking for 'undefined'."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "undefined means you forgot to assign a value; null means you intentionally marked it empty.",
+                    funnyEgTamil: "undefined = Pocket-la wallet vekkave marandhutaen; null = Wallet irukku, aana ulla kaasu illa nu unmaiya othukitaen!",
+          meaningGeneral: "undefined means you forgot to assign a value; null means you intentionally marked it empty.",
+          funnyEgGeneral: "Undefined = I forgot to even put my wallet in my pocket; Null = I have my wallet, but I've truthfully admitted there's no money inside!"
+    }
 },
   {
     id: 20,
@@ -553,8 +629,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Truthy/Falsy Values",
     sticker: "🎭",
-    funnyExplanationGeneral: "Truthy values are like a fully charged phone, but falsy values are like a dead battery—you're not going anywhere",
-    funnyExplanationTamil: "Truthy values are like a 'mass' hero entry—everyone believes it. Falsy values are like the villain's henchmen—completely useless.",
     codeExample: "if ('false') { console.log('This runs because string is truthy!'); }\nif (0) { console.log('This won\\'t run'); }",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -573,7 +647,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "if\\s*\\(",
               expectedMessage: "Use an 'if' statement to test if a value is truthy or falsy."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Sneaky values that act as true or false when dumped inside an if statement.",
+                    funnyEgTamil: "\"Naalaikku kaalaila 5 manikku kandippa padikka poren\" nu solradhu Falsy value—pesumbodhu true maari irukkum, aana matter zero!",
+          meaningGeneral: "Sneaky values that act as true or false when dumped inside an if statement.",
+          funnyEgGeneral: "Saying 'I'll definitely wake up at 5 AM tomorrow to study' is a Falsy value—it sounds true when you say it, but the actual chances are zero!"
+    }
 },
   {
     id: 21,
@@ -581,8 +661,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Basic Debugging",
     sticker: "🐛",
-    funnyExplanationGeneral: "Debugging is like searching for a missing sock—you know it's somewhere, but finding it is a whole different story",
-    funnyExplanationTamil: "Debugging is like ACP Raghavan finding the killer in Vettaiyaadu Vilaiyaadu—you look at every console log until the culprit is caught.",
     codeExample: "let codeWorks = false;\n// console.log('Trying to find the bug...');\nconsole.log('Found it! Typo.');",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -601,7 +679,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "(?:console\\.log|debugger)",
               expectedMessage: "Try using console.log() to debug!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Finding where the code blew up, understanding error logs, and removing the bug.",
+                    funnyEgTamil: "Bike start aagala-na, plug-ah kazhatti oodhi paathu petrol tank-ah thatti paakura detective vela!",
+          meaningGeneral: "Finding where the code blew up, understanding error logs, and removing the bug.",
+          funnyEgGeneral: "When the TV remote stops working, it's the detective work of taking out the batteries, blowing on them, and hitting the remote against your hand!"
+    }
 },
   {
     id: 22,
@@ -609,8 +693,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Switch Statements",
     sticker: "🕹️",
-    funnyExplanationGeneral: "Switch statements are like phone notifications—you think you're handling each case individually, but really you're just swiping through them all to get to the one that matters",
-    funnyExplanationTamil: "Switch statements are like going to a Saravana Bhavan—you have 10 cases (idli, dosa, pongal) and a default (just coffee).",
     codeExample: "let day = 3;\nswitch(day) {\n  case 1: console.log('Monday'); break;\n  case 3: console.log('Wednesday'); break;\n  default: console.log('Other day');\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -634,7 +716,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "case\\s+",
               expectedMessage: "Make sure you have at least one 'case' in your switch block."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Cleanly picking one exact match out of a long list of choices.",
+                    funnyEgTamil: "Tea shop token system: 1 na Plain Tea, 2 na Samosa, 3 na Boost. Direct order, no confusion!",
+          meaningGeneral: "Cleanly picking one exact match out of a long list of choices.",
+          funnyEgGeneral: "Imagine a deli counter token system: Token 1 for a black coffee, Token 2 for a muffin, Token 3 for a hot chocolate. You pick your number, you get exactly that item. Direct order, no confusion!"
+    }
 },
   {
     id: 23,
@@ -642,8 +730,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Nested Loops",
     sticker: "🪆",
-    funnyExplanationGeneral: "Nested loops are like traffic circles—you think you're making progress, but you're just ending up back where you started",
-    funnyExplanationTamil: "Nested loops are like a Tamil serial plot—loops inside loops inside loops, and it runs for 5 years.",
     codeExample: "for (let i = 1; i <= 2; i++) {\n  for (let j = 1; j <= 2; j++) {\n    console.log(`i=${i}, j=${j}`);\n  }\n}",
     gifKeyword: "going in circles",
     miniQuizQuestion: {
@@ -662,7 +748,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "(?:for|while).*\\{.*(?:for|while)",
               expectedMessage: "You need a loop inside another loop for this exercise."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Placing one loop inside another loop so it repeats completely on every single outer step.",
+                    funnyEgTamil: "Semester exam week: Monday to Friday outer loop; adhukulla daily 3 hours inner loop torture!",
+          meaningGeneral: "Placing one loop inside another loop so it repeats completely on every single outer step.",
+          funnyEgGeneral: "Semester exam week: Monday to Friday is the outer loop; the daily 3-hour exam is the inner loop torture!"
+    }
 },
   {
     id: 24,
@@ -670,8 +762,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Array Push/Pop Methods",
     sticker: "🛒",
-    funnyExplanationGeneral: "Array push/pop is like a cafeteria lunch line—you add or remove people and hope the food doesn't run out",
-    funnyExplanationTamil: "Push/Pop is like boarding a crowded Chennai local train—someone gets pushed in at the back, and someone else pops out at the next station.",
     codeExample: "let cart = ['Apples', 'Milk'];\ncart.push('Cookies'); // Add to end\ncart.pop(); // Remove last (Cookies)\nconsole.log(cart);",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -690,7 +780,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\.(?:push|pop)\\s*\\(",
               expectedMessage: "Try using the .push() or .pop() methods on an array."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "push adds an item to the end; pop kicks the last item out.",
+                    funnyEgTamil: "Crowded bus footboard: Pinnediyirundhu yeruradhu push, conductor thitti kadasila erakkividuradhu pop!",
+          meaningGeneral: "push adds an item to the end; pop kicks the last item out.",
+          funnyEgGeneral: "Crowded train: pushing your way in is 'push', the conductor kicking you out at the last stop is 'pop'!"
+    }
 },
   {
     id: 25,
@@ -698,8 +794,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "String Slice/Split Methods",
     sticker: "🔪",
-    funnyExplanationGeneral: "String slice/split methods are like autocorrecting a text message—you think you're fixing it, but now it's worse",
-    funnyExplanationTamil: "String slice/split methods are like autocorrecting a text message—you think you're fixing it, but now it's worse",
     codeExample: "let word = 'JavaScript';\nconsole.log(word.slice(0, 4)); // Java\nconsole.log(word.split('S')); // ['Java', 'cript']",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -718,7 +812,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\.(?:slice|split)\\s*\\(",
               expectedMessage: "Use the .slice() or .split() methods on a string."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "slice cuts out a specific portion; split chops text into a list using a divider.",
+                    funnyEgTamil: "Biryani packet-la chicken piece-ah mattum thaedi edukradhu slice; parotta-va kothu parotta panna pichi podradhu split.",
+          meaningGeneral: "slice copies a portion; split breaks a string into an array.",
+          funnyEgGeneral: "slice is like picking only the pepperoni off a pizza; split is like cutting the pizza into individual slices."
+    }
 },
   {
     id: 101,
@@ -726,8 +826,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Basics Builder",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Coding is like a treadmill—you run a lot but sometimes feel like you're getting nowhere",
-    funnyExplanationTamil: "Coding is like climbing the Palani steps—you start with energy, but halfway through you're wondering why you started.",
     codeExample: "// Create a variable 'playerName' and print a greeting.",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -751,7 +849,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "console\\.log",
               expectedMessage: "Don't forget to print the greeting using console.log."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Small exercises to verify you know how to store data and print it properly.",
+                    funnyEgTamil: "Bike otta kathukura munnadi, main stand poda theriyudhaanu check panra test!",
+          meaningGeneral: "Validating conditions before executing a block of code.",
+          funnyEgGeneral: "Testing if you know how to put the kickstand down before letting you ride the motorcycle!"
+    }
 },
   {
     id: 102,
@@ -759,8 +863,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Logic & Flow",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Workout logic is like a phone notification—you think you've silenced it, but it keeps popping up to remind you of your next set",
-    funnyExplanationTamil: "Workout logic is like a Surya training montage—lots of sweat, background music, and eventually you get the six-pack (solution).",
     codeExample: "// Write a loop that counts down from 3, then says 'GO!'",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -788,7 +890,13 @@ export const beginnerLessons: Lesson[] = [
               type: "requires_call_count",
               expectedMessage: "Make sure your loop runs multiple times."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Combining loops and conditions to solve puzzles without getting trapped in infinite loops.",
+                    funnyEgTamil: "Signal illadha T-Nagar junction-la police kitta maattama bike-ah correct route-la thiruppura trial.",
+          meaningGeneral: "Making complex branching decisions using multiple conditions.",
+          funnyEgGeneral: "Trying to navigate a 4-way intersection with broken traffic lights without getting pulled over."
+    }
 },
   {
     id: 103,
@@ -796,8 +904,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Data Mastery",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Mastering data is like having a strong WiFi signal—you finally get a connection and then your battery dies",
-    funnyExplanationTamil: "Mastering data is like packing for a trip to native—you try to fit a grinder, 3 sarees, and a TV into one array.",
     codeExample: "// Create an inventory array and add items to it using a loop.",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -826,7 +932,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\.push",
               expectedMessage: "Use .push to add an item to the array."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Practice slicing, filtering, and organizing collections of raw data.",
+                    funnyEgTamil: "Room cupboard-la kotti kedakura thuni-kulla thevaana formal shirt-ah mattum uruvi eduka kathukura skill!",
+          meaningGeneral: "Searching and retrieving specific elements from an array or object.",
+          funnyEgGeneral: "The skill of pulling out the exact dress shirt you need from a completely messy closet!"
+    }
 },
   {
     id: 104,
@@ -834,8 +946,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Function Architect",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Workout routines are like phone notifications—you get reminded to do them daily, but you often swipe them away",
-    funnyExplanationTamil: "Function architect is like being a director—you call the shots, pass the script (parameters), and hope the actors don't throw an error.",
     codeExample: "// Create a function that calculates total damage.",
     gifKeyword: "procrastination mode",
     miniQuizQuestion: {
@@ -859,7 +969,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "return\\s+",
               expectedMessage: "Make sure your function returns the total damage."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Structuring clean, reusable blocks of code that don't depend on outside mess.",
+                    funnyEgTamil: "Orey formula vechu class-la irukra 60 perukum observation calculations pottu thara setup!",
+          meaningGeneral: "Using a function to perform the same operation on multiple data points.",
+          funnyEgGeneral: "Using one formula in Excel to calculate the grades for all 60 students in the class!"
+    }
 },
   {
     id: 105,
@@ -867,8 +983,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Bug Hunter",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Bug hunter is like a personal trainer for code—you yell at it until it gets its act together",
-    funnyExplanationTamil: "Bug hunter is like being a CID—you investigate the missing semicolon while the rest of the code plays dead.",
     codeExample: "// Write a safe function that handles missing data.",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -892,7 +1006,13 @@ export const beginnerLessons: Lesson[] = [
               pattern: "(?:if|\\|\\|)",
               expectedMessage: "Check for missing or undefined data!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Deliberately reading broken stack traces and fixing errors until the build succeeds.",
+                    funnyEgTamil: "Midnight hostel room-la light-ah off pannitu orey oru kosu-va thedi adichi thoongura operation!",
+          meaningGeneral: "Debugging a specific issue in a large block of code.",
+          funnyEgGeneral: "Turning the lights off in your dorm room and hunting down that one single mosquito so you can sleep!"
+    }
 },
   {
     id: 106,
@@ -900,8 +1020,6 @@ export const beginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Final Workout: The Ultimate Trial",
     sticker: "🔥",
-    funnyExplanationGeneral: "Final workout is like a never-ending phone notification—you think you're done, but it just keeps going",
-    funnyExplanationTamil: "Final workout is the climax fight scene—you vs the compiler, flying cars, exploding objects, and only one will survive.",
     codeExample: "// Combine everything to build a mini-game logic.",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -930,6 +1048,12 @@ export const beginnerLessons: Lesson[] = [
               pattern: "\\?.*:",
               expectedMessage: "Use a ternary operator to decide the winner."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "The boss level requiring you to combine every tool in the syllabus to build a project.",
+                    funnyEgTamil: "Climax action scene-la hero ellathayum thooki potu midhichu single shot-la movie-ah mudikkira Padayappa moment!",
+          meaningGeneral: "Using advanced array methods (like map, filter, reduce) to process data in one line.",
+          funnyEgGeneral: "The climax action scene where the hero takes out everyone in a single, continuous camera shot!"
+    }
 }
 ];

@@ -2,8 +2,10 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import Editor from '@monaco-editor/react';
+import Editor, { loader } from '@monaco-editor/react';
 import { getAllLessons } from '@/lib/lessons';
+
+
 import Link from 'next/link';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
@@ -13,7 +15,6 @@ import { saveLessonProgress } from '@/lib/progress';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 import SkillTreeView from '@/components/SkillTreeView';
-import CuriosityHook from '@/components/CuriosityHook';
 import { Map as MapIcon, LayoutList } from 'lucide-react';
 import { useMicroCelebration } from '@/hooks/useMicroCelebration';
 
@@ -27,10 +28,24 @@ interface LearnPageClientProps {
 export default function LearnPageClient({ initialLevel, highestUnlockedLevel, initialHumorPref, learningLanguage = 'javascript' }: LearnPageClientProps) {
   const [currentLevel, setCurrentLevel] = useState<number>(initialLevel);
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>(initialHumorPref);
+  const [activeLang, setActiveLang] = useState<string>(learningLanguage);
   const [viewMode, setViewMode] = useState<'lesson' | 'map'>('lesson');
   const [isLoadingLevel, setIsLoadingLevel] = useState(false);
   
-  const allLessons = getAllLessons(learningLanguage);
+  useEffect(() => {
+    // If we're a guest (initial props were defaults), read from localStorage
+    const storedHumor = localStorage.getItem('guest_humor');
+    if (storedHumor === 'tamil' || storedHumor === 'general') {
+      setHumorPref(storedHumor);
+    }
+    
+    const storedLang = localStorage.getItem('guest_lang');
+    if (storedLang === 'python' || storedLang === 'javascript') {
+      setActiveLang(storedLang);
+    }
+  }, []);
+
+  const allLessons = getAllLessons(activeLang);
 
   const handleSelectLevel = (level: number) => {
     setIsLoadingLevel(true);
@@ -91,7 +106,7 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
               highestUnlockedLevel={highestUnlockedLevel}
               setCurrentLevel={handleSelectLevel} 
               humorPref={humorPref} 
-              learningLanguage={learningLanguage}
+              learningLanguage={activeLang}
               allLessons={allLessons}
             />
           </motion.div>
@@ -105,10 +120,11 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
   const lesson = allLessons[currentLevel - 1];
   
   // Editor & Run State
-  const [code, setCode] = useState(lesson?.codeExample || '');
+  const [code, setCode] = useState('// Write your code here based on the examples!\\n');
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [hasRunSuccessfully, setHasRunSuccessfully] = useState(false);
+  const [shake, setShake] = useState(false);
 
   // Auto-roast state handled by hook
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
@@ -122,10 +138,26 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
   // Micro celebrations
   const { triggerCelebration: triggerFirstRoast } = useMicroCelebration('first_roast');
 
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  };
+
+  const handleLevelComplete = async () => {
+    setIsSaving(true);
+    try {
+      await saveLessonProgress(currentLevel, learningLanguage);
+    } catch (e) {
+      console.error("Error saving progress", e);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // Reset state when lesson changes
   useEffect(() => {
     if (!lesson) return;
-    setCode(lesson.codeExample);
+    setCode('// Write your code here based on the examples!\\n');
     setOutput('');
     setHasRunSuccessfully(false);
     setShowTierComplete(false);
@@ -151,11 +183,22 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
     if (lesson.verificationChecks) {
       const syntaxChecks = lesson.verificationChecks.filter((c: any) => c.type === 'requires_syntax');
       for (const check of syntaxChecks) {
-        if (check.pattern && !new RegExp(check.pattern).test(code)) {
-          setOutput(`Check Failed: ${check.expectedMessage}`);
-          setHasRunSuccessfully(false);
-          setIsRunning(false);
-          return;
+        if (check.pattern) {
+          // Normalize pattern to handle strict anchors and over-escaped backslashes from JSON/TS definitions
+          let normalizedPattern = check.pattern.startsWith('^') ? check.pattern.slice(1) : check.pattern;
+          // If the pattern was defined as \\\\w in the TS file, it evaluates to \\w in memory. Reduce it to \w.
+          normalizedPattern = normalizedPattern.replace(/\\\\/g, '\\');
+          
+          if (!new RegExp(normalizedPattern).test(code)) {
+            const errorMsg = `Check Failed: ${check.expectedMessage}`;
+            setOutput(errorMsg);
+            await handleRoast(code, errorMsg, false, '', humorPref);
+            playMemeSound(false, humorPref);
+            setHasRunSuccessfully(false);
+            setIsRunning(false);
+            triggerShake();
+            return;
+          }
         }
       }
     }
@@ -168,6 +211,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
         await handleRoast(code, errorOutput, false, '', humorPref);
         playMemeSound(false, humorPref);
         setIsRunning(false);
+        triggerShake();
         return;
       }
     }
@@ -206,17 +250,6 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
           }
         }
 
-        if (!mismatchError && lesson.expectedOutput) {
-           let matched = true;
-           if (typeof lesson.expectedOutput === 'string') {
-             matched = finalOutput.includes(lesson.expectedOutput);
-           } else if (lesson.expectedOutput instanceof RegExp) {
-             matched = lesson.expectedOutput.test(finalOutput);
-           }
-           if (!matched) {
-             mismatchError = `❌ Output mismatch!\nExpected: ${lesson.expectedOutput}\nReceived: ${finalOutput}`;
-           }
-        }
 
         if (mismatchError) {
            setOutput(mismatchError);
@@ -224,6 +257,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
            playMemeSound(false, humorPref);
            setHasRunSuccessfully(false);
            setIsRunning(false);
+           triggerShake();
            return;
         }
 
@@ -231,9 +265,13 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
         if (expectsCallCount && data.verificationResults) {
           const callCountResult = data.verificationResults.find((r: {id: string, passed: boolean}) => r.id === 'call_count');
           if (!callCountResult || !callCountResult.passed) {
-            setOutput(`${finalOutput}\n\nCheck Failed: ${expectedCallCountMsg}`);
+            const errorMsg = `${finalOutput}\n\nCheck Failed: ${expectedCallCountMsg}`;
+            setOutput(errorMsg);
+            await handleRoast(code, errorMsg, false, '', humorPref);
+            playMemeSound(false, humorPref);
             setHasRunSuccessfully(false);
             setIsRunning(false);
+            triggerShake();
             return;
           }
         }
@@ -259,26 +297,16 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
         triggerFirstRoast();
         playMemeSound(false, humorPref);
         setHasRunSuccessfully(false);
+        triggerShake();
       }
     } catch {
       setOutput('Failed to execute code. Check your connection.');
       await handleRoast(code, 'Failed to execute code.', false, '', humorPref);
       playMemeSound(false, humorPref);
       setHasRunSuccessfully(false);
+      triggerShake();
     } finally {
       setIsRunning(false);
-    }
-  };
-
-
-  const handleLevelComplete = async () => {
-    setIsSaving(true);
-    try {
-      await saveLessonProgress(currentLevel, learningLanguage);
-    } catch (e) {
-      console.error("Error saving progress", e);
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -322,7 +350,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-zinc-800 pb-4">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
-            Level {currentLevel} of 100
+            Level {currentLevel} of {allLessons.length}
           </h1>
           <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${getTierColor(lesson.tier)}`}>
             {lesson.tier} 🔥
@@ -350,7 +378,11 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 h-full min-h-0 flex-1">
+      <motion.div 
+        animate={shake ? { x: [-8, 8, -6, 6, -3, 3, 0] } : {}} 
+        transition={{ duration: 0.4 }}
+        className="flex flex-col lg:flex-row gap-6 h-full min-h-0 flex-1"
+      >
         <div className="lg:w-[400px] xl:w-[500px] flex flex-col gap-6 shrink-0 overflow-y-auto pr-2 custom-scrollbar">
           <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500 opacity-50"></div>
@@ -360,9 +392,57 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
               <h2 className="text-3xl font-bold">{lesson.title}</h2>
             </div>
             
-            <p className="text-zinc-300 leading-relaxed text-lg mb-6">
-              {humorPref === 'tamil' ? lesson.funnyExplanationTamil : lesson.funnyExplanationGeneral}
-            </p>
+            {lesson.biteSized ? (
+              <div className="space-y-4 mb-6">
+                <p className="text-zinc-200 text-lg leading-relaxed">
+                  {humorPref === 'general' && lesson.biteSized.meaningGeneral ? lesson.biteSized.meaningGeneral : lesson.biteSized.meaning}
+                </p>
+                {((humorPref === 'tamil' && lesson.biteSized.funnyEgTamil) || (humorPref === 'general' && (lesson.biteSized.funnyEgGeneral || lesson.biteSized.funnyEgTamil))) && (
+                  <div className="bg-pink-950/20 p-4 rounded-xl border border-pink-900/50">
+                    <p className="text-pink-200 italic">
+                      <span className="font-bold text-pink-500 mr-2">
+                        {humorPref === 'tamil' ? 'Tamil Humor:' : 'Joke:'}
+                      </span>
+                      {humorPref === 'general' && lesson.biteSized.funnyEgGeneral ? lesson.biteSized.funnyEgGeneral : lesson.biteSized.funnyEgTamil}
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-zinc-300 leading-relaxed text-lg mb-6">
+                Missing explanation data.
+              </p>
+            )}
+
+            {lesson.examples && lesson.examples.length > 0 && (
+              <div className="space-y-4 mb-6">
+                <h3 className="font-bold text-zinc-500 uppercase tracking-widest text-xs">Examples</h3>
+                {lesson.examples.map((ex: any, i: number) => (
+                  <div key={i} className="bg-zinc-950 p-4 rounded-xl border border-zinc-800">
+                    <p className="text-zinc-400 text-sm mb-2">{ex.explanation}</p>
+                    <pre className="text-blue-300 text-sm font-mono overflow-x-auto whitespace-pre-wrap"><code>{ex.code}</code></pre>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <div className="space-y-4 mb-6">
+               <h3 className="font-bold text-zinc-500 uppercase tracking-widest text-xs">Your Mission</h3>
+               <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-800">
+                 <p className="text-zinc-300 text-sm">
+                   Write any program you want, as long as you use the concepts taught in this lesson!
+                 </p>
+                 {lesson.codeExample && (
+                   <div className="mt-4 pt-4 border-t border-zinc-800">
+                     <p className="text-zinc-500 text-xs uppercase mb-2 flex justify-between">
+                       <span>Target Code / Hint</span>
+                       <span className="text-zinc-600">(Try not to copy-paste!)</span>
+                     </p>
+                     <pre className="text-blue-300/80 text-sm font-mono overflow-x-auto whitespace-pre-wrap blur-[2px] hover:blur-none transition-all cursor-help"><code>{lesson.codeExample}</code></pre>
+                   </div>
+                 )}
+               </div>
+            </div>
 
             {isRoasting && (
               <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4 animate-pulse flex flex-col items-center">
@@ -387,7 +467,6 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
                />
             )}
 
-            <CuriosityHook />
           </div>
         </div>
 
@@ -457,7 +536,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

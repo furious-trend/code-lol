@@ -7,8 +7,6 @@ export const pythonInterviewLessons: Lesson[] = [
     tier: "Interview",
     title: "The 5-Step Process",
     sticker: "🧠",
-    funnyExplanationGeneral: "The 5-Step Process is like a phone notification—you think you've cleared all the steps, but another one pops up",
-    funnyExplanationTamil: "The 5-Step Process is like a phone notification—you think you've cleared all the steps, but another one pops up",
     codeExample: "# Step 1: Clarify\n# 'Can the array have negative numbers?'\n\n# Step 2 & 3: Pseudo-code\n/* \n  Loop through array\n  Keep track of max sum\n  Return max\n*/\n\n# Step 4: Code\ndef getMax(arr) {\n  return max(arr);\n}",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -18,16 +16,18 @@ export const pythonInterviewLessons: Lesson[] = [
     },
     examples: [
       { explanation: "Always ask about edge cases (empty arrays, negative numbers, Nones).", code: "def findMax(arr) {\n  # What if arr is empty?\n  if (!len(arr)) return None;\n}" }
-    ]
-  },
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "The 5-Step Process is like a phone notification—you think you've cleared all the steps, but another one pops up"
+                  }
+},
   {
     id: 302,
     chapter: "Chapter 2: Bit Manipulation",
     tier: "Interview",
     title: "AND, OR, XOR",
     sticker: "🤖",
-    funnyExplanationGeneral: "AND needs coffee and sleep, OR needs pizza or a burger, XOR forces you to choose iPhone or Android.",
-    funnyExplanationTamil: "AND needs coffee and sleep, OR needs pizza or a burger, XOR forces you to choose iPhone or Android.",
     codeExample: "# AND (&) - Both must be 1\nprint(5 & 1); # 1 (Is it odd?)\n\n# XOR (^) - Must be DIFFERENT\nprint(5 ^ 5); # 0 (Destroys itself)",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -37,16 +37,18 @@ export const pythonInterviewLessons: Lesson[] = [
     },
     examples: [
       { explanation: "Finding the only non-duplicate number in an array.", code: "arr = [2, 3, 2, 4, 4];\nsingle = 0;\nfor (n of arr) single ^= n;\nprint(single); # 3!" }
-    ]
-  },
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "AND needs coffee and sleep, OR needs pizza or a burger, XOR forces you to choose iPhone or Android."
+                  }
+},
   {
     id: 303,
     chapter: "Chapter 2: Bit Manipulation",
     tier: "Interview",
     title: "Bit Shifting",
     sticker: "⏩",
-    funnyExplanationGeneral: "Bit shifting is like skipping songs on a playlist—you rapidly click next until you hit the right spot.",
-    funnyExplanationTamil: "Bit shifting is like skipping songs on a playlist—you rapidly click next until you hit the right spot.",
     codeExample: "num = 5;\nprint(num << 1); # 10 (Multiplied by 2!)\nprint(num >> 1); # 2 (Divided by 2 and floored!)",
     gifKeyword: "scrolling forever",
     miniQuizQuestion: {
@@ -56,16 +58,18 @@ export const pythonInterviewLessons: Lesson[] = [
     },
     examples: [
       { explanation: "Multiplying by 8 quickly.", code: "x = 5;\nprint(x << 3); # 5 * 2^3 = 40" }
-    ]
-  },
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Bit shifting is like skipping songs on a playlist—you rapidly click next until you hit the right spot."
+                  }
+},
   {
     id: 304,
     chapter: "Chapter 3: System Design",
     tier: "Interview",
     title: "Scalability 101",
     sticker: "📈",
-    funnyExplanationGeneral: "Scalability is like adding lanes to a highway—you think it'll reduce traffic, but it just invites more cars",
-    funnyExplanationTamil: "Scalability is like adding lanes to a highway—you think it'll reduce traffic, but it just invites more cars",
     codeExample: "# Vertical Scaling: \n# Server.upgradeRAM('128GB');\n\n# Horizontal Scaling:\n# LoadBalancer.distribute([Server1, Server2, Server3]);",
     gifKeyword: "traffic jam meme",
     miniQuizQuestion: {
@@ -75,16 +79,18 @@ export const pythonInterviewLessons: Lesson[] = [
     },
     examples: [
       { explanation: "A simple load balancer concept.", code: "def loadBalance(requests, servers) {\n  return requests.map((req, i) => servers[i % len(servers)]);\n}" }
-    ]
-  },
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Scalability is like adding lanes to a highway—you think it'll reduce traffic, but it just invites more cars"
+                  }
+},
   {
     id: 305,
     chapter: "Chapter 3: System Design",
     tier: "Interview",
     title: "Caching (Redis/Memcached)",
     sticker: "⚡",
-    funnyExplanationGeneral: "Caching is like having snacks nearby—but they're stale after a while and you still have to go grocery shopping",
-    funnyExplanationTamil: "Caching is like having snacks nearby—but they're stale after a while and you still have to go grocery shopping",
     codeExample: "cache = {};\nasync def getUser(id) {\n  if (cache[id]) return cache[id]; # FAST!\n  user = await db.query('...'); # SLOW\n  cache[id] = user;\n  return user;\n}",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -94,16 +100,18 @@ export const pythonInterviewLessons: Lesson[] = [
     },
     examples: [
       { explanation: "Basic Memoization (caching def results).", code: "memo = {};\ndef expensive(n) {\n  if(memo[n]) return memo[n];\n  # ...do math...\n}" }
-    ]
-  },
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Caching is like having snacks nearby—but they're stale after a while and you still have to go grocery shopping"
+                  }
+},
   {
     id: 306,
     chapter: "Chapter 4: Logic & Math",
     tier: "Interview",
     title: "Brain Teasers",
     sticker: "🤯",
-    funnyExplanationGeneral: "Brain teasers are like trying to merge lanes in heavy traffic—you think you've figured it out, but then everything changes",
-    funnyExplanationTamil: "Brain teasers are like trying to merge lanes in heavy traffic—you think you've figured it out, but then everything changes",
     codeExample: "# Step 1: Volume of Bus = Length * Width * Height\n# Step 2: Volume of Golf Ball = 4/3 * PI * r^3\n# Step 3: Divide Bus by Ball\n# Step 4: Subtract 20% for seats and empty space",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -113,6 +121,25 @@ export const pythonInterviewLessons: Lesson[] = [
     },
     examples: [
       { explanation: "Always break the big problem into smaller, logical formulas.", code: "busVol = 2000000; # cubic inches\nballVol = 2.5;\nballs = (busVol / ballVol) * 0.8;" }
-    ]
-  }
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Brain teasers are like trying to merge lanes in heavy traffic—you think you've figured it out, but then everything changes"
+                  }
+},
+    {"id":307,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Pattern: Merge Intervals","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":308,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Pattern: Two Heaps","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":309,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Pattern: Top K","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":310,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"System Design: Load Balancing","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":311,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"System Design: SQL vs NoSQL","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":312,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"System Design: Sharding","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":313,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"System Design: Microservices","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":314,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"System Design: Message Queues","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":315,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"System Design: API Design","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":316,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Behavioral: STAR Method","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":317,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Behavioral: Conflict","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":318,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Resume Tips","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":319,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Whiteboard Interview","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":320,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Take-Home Assignment","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}},
+    {"id":321,"chapter":"Chapter 12: System Design & Interviews","tier":"Interview Prep","title":"Salary Negotiation 101","sticker":"💼","codeExample":"print(\"Interview\")","miniQuizQuestion":{"question":"Are you ready?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Cracking the coding interview.","funnyEgTamil":"HR kitta package pesumbodhu nadukathoda sirikkira oru acting!"}}
 ];

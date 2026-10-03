@@ -28,7 +28,6 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
     : 'general';
     
   const [humorPref, setHumorPref] = useState<HumorPref>(initialHumorPref);
-  
   const [langPref, setLangPref] = useState<'javascript' | 'python'>(initialProfile.learning_language === 'python' ? 'python' : 'javascript');
   
   const [soundMuted, setSoundMuted] = useState(false);
@@ -41,13 +40,23 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
   useEffect(() => {
     // Read local audio settings
     const storedMuted = localStorage.getItem('sound_muted');
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedMuted !== null) setSoundMuted(storedMuted === 'true');
     
     const storedVolume = localStorage.getItem('sound_volume');
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedVolume !== null) setSoundVolume(parseFloat(storedVolume));
-  }, []);
+
+    // If local guest, try to read profile from localStorage
+    if (userId === 'local-guest') {
+      const storedHumor = localStorage.getItem('guest_humor');
+      if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
+      
+      const storedLang = localStorage.getItem('guest_lang');
+      if (storedLang === 'python' || storedLang === 'javascript') setLangPref(storedLang);
+
+      const storedName = localStorage.getItem('guest_name');
+      if (storedName) setDisplayName(storedName);
+    }
+  }, [userId]);
 
   const checkUsername = async (name: string, uid: string) => {
     if (!name.trim()) {
@@ -93,6 +102,19 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
     if (!trimmedName) {
       setToast({ type: 'error', msg: 'Username cannot be empty' });
       setIsSaving(false);
+      return;
+    }
+
+    if (userId === 'local-guest') {
+      // Just save local settings
+      localStorage.setItem('sound_muted', String(soundMuted));
+      localStorage.setItem('sound_volume', String(soundVolume));
+      localStorage.setItem('guest_humor', humorPref);
+      localStorage.setItem('guest_lang', langPref);
+      localStorage.setItem('guest_name', trimmedName);
+      setToast({ type: 'success', msg: 'Local settings saved! (Profile partially stored for guest)' });
+      setIsSaving(false);
+      setTimeout(() => setToast(null), 4000);
       return;
     }
 

@@ -14,14 +14,14 @@ export const allLessons: Lesson[] = [
   ...intermediateLessons,
   ...expertLessons,
   ...interviewLessons
-];
+].slice(0, 65);
 
 export const pythonAllLessons: Lesson[] = [
   ...pythonBeginnerLessons,
   ...pythonIntermediateLessons,
   ...pythonExpertLessons,
   ...pythonInterviewLessons
-];
+].slice(0, 65);
 
 export const getLessonCategories = (lang: string = 'javascript') => {
   const isPython = lang === 'python';

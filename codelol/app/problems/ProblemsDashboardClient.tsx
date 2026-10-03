@@ -22,7 +22,7 @@ export default function ProblemsDashboardClient({ initialCompletedProblems }: Pr
             Solve & Conquer.
           </h1>
           <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto">
-            Test your skills with coding challenges. Select a tier and conquer all 100 levels!
+            Test your skills with coding challenges. Select a tier and conquer all 65 levels!
           </p>
         </header>
 
@@ -43,7 +43,7 @@ export default function ProblemsDashboardClient({ initialCompletedProblems }: Pr
           ))}
         </div>
 
-        {/* 100 Levels Grid */}
+        {/* 65 Levels Grid */}
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h2 className="text-2xl md:text-3xl font-bold text-blue-400 mb-6 flex items-center gap-3">
             <span className="text-3xl">🏆</span> {activeDifficulty} Map

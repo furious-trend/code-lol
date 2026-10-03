@@ -7,8 +7,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Variables",
     sticker: "📦",
-    funnyExplanationGeneral: "Variables are like phone notifications—you think you've cleared them all, but more just keep coming",
-    funnyExplanationTamil: "Variables are like a Rajini movie intro—oru thadava sonna nooru thadava sonna mathiri, unless you use 'let' to change it!",
     codeExample: "fridgeLabel = 'Leftover Biryani'\nactualFood = 'Frozen Dal'\nprint('Label says:', fridgeLabel)\nprint('Mom actually put:', actualFood)",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -17,9 +15,9 @@ export const pythonBeginnerLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Using to declare a changeable variable, simulating a fridge surprise.", code: "sweetBox = 'Cookies'\nprint('Opening sweet box...')\nsweetBox = 'Sewing Kit'\nprint('Result:', sweetBox)\nprint('Trust issues level increased.')" },
-      { explanation: "Using for things that never change, like Mom's rules.", code: "TUPPERWARE = 'Moms Favorite Box'\nborrower = 'Me'\nprint('I borrowed:', TUPPERWARE)\nborrower = 'My Friend'\nprint('Now who has it?', borrower)\nprint('Mom is going to be mad.')" },
-      { explanation: "Declaring multiple items at once to prepare a full meal.", code: "dinner1 = 'Rice', dinner2 = 'Dal', drink = 'Water'\nprint('Menu tonight:')\nprint(dinner1)\nprint(dinner2)\nprint(drink)" }
+      { explanation: "Variables can change, like Amma's Horlicks dabba.", code: "horlicksDabba = 'Horlicks'\nprint('Outside:', horlicksDabba)\nhorlicksDabba = 'Sambar Thool'\nprint('Inside:', horlicksDabba)" },
+      { explanation: "Constants (ALL_CAPS) shouldn't change, like Appa's TV remote.", code: "APPA_REMOTE = 'News Channel'\nprint('Watching:', APPA_REMOTE)\n# APPA_REMOTE = 'Cartoon Network' # Python won't stop you, but Appa will." },
+      { explanation: "Declaring multiple items for a local tea stall.", code: "item1, item2, parcel = 'Tea', 'Vada', 'Bonda'\nprint(item1, item2, parcel)" }
     ],
       verificationChecks: [
             {
@@ -27,7 +25,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "^[a-zA-Z_]\\\\w*\\\\s*=",
               expectedMessage: "Your code runs, but it doesn't actually declare a variable. Use variable assignment."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Value-va store panni vekkura memory dabba (Storage box with a label).",
+                    meaningGeneral: "A memory box to store values (like a storage box with a label).",
+                    funnyEgTamil: "Amma vechirukra Horlicks dabba maari—veliya label paatha \"Horlicks\", aana ulla eduthu paatha eppovume sambar thool dhaan irukkum!",
+                    funnyEgGeneral: "Like a cookie tin your mom keeps—outside the label says 'Butter Cookies', but if you open it, it's always filled with sewing supplies!"
+                  }
 },
   {
     id: 2,
@@ -35,8 +39,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Data Types",
     sticker: "📊",
-    funnyExplanationGeneral: "Data types are like phone notifications—they pop up everywhere and you're not always sure what they mean",
-    funnyExplanationTamil: "Data types are like the cast in a Hari movie—you've got the hero (string), the comedian (boolean), and a hundred side actors (numbers) doing their own thing.",
     codeExample: "status = 'It\\'s Complicated'\nsingles = 1\nisHappy = False\nprint(type(status), type(singles), type(isHappy))",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -55,7 +57,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "type\\\\(",
               expectedMessage: "Your code runs, but doesn't seem to check any data types. Try using the 'type()' function!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Data types are like the cast in a Hari movie—you've got the hero (string), the comedian (boolean), and a hundred side actors (numbers) doing their own thing.",
+          meaningGeneral: "Different categories of data like numbers, strings, and booleans that the computer handles differently.",
+          funnyEgGeneral: "Data types are like the cast in an action movie—you've got the hero (string), the comic relief (boolean), and a hundred side characters (numbers) doing their own thing."
+    }
 },
   {
     id: 3,
@@ -63,8 +71,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Arrays",
     sticker: "📚",
-    funnyExplanationGeneral: "Arrays are like phone notifications—you can't ignore them and they just keep piling up",
-    funnyExplanationTamil: "Arrays are like the seats in a local bus—everyone is packed in order, and there's always that one guy taking up three indexes.",
     codeExample: "family = ['Uncle', 'Aunty', 'Cousin']\nprint(family[0]) # Uncle is at index 0",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -83,7 +89,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "\\[.*\\]",
               expectedMessage: "Your code runs, but it doesn't look like you created or used an array [] yet."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Ordered list of items.",
+                    funnyEgTamil: "Ration kadai queue—first person index 0!",
+          meaningGeneral: "An ordered collection of items, starting at index 0.",
+          funnyEgGeneral: "A deli line—the first person is index 0!"
+    }
 },
   {
     id: 4,
@@ -91,8 +103,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Objects",
     sticker: "🏷️",
-    funnyExplanationGeneral: "Objects are like phone notifications—you think you've handled them all, but more just keep popping up",
-    funnyExplanationTamil: "Objects are like a typical Tamil mom's kitchen cabinet—everything is labeled, but only she knows what property holds the 'murukku'.",
     codeExample: "person = {\n  name: 'Shafiq',\n  age: 21,\n  patience: 0\n}\nprint(person.name)",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -111,7 +121,11 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "\\{[\\s\\S]*\\}",
               expectedMessage: "Your code runs, but you didn't define an object {} yet."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Key-value data packet.",
+                    funnyEgTamil: "Contractor biodata: { name: \\\"Nesamani\\\", weakness: \\\"Spanner\\\" }."
+                  }
 },
   {
     id: 5,
@@ -119,8 +133,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "For Loops",
     sticker: "🔁",
-    funnyExplanationGeneral: "For loops are like autocorrect on your phone—it keeps repeating the same mistake over and over",
-    funnyExplanationTamil: "For loops are like a Vijay movie dance step—repeat the same 'Dappankuthu' 100 times until the director says cut!",
     codeExample: "for minutes in range(1, 6):\n  print('Scrolling reel #' + str(minutes))",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -143,7 +155,11 @@ export const pythonBeginnerLessons: Lesson[] = [
               type: "requires_call_count",
               expectedMessage: "Your loop didn't seem to iterate multiple times. Make sure your loop condition allows it to run more than once!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Code repeating until told to stop.",
+                    funnyEgTamil: "Kaipulla in Winner: \\\"Naanum evvalo dhaan adivaanguradhu...\\\" without a break."
+                  }
 },
   {
     id: 6,
@@ -151,8 +167,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "While Loops",
     sticker: "☕",
-    funnyExplanationGeneral: "While loops are like checking your phone for a text from someone—you keep going back hoping something new is there, but it's always the same",
-    funnyExplanationTamil: "While loops are like waiting for an Ajith movie update—you just keep looping and waiting until the condition (producer tweets) finally becomes True.",
     codeExample: "broke = False\ncups = 0\nwhile not broke and cups < 3:\n  print('One more chai!')\n  cups += 1",
     gifKeyword: "waiting forever",
     miniQuizQuestion: {
@@ -175,7 +189,11 @@ export const pythonBeginnerLessons: Lesson[] = [
               type: "requires_call_count",
               expectedMessage: "Your loop didn't seem to iterate multiple times. Check your condition!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Code repeating until told to stop.",
+                    funnyEgTamil: "Kaipulla in Winner: \\\"Naanum evvalo dhaan adivaanguradhu...\\\" without a break."
+                  }
 },
   {
     id: 7,
@@ -183,8 +201,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Conditionals (if/else)",
     sticker: "🔀",
-    funnyExplanationGeneral: "Conditionals are like your phone's low battery warning: if you charge it, you're good, else you're calling your mom to pick you up",
-    funnyExplanationTamil: "Conditionals are like dealing with a strict dad: 'If (marks > 90) get a bike, Else get an umbrella for walking'.",
     codeExample: "isBored = True\nif isBored:\n  print('Opening Insta...')\nelse:\n  print('Writing code!')",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -203,7 +219,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "if\\s+",
               expectedMessage: "Your code runs, but you didn't use an 'if' statement to make a decision."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Conditionals are like dealing with a strict dad: 'If (marks > 90) get a bike, Else get an umbrella for walking'.",
+          meaningGeneral: "Executing different code blocks based on conditions.",
+          funnyEgGeneral: "Conditionals are like dealing with strict parents: 'If (grades > 90) get a car, Else get a bus pass'."
+    }
 },
   {
     id: 8,
@@ -211,8 +233,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Functions",
     sticker: "🤖",
-    funnyExplanationGeneral: "Functions are like phone notifications—you think they're helpful, but sometimes they just keep popping up and interrupting everything",
-    funnyExplanationTamil: "Functions are like calling Vadivelu for help—you pass in the problem, and he returns an epic disaster, but at least it's reusable!",
     codeExample: "def orderBiryani(isSpicy):\n  if isSpicy:\n    return '🔥 Spicy Biryani'\n  return 'Normal Biryani'\nprint(orderBiryani(True))",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -236,7 +256,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "return\\s+",
               expectedMessage: "Make sure your function returns a value using the 'return' keyword."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Reusable task machine.",
+                    funnyEgTamil: "Madurai tea master: Milk & sugar in, hot tea return.",
+          meaningGeneral: "A reusable block of code that takes inputs and returns an output.",
+          funnyEgGeneral: "Barista: Espresso and milk in, hot latte return."
+    }
 },
   {
     id: 9,
@@ -244,8 +270,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Operators",
     sticker: "➕",
-    funnyExplanationGeneral: "Operators are like traffic lights—you think they're controlling the flow, but sometimes they just stop everything",
-    funnyExplanationTamil: "Operators are like the fight scene gravity in Boyapati movies—they push, pull, and multiply things in ways that defy logic.",
     codeExample: "score = 95\ncousinScore = '95'\nprint(score == cousinScore) # True (loose)\nprint(score == cousinScore) # False (strict!)",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -264,7 +288,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "(?:==|==|!=|!=|>|<|>=|<=)",
               expectedMessage: "Try using a comparison operator like == or == to compare values."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Operators are like the fight scene gravity in Boyapati movies—they push, pull, and multiply things in ways that defy logic.",
+          meaningGeneral: "Symbols that perform operations on variables and values.",
+          funnyEgGeneral: "Operators are like physics in action movies—they push, pull, and multiply things in ways that defy logic."
+    }
 },
   {
     id: 10,
@@ -272,8 +302,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "String Basics",
     sticker: "🧵",
-    funnyExplanationGeneral: "Strings are like autocorrected text messages—you type one thing, but it comes out as something entirely different",
-    funnyExplanationTamil: "Strings are like Dhanush singing 'Why This Kolaveri Di'—you just keep adding words together until it becomes a massive hit.",
     codeExample: "msg = 'Hello'\nname = \"Shafiq\"\nprint(msg + ' ' + name) # concatenation",
     gifKeyword: "facepalm",
     miniQuizQuestion: {
@@ -292,7 +320,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "\\+",
               expectedMessage: "Try concatenating (adding) two strings together using the + operator."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Strings are like Dhanush singing 'Why This Kolaveri Di'—you just keep adding words together until it becomes a massive hit.",
+          meaningGeneral: "Text data that can be concatenated and manipulated.",
+          funnyEgGeneral: "Strings are like a pop song chorus—you just keep adding words together until it becomes a massive hit."
+    }
 },
   {
     id: 11,
@@ -300,8 +334,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Comments",
     sticker: "🤫",
-    funnyExplanationGeneral: "Comments are like old phone notifications—you swipe them away but they keep coming back",
-    funnyExplanationTamil: "Comments are like the director's cut explanations—nobody reads them during the movie, but without them, you have no idea what's happening.",
     codeExample: "# This is a single line comment\nx = 10 /* This is a \nmulti-line comment */\nprint(x)",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -320,7 +352,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "(?:\\/\\/|\\/\\*)",
               expectedMessage: "Your code runs, but it looks like you forgot to write a comment!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Comments are like the director's cut explanations—nobody reads them during the movie, but without them, you have no idea what's happening.",
+          meaningGeneral: "Text in code intended for humans, ignored by the computer.",
+          funnyEgGeneral: "Comments are like the director's commentary track—nobody listens to them during the movie, but without them, you have no idea why things happened."
+    }
 },
   {
     id: 12,
@@ -328,8 +366,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Type Conversion",
     sticker: "🔄",
-    funnyExplanationGeneral: "Type conversion is like autocorrecting your text to your ex's name",
-    funnyExplanationTamil: "Type conversion is like Kamal Haasan's Dasavatharam—suddenly a number dresses up as a string and you're just confused about who is who.",
     codeExample: "a = '5' + 1\nb = '5' - 1\nprint('a = ' + a + ', b = ' + b)",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -348,7 +384,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "(?:Number\\(|String\\()",
               expectedMessage: "Try explicitly converting a type using Number() or String()."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Type conversion is like Kamal Haasan's Dasavatharam—suddenly a number dresses up as a string and you're just confused about who is who.",
+          meaningGeneral: "Converting data from one type to another.",
+          funnyEgGeneral: "Type conversion is like an actor in a spy movie—suddenly a number dresses up as a string and you're confused about who is who."
+    }
 },
   {
     id: 13,
@@ -356,8 +398,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Input/Output Basics",
     sticker: "🖨️",
-    funnyExplanationGeneral: "Input/Output is like phone notifications—you think you're in control, but they just keep coming",
-    funnyExplanationTamil: "Input/Output is like a press meet—you throw a question (input) and get a pre-planned political answer (output) on the console.",
     codeExample: "secret = 'I love coding'\nprint('The secret is:', secret)",
     gifKeyword: "this is fine fire",
     miniQuizQuestion: {
@@ -376,7 +416,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "console\\.(?:log|warn|error|table)",
               expectedMessage: "You need to print something using print() or similar."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Input/Output is like a press meet—you throw a question (input) and get a pre-planned political answer (output) on the console.",
+          meaningGeneral: "Taking data in from the user and printing results back out.",
+          funnyEgGeneral: "Input/Output is like a press conference—you throw a question (input) and get a pre-planned political answer (output) on the screen."
+    }
 },
   {
     id: 14,
@@ -384,8 +430,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Variable Scope",
     sticker: "🔭",
-    funnyExplanationGeneral: "Variables are like phone notifications—they can pop up anywhere and change everything",
-    funnyExplanationTamil: "Variable scope is like local rowdy vs international don—a local 'let' has no power outside its own street (block).",
     codeExample: "globalGossip = 'Everyone knows'\ndef myHouse():\n  secret = 'Only I know'\n  print(globalGossip)\nmyHouse()",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -404,7 +448,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "let\\s+",
               expectedMessage: "Try declaring a local variable using 'let' inside a function or block."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Variable scope is like local rowdy vs international don—a local 'let' has no power outside its own street (block).",
+          meaningGeneral: "The context in which a variable is accessible.",
+          funnyEgGeneral: "Variable scope is like a local gang vs an international syndicate—a local variable has no power outside its own neighborhood."
+    }
 },
   {
     id: 15,
@@ -412,8 +462,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Constants vs Variables",
     sticker: "🛑",
-    funnyExplanationGeneral: "Constants are like your WiFi password—you set it once and then you're stuck with it forever.",
-    funnyExplanationTamil: "Constants are like the villain's promise in a masala film—it never changes until the hero breaks it (which throws a TypeError).",
     codeExample: "PI = 3.14159\n# PI = 3 # This would cause an error!\nprint('PI is', PI)",
     gifKeyword: "wifi not working",
     miniQuizQuestion: {
@@ -432,7 +480,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "const\\s+",
               expectedMessage: "Make sure you declare a constant using 'const'."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Locked forever value.",
+                    funnyEgTamil: "Appa-oda TV remote—touch panna TypeError adi vizhum!",
+          meaningGeneral: "Values that cannot be changed after creation (like tuples).",
+          funnyEgGeneral: "Dad's TV remote—if you touch it, you'll get a TypeError slap!"
+    }
 },
   {
     id: 16,
@@ -440,8 +494,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Basic Math Operations",
     sticker: "🧮",
-    funnyExplanationGeneral: "Division is like sharing fries with a friend who takes the biggest pieces",
-    funnyExplanationTamil: "Division is like sharing biryani with friends—someone always takes the 'leg piece' (remainder) and you use modulo to find who took it.",
     codeExample: "slices = 5\nfriends = 2\nleftover = slices % friends\nprint('Leftover slices:', leftover)",
     gifKeyword: "salty reaction",
     miniQuizQuestion: {
@@ -460,7 +512,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "%",
               expectedMessage: "Use the modulo operator (%) to find the remainder."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Division is like sharing biryani with friends—someone always takes the 'leg piece' (remainder) and you use modulo to find who took it.",
+          meaningGeneral: "Mathematical division and finding the remainder.",
+          funnyEgGeneral: "Division is like sharing pizza with friends—someone always takes the last slice (remainder) and you use modulo to find out how many are left."
+    }
 },
   {
     id: 17,
@@ -468,8 +526,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Ternary Operator",
     sticker: "❓",
-    funnyExplanationGeneral: "Ternary operator is like a traffic light—it's either go or stop, with no annoying yellow phase",
-    funnyExplanationTamil: "Ternary operator is like a quick punch dialogue—short, sharp, and hits you with either 'Success' or 'Failure' in one line.",
     codeExample: "marks = 85\nresult = 'Pass 🎉' if marks > 40 else 'Fail 💀'\nprint(result)",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -488,7 +544,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "if\\s+.*\\s+else",
               expectedMessage: "Your code runs, but you need to use the ternary operator (? :) for this exercise."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Ternary operator is like a quick punch dialogue—short, sharp, and hits you with either 'Success' or 'Failure' in one line.",
+          meaningGeneral: "A shorthand one-line if-else statement.",
+          funnyEgGeneral: "A ternary operator is like a quick action movie one-liner—short, sharp, and hits you with either 'Success' or 'Failure' instantly."
+    }
 },
   {
     id: 18,
@@ -496,8 +558,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Template Literals",
     sticker: "📝",
-    funnyExplanationGeneral: "Template literals are like phone notifications - they fill in the blanks, but sometimes with embarrassing results",
-    funnyExplanationTamil: "Template literals are like a Harris Jayaraj song—you just plug in some random English words \`\${here}\` and it sounds beautiful.",
     codeExample: "name = 'Batman'\ncity = 'Gotham'\nprint(f'{name} protects {city}')",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -516,7 +576,11 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "\\`.*\\$\\{.*\\}.*\\`",
               expectedMessage: "Try using backticks (`) and ${} to insert a variable into your string."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Template literals are like a Harris Jayaraj song—you just plug in some random English words \\`\\${here}\\` and it sounds beautiful."
+                  }
 },
   {
     id: 19,
@@ -524,8 +588,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Null vs Undefined",
     sticker: "🕳️",
-    funnyExplanationGeneral: "Null is like an empty pizza box, None is like calling a pizza place that doesn't exist",
-    funnyExplanationTamil: "Null is like saying 'I have no money', None is like opening your waland finding a moth flying out.",
     codeExample: "forgotToAssign\nemptyOnPurpose = None\nprint(forgotToAssign, emptyOnPurpose)",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
@@ -544,7 +606,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "(?:None|None)",
               expectedMessage: "Try explicitly using 'None' or checking for 'None'."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Null is like saying 'I have no money', None is like opening your waland finding a moth flying out.",
+          meaningGeneral: "Representing the intentional absence of any value.",
+          funnyEgGeneral: "Null is like saying 'I have no cash', None is like opening your wallet and finding a moth flying out."
+    }
 },
   {
     id: 20,
@@ -552,8 +620,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Truthy/Falsy Values",
     sticker: "🎭",
-    funnyExplanationGeneral: "Truthy values are like a fully charged phone, but falsy values are like a dead battery—you're not going anywhere",
-    funnyExplanationTamil: "Truthy values are like a 'mass' hero entry—everyone believes it. Falsy values are like the villain's henchmen—completely useless.",
     codeExample: "if 'False':\n  print('This runs because string is truthy!')\nif 0:\n  print('This won\\'t run')",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -572,7 +638,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "if\\s+",
               expectedMessage: "Use an 'if' statement to test if a value is truthy or falsy."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Truthy values are like a 'mass' hero entry—everyone believes it. Falsy values are like the villain's henchmen—completely useless.",
+          meaningGeneral: "Values that evaluate to true or false in a boolean context.",
+          funnyEgGeneral: "Truthy values are like the hero's entrance—everyone believes it. Falsy values are like the villain's henchmen—completely useless."
+    }
 },
   {
     id: 21,
@@ -580,8 +652,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Basic Debugging",
     sticker: "🐛",
-    funnyExplanationGeneral: "Debugging is like searching for a missing sock—you know it's somewhere, but finding it is a whole different story",
-    funnyExplanationTamil: "Debugging is like ACP Raghavan finding the killer in Vettaiyaadu Vilaiyaadu—you look at every console log until the culprit is caught.",
     codeExample: "codeWorks = False\n# print('Trying to find the bug...')\nprint('Found it! Typo.')",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -600,7 +670,11 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "(?:console\\.log|debugger)",
               expectedMessage: "Try using print() to debug!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "Broken code crash.",
+                    funnyEgTamil: "Vadivelu dialogue: \\\"Build-up bayangarama irukku... aana output varala!\\\""
+                  }
 },
   {
     id: 22,
@@ -608,8 +682,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Switch Statements",
     sticker: "🕹️",
-    funnyExplanationGeneral: "Switch statements are like phone notifications—you think you're handling each case individually, but really you're just swiping through them all to get to the one that matters",
-    funnyExplanationTamil: "Switch statements are like going to a Saravana Bhavan—you have 10 cases (idli, dosa, pongal) and a default (just coffee).",
     codeExample: "day = 3\nmatch day:\n  case 1:\n    print('Monday')\n  case 3:\n    print('Wednesday')\n  case _:\n    print('Other day')",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -633,7 +705,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "case\\s+",
               expectedMessage: "Make sure you have at least one 'case' in your switch block."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Switch statements are like going to a Saravana Bhavan—you have 10 cases (idli, dosa, pongal) and a default (just coffee).",
+          meaningGeneral: "A control structure for selecting one of many code blocks to execute.",
+          funnyEgGeneral: "Switch statements are like going to a diner—you have 10 cases (burger, fries, shake) and a default (just water)."
+    }
 },
   {
     id: 23,
@@ -641,8 +719,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Nested Loops",
     sticker: "🪆",
-    funnyExplanationGeneral: "Nested loops are like traffic circles—you think you're making progress, but you're just ending up back where you started",
-    funnyExplanationTamil: "Nested loops are like a Tamil serial plot—loops inside loops inside loops, and it runs for 5 years.",
     codeExample: "for i in range(1, 3):\n  for j in range(1, 3):\n    print(f'i={i}, j={j}')",
     gifKeyword: "going in circles",
     miniQuizQuestion: {
@@ -661,7 +737,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "(?:for|while).*\\{.*(?:for|while)",
               expectedMessage: "You need a loop inside another loop for this exercise."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Nested loops are like a Tamil serial plot—loops inside loops inside loops, and it runs for 5 years.",
+          meaningGeneral: "A loop inside another loop.",
+          funnyEgGeneral: "Nested loops are like a soap opera plot—loops inside loops inside loops, and it runs for 5 years."
+    }
 },
   {
     id: 24,
@@ -669,8 +751,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Array Push/Pop Methods",
     sticker: "🛒",
-    funnyExplanationGeneral: "Array push/pop is like a cafeteria lunch line—you add or remove people and hope the food doesn't run out",
-    funnyExplanationTamil: "Push/Pop is like boarding a crowded Chennai local train—someone gets pushed in at the back, and someone else pops out at the next station.",
     codeExample: "cart = ['Apples', 'Milk']\ncart.append('Cookies') # Add to end\ncart.pop() # Remove last (Cookies)\nprint(cart)",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -689,7 +769,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "\\.(?:push|pop)\\s*\\(",
               expectedMessage: "Try using the .append() or .pop() methods on an array."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Push/Pop is like boarding a crowded Chennai local train—someone gets pushed in at the back, and someone else pops out at the next station.",
+          meaningGeneral: "Adding and removing items from the end of an array.",
+          funnyEgGeneral: "Push/Pop is like boarding a crowded subway train—someone gets pushed in at the back, and someone else pops out at the next stop."
+    }
 },
   {
     id: 25,
@@ -697,8 +783,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "String Slice/Split Methods",
     sticker: "🔪",
-    funnyExplanationGeneral: "String slice/split methods are like autocorrecting a text message—you think you're fixing it, but now it's worse",
-    funnyExplanationTamil: "String slice/split methods are like autocorrecting a text message—you think you're fixing it, but now it's worse",
     codeExample: "word = 'JavaScript'\nprint(word.slice(0, 4)) # Java\nprint(word.split('S')) # ['Java', 'cript']",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -717,7 +801,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "\\.(?:slice|split)\\s*\\(",
               expectedMessage: "Use the .slice() or .split() methods on a string."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "String slice/split methods are like autocorrecting a text message—you think you're fixing it, but now it's worse",
+          meaningGeneral: "Extracting parts of a string or breaking it into a list.",
+          funnyEgGeneral: "String slice/split methods are like autocorrecting a text message—you think you're slicing out the bad part, but now it's worse."
+    }
 },
   {
     id: 101,
@@ -725,8 +815,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Basics Builder",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Coding is like a treadmill—you run a lot but sometimes feel like you're getting nowhere",
-    funnyExplanationTamil: "Coding is like climbing the Palani steps—you start with energy, but halfway through you're wondering why you started.",
     codeExample: "# Create a variable 'playerName' and print a greeting.",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -750,7 +838,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "console\\.log",
               expectedMessage: "Don't forget to print the greeting using print."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Coding is like climbing the Palani steps—you start with energy, but halfway through you're wondering why you started.",
+          meaningGeneral: "The perseverance required to write and debug code.",
+          funnyEgGeneral: "Coding is like climbing a mountain—you start with energy, but halfway through you're wondering why you even started."
+    }
 },
   {
     id: 102,
@@ -758,8 +852,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Logic & Flow",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Workout logic is like a phone notification—you think you've silenced it, but it keeps popping up to remind you of your next set",
-    funnyExplanationTamil: "Workout logic is like a Surya training montage—lots of sweat, background music, and eventually you get the six-pack (solution).",
     codeExample: "# Write a loop that counts down from 3, then says 'GO!'",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -787,7 +879,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               type: "requires_call_count",
               expectedMessage: "Make sure your loop runs multiple times."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Workout logic is like a Surya training montage—lots of sweat, background music, and eventually you get the six-pack (solution).",
+          meaningGeneral: "Applying problem-solving logic to code.",
+          funnyEgGeneral: "Coding logic is like a sports training montage—lots of sweat, background music, and eventually you get the trophy (solution)."
+    }
 },
   {
     id: 103,
@@ -795,8 +893,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Data Mastery",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Mastering data is like having a strong WiFi signal—you finally get a connection and then your battery dies",
-    funnyExplanationTamil: "Mastering data is like packing for a trip to native—you try to fit a grinder, 3 sarees, and a TV into one array.",
     codeExample: "# Create an inventory array and add items to it using a loop.",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
@@ -825,7 +921,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "\\.append",
               expectedMessage: "Use .append() to add an item to the array."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Mastering data is like packing for a trip to native—you try to fit a grinder, 3 sarees, and a TV into one array.",
+          meaningGeneral: "Handling complex data structures.",
+          funnyEgGeneral: "Mastering data is like packing for a family trip—you try to fit a blender, 3 suitcases, and a TV into one array."
+    }
 },
   {
     id: 104,
@@ -833,8 +935,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Function Architect",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Workout routines are like phone notifications—you get reminded to do them daily, but you often swipe them away",
-    funnyExplanationTamil: "Function architect is like being a director—you call the shots, pass the script (parameters), and hope the actors don't throw an error.",
     codeExample: "# Create a function that calculates total damage.",
     gifKeyword: "procrastination mode",
     miniQuizQuestion: {
@@ -858,7 +958,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "return\\s+",
               expectedMessage: "Make sure your function returns the total damage."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Function architect is like being a director—you call the shots, pass the script (parameters), and hope the actors don't throw an error.",
+          meaningGeneral: "Designing and structuring functions.",
+          funnyEgGeneral: "Function architect is like being a movie director—you call the shots, pass the script (parameters), and hope the actors don't throw an error."
+    }
 },
   {
     id: 105,
@@ -866,8 +972,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Workout: Bug Hunter",
     sticker: "🏋️",
-    funnyExplanationGeneral: "Bug hunter is like a personal trainer for code—you yell at it until it gets its act together",
-    funnyExplanationTamil: "Bug hunter is like being a CID—you investigate the missing semicolon while the rest of the code plays dead.",
     codeExample: "# Write a safe function that handles missing data.",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -891,7 +995,13 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "(?:if|\\|\\|)",
               expectedMessage: "Check for missing or None data!"
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Bug hunter is like being a CID—you investigate the missing semicolon while the rest of the code plays dead.",
+          meaningGeneral: "Debugging and finding errors in code.",
+          funnyEgGeneral: "Bug hunter is like being a detective—you investigate the missing semicolon while the rest of the code plays dead."
+    }
 },
   {
     id: 106,
@@ -899,8 +1009,6 @@ export const pythonBeginnerLessons: Lesson[] = [
     tier: "Beginner",
     title: "Final Workout: The Ultimate Trial",
     sticker: "🔥",
-    funnyExplanationGeneral: "Final workout is like a never-ending phone notification—you think you're done, but it just keeps going",
-    funnyExplanationTamil: "Final workout is the climax fight scene—you vs the compiler, flying cars, exploding objects, and only one will survive.",
     codeExample: "# Combine everything to build a mini-game logic.",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
@@ -929,6 +1037,12 @@ export const pythonBeginnerLessons: Lesson[] = [
               pattern: "if\\s+.*\\s+else",
               expectedMessage: "Use a ternary operator to decide the winner."
             }
-          ]
+          ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Final workout is the climax fight scene—you vs the compiler, flying cars, exploding objects, and only one will survive.",
+          meaningGeneral: "Completing a complex coding challenge.",
+          funnyEgGeneral: "Final workout is the climax fight scene—you vs the compiler, flying cars, exploding objects, and only one will survive."
+    }
 }
 ]

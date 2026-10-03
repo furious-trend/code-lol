@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { Bugsy } from './Bugsy'
 import { UserProgress } from './UserProgress'
 
-import { FriendBell } from './FriendBell'
+import { Notifications } from './Notifications'
 
 export default async function Navbar() {
   const supabase = await createClient()
@@ -44,12 +44,13 @@ export default async function Navbar() {
       <div className="flex items-center gap-4 text-zinc-300">
         <UserProgress />
         
+        <Link href="/settings" className="text-sm hover:text-white transition-colors" title="Settings">
+          ⚙️
+        </Link>
+        
         {user ? (
           <>
-            <FriendBell />
-            <Link href="/settings" className="text-sm hover:text-white transition-colors" title="Settings">
-              ⚙️
-            </Link>
+            <Notifications />
             <span className="text-sm hidden sm:inline-block">{user.email}</span>
             <form action={handleLogout}>
               <button className="text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-100 px-4 py-2 rounded transition-colors font-medium">

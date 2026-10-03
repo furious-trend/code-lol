@@ -19,6 +19,6 @@ CREATE POLICY "Users can insert their own problem completions"
     ON public.problem_completions FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
-CREATE POLICY "Users can update their own problem completions"y
+CREATE POLICY "Users can update their own problem completions"
     ON public.problem_completions FOR UPDATE
     USING (auth.uid() = user_id);
