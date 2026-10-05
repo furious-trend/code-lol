@@ -19,7 +19,8 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ error: 'Gemini API Key is not configured. Add GEMINI_API_KEY to your environment.' }, { status: 500 });
+      console.warn('Gemini API Key is not configured. Using fallback roast.');
+      return NextResponse.json(getRandomFallback(isSuccess, humorPref));
     }
 
     let prompt = '';
