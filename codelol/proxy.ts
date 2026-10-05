@@ -42,7 +42,7 @@ export async function proxy(request: NextRequest) {
   const path = url.pathname;
 
   // Unprotected routes: public pages and API
-  const isPublicRoute = path === '/' || path.startsWith('/login') || path.startsWith('/auth/callback') || path.startsWith('/api/');
+  const isPublicRoute = path.startsWith('/login') || path.startsWith('/auth/callback') || path.startsWith('/api/');
   
   if (!user && !isPublicRoute) {
     // Unauthenticated user trying to access a protected route
