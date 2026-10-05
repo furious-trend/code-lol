@@ -85,6 +85,12 @@ export default function ProblemSolverPage() {
     if (problem) {
       if (activeLang === 'python' && problem.starterCodePython) {
         setCode(problem.starterCodePython);
+      } else if (activeLang === 'c' && problem.starterCodeC) {
+        setCode(problem.starterCodeC);
+      } else if (activeLang === 'cpp' && problem.starterCodeCpp) {
+        setCode(problem.starterCodeCpp);
+      } else if (activeLang === 'java' && problem.starterCodeJava) {
+        setCode(problem.starterCodeJava);
       } else {
         setCode(problem.starterCode);
       }
@@ -415,8 +421,14 @@ let _log = [];
                     setCode(problem.starterCodePython);
                   } else if (newLang === 'javascript') {
                     setCode(problem.starterCode);
+                  } else if (newLang === 'c' && problem.starterCodeC) {
+                    setCode(problem.starterCodeC);
+                  } else if (newLang === 'cpp' && problem.starterCodeCpp) {
+                    setCode(problem.starterCodeCpp);
+                  } else if (newLang === 'java' && problem.starterCodeJava) {
+                    setCode(problem.starterCodeJava);
                   } else {
-                    // For C/C++/Java, provide a basic starter if not defined
+                    // Fallback
                     const starters: Record<string, string> = {
                       c: '#include <stdio.h>\n\nint main() {\n    // Write your code here\n    return 0;\n}',
                       cpp: '#include <iostream>\n\nint main() {\n    // Write your code here\n    return 0;\n}',
