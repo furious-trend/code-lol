@@ -11,6 +11,7 @@ export interface Battle {
   time_limit_seconds: number;
   started_at: string | null;
   room_code: string;
+  language: string;
   created_at: string;
 }
 
@@ -40,7 +41,7 @@ function generateRoomCode(): string {
   return result;
 }
 
-export async function createBattle(problemId: string, maxPlayers: number, timeLimitSeconds: number): Promise<{ id: string, room_code: string } | null> {
+export async function createBattle(problemId: string, maxPlayers: number, timeLimitSeconds: number, language: string = 'javascript'): Promise<{ id: string, room_code: string } | null> {
   const supabase = createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return null;
@@ -55,7 +56,8 @@ export async function createBattle(problemId: string, maxPlayers: number, timeLi
       max_players: maxPlayers,
       time_limit_seconds: timeLimitSeconds,
       room_code: roomCode,
-      status: 'waiting'
+      status: 'waiting',
+      language
     })
     .select('id, room_code')
     .single();

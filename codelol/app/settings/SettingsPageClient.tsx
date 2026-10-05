@@ -28,7 +28,9 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
     : 'general';
     
   const [humorPref, setHumorPref] = useState<HumorPref>(initialHumorPref);
-  const [langPref, setLangPref] = useState<'javascript' | 'python'>(initialProfile.learning_language === 'python' ? 'python' : 'javascript');
+  const [langPref, setLangPref] = useState<'javascript' | 'python' | 'c' | 'cpp' | 'java'>(
+    (initialProfile.learning_language as 'javascript' | 'python' | 'c' | 'cpp' | 'java') || 'javascript'
+  );
   
   const [soundMuted, setSoundMuted] = useState(false);
   const [soundVolume, setSoundVolume] = useState(1.0);
@@ -51,7 +53,9 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
       if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
       
       const storedLang = localStorage.getItem('guest_lang');
-      if (storedLang === 'python' || storedLang === 'javascript') setLangPref(storedLang);
+      if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
+        setLangPref(storedLang as any);
+      }
 
       const storedName = localStorage.getItem('guest_name');
       if (storedName) setDisplayName(storedName);
@@ -254,7 +258,7 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
             <h2 className="text-xl font-semibold text-zinc-300">Learning Language</h2>
             <p className="text-sm text-zinc-500 mb-4">Choose the primary language you want to learn and battle in.</p>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <button
                 onClick={() => setLangPref('javascript')}
                 className={`p-4 rounded-xl border text-left transition-all ${
@@ -276,6 +280,39 @@ export default function SettingsPageClient({ initialProfile, userId }: SettingsP
               >
                 <div className="font-semibold mb-1">Python</div>
                 <div className="text-sm text-zinc-500">Data, AI, and simplicity</div>
+              </button>
+              <button
+                onClick={() => setLangPref('c')}
+                className={`p-4 rounded-xl border text-left transition-all ${
+                  langPref === 'c'
+                    ? 'border-indigo-500 bg-indigo-500/10'
+                    : 'border-zinc-800 bg-zinc-950/50 hover:border-zinc-700'
+                }`}
+              >
+                <div className="font-semibold mb-1">C</div>
+                <div className="text-sm text-zinc-500">Memory & Systems</div>
+              </button>
+              <button
+                onClick={() => setLangPref('cpp')}
+                className={`p-4 rounded-xl border text-left transition-all ${
+                  langPref === 'cpp'
+                    ? 'border-cyan-500 bg-cyan-500/10'
+                    : 'border-zinc-800 bg-zinc-950/50 hover:border-zinc-700'
+                }`}
+              >
+                <div className="font-semibold mb-1">C++</div>
+                <div className="text-sm text-zinc-500">Games & Performance</div>
+              </button>
+              <button
+                onClick={() => setLangPref('java')}
+                className={`p-4 rounded-xl border text-left transition-all ${
+                  langPref === 'java'
+                    ? 'border-red-500 bg-red-500/10'
+                    : 'border-zinc-800 bg-zinc-950/50 hover:border-zinc-700'
+                }`}
+              >
+                <div className="font-semibold mb-1">Java</div>
+                <div className="text-sm text-zinc-500">Enterprise & Android</div>
               </button>
             </div>
           </section>

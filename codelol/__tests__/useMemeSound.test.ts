@@ -2,6 +2,9 @@ import { renderHook } from '@testing-library/react';
 import { useMemeSound, __resetGlobalAudioPlayer } from '../hooks/useMemeSound';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321';
+const SOUND_BASE_URL = `${supabaseUrl}/storage/v1/object/public/sounds`;
+
 describe('useMemeSound', () => {
   let playStub: any;
   let pauseStub: any;
@@ -43,14 +46,14 @@ describe('useMemeSound', () => {
     const soundUrl = result.current.playMemeSound(true, 'tamil');
     
     const expectedSuccessSounds = [
-      "/sounds/tamil/right/thalapathy_kacheri.mp3",
-      "/sounds/tamil/right/powerhouse_coolie.mp3",
-      "/sounds/tamil/right/raga_of_revenge.mp3",
-      "/sounds/tamil/right/evalavo_pannitom.mp3",
-      "/sounds/tamil/right/if_you_are_bad.mp3",
-      "/sounds/tamil/right/vadivelu_bomb.mp3",
-      "/sounds/tamil/right/vadivelu.mp3",
-      "/sounds/tamil/right/seeman-buhaha.mp3"
+      `${SOUND_BASE_URL}/sounds/tamil/right/thalapathy_kacheri.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/powerhouse_coolie.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/raga_of_revenge.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/evalavo_pannitom.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/if_you_are_bad.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/vadivelu_bomb.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/vadivelu.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/seeman-buhaha.mp3`
     ];
 
     expect(expectedSuccessSounds).toContain(soundUrl);
@@ -61,10 +64,10 @@ describe('useMemeSound', () => {
     const soundUrl = result.current.playMemeSound(true, 'general');
     
     const expectedSuccessSounds = [
-      "/sounds/general/right/happy-happy-happy-song.mp3",
-      "/sounds/general/right/indian-song.mp3",
-      "/sounds/general/right/kids-saying-yay-sound-effect_3.mp3",
-      "/sounds/general/right/anime-wow-sound-effect.mp3"
+      `${SOUND_BASE_URL}/sounds/general/right/happy-happy-happy-song.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/right/indian-song.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/right/kids-saying-yay-sound-effect_3.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/right/anime-wow-sound-effect.mp3`
     ];
 
     expect(expectedSuccessSounds).toContain(soundUrl);
@@ -75,13 +78,13 @@ describe('useMemeSound', () => {
     const soundUrl = result.current.playMemeSound(false, 'general');
     
     const expectedFailSounds = [
-      "/sounds/general/wrong/faaah.mp3",
-      "/sounds/general/wrong/896756048.mp3",
-      "/sounds/general/wrong/tf_nemesis.mp3",
-      "/sounds/general/wrong/directed-by-robert-b_voI2Z4T.mp3",
-      "/sounds/general/wrong/dexter-meme.mp3",
-      "/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3",
-      "/sounds/general/wrong/let-her-go.mp3"
+      `${SOUND_BASE_URL}/sounds/general/wrong/faaah.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/896756048.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/tf_nemesis.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/directed-by-robert-b_voI2Z4T.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/dexter-meme.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/let-her-go.mp3`
     ];
 
     expect(expectedFailSounds).toContain(soundUrl);

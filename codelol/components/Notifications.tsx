@@ -17,8 +17,25 @@ export interface Notification {
 
 export function Notifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [senderNames, setSenderNames] = useState<Record<string, string>>({});
   const [isOpen, setIsOpen] = useState(false);
   const supabase = createClient();
+
+  const fetchSenderNames = async (senderIds: string[]) => {
+    if (senderIds.length === 0) return;
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, display_name, username')
+      .in('id', senderIds);
+      
+    if (profiles) {
+      const names: Record<string, string> = {};
+      profiles.forEach((p: any) => {
+        names[p.id] = p.display_name || p.username || 'A player';
+      });
+      setSenderNames(prev => ({ ...prev, ...names }));
+    }
+  };
 
   useEffect(() => {
     async function fetchNotifications() {
@@ -31,7 +48,14 @@ export function Notifications() {
         .eq('user_id', userData.user.id)
         .order('created_at', { ascending: false });
 
-      if (data) setNotifications(data);
+      if (data) {
+        setNotifications(data);
+        
+        const senderIds = data
+          .map(n => n.payload?.friend_id || n.payload?.challenger_id || n.payload?.sender_id)
+          .filter(Boolean);
+        await fetchSenderNames(senderIds);
+      }
     }
 
     fetchNotifications();
@@ -50,9 +74,11 @@ export function Notifications() {
             table: 'notifications',
             filter: `user_id=eq.${userData.user.id}`,
           },
-          (payload) => {
+          async (payload) => {
             const newNotif = payload.new as Notification;
             setNotifications((prev) => [newNotif, ...prev]);
+            const senderId = newNotif.payload?.friend_id || newNotif.payload?.challenger_id || newNotif.payload?.sender_id;
+            if (senderId) await fetchSenderNames([senderId]);
           }
         )
         .on(
@@ -157,7 +183,13 @@ export function Notifications() {
               {notifications.length > 0 ? (
                 notifications.map(notif => (
                   <div key={notif.id} className={`bg-zinc-800/50 p-3 rounded-xl border mb-2 ${notif.is_read ? 'border-zinc-800/30 opacity-70' : 'border-zinc-700/50'}`}>
-                    <p className="text-sm font-medium text-white mb-1">{notif.title}</p>
+                    <p className="text-sm font-medium text-white mb-1">
+                      {notif.type === 'friend_request' && senderNames[notif.payload?.friend_id]
+                        ? `Friend request from ${senderNames[notif.payload.friend_id]}`
+                        : (notif.type === 'battle_invite' || notif.title?.toLowerCase().includes('invite')) && senderNames[notif.payload?.challenger_id || notif.payload?.sender_id]
+                        ? `Battle invite from ${senderNames[notif.payload.challenger_id || notif.payload.sender_id]}`
+                        : notif.title}
+                    </p>
                     
                     {notif.type === 'friend_request' && !notif.is_read && (
                       <div className="flex gap-2 mt-2">

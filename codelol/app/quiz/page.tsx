@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { quizzes, QuizTopic } from '@/lib/quizzes';
 import { pythonQuizzes } from '@/lib/quizzes-python';
+import { cQuizzes } from '@/lib/quizzes-c';
+import { cppQuizzes } from '@/lib/quizzes-cpp';
+import { javaQuizzes } from '@/lib/quizzes-java';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { saveQuizProgress } from '@/lib/progress';
 import { createClient } from '@/lib/supabase/client';
@@ -28,7 +31,9 @@ export default function QuizPage() {
           const storedHumor = localStorage.getItem('guest_humor');
           if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
           const storedLang = localStorage.getItem('guest_lang');
-          if (storedLang === 'python' || storedLang === 'javascript') setLearningLanguage(storedLang);
+          if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
+            setLearningLanguage(storedLang);
+          }
         } else {
           const { data: profile } = await supabase
             .from('profiles')
@@ -57,7 +62,15 @@ export default function QuizPage() {
     setScore(0);
   };
 
-  const activeQuizzes = learningLanguage === 'python' ? pythonQuizzes : quizzes;
+  const getActiveQuizzes = () => {
+    if (learningLanguage === 'python') return pythonQuizzes;
+    if (learningLanguage === 'c') return cQuizzes;
+    if (learningLanguage === 'cpp') return cppQuizzes;
+    if (learningLanguage === 'java') return javaQuizzes;
+    return quizzes;
+  };
+  
+  const activeQuizzes = getActiveQuizzes();
   const currentTopic = topic ? activeQuizzes[topic] : null;
   const currentQuiz = currentTopic ? currentTopic.questions : [];
   const currentQuestion = currentQuiz[currentQuestionIndex];

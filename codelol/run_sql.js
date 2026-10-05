@@ -49,7 +49,7 @@ ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS display_name text,
   ADD COLUMN IF NOT EXISTS humor_preference text,
   ADD COLUMN IF NOT EXISTS onboarding_complete boolean DEFAULT false,
-  ADD COLUMN IF NOT EXISTS learning_language text DEFAULT 'javascript' CHECK (learning_language IN ('javascript', 'python')),
+  ADD COLUMN IF NOT EXISTS learning_language text DEFAULT 'javascript' CHECK (learning_language IN ('javascript', 'python', 'c', 'cpp', 'java')),
   ADD COLUMN IF NOT EXISTS python_current_level integer DEFAULT 1,
   ADD COLUMN IF NOT EXISTS python_levels_completed integer DEFAULT 0,
   ADD COLUMN IF NOT EXISTS python_current_tier text DEFAULT 'Beginner';

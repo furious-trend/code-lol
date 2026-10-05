@@ -11,6 +11,7 @@ export default function BattleLobbyPage() {
   const [selectedProblem, setSelectedProblem] = useState(problems[0].id);
   const [maxPlayers, setMaxPlayers] = useState(2);
   const [timeLimit, setTimeLimit] = useState(300); // 5 mins
+  const [selectedLanguage, setSelectedLanguage] = useState('javascript');
   
   const [isCreating, setIsCreating] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
@@ -21,7 +22,7 @@ export default function BattleLobbyPage() {
     setIsCreating(true);
     setError('');
 
-    const battle = await createBattle(selectedProblem, maxPlayers, timeLimit);
+    const battle = await createBattle(selectedProblem, maxPlayers, timeLimit, selectedLanguage);
     if (battle) {
       router.push(`/battle/${battle.room_code}`);
     } else {
@@ -69,6 +70,23 @@ export default function BattleLobbyPage() {
                   <option key={p.id} value={p.id}>{p.title} ({p.difficulty})</option>
                 ))}
               </select>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-bold text-zinc-400 mb-2">Language</label>
+                <select 
+                  value={selectedLanguage}
+                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                  className="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500"
+                >
+                  <option value="javascript">JavaScript</option>
+                  <option value="python">Python</option>
+                  <option value="c">C</option>
+                  <option value="cpp">C++</option>
+                  <option value="java">Java</option>
+                </select>
+              </div>
             </div>
             
             <div className="grid grid-cols-2 gap-4">

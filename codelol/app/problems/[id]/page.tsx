@@ -580,25 +580,7 @@ let _log = [];
         >
           <h3 className="font-bold text-zinc-500 mb-6 uppercase tracking-wider text-sm border-b border-zinc-800 pb-2">Execution Output & Roast</h3>
           
-          {(isRoasting || roastError || roastData) && (
-            <div className="mb-6 pb-6 border-b border-zinc-800 animate-in fade-in slide-in-from-top-4 duration-500">
-              {isRoasting && (
-                <div className="flex flex-col items-center gap-2 py-4 text-pink-400">
-                  <span className="animate-pulse font-bold tracking-widest text-lg">{roastStatus === 'Roasting...' ? loadingMsg : roastStatus} 🔥</span>
-                </div>
-              )}
-              {roastError && <div className="text-red-400 text-sm p-4 bg-red-500/10 rounded-lg">{roastError}</div>}
-              {roastData && !isRoasting && (
-                 <RoastCard 
-                   roast={roastData.roast}
-                   fix={roastData.fix}
-                   mood={roastData.mood}
-                   gifUrl={roastData.gifUrl}
-                   onDismiss={() => clearRoast()}
-                 />
-              )}
-            </div>
-          )}
+
 
           {testResults ? (
             <div className="space-y-4 animate-in fade-in duration-300">
@@ -637,6 +619,26 @@ let _log = [];
           ) : (
             <div className="text-zinc-600 italic p-6 bg-zinc-900/50 rounded-xl text-center">
               Run your code to see the test results and roast here!
+            </div>
+          )}
+          
+          {(isRoasting || roastError || roastData) && (
+            <div className="mt-6 pt-6 border-t border-zinc-800 animate-in fade-in slide-in-from-top-4 duration-500">
+              {isRoasting && (
+                <div className="flex flex-col items-center gap-2 py-4 text-pink-400">
+                  <span className="animate-pulse font-bold tracking-widest text-lg">{roastStatus === 'Roasting...' ? loadingMsg : roastStatus} 🔥</span>
+                </div>
+              )}
+              {roastError && <div className="text-red-400 text-sm p-4 bg-red-500/10 rounded-lg">{roastError}</div>}
+              {roastData && !isRoasting && (
+                 <RoastCard 
+                   roast={roastData.roast}
+                   fix={roastData.fix}
+                   mood={roastData.mood}
+                   gifUrl={roastData.gifUrl}
+                   onDismiss={() => clearRoast()}
+                 />
+              )}
             </div>
           )}
         </div>

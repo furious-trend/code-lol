@@ -254,7 +254,7 @@ export default function LessonsPage() {
         }
         
         const storedLang = localStorage.getItem('guest_lang');
-        if (storedLang === 'python' || storedLang === 'javascript') {
+        if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
           setLearningLanguage(storedLang);
         }
       }

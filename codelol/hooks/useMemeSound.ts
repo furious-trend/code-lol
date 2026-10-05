@@ -9,6 +9,9 @@ export const __resetGlobalAudioPlayer = () => {
 };
 
 export function useMemeSound() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321';
+  const SOUND_BASE_URL = `${supabaseUrl}/storage/v1/object/public/sounds`;
+
   const playMemeSound = useCallback((isSuccess: boolean, humorPref: 'general' | 'tamil' = 'general') => {
     if (typeof window === 'undefined') return '';
 
@@ -32,40 +35,40 @@ export function useMemeSound() {
     globalAudioPlayer.volume = Math.min(1, Math.max(0, 0.6 * baseVolume));
 
     const generalFailSounds = [
-      "/sounds/general/wrong/faaah.mp3",
-      "/sounds/general/wrong/896756048.mp3",
-      "/sounds/general/wrong/tf_nemesis.mp3",
-      "/sounds/general/wrong/directed-by-robert-b_voI2Z4T.mp3",
-      "/sounds/general/wrong/dexter-meme.mp3",
-      "/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3",
-      "/sounds/general/wrong/let-her-go.mp3"
+      `${SOUND_BASE_URL}/sounds/general/wrong/faaah.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/896756048.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/tf_nemesis.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/directed-by-robert-b_voI2Z4T.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/dexter-meme.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/faaaaaaaaaaaaaaaaaah.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/wrong/let-her-go.mp3`
     ];
     
     const tamilFailSounds = [
-      "/sounds/tamil/wrong/nov-thappa-irrkuthu-naa.mp3",
-      "/sounds/tamil/wrong/aiyo-apdi-chollatha.mp3",
-      "/sounds/tamil/wrong/chei-sirikkira-nee.mp3",
-      "/sounds/tamil/wrong/annaiku_kalaila_6_mani.mp3",
-      "/sounds/tamil/wrong/yarume_illatha_kadaila_yarukuda.mp3",
-      "/sounds/tamil/wrong/vadivelu_winner.mp3"
+      `${SOUND_BASE_URL}/sounds/tamil/wrong/nov-thappa-irrkuthu-naa.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/wrong/aiyo-apdi-chollatha.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/wrong/chei-sirikkira-nee.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/wrong/annaiku_kalaila_6_mani.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/wrong/yarume_illatha_kadaila_yarukuda.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/wrong/vadivelu_winner.mp3`
     ];
     
     const generalSuccessSounds = [
-      "/sounds/general/right/happy-happy-happy-song.mp3",
-      "/sounds/general/right/indian-song.mp3",
-      "/sounds/general/right/kids-saying-yay-sound-effect_3.mp3",
-      "/sounds/general/right/anime-wow-sound-effect.mp3"
+      `${SOUND_BASE_URL}/sounds/general/right/happy-happy-happy-song.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/right/indian-song.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/right/kids-saying-yay-sound-effect_3.mp3`,
+      `${SOUND_BASE_URL}/sounds/general/right/anime-wow-sound-effect.mp3`
     ];
 
     const tamilSuccessSounds = [
-      "/sounds/tamil/right/thalapathy_kacheri.mp3",
-      "/sounds/tamil/right/powerhouse_coolie.mp3",
-      "/sounds/tamil/right/raga_of_revenge.mp3",
-      "/sounds/tamil/right/evalavo_pannitom.mp3",
-      "/sounds/tamil/right/if_you_are_bad.mp3",
-      "/sounds/tamil/right/vadivelu_bomb.mp3",
-      "/sounds/tamil/right/vadivelu.mp3",
-      "/sounds/tamil/right/seeman-buhaha.mp3"
+      `${SOUND_BASE_URL}/sounds/tamil/right/thalapathy_kacheri.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/powerhouse_coolie.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/raga_of_revenge.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/evalavo_pannitom.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/if_you_are_bad.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/vadivelu_bomb.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/vadivelu.mp3`,
+      `${SOUND_BASE_URL}/sounds/tamil/right/seeman-buhaha.mp3`
     ];
 
     const failSounds = humorPref === 'tamil' ? tamilFailSounds : generalFailSounds;

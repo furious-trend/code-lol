@@ -47,6 +47,13 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
         </div>
         
         <div className="flex-1 p-5 overflow-y-auto flex flex-col gap-5">
+          {output && (
+            <div className="mt-2 p-3 bg-black border-2 border-amber-500/20 rounded-xl overflow-x-auto">
+              <span className="text-[10px] text-amber-400 font-mono uppercase block mb-1">Execution Output</span>
+              <pre className="text-sm text-zinc-300 font-mono whitespace-pre-wrap">{output}</pre>
+            </div>
+          )}
+
           {roast && (
             <p className="text-xl font-bold text-white leading-relaxed text-center">
               &quot;{roast}&quot;
@@ -70,13 +77,6 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
                   }
                 }}
               />
-            </div>
-          )}
-          
-          {output && (
-            <div className="mt-2 p-3 bg-black border-2 border-amber-500/20 rounded-xl overflow-x-auto">
-              <span className="text-[10px] text-amber-400 font-mono uppercase block mb-1">Execution Output</span>
-              <pre className="text-sm text-zinc-300 font-mono whitespace-pre-wrap">{output}</pre>
             </div>
           )}
           

@@ -40,7 +40,7 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
     }
     
     const storedLang = localStorage.getItem('guest_lang');
-    if (storedLang === 'python' || storedLang === 'javascript') {
+    if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
       setActiveLang(storedLang);
     }
   }, []);
@@ -444,29 +444,6 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
                </div>
             </div>
 
-            {isRoasting && (
-              <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4 animate-pulse flex flex-col items-center">
-                <span className="text-3xl mb-2">🔥</span>
-                <p className="text-purple-400 font-bold text-sm tracking-widest text-center">{roastStatus}</p>
-              </div>
-            )}
-            
-            {roastError && (
-              <div className="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
-                <p className="text-red-400 text-sm text-center">{roastError}</p>
-              </div>
-            )}
-            
-            {roastData && !isRoasting && (
-               <RoastCard 
-                 roast={roastData.roast}
-                 fix={roastData.fix}
-                 mood={roastData.mood}
-                 gifUrl={roastData.gifUrl}
-                 onDismiss={clearRoast}
-               />
-            )}
-
           </div>
         </div>
 
@@ -517,6 +494,33 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
                )}
             </div>
           </div>
+
+          {(isRoasting || roastError || roastData) && (
+            <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+              {isRoasting && (
+                <div className="bg-purple-900/20 border border-purple-500/20 rounded-xl p-4 animate-pulse flex flex-col items-center">
+                  <span className="text-3xl mb-2">🔥</span>
+                  <p className="text-purple-400 font-bold text-sm tracking-widest text-center">{roastStatus}</p>
+                </div>
+              )}
+              
+              {roastError && (
+                <div className="bg-red-900/20 border border-red-500/20 rounded-xl p-4">
+                  <p className="text-red-400 text-sm text-center">{roastError}</p>
+                </div>
+              )}
+              
+              {roastData && !isRoasting && (
+                 <RoastCard 
+                   roast={roastData.roast}
+                   fix={roastData.fix}
+                   mood={roastData.mood}
+                   gifUrl={roastData.gifUrl}
+                   onDismiss={clearRoast}
+                 />
+              )}
+            </div>
+          )}
 
           {hasRunSuccessfully && (
             <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl animate-in fade-in slide-in-from-bottom-8 duration-700 flex flex-col sm:flex-row items-center justify-between gap-4">
