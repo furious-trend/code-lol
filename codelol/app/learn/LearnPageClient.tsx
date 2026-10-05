@@ -9,7 +9,7 @@ import { getAllLessons } from '@/lib/lessons';
 import Link from 'next/link';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
-import { executeCodeInBrowser } from '@/lib/executor';
+import { executeCode } from '@/lib/executor';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { saveLessonProgress } from '@/lib/progress';
 import confetti from 'canvas-confetti';
@@ -228,12 +228,12 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
         if (callCountChecks.length > 0) {
           expectsCallCount = true;
           expectedCallCountMsg = callCountChecks[0].expectedMessage;
-          codeToExecute = codeToExecute.replace(/(for|while|do)\s*\(.*?\)\s*\{/g, "$&\n  window.__loopCount = (window.__loopCount || 0) + 1;\n");
-          assertions.push({ id: 'call_count', code: 'window.__loopCount > 1' });
+          codeToExecute = codeToExecute.replace(/(for|while|do)\s*\(.*?\)\s*\{/g, "$&\n  globalThis.__loopCount = (globalThis.__loopCount || 0) + 1;\n");
+          assertions.push({ id: 'call_count', code: 'globalThis.__loopCount > 1' });
         }
       }
 
-      const data = await executeCodeInBrowser(learningLanguage, codeToExecute, assertions);
+      const data = await executeCode(learningLanguage, codeToExecute, assertions);
       
       if (!data.error) {
         const finalOutput = data.output || 'Code ran successfully with no output.';

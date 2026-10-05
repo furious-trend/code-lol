@@ -5,6 +5,7 @@ import { checkRateLimit } from '@/lib/rateLimit';
 export async function POST(request: Request) {
   try {
     const { code, output, isSuccess, humorPref = 'general' } = await request.json();
+    console.log("RECEIVED HUMOR PREF:", humorPref);
 
     const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
     const rateLimit = checkRateLimit(ip);
@@ -23,28 +24,12 @@ export async function POST(request: Request) {
 
     let prompt = '';
     if (isSuccess) {
-      if (humorPref === 'tamil') {
-        prompt = `You are a hilarious, over-the-top Kollywood comedy mentor. The user just successfully ran or solved this code!
-1. For the 'roast' field, provide a short, punchy Tamil celebration phrase (under 15 words) using authentic Tamil movie punchlines or meme rhythms. DO NOT use generic translated humor.
-2. Keep the 'fix' field strictly as an empty string ("") since there are no errors.
-3. Provide a 'gifKeyword' that specifically searches for a happy funny Kollywood/Tamil celebration meme gif.
-4. At the end, output one word only on a new line labeled 'MOOD:' summarizing the vibe — must be exactly one of: party, genius, happy, relief, done, mind_blown.
+      const successHumorInstruction = humorPref === 'tamil' ? 
+        "Provide a short, hype Tamil slang phrase (in English letters) praising the user like 'Mass panita po!' or 'Bloody sweet!'" : 
+        'Keep the \'roast\' field strictly as an empty string ("").';
 
-Format the response strictly as a JSON object with this exact shape:
-{
-  "roast": "the celebration phrase here",
-  "fix": "",
-  "mood": "the single word mood from the list above",
-  "gifKeyword": "the search term for the GIF"
-}
-
-Good examples for the 'roast' field:
-- "Bloody sweet... output vandhuruchu da!"
-- "Appa, unga pulla urupputturuchu pa!"
-- "Singam single-ah vandhu run panniruchu!"`;
-      } else {
-        prompt = `You are a hilarious, over-the-top comedy mentor. The user just successfully ran or solved this code!
-1. CRITICAL RULE: Keep the 'roast' field strictly as an empty string ("").
+      prompt = `You are a hilarious, over-the-top comedy mentor. The user just successfully ran or solved this code!
+1. CRITICAL RULE: ${successHumorInstruction}
 2. Keep the 'fix' field strictly as an empty string ("") since there are no errors.
 3. Provide a 'gifKeyword' that specifically searches for a happy funny excited meme gif (e.g. 'excited meme', 'happy meme').
 4. At the end, output one word only on a new line labeled 'MOOD:' summarizing the vibe — must be exactly one of: party, genius, happy.
@@ -56,7 +41,6 @@ Format the response strictly as a JSON object with this exact shape:
   "mood": "the single word mood from the list above",
   "gifKeyword": "the search term for the GIF"
 }`;
-      }
     } else {
       if (humorPref === 'tamil') {
         prompt = `You are a witty, ruthless coding mentor. Look at this code and the execution error. You MUST find the actual bug or issue causing the error.
@@ -122,9 +106,9 @@ ${output || 'None'}
     let text = "";
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      const timeoutId = setTimeout(() => controller.abort(), 2500);
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -152,7 +136,7 @@ ${output || 'None'}
       const result = await response.json();
       text = result.candidates[0].content.parts[0].text.trim();
     } catch (apiError) {
-      console.warn('Gemini API fetch failed or timed out. Using fallback roast.', apiError instanceof Error ? apiError.message : String(apiError));
+      console.warn('Gemini API fetch failed or timed out. Using fallback roast.', apiError);
       return NextResponse.json(getRandomFallback(isSuccess, humorPref));
     }
 

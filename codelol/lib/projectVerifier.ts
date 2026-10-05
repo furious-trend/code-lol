@@ -1,4 +1,4 @@
-import { executeCodeInBrowser } from './executor';
+import { executeCode } from './executor';
 
 export type CheckType = 'function_exists' | 'output_contains' | 'dom_element_exists' | 'custom_assertion';
 
@@ -26,7 +26,7 @@ export async function checkRequirement(code: string, requirement: Requirement): 
     assertions = [{ id: requirement.id, code: `!!document.querySelector("${requirement.check_code.replace(/"/g, '\\"')}")` }];
   }
 
-  const result = await executeCodeInBrowser('javascript', code, assertions);
+  const result = await executeCode('javascript', code, assertions);
 
   if (requirement.check_type === 'output_contains') {
     const passed = result.output.includes(requirement.check_code);

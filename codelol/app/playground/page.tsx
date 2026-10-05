@@ -11,16 +11,32 @@ import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { Bugsy } from '@/components/Bugsy';
 import { useMemeSound } from '@/hooks/useMemeSound';
-import { executeCodeInBrowser } from '@/lib/executor';
+import { executeCode } from '@/lib/executor';
 import { getRandomLoadingMessage, getRandomEmptyMessage } from '@/lib/funnyCopy';
 import { createClient } from '@/lib/supabase/client';
+
+const STARTER_CODE: Record<string, string> = {
+  javascript: '// Write your code here\nconsole.log("Hello, World!");',
+  python: '# Write your code here\nprint("Hello, World!")',
+  c: '#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}',
+  cpp: '#include <iostream>\n\nint main() {\n    std::cout << "Hello, World!" << std::endl;\n    return 0;\n}',
+  java: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}'
+};
+
+const FILE_EXT: Record<string, string> = {
+  javascript: 'main.js',
+  python: 'main.py',
+  c: 'main.c',
+  cpp: 'main.cpp',
+  java: 'Main.java'
+};
 
 function PlaygroundContent() {
   const searchParams = useSearchParams();
   const snippetId = searchParams.get('snippet');
   
   const [language, setLanguage] = useState<string>('javascript');
-  const [code, setCode] = useState('// Write your code here\nconsole.log("Hello, World!");');
+  const [code, setCode] = useState(STARTER_CODE['javascript']);
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [lastRunSuccess, setLastRunSuccess] = useState<boolean | null>(null);
@@ -34,29 +50,42 @@ function PlaygroundContent() {
 
   useEffect(() => {
     async function loadPref() {
-      const { data: { user } } = await supabase.auth.getUser();
+      const supabaseClient = createClient();
+      const { data: { user } } = await supabaseClient.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase
+        const { data: profile } = await supabaseClient
           .from('profiles')
           .select('humor_preference, learning_language')
           .eq('id', user.id)
           .single();
         if (profile?.humor_preference) {
-          setHumorPref(profile.humor_preference);
+          setHumorPref(profile.humor_preference as 'general' | 'tamil');
         }
         if (profile?.learning_language) {
           setLearningLanguage(profile.learning_language);
           if (!snippetId) {
             setLanguage(profile.learning_language);
-            if (profile.learning_language === 'python') {
-              setCode('# Write your code here\nprint("Hello, World!")');
-            }
+            setCode(STARTER_CODE[profile.learning_language] || STARTER_CODE['javascript']);
+          }
+        }
+      } else {
+        // Handle guest user preferences from localStorage
+        const storedHumor = localStorage.getItem('guest_humor');
+        if (storedHumor === 'tamil' || storedHumor === 'general') {
+          setHumorPref(storedHumor);
+        }
+        const storedLang = localStorage.getItem('guest_lang');
+        if (storedLang) {
+          setLearningLanguage(storedLang);
+          if (!snippetId) {
+            setLanguage(storedLang);
+            setCode(STARTER_CODE[storedLang] || STARTER_CODE['javascript']);
           }
         }
       }
     }
     loadPref();
-  }, [supabase, snippetId]);
+  }, [snippetId]);
 
   useEffect(() => {
     setEmptyMsg(getRandomEmptyMessage());
@@ -88,7 +117,7 @@ function PlaygroundContent() {
     
     try {
        
-      const data = await executeCodeInBrowser(language, code);
+      const data = await executeCode(language, code);
 
       if (!data.error) {
         const result = data.output || '';
@@ -138,18 +167,40 @@ function PlaygroundContent() {
             value={language}
             onChange={(e) => {
               const newLang = e.target.value;
+              
+              // Only replace if the user hasn't edited the starter code of the old language
+              if (STARTER_CODE[language] === code) {
+                setCode(STARTER_CODE[newLang] || STARTER_CODE['javascript']);
+              }
+              
               setLanguage(newLang);
               setLearningLanguage(newLang);
-              if (code === '// Write your code here\\nconsole.log("Hello, World!");' && newLang === 'python') {
-                setCode('# Write your code here\\nprint("Hello, World!")');
-              } else if (code === '# Write your code here\\nprint("Hello, World!")' && newLang === 'javascript') {
-                setCode('// Write your code here\\nconsole.log("Hello, World!");');
-              }
             }}
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer"
           >
             <option value="javascript">JavaScript</option>
             <option value="python">Python</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="java">Java</option>
+          </select>
+          
+          <select 
+            value={humorPref}
+            onChange={async (e) => {
+              const val = e.target.value as 'general' | 'tamil';
+              setHumorPref(val);
+              localStorage.setItem('guest_humor', val);
+              const supabaseClient = createClient();
+              const { data: { user } } = await supabaseClient.auth.getUser();
+              if (user) {
+                await supabaseClient.from('profiles').update({ humor_preference: val }).eq('id', user.id);
+              }
+            }}
+            className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer"
+          >
+            <option value="general">General Humor</option>
+            <option value="tamil">Tamil Humor</option>
           </select>
           
           <motion.button 
@@ -159,7 +210,7 @@ function PlaygroundContent() {
             disabled={isRoasting || isRunning}
             className={`flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRoasting || isRunning ? 'opacity-50 cursor-not-allowed' : 'shadow-lg shadow-purple-600/30'}`}
           >
-            {isRoasting || isRunning ? 'Evaluating... ⏳' : 'Submit & Roast 🚀🔥'}
+            {isRoasting || isRunning ? '⏳ Compiling... please wait' : 'Submit & Roast 🚀🔥'}
           </motion.button>
         </div>
       </div>
@@ -175,7 +226,7 @@ function PlaygroundContent() {
               <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
             </div>
-            <span className="ml-4 text-xs font-mono text-zinc-500">main.js</span>
+            <span className="ml-4 text-xs font-mono text-zinc-500">{FILE_EXT[language] || 'main.js'}</span>
           </div>
           <div className="flex-1 relative">
             <Editor

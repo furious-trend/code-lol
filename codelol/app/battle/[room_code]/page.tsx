@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useBattle } from '@/hooks/useBattle';
 import { startBattle, updateParticipantProgress, finishBattle } from '@/lib/battles';
 import { problems } from '@/lib/problems';
-import { executeCodeInBrowser } from '@/lib/executor';
+import { executeCode } from '@/lib/executor';
 import { Bugsy } from '@/components/Bugsy';
 import Link from 'next/link';
 import Confetti from 'react-confetti';
@@ -235,7 +235,7 @@ let _log = [];
     }
 
     try {
-      const data = await executeCodeInBrowser(learningLanguage, testSuite);
+      const data = await executeCode(learningLanguage, testSuite);
       
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);
@@ -388,7 +388,7 @@ let _log = [];
                   disabled={isSubmitting || myParticipantRecord?.finished}
                   className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors"
                 >
-                  {isSubmitting ? 'Running...' : 'Submit Code 🚀'}
+                  {isSubmitting ? '⏳ Compiling... please wait' : 'Submit Code 🚀'}
                 </button>
               </div>
               <textarea

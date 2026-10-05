@@ -3,13 +3,13 @@ import { analyzeComplexity } from '@/lib/complexityAnalyzer';
 
 export async function POST(req: Request) {
   try {
-    const { code } = await req.json();
+    const { code, language = 'javascript' } = await req.json();
     
     if (!code) {
       return NextResponse.json({ error: 'Code is required' }, { status: 400 });
     }
     
-    const result = await analyzeComplexity(code);
+    const result = analyzeComplexity(code, language);
     return NextResponse.json(result);
   } catch (error) {
     console.error('API /analyze-complexity error:', error);

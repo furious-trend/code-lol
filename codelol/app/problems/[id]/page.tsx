@@ -8,7 +8,7 @@ import { problems } from '@/lib/problems';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { useMemeSound } from '@/hooks/useMemeSound';
-import { executeCodeInBrowser } from '@/lib/executor';
+import { executeCode } from '@/lib/executor';
 import { saveProblemCompletion } from '@/lib/progress';
 import { getRandomLoadingMessage, getRandomSuccessMessage, getRandomNudgeMessage } from '@/lib/funnyCopy';
 import { MilestoneCelebration } from '@/components/MilestoneCelebration';
@@ -34,7 +34,7 @@ export default function ProblemSolverPage() {
   const [testResults, setTestResults] = useState<{passed: number, total: number, log: string[]} | null>(null);
   const [rawOutput, setRawOutput] = useState('');
   const [quizAnswered, setQuizAnswered] = useState<number | null>(null);
-  const [loadingMsg, setLoadingMsg] = useState('Evaluating... ⏳');
+  const [loadingMsg, setLoadingMsg] = useState('⏳ Compiling... please wait');
   const [successMsg, setSuccessMsg] = useState('🎉 Accepted! All tests passed.');
   const [nudgeMsg, setNudgeMsg] = useState('One more? Bugsy dares you 😏');
   
@@ -255,7 +255,7 @@ let _log = [];
     }
 
     try {
-      const data = await executeCodeInBrowser(learningLanguage, testSuite);
+      const data = await executeCode(learningLanguage, testSuite);
       
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);
@@ -291,7 +291,7 @@ let _log = [];
             try {
               const res = await fetch('/api/analyze-complexity', {
                 method: 'POST',
-                body: JSON.stringify({ code })
+                body: JSON.stringify({ code, language: learningLanguage })
               });
               if (res.ok) {
                 const complexity = await res.json();
@@ -482,7 +482,7 @@ let _log = [];
                 disabled={isSubmitting || isRoasting}
                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl text-sm transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2 disabled:opacity-50"
               >
-                {isSubmitting || isRoasting ? 'Evaluating... ⏳' : 'Submit & Roast 🚀🔥'}
+                {isSubmitting || isRoasting ? '⏳ Compiling... please wait' : 'Submit & Roast 🚀🔥'}
               </motion.button>
             </div>
           </div>

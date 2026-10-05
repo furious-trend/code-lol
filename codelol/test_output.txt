@@ -1,0 +1,40 @@
+
+========================================
+Testing Language: PYTHON
+========================================
+
+--- Test Type: error - div by zero ---
+[Execution Output]
+Internal error: code execution failed
+[Roast Generator]
+Roast: Missing a bracket? It's like leaving the front door wide open and wondering why it's cold.
+Mood: facepalm
+Waiting 15 seconds to avoid Gemini 429...
+
+--- Test Type: error - index out of bounds ---
+[Execution Output]
+Internal error: code execution failed
+[Roast Generator]
+Roast: Missing a bracket? It's like leaving the front door wide open and wondering why it's cold.
+Mood: facepalm
+Waiting 15 seconds to avoid Gemini 429...
+
+========================================
+Testing Language: JAVA
+========================================
+
+--- Test Type: error - div by zero ---
+[Execution Output]
+Internal error: code execution failed
+[Roast Generator]
+Roast: Variable is not defined. Did you expect it to magically appear out of thin air?
+Mood: facepalm
+Waiting 15 seconds to avoid Gemini 429...
+
+--- Test Type: error - index out of bounds ---
+[Execution Output]
+Internal error: code execution failed
+[Roast Generator]
+Roast: A typo in a keyword? It's like calling your teacher 'Mom'.
+Mood: crying_laughing
+Waiting 15 seconds to avoid Gemini 429...
