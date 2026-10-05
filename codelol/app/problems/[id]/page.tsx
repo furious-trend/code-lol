@@ -48,6 +48,7 @@ export default function ProblemSolverPage() {
   const supabase = createClient();
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
+  const [activeLang, setActiveLang] = useState<string>('javascript');
 
   useEffect(() => {
     async function loadPref() {
@@ -57,7 +58,10 @@ export default function ProblemSolverPage() {
           const storedHumor = localStorage.getItem('guest_humor');
           if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
           const storedLang = localStorage.getItem('guest_lang');
-          if (storedLang === 'python' || storedLang === 'javascript') setLearningLanguage(storedLang);
+          if (storedLang === 'python' || storedLang === 'javascript') {
+            setLearningLanguage(storedLang);
+            setActiveLang(storedLang);
+          }
         } else {
           const { data: profile } = await supabase
             .from('profiles')
@@ -68,7 +72,7 @@ export default function ProblemSolverPage() {
             setHumorPref(profile.humor_preference);
           }
           if (profile?.learning_language) {
-            setLearningLanguage(profile.learning_language);
+            setLearningLanguage(profile.learning_language); setActiveLang(profile.learning_language);
           }
         }
       }
@@ -79,13 +83,13 @@ export default function ProblemSolverPage() {
   // Sync state if problem loads
   useEffect(() => {
     if (problem) {
-      if (learningLanguage === 'python' && problem.starterCodePython) {
+      if (activeLang === 'python' && problem.starterCodePython) {
         setCode(problem.starterCodePython);
       } else {
         setCode(problem.starterCode);
       }
     }
-  }, [problem, learningLanguage]);
+  }, [problem, activeLang]);
 
   if (!problem) {
     return (
@@ -162,7 +166,7 @@ export default function ProblemSolverPage() {
     clearRoast();
 
     let functionName = 'solution';
-    if (learningLanguage === 'python') {
+    if (activeLang === 'python') {
        const funcNameMatch = (problem.starterCodePython || problem.starterCode).match(/def\s+([a-zA-Z0-9_]+)/);
        if (funcNameMatch) functionName = funcNameMatch[1];
     } else {
@@ -170,10 +174,12 @@ export default function ProblemSolverPage() {
        if (funcNameMatch) functionName = funcNameMatch[1];
     }
 
+    
     let testSuite = '';
     
-    if (learningLanguage === 'python') {
-      testSuite = `
+    if (activeLang === 'python' || activeLang === 'javascript') {
+      if (activeLang === 'python') {
+        testSuite = `
 ${code}
 
 import json
@@ -201,8 +207,8 @@ for i, tc in enumerate(_tc):
 print('===TEST_RESULTS===')
 print(json.dumps({'passed': _passed, 'total': len(_tc), 'log': _log}))
 `;
-    } else {
-      testSuite = `
+      } else {
+        testSuite = `
 ${code}
 
 const _tc = ${JSON.stringify(problem.testCases)};
@@ -223,7 +229,6 @@ let _log = [];
         continue;
       }
       
-      // Catch asynchronous hangs with a 2-second timeout
       const result = await Promise.race([
         Promise.resolve(fn(..._tc[i].input)),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Test case timed out (async hang)')), 2000))
@@ -252,10 +257,15 @@ let _log = [];
   console.log(JSON.stringify({ passed: _passed, total: _tc.length, log: _log }));
 })();
 `;
+      }
+    } else {
+      // For C, C++, Java, we simply run the code and do not auto-test right now.
+      testSuite = code;
     }
 
+
     try {
-      const data = await executeCode(learningLanguage, testSuite);
+      const data = await executeCode(activeLang, testSuite);
       
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);
@@ -267,8 +277,24 @@ let _log = [];
       
       const outputLines = data.output.split('\n');
       
+      
+      if (activeLang !== 'javascript' && activeLang !== 'python') {
+        // Just show output
+        setRawOutput(data.output || "Code ran successfully with no output.");
+        setSuccessMsg("Executed Successfully!");
+        setTestResults({ passed: 1, total: 1, log: ["Execution Output:", ...(data.output || "No output").split('\n')] });
+        
+        // Wait for roast and GIF to fully load
+        const playedSound = playMemeSound(true, humorPref);
+        handleRoast(code, data.output || "Code ran successfully with no output.", true, playedSound, humorPref);
+        
+        setIsSubmitting(false);
+        return;
+      }
+
       // Parse the output to find our test results
       const resultsIdx = outputLines.findIndex((l: string) => l === '===TEST_RESULTS===');
+
       
       if (resultsIdx !== -1 && outputLines[resultsIdx + 1]) {
         try {
@@ -291,7 +317,7 @@ let _log = [];
             try {
               const res = await fetch('/api/analyze-complexity', {
                 method: 'POST',
-                body: JSON.stringify({ code, language: learningLanguage })
+                body: JSON.stringify({ code, language: activeLang })
               });
               if (res.ok) {
                 const complexity = await res.json();
@@ -308,7 +334,7 @@ let _log = [];
               timeComplexity,
               spaceComplexity,
               pointsAwarded: 100 // Fixed base points for now
-            }, learningLanguage);
+            }, activeLang);
             
             if (isNew && (completedBefore.length + 1) % 5 === 0) {
               setMilestoneData({
@@ -374,12 +400,42 @@ let _log = [];
             <Link href="/problems" className="text-zinc-500 hover:text-blue-400 mb-6 inline-block font-medium transition-colors">
               ← Back to Problems
             </Link>
+            
             <div className="flex items-center gap-4 mt-2">
               <h1 className="text-3xl font-bold">{problem.title}</h1>
               <span className={`px-3 py-1 rounded-full text-xs font-bold border ${badgeColor}`}>
                 {problem.difficulty}
               </span>
+              <select 
+                value={activeLang}
+                onChange={(e) => {
+                  const newLang = e.target.value;
+                  // Set new starter code based on selection if available
+                  if (newLang === 'python' && problem.starterCodePython) {
+                    setCode(problem.starterCodePython);
+                  } else if (newLang === 'javascript') {
+                    setCode(problem.starterCode);
+                  } else {
+                    // For C/C++/Java, provide a basic starter if not defined
+                    const starters: Record<string, string> = {
+                      c: '#include <stdio.h>\n\nint main() {\n    // Write your code here\n    return 0;\n}',
+                      cpp: '#include <iostream>\n\nint main() {\n    // Write your code here\n    return 0;\n}',
+                      java: 'public class Main {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}'
+                    };
+                    setCode(starters[newLang] || '');
+                  }
+                  setActiveLang(newLang);
+                }}
+                className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-blue-500 cursor-pointer ml-auto"
+              >
+                <option value="javascript">JavaScript</option>
+                <option value="python">Python</option>
+                <option value="c">C</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+              </select>
             </div>
+
           </div>
 
           <div className="prose prose-invert max-w-none">
