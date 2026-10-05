@@ -49,9 +49,6 @@ export async function updateSession(request: NextRequest) {
 
     if (!user) {
       // If no session exists, redirect everything to /login except the allowed public paths
-      if (process.env.NODE_ENV === 'development') {
-         return supabaseResponse;
-      }
       if (!isLogin && !isAuthCallback) {
         const url = request.nextUrl.clone()
         url.pathname = '/login'

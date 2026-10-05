@@ -15,17 +15,6 @@ export function createClient() {
     }
   )
 
-  if (process.env.NODE_ENV === 'development') {
-    const originalGetUser = supabase.auth.getUser.bind(supabase.auth);
-    supabase.auth.getUser = async (...args) => {
-      const { data, error } = await originalGetUser(...args);
-      if (data && data.user) return { data, error } as any;
-      return { 
-        data: { user: { id: 'local-guest', email: 'guest@localhost' } as any }, 
-        error: null 
-      } as any;
-    };
-  }
 
   return supabase;
 }
