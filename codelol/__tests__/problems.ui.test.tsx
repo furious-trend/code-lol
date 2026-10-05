@@ -18,10 +18,17 @@ vi.mock('@/lib/supabase/client', () => ({
         eq: () => ({
           single: vi.fn().mockResolvedValue({ data: { humor_preference: 'general' } })
         })
-      })
+      }),
+      upsert: vi.fn().mockResolvedValue({ error: null })
     })
   })
 }));
+
+// Mock global fetch for complexity API call
+global.fetch = vi.fn().mockResolvedValue({
+  ok: true,
+  json: async () => ({ timeComplexity: "O(n)", spaceComplexity: "O(1)" })
+});
 
 // Mock problems
 vi.mock('@/lib/problems', () => ({
@@ -72,8 +79,8 @@ vi.mock('framer-motion', () => {
   };
 });
 
-// Spy on executeCodeInBrowser
-vi.spyOn(executor, 'executeCodeInBrowser');
+// Spy on executeCode
+vi.spyOn(executor, 'executeCode');
 
 describe('ProblemSolverPage - Execution Feedback', () => {
   beforeEach(() => {
@@ -81,7 +88,7 @@ describe('ProblemSolverPage - Execution Feedback', () => {
   });
 
   it('triggers failure shake and red pulse on failed execution', async () => {
-    (executor.executeCodeInBrowser as any).mockResolvedValueOnce({
+    (executor.executeCode as any).mockResolvedValueOnce({
       output: '===TEST_RESULTS===\n{"passed": 0, "total": 1, "log": ["Test 1: FAIL"]}',
       error: null
     });
@@ -101,7 +108,7 @@ describe('ProblemSolverPage - Execution Feedback', () => {
   });
 
   it('triggers neon green aura on success', async () => {
-    (executor.executeCodeInBrowser as any).mockResolvedValueOnce({
+    (executor.executeCode as any).mockResolvedValueOnce({
       output: '===TEST_RESULTS===\n{"passed": 1, "total": 1, "log": ["Test 1: PASS"]}',
       error: null
     });

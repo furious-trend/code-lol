@@ -28,24 +28,19 @@ describe('analyzeComplexity', () => {
         return max;
       }
     `;
-    const result = await analyzeComplexity(code);
+    const result = analyzeComplexity(code);
     expect(result).toEqual({
       timeComplexity: "O(n)",
       spaceComplexity: "O(1)"
     });
   });
 
-  it('should return fallback O(?) when the API fails to return valid JSON', async () => {
-    // Override the mock for this specific test
-    mockGenerateContent.mockResolvedValueOnce({
-      text: "I am an AI and I think this is O(N) but this is not JSON"
-    });
-
-    const code = `function noop() {}`;
-    const result = await analyzeComplexity(code);
+  it('should return O(1) for empty code as fallback', () => {
+    const code = ``;
+    const result = analyzeComplexity(code);
     expect(result).toEqual({
-      timeComplexity: "O(?)",
-      spaceComplexity: "O(?)"
+      timeComplexity: "O(1)",
+      spaceComplexity: "O(1)"
     });
   });
 });

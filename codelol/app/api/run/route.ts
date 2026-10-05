@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
 const COMPILER_MAP: Record<string, string> = {
-  'javascript': 'typescript-deno',
   'python': 'python-3.14',
   'c': 'gcc-15',
   'cpp': 'g++-15',
@@ -35,7 +34,12 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { language, code, assertions } = body;
 
-
+    if (language === 'javascript') {
+      return NextResponse.json(
+        { error: 'External execution is disabled for javascript — handled in-browser' },
+        { status: 400 }
+      );
+    }
     const compiler = COMPILER_MAP[language];
     if (!compiler) {
       return NextResponse.json(

@@ -37,7 +37,7 @@ describe('POST /api/run', () => {
     
     expect(mockFetch).toHaveBeenCalledTimes(1);
     const callArgs = mockFetch.mock.calls[0];
-    expect(callArgs[0]).toBe('https://api.onlinecompiler.io/api/run-code/');
+    expect(callArgs[0]).toBe('https://api.onlinecompiler.io/api/run-code-sync/');
     expect(callArgs[1].headers).toHaveProperty('Authorization');
     const parsedBody = JSON.parse(callArgs[1].body);
     expect(parsedBody.compiler).toBe('python-3.14');

@@ -81,6 +81,7 @@ export default function Onboarding() {
 
       if (queryError) {
         console.error('Error checking username:', queryError);
+        setError('Error checking username availability');
         setCheckingUsername(false);
         return false;
       }
@@ -171,6 +172,7 @@ export default function Onboarding() {
         setLoading(false);
         setSuccess(true);
         setTimeout(() => {
+          router.refresh();
           router.push('/');
         }, 1500);
       }

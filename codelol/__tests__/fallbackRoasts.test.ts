@@ -18,7 +18,7 @@ describe('fallbackRoasts', () => {
     expect(generalRoastFallbacks.length).toBeGreaterThan(0);
     expect(tamilRoastFallbacks.length).toBeGreaterThan(0);
     expect(generalProudFallbacks.length).toBeGreaterThan(0);
-    expect(tamilProudFallbacks.length).toBe(13); // Expected exactly 13 specific fallbacks
+    expect(tamilProudFallbacks.length).toBe(30); // Expected exactly 30 specific fallbacks
     expect(tamilProudFallbacks.some(f => f.roast.includes("Bloody sweet... output vandhuruchu da!"))).toBe(true);
   });
 

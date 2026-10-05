@@ -158,6 +158,31 @@ export default function LessonExplanationPage() {
                 )}
               </div>
             )}
+            
+            {currentSlide === 0 && !lesson.biteSized && lesson.deepConcept && (
+              <div className="mb-8 space-y-6">
+                <div className="p-6 bg-zinc-950/50 rounded-2xl border border-zinc-800 border-dashed">
+                  <h3 className="text-xl font-bold text-white mb-2">What is it?</h3>
+                  <p className="text-zinc-300 leading-relaxed">{lesson.deepConcept.whatIsIt}</p>
+                </div>
+                <div className="p-6 bg-zinc-950/50 rounded-2xl border border-zinc-800 border-dashed">
+                  <h3 className="text-xl font-bold text-white mb-2">Under the Hood</h3>
+                  <p className="text-zinc-300 leading-relaxed">{lesson.deepConcept.underTheHood}</p>
+                </div>
+              </div>
+            )}
+            
+            {currentSlide === 0 && !lesson.biteSized && lesson.humor && lesson.humor[humorPref] && (
+              <div className="mb-8 space-y-6">
+                <div className="p-6 bg-pink-950/20 rounded-2xl border border-pink-900/50">
+                  <h3 className="text-lg font-bold text-pink-400 mb-2">Analogy ({humorPref === 'tamil' ? 'Tamil' : 'General'})</h3>
+                  <p className="text-pink-200/90 leading-relaxed italic">&quot;{lesson.humor[humorPref].analogy}&quot;</p>
+                  {lesson.humor[humorPref].punchline && (
+                    <p className="text-pink-300 mt-2 font-bold">{lesson.humor[humorPref].punchline}</p>
+                  )}
+                </div>
+              </div>
+            )}
 
             <AnimatePresence mode="wait">
               <motion.div

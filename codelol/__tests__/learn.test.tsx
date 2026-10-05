@@ -39,7 +39,7 @@ vi.mock('@monaco-editor/react', () => ({
 describe('LearnPageClient', () => {
   it('loads level from props immediately', () => {
     render(<LearnPageClient initialLevel={3} highestUnlockedLevel={5} initialHumorPref="general" />);
-    expect(screen.getByText(/Level 3 of 100/i)).toBeTruthy();
+    expect(screen.getByText(/Level 3 of \d+/i)).toBeTruthy();
   });
 
   it('allows navigating to next level if unlocked', () => {
