@@ -6,7 +6,6 @@ import { pythonQuizzes } from '@/lib/quizzes-python';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { saveQuizProgress } from '@/lib/progress';
 import { createClient } from '@/lib/supabase/client';
-import { getRandomFallback } from '@/lib/fallbackRoasts';
 
 export default function QuizPage() {
   const [topic, setTopic] = useState<string | null>(null);
@@ -14,7 +13,6 @@ export default function QuizPage() {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [gifUrl, setGifUrl] = useState<string | null>(null);
-  const [roastText, setRoastText] = useState<string | null>(null);
   const [isFinished, setIsFinished] = useState(false);
   const [score, setScore] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
@@ -55,7 +53,6 @@ export default function QuizPage() {
     setSelectedOption(null);
     setIsAnswered(false);
     setGifUrl(null);
-    setRoastText(null);
     setIsFinished(false);
     setScore(0);
   };
@@ -78,10 +75,6 @@ export default function QuizPage() {
 
     // Play the sound immediately
     playMemeSound(isCorrect, humorPref);
-    
-    // Set fallback roast
-    const fallback = getRandomFallback(isCorrect, humorPref);
-    setRoastText(fallback.roast);
 
     try {
       const { getResultGif } = await import('@/lib/localGifs');
@@ -98,7 +91,6 @@ export default function QuizPage() {
       setSelectedOption(null);
       setIsAnswered(false);
       setGifUrl(null);
-      setRoastText(null);
     } else {
       setIsFinished(true);
       await completeQuiz();
@@ -259,7 +251,7 @@ export default function QuizPage() {
               
               <div className="flex-1 flex flex-col justify-center">
                 <h3 className={`text-2xl font-bold mb-2 ${selectedOption === currentQuestion.correctIndex ? 'text-green-400' : 'text-red-400'}`}>
-                  {roastText || (selectedOption === currentQuestion.correctIndex ? 'Nailed it!' : 'Oops, not quite.')}
+                  {selectedOption === currentQuestion.correctIndex ? 'Nailed it!' : 'Oops, not quite.'}
                 </h3>
                 <p className="text-zinc-300 mb-6 leading-relaxed">
                   {currentQuestion.explanation}
