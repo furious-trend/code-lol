@@ -1,3 +1,4 @@
+// Force HMR reload
 'use client'
 
 import { useState, useEffect } from 'react';
@@ -25,27 +26,27 @@ export default function QuizPage() {
 
   useEffect(() => {
     async function loadPref() {
+      // First load local defaults
+      const storedHumor = localStorage.getItem('guest_humor');
+      if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
+      const storedLang = localStorage.getItem('guest_lang');
+      if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
+        setLearningLanguage(storedLang);
+      }
+
+      // Then override if logged in
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        if (user.id === 'local-guest') {
-          const storedHumor = localStorage.getItem('guest_humor');
-          if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
-          const storedLang = localStorage.getItem('guest_lang');
-          if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
-            setLearningLanguage(storedLang);
-          }
-        } else {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('humor_preference, learning_language')
-            .eq('id', user.id)
-            .single();
-          if (profile?.humor_preference) {
-            setHumorPref(profile.humor_preference);
-          }
-          if (profile?.learning_language) {
-            setLearningLanguage(profile.learning_language);
-          }
+      if (user && user.id !== 'local-guest') {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('humor_preference, learning_language')
+          .eq('id', user.id)
+          .single();
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
+        }
+        if (profile?.learning_language) {
+          setLearningLanguage(profile.learning_language);
         }
       }
     }
