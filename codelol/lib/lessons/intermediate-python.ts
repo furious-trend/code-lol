@@ -141,4 +141,365 @@ export const pythonIntermediateLessons: Lesson[] = [
       funnyEgGeneral: "Classes are like cookie cutters; instances are the actual cookies."
     }
   }
+,
+{
+  "id": 104,
+  "chapter": "Chapter 1: The Big O",
+  "tier": "Intermediate",
+  "title": "Sliding Window",
+  "sticker": "🪟",
+  "codeExample": "def sliding_window(arr, k):\n    window_sum = sum(arr[:k])\n    max_sum = window_sum\n    for i in range(len(arr) - k):\n        window_sum = window_sum - arr[i] + arr[i+k]\n        max_sum = max(max_sum, window_sum)\n    return max_sum",
+  "gifKeyword": "window",
+  "miniQuizQuestion": {
+    "question": "What is the primary benefit of the sliding window technique?",
+    "options": [
+      "O(1) memory usage",
+      "Avoiding nested loops to reduce time complexity to O(n)",
+      "Sorting the array faster",
+      "Finding the minimum value in an array"
+    ],
+    "correctAnswerIndex": 1
+  },
+  "examples": [
+    {
+      "explanation": "Instead of recalculating the sum of k elements every time, just subtract the outgoing element and add the incoming element.",
+      "code": "window_sum = window_sum - arr[i] + arr[i+k]"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "An algorithmic technique for finding a subset of elements in an array or string.",
+    "funnyEgGeneral": "Like a magnifying glass sliding across a newspaper.",
+    "funnyEgTamil": "Sliding window is like moving your chair to watch the TV when someone stands in front of you."
+  }
+},
+{
+  "id": 106,
+  "chapter": "Chapter 2: Data Structures",
+  "tier": "Intermediate",
+  "title": "Sets (Deduplication)",
+  "sticker": "🎭",
+  "codeExample": "my_set = {1, 2, 2, 3}\nprint(my_set) # {1, 2, 3}\n\nnames = ['Alice', 'Bob', 'Alice']\nunique_names = set(names)",
+  "gifKeyword": "unique",
+  "miniQuizQuestion": {
+    "question": "What is the primary characteristic of a Set?",
+    "options": [
+      "It keeps elements in insertion order",
+      "It only stores unique elements",
+      "It is slower than a list",
+      "It uses key-value pairs"
+    ],
+    "correctAnswerIndex": 1
+  },
+  "examples": [
+    {
+      "explanation": "Sets automatically remove duplicates.",
+      "code": "nums = [1, 1, 2, 2]\nunique = set(nums)"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "A collection of unique items.",
+    "funnyEgGeneral": "A VIP club where no one is allowed to have the same name as anyone else.",
+    "funnyEgTamil": "Set is like getting a unique Aadhaar card—nobody can have your number!"
+  }
+},
+{
+  "id": 107,
+  "chapter": "Chapter 2: Data Structures",
+  "tier": "Intermediate",
+  "title": "Singly Linked Lists",
+  "sticker": "🔗",
+  "codeExample": "class Node:\n    def __init__(self, val):\n        self.val = val\n        self.next = None\n\nhead = Node(1)\nhead.next = Node(2)",
+  "gifKeyword": "chain",
+  "miniQuizQuestion": {
+    "question": "In a singly linked list, what does a node contain?",
+    "options": [
+      "Only the value",
+      "The value and a pointer to the next node",
+      "The value and pointers to both next and previous",
+      "An array of values"
+    ],
+    "correctAnswerIndex": 1
+  },
+  "examples": [
+    {
+      "explanation": "Each node points to the next.",
+      "code": "current = head\nwhile current:\n    print(current.val)\n    current = current.next"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "A linear data structure where elements are not stored contiguously.",
+    "funnyEgGeneral": "A treasure hunt where each clue leads to the next clue.",
+    "funnyEgTamil": "Linked List is like a scavenger hunt—each clue tells you where to find the next one."
+  }
+},
+{
+  "id": 108,
+  "chapter": "Chapter 2: Data Structures",
+  "tier": "Intermediate",
+  "title": "Fast & Slow Pointers (Tortoise & Hare)",
+  "sticker": "🐢",
+  "codeExample": "def has_cycle(head):\n    slow, fast = head, head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False",
+  "gifKeyword": "rabbit",
+  "miniQuizQuestion": {
+    "question": "What is the Tortoise and Hare algorithm typically used for?",
+    "options": [
+      "Sorting a linked list",
+      "Finding cycles in a linked list",
+      "Reversing a linked list",
+      "Finding the minimum value"
+    ],
+    "correctAnswerIndex": 1
+  },
+  "examples": [
+    {
+      "explanation": "If there's a cycle, the fast pointer will eventually overlap the slow one.",
+      "code": "fast = fast.next.next"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "Using two pointers moving at different speeds.",
+    "funnyEgGeneral": "Like two runners on a track, if the track is a circle, the faster one will lap the slower one.",
+    "funnyEgTamil": "Fast pointer is like a speeding auto, slow pointer is the traffic police catching him eventually in a round-tana."
+  }
+},
+{
+  "id": 109,
+  "chapter": "Chapter 2: Data Structures",
+  "tier": "Intermediate",
+  "title": "Stacks (LIFO)",
+  "sticker": "🥞",
+  "codeExample": "stack = []\nstack.append(1) # Push\nstack.append(2)\ntop = stack.pop() # Pop returns 2",
+  "gifKeyword": "pancakes",
+  "miniQuizQuestion": {
+    "question": "What does LIFO stand for?",
+    "options": [
+      "Last In, First Out",
+      "List In, First Out",
+      "Last In, Fast Out",
+      "Late In, First Out"
+    ],
+    "correctAnswerIndex": 0
+  },
+  "examples": [
+    {
+      "explanation": "Push to add, pop to remove the latest.",
+      "code": "stack.append('A')\nstack.pop()"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "A Last-In-First-Out data structure.",
+    "funnyEgGeneral": "A stack of pancakes. You always eat the top one first.",
+    "funnyEgTamil": "Stack is like arranging plates at a wedding buffet—you always pick the top plate."
+  }
+},
+{
+  "id": 110,
+  "chapter": "Chapter 2: Data Structures",
+  "tier": "Intermediate",
+  "title": "Queues (FIFO)",
+  "sticker": "🧍",
+  "codeExample": "from collections import deque\nqueue = deque()\nqueue.append(1) # Enqueue\nqueue.append(2)\nfirst = queue.popleft() # Dequeue returns 1",
+  "gifKeyword": "queue",
+  "miniQuizQuestion": {
+    "question": "What does FIFO stand for?",
+    "options": [
+      "First In, First Out",
+      "Fast In, Fast Out",
+      "First In, Fast Out",
+      "For In, For Out"
+    ],
+    "correctAnswerIndex": 0
+  },
+  "examples": [
+    {
+      "explanation": "Use deque for O(1) pops from the front.",
+      "code": "from collections import deque\nq = deque([1, 2, 3])\nq.popleft()"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "A First-In-First-Out data structure.",
+    "funnyEgGeneral": "A line at the grocery store. First person there gets served first.",
+    "funnyEgTamil": "Queue is like a ration shop line—first come, first serve!"
+  }
+},
+{
+  "id": 112,
+  "chapter": "Chapter 3: Deep Dive",
+  "tier": "Intermediate",
+  "title": "The Call Stack",
+  "sticker": "☎️",
+  "codeExample": "def a():\n    print('A')\n    b()\n\ndef b():\n    print('B')\n\na()",
+  "gifKeyword": "phone",
+  "miniQuizQuestion": {
+    "question": "What happens when the call stack gets too large (e.g., infinite recursion)?",
+    "options": [
+      "The program runs faster",
+      "Stack Overflow Error",
+      "Memory Leak",
+      "Nothing"
+    ],
+    "correctAnswerIndex": 1
+  },
+  "examples": [
+    {
+      "explanation": "Functions are pushed to the stack when called and popped when they return.",
+      "code": ""
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "The mechanism the interpreter uses to keep track of function calls.",
+    "funnyEgGeneral": "Like placing sticky notes on your monitor for every task you start, and removing them when finished.",
+    "funnyEgTamil": "Call stack is like asking your mom where your shirt is, she asks dad, dad asks sister..."
+  }
+},
+{
+  "id": 114,
+  "chapter": "Chapter 4: Object Oriented Programming",
+  "tier": "Intermediate",
+  "title": "Classes & Constructors",
+  "sticker": "🏗️",
+  "codeExample": "class Dog:\n    def __init__(self, name):\n        self.name = name\n\n    def bark(self):\n        return 'Woof!'\n\nd = Dog('Rex')",
+  "gifKeyword": "dog",
+  "miniQuizQuestion": {
+    "question": "What is the constructor method in Python?",
+    "options": [
+      "__init__",
+      "constructor",
+      "init",
+      "create"
+    ],
+    "correctAnswerIndex": 0
+  },
+  "examples": [
+    {
+      "explanation": "__init__ initializes the object.",
+      "code": "def __init__(self): pass"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "A blueprint for creating objects with properties and methods.",
+    "funnyEgGeneral": "A cookie cutter (class) makes many cookies (objects).",
+    "funnyEgTamil": "Class is the blueprint, object is the actual house."
+  }
+},
+{
+  "id": 115,
+  "chapter": "Chapter 4: Object Oriented Programming",
+  "tier": "Intermediate",
+  "title": "Inheritance",
+  "sticker": "🧬",
+  "codeExample": "class Animal:\n    def speak(self):\n        return '?'\n\nclass Cat(Animal):\n    def speak(self):\n        return 'Meow'\n\nc = Cat()\nprint(c.speak())",
+  "gifKeyword": "cat",
+  "miniQuizQuestion": {
+    "question": "How does a class inherit from another in Python?",
+    "options": [
+      "class Cat extends Animal:",
+      "class Cat(Animal):",
+      "class Cat inherits Animal:",
+      "class Cat implements Animal:"
+    ],
+    "correctAnswerIndex": 1
+  },
+  "examples": [
+    {
+      "explanation": "Child class inherits methods from parent class.",
+      "code": "class Child(Parent):"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "A mechanism where a new class derives properties from an existing class.",
+    "funnyEgGeneral": "Inheriting your dad's old car, but giving it a custom paint job.",
+    "funnyEgTamil": "Inheritance is like getting your older sibling's old textbooks."
+  }
+},
+{
+  "id": 116,
+  "chapter": "Chapter 4: Object Oriented Programming",
+  "tier": "Intermediate",
+  "title": "Encapsulation (Private Fields)",
+  "sticker": "🔒",
+  "codeExample": "class BankAccount:\n    def __init__(self, balance):\n        self.__balance = balance # Private\n\n    def get_balance(self):\n        return self.__balance\n\nacc = BankAccount(100)",
+  "gifKeyword": "safe",
+  "miniQuizQuestion": {
+    "question": "How do you conventionally define a private attribute in Python?",
+    "options": [
+      "private balance",
+      "self.balance = private",
+      "self.__balance",
+      "self._private_balance"
+    ],
+    "correctAnswerIndex": 2
+  },
+  "examples": [
+    {
+      "explanation": "Prefix with double underscore for name mangling.",
+      "code": "self.__secret = 42"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "Hiding the internal state and requiring all interaction to be performed through an object's methods.",
+    "funnyEgGeneral": "Like keeping your diary locked and only reading it aloud yourself.",
+    "funnyEgTamil": "Encapsulation is like hiding your diary from your sibling."
+  }
+},
+{
+  "id": 117,
+  "chapter": "Chapter 4: Object Oriented Programming",
+  "tier": "Intermediate",
+  "title": "Polymorphism (Overriding)",
+  "sticker": "🎭",
+  "codeExample": "class Bird:\n    def fly(self):\n        return 'Flying'\n\nclass Penguin(Bird):\n    def fly(self):\n        return 'Cannot fly'\n\np = Penguin()\nprint(p.fly())",
+  "gifKeyword": "penguin",
+  "miniQuizQuestion": {
+    "question": "What is polymorphism?",
+    "options": [
+      "Classes with the same name",
+      "Different objects responding to the same method call in their own way",
+      "Variables that change types randomly",
+      "A type of loop"
+    ],
+    "correctAnswerIndex": 1
+  },
+  "examples": [
+    {
+      "explanation": "Overriding a method in a subclass.",
+      "code": "def fly(self): return 'Flap'"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "The ability of different objects to respond to the same method call in a way that is appropriate for their type.",
+    "funnyEgGeneral": "Pressing 'play' on a remote works for a DVD player, TV, and stereo, but they do different things.",
+    "funnyEgTamil": "Polymorphism is like pressing a single button, but your TV does one thing and AC does another."
+  }
+},
+{
+  "id": 118,
+  "chapter": "Chapter 4: Object Oriented Programming",
+  "tier": "Intermediate",
+  "title": "Static Methods",
+  "sticker": "⚡",
+  "codeExample": "class MathUtils:\n    @staticmethod\n    def add(a, b):\n        return a + b\n\nprint(MathUtils.add(5, 10))",
+  "gifKeyword": "lightning",
+  "miniQuizQuestion": {
+    "question": "What decorator is used to define a static method in Python?",
+    "options": [
+      "@classmethod",
+      "@static",
+      "@staticmethod",
+      "@class"
+    ],
+    "correctAnswerIndex": 2
+  },
+  "examples": [
+    {
+      "explanation": "Static methods don't take a 'self' parameter.",
+      "code": "@staticmethod\ndef greet(): return 'Hi'"
+    }
+  ],
+  "biteSized": {
+    "meaningGeneral": "Methods that belong to a class rather than an instance of the class.",
+    "funnyEgGeneral": "A tool that anyone can use without needing to own a house first.",
+    "funnyEgTamil": "Static method is like a public tap—anyone can use it, no need to own a house."
+  }
+}
 ];

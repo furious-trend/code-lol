@@ -79,19 +79,19 @@ export const getLessonCategories = (lang: string = 'javascript') => {
       id: 'intermediate',
       name: 'Intermediate',
       sticker: '🟡',
-      lessons: isPython ? pythonIntermediateLessons : intermediateLessons
+      lessons: lang === 'python' ? pythonIntermediateLessons : lang === 'c' ? cIntermediateLessons : lang === 'cpp' ? cppIntermediateLessons : lang === 'java' ? javaIntermediateLessons : intermediateLessons
     },
     {
       id: 'expert',
       name: 'Expert',
       sticker: '🔴',
-      lessons: isPython ? pythonExpertLessons : expertLessons
+      lessons: lang === 'python' ? pythonExpertLessons : lang === 'c' ? cExpertLessons : lang === 'cpp' ? cppExpertLessons : lang === 'java' ? javaExpertLessons : expertLessons
     },
     {
       id: 'interview',
       name: 'Interview Prep',
       sticker: '👔',
-      lessons: isPython ? pythonInterviewLessons : interviewLessons
+      lessons: lang === 'python' ? pythonInterviewLessons : lang === 'c' ? cInterviewLessons : lang === 'cpp' ? cppInterviewLessons : lang === 'java' ? javaInterviewLessons : interviewLessons
     }
   ];
 };
