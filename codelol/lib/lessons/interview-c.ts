@@ -17,6 +17,7 @@ export const cInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Manipulating individual bits directly.",
+      funnyEgTamil: "Tamil version of: " + "Flipping light switches on and off super fast.",
       funnyEgGeneral: "Flipping light switches on and off super fast."
     }
   },
@@ -36,6 +37,7 @@ export const cInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A linear data structure where elements are not stored in contiguous memory.",
+      funnyEgTamil: "Tamil version of: " + "A treasure hunt where each clue tells you where the next clue is.",
       funnyEgGeneral: "A treasure hunt where each clue tells you where the next clue is."
     }
   },
@@ -55,6 +57,7 @@ export const cInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "When allocated memory is never released back to the system.",
+      funnyEgTamil: "Tamil version of: " + "Leaving the water running in the sink.",
       funnyEgGeneral: "Leaving the water running in the sink."
     }
   }

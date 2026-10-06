@@ -17,6 +17,7 @@ export const cppExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Allowing a function to behave differently based on the actual object type.",
+      funnyEgTamil: "Tamil version of: " + "Pressing the same 'Play' button but hearing a different song depending on the app.",
       funnyEgGeneral: "Pressing the same 'Play' button but hearing a different song depending on the app."
     }
   },
@@ -36,6 +37,7 @@ export const cppExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Pointers that automatically manage memory deallocation.",
+      funnyEgTamil: "Tamil version of: " + "A roommate who actually cleans up after themselves.",
       funnyEgGeneral: "A roommate who actually cleans up after themselves."
     }
   },
@@ -55,6 +57,7 @@ export const cppExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Redefining how operators like +, -, == work for custom classes.",
+      funnyEgTamil: "Tamil version of: " + "Teaching your dog to 'fetch' the TV remote instead of a stick.",
       funnyEgGeneral: "Teaching your dog to 'fetch' the TV remote instead of a stick."
     }
   }

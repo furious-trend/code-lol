@@ -17,6 +17,7 @@ export const cppInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Using standard library functions instead of writing them from scratch.",
+      funnyEgTamil: "Tamil version of: " + "Buying a frozen pizza instead of making dough from scratch.",
       funnyEgGeneral: "Buying a frozen pizza instead of making dough from scratch."
     }
   },
@@ -36,6 +37,7 @@ export const cppInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A collection of key-value pairs sorted by key.",
+      funnyEgTamil: "Tamil version of: " + "A dictionary where the word is the key and definition is the value.",
       funnyEgGeneral: "A dictionary where the word is the key and definition is the value."
     }
   },
@@ -55,6 +57,7 @@ export const cppInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Inline, anonymous functions used for short snippets of code.",
+      funnyEgTamil: "Tamil version of: " + "A disposable camera—use it once right where you need it, then forget about it.",
       funnyEgGeneral: "A disposable camera—use it once right where you need it, then forget about it."
     }
   }

@@ -17,6 +17,7 @@ export const cExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A pointer that points to another pointer.",
+      funnyEgTamil: "Tamil version of: " + "Inception, but for computer memory.",
       funnyEgGeneral: "Inception, but for computer memory."
     }
   },
@@ -36,6 +37,7 @@ export const cExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Storing the address of a function so you can execute it dynamically.",
+      funnyEgTamil: "Tamil version of: " + "Giving someone the remote control instead of pushing the TV buttons yourself.",
       funnyEgGeneral: "Giving someone the remote control instead of pushing the TV buttons yourself."
     }
   },
@@ -55,6 +57,7 @@ export const cExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A macro is a fragment of code given a name, processed before compilation.",
+      funnyEgTamil: "Tamil version of: " + "Copy-pasting with find-and-replace, but automated.",
       funnyEgGeneral: "Copy-pasting with find-and-replace, but automated."
     }
   }

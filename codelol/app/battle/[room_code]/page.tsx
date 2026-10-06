@@ -10,6 +10,9 @@ import { executeCode } from '@/lib/executor';
 import { Bugsy } from '@/components/Bugsy';
 import Link from 'next/link';
 import Confetti from 'react-confetti';
+import { useRoast } from '@/hooks/useRoast';
+import { RoastCard } from '@/components/RoastCard';
+import { useMemeSound } from '@/hooks/useMemeSound';
 
 import { createClient } from '@/lib/supabase/client';
 
@@ -28,6 +31,9 @@ export default function BattleRoomPage() {
   const [testResults, setTestResults] = useState<{passed: number, total: number, log: string[]} | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
+  const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
+  const { playMemeSound } = useMemeSound();
 
   useEffect(() => {
     async function loadPref() {
@@ -35,9 +41,10 @@ export default function BattleRoomPage() {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('learning_language')
+          .select('learning_language, humor_preference')
           .eq('id', user.id)
           .single();
+        if (profile?.humor_preference) setHumorPref(profile.humor_preference as any);
         if (profile?.learning_language) {
           setLearningLanguage(profile.learning_language);
         }
@@ -145,6 +152,7 @@ export default function BattleRoomPage() {
     setIsSubmitting(true);
     setRawOutput('');
     setTestResults(null);
+    clearRoast();
 
     let functionName = 'solution';
     if (learningLanguage === 'python') {
@@ -250,6 +258,8 @@ let _log = [];
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);
         await updateParticipantProgress(battle.id, 0, problem!.testCases.length, code, false);
+        const playedSound = playMemeSound(false, humorPref);
+        handleRoast(code, "Execution Error:\n" + data.error, false, playedSound, humorPref);
         setIsSubmitting(false);
         return;
       }
@@ -266,16 +276,24 @@ let _log = [];
           const solvedAt = isFinished ? new Date().toISOString() : undefined;
           
           await updateParticipantProgress(battle.id, parsedResults.passed, problem!.testCases.length, code, isFinished, solvedAt);
+          const playedSound = playMemeSound(isFinished, humorPref);
+          handleRoast(code, data.output, isFinished, playedSound, humorPref);
           
         } catch (e) {
           setRawOutput("Failed to parse test results.\n" + data.output);
+          const playedSound = playMemeSound(false, humorPref);
+          handleRoast(code, "Failed to parse test results.\n" + data.output, false, playedSound, humorPref);
         }
       } else {
         setRawOutput("Execution Error:\n" + data.output);
         await updateParticipantProgress(battle.id, 0, problem!.testCases.length, code, false);
+        const playedSound = playMemeSound(false, humorPref);
+        handleRoast(code, "Execution Error:\n" + data.output, false, playedSound, humorPref);
       }
     } catch (err) {
       setRawOutput("Network Error. Please try again.");
+      const playedSound = playMemeSound(false, humorPref);
+      handleRoast(code, "Network Error. Please try again.", false, playedSound, humorPref);
     } finally {
       setIsSubmitting(false);
     }
@@ -428,6 +446,29 @@ let _log = [];
                 <div className="text-red-400 font-mono text-sm whitespace-pre-wrap">{rawOutput}</div>
               ) : (
                 <div className="text-zinc-600 font-mono text-sm italic">Run code to see output...</div>
+              )}
+
+              {(isRoasting || roastError || roastData) && (
+                <div className="mt-4 pt-4 border-t border-zinc-800 animate-in fade-in slide-in-from-top-4 duration-500">
+                  {isRoasting && (
+                    <div className="flex justify-center py-2 text-indigo-400">
+                      <span className="animate-pulse font-bold tracking-widest text-sm">{roastStatus} 🔥</span>
+                    </div>
+                  )}
+                  {roastError && <div className="text-red-400 text-xs p-2 bg-red-500/10 rounded-lg">{roastError}</div>}
+                  {roastData && !isRoasting && (
+                     <div className="scale-90 origin-top">
+                       <RoastCard 
+                         roast={roastData.roast}
+                         fix={roastData.fix}
+                         mood={roastData.mood}
+                         gifUrl={roastData.gifUrl}
+                         onDismiss={() => clearRoast()}
+                         onReplayAudio={() => playMemeSound(false, humorPref)}
+                       />
+                     </div>
+                  )}
+                </div>
               )}
             </div>
           </div>

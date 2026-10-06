@@ -17,6 +17,7 @@ export const javaIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "One class acquiring the properties and behaviors of another.",
+      funnyEgTamil: "Tamil version of: " + "Getting your parent's old car when you get your license.",
       funnyEgGeneral: "Getting your parent's old car when you get your license."
     }
   },
@@ -36,6 +37,7 @@ export const javaIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A contract that guarantees a class will provide specific behaviors.",
+      funnyEgTamil: "Tamil version of: " + "Signing a gym contract (you must go work out... eventually).",
       funnyEgGeneral: "Signing a gym contract (you must go work out... eventually)."
     }
   },
@@ -55,6 +57,7 @@ export const javaIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Handling runtime errors gracefully without crashing the program.",
+      funnyEgTamil: "Tamil version of: " + "A safety net catching you when you fall off the tightrope.",
       funnyEgGeneral: "A safety net catching you when you fall off the tightrope."
     }
   }

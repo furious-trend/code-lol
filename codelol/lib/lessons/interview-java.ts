@@ -17,6 +17,7 @@ export const javaInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "StringBuilder mutates the string in memory instead of creating new ones.",
+      funnyEgTamil: "Tamil version of: " + "String is writing in pen. StringBuilder is writing in pencil.",
       funnyEgGeneral: "String is writing in pen. StringBuilder is writing in pencil."
     }
   },
@@ -36,6 +37,7 @@ export const javaInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A data structure that stores key-value pairs using hashing.",
+      funnyEgTamil: "Tamil version of: " + "A coat check system. Give a ticket (key), get your coat (value) instantly.",
       funnyEgGeneral: "A coat check system. Give a ticket (key), get your coat (value) instantly."
     }
   },
@@ -55,6 +57,7 @@ export const javaInterviewLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Automatic memory management process that frees up unused objects.",
+      funnyEgTamil: "Tamil version of: " + "A Roomba that cleans up your house without you telling it to.",
       funnyEgGeneral: "A Roomba that cleans up your house without you telling it to."
     }
   }

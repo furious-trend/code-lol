@@ -40,6 +40,7 @@ export const cIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "malloc allocates memory at runtime on the heap, and free releases it.",
+      funnyEgTamil: "Tamil version of: " + "Renting a car for a road trip (malloc) and returning it so you don't get charged forever (free).",
       funnyEgGeneral: "Renting a car for a road trip (malloc) and returning it so you don't get charged forever (free)."
     }
   },
@@ -59,6 +60,7 @@ export const cIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Structs group different variables under a single name.",
+      funnyEgTamil: "Tamil version of: " + "Packing your clothes, toothbrush, and snacks into one suitcase.",
       funnyEgGeneral: "Packing your clothes, toothbrush, and snacks into one suitcase."
     }
   }

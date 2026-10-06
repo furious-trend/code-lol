@@ -23,7 +23,8 @@ import { cppInterviewLessons } from './interview-cpp';
 import { javaIntermediateLessons } from './intermediate-java';
 import { javaExpertLessons } from './expert-java';
 import { javaInterviewLessons } from './interview-java';
-\n// Default export (JS)
+
+// Default export (JS)
 export const allLessons: Lesson[] = [
   ...beginnerLessons,
   ...intermediateLessons,
@@ -56,7 +57,8 @@ export const javaAllLessons: Lesson[] = [
   ...javaExpertLessons,
   ...javaInterviewLessons
 ];
-\nexport const getLessonCategories = (lang: string = 'javascript') => {
+
+export const getLessonCategories = (lang: string = 'javascript') => {
   const getBeginner = () => {
     if (lang === 'python') return pythonBeginnerLessons;
     if (lang === 'c') return cBeginnerLessons;

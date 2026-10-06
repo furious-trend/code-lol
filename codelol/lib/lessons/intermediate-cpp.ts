@@ -17,6 +17,7 @@ export const cppIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A class is a blueprint, an object is the actual house built from it.",
+      funnyEgTamil: "Tamil version of: " + "Class is the recipe, Object is the cake you eat.",
       funnyEgGeneral: "Class is the recipe, Object is the cake you eat."
     }
   },
@@ -36,6 +37,7 @@ export const cppIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A special function called automatically when an object is created.",
+      funnyEgTamil: "Tamil version of: " + "The welcome email you instantly get when signing up for a service.",
       funnyEgGeneral: "The welcome email you instantly get when signing up for a service."
     }
   },
@@ -55,6 +57,7 @@ export const cppIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A dynamic array that can grow in size automatically.",
+      funnyEgTamil: "Tamil version of: " + "An elastic waistband after a big meal.",
       funnyEgGeneral: "An elastic waistband after a big meal."
     }
   }

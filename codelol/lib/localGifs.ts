@@ -15,8 +15,6 @@ export const generalRoastingGifs = manifest.general.wrong.map(toSupabaseUrl);
 
 let lastGifIndex = -1;
 
-let lastGifIndex = -1;
-
 export function getResultGif(isCorrect: boolean, humorPref: 'general' | 'tamil' = 'general'): string {
   const happyGifs = humorPref === 'tamil' && tamilHappyGifs.length > 0 ? tamilHappyGifs : generalHappyGifs;
   const roastingGifs = humorPref === 'tamil' && tamilRoastingGifs.length > 0 ? tamilRoastingGifs : generalRoastingGifs;

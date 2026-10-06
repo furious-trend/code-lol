@@ -17,6 +17,7 @@ export const javaExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Different ways to store dynamic lists based on memory and performance needs.",
+      funnyEgTamil: "Tamil version of: " + "ArrayList is reading a book (flip to page 50). LinkedList is a VHS tape (fast forward to minute 50).",
       funnyEgGeneral: "ArrayList is reading a book (flip to page 50). LinkedList is a VHS tape (fast forward to minute 50)."
     }
   },
@@ -36,6 +37,7 @@ export const javaExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A functional way to process sequences of elements in Java.",
+      funnyEgTamil: "Tamil version of: " + "An assembly line filtering out the bad apples.",
       funnyEgGeneral: "An assembly line filtering out the bad apples."
     }
   },
@@ -55,6 +57,7 @@ export const javaExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Doing multiple things simultaneously in a program.",
+      funnyEgTamil: "Tamil version of: " + "Texting, eating, and watching TV all at the same time.",
       funnyEgGeneral: "Texting, eating, and watching TV all at the same time."
     }
   }
