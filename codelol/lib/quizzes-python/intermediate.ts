@@ -13,14 +13,14 @@ export const pythonIntermediateTopics: Record<string, QuizTopic> = {
         question: 'What is a list comprehension in Python?',
         options: ['A way to read a list aloud', 'A concise way to create lists based on existing lists', 'A method to compress list memory', 'A type of loop for dictionaries'],
         correctIndex: 1,
-        explanation: 'List comprehensions provide a concise way to create lists. Common applications are to make new lists where each element is the result of some operations applied to each member of another sequence.'
+        explanation: 'List comprehensions provide a concise way to create lists.'
       },
       {
         id: 'py_int_lc_2',
         question: 'Which of the following creates a list of squares for numbers from 0 to 4?',
         options: ['[x**2 for x in range(5)]', 'list(square(0:4))', '[(x*x) in range(4)]', '{x**2 for x in range(5)}'],
         correctIndex: 0,
-        explanation: '[x**2 for x in range(5)] produces [0, 1, 4, 9, 16]. The curly braces would create a set comprehension instead.'
+        explanation: '[x**2 for x in range(5)] produces [0, 1, 4, 9, 16]. The curly braces would create a set instead.'
       },
       {
         id: 'py_int_lc_3',
@@ -42,12 +42,33 @@ export const pythonIntermediateTopics: Record<string, QuizTopic> = {
         options: ['A tuple comprehension', 'A dictionary comprehension', 'A generator expression', 'A function expression'],
         correctIndex: 2,
         explanation: 'Using parentheses creates a generator expression, which yields items one by one instead of creating the entire list in memory.'
+      },
+      {
+        id: 'py_int_lc_6',
+        question: 'Can you have nested loops in a list comprehension?',
+        options: ['No', 'Yes, but limited to two', 'Yes, e.g. [x*y for x in range(3) for y in range(3)]', 'Yes, but they must use different lists'],
+        correctIndex: 2,
+        explanation: 'You can chain multiple `for` clauses in a list comprehension.'
+      },
+      {
+        id: 'py_int_lc_7',
+        question: 'How do you do an if/else inline inside a list comprehension?',
+        options: ['[x if x>0 else 0 for x in nums]', '[x for x in nums if x>0 else 0]', '[(if x>0 x else 0) for x in nums]', 'List comprehensions don\'t support else'],
+        correctIndex: 0,
+        explanation: 'If you want an if/else, you put it BEFORE the `for` keyword as a conditional expression.'
+      },
+      {
+        id: 'py_int_lc_8',
+        question: 'Which of the following creates a dictionary mapping x to x*2?',
+        options: ['[x: x*2 for x in nums]', '{x: x*2 for x in nums}', 'dict(x, x*2 for x in nums)', 'map(x: x*2, nums)'],
+        correctIndex: 1,
+        explanation: 'Using curly braces with key: value syntax creates a Dictionary Comprehension.'
       }
     ]
   },
   dictionaries: {
     id: 'dictionaries',
-    title: 'Dictionaries',
+    title: 'Dictionaries Deep Dive',
     tier: 'Intermediate',
     icon: '📖',
     color: 'hover:border-green-500',
@@ -61,7 +82,7 @@ export const pythonIntermediateTopics: Record<string, QuizTopic> = {
       },
       {
         id: 'py_int_dict_2',
-        question: 'Which method returns a list of all keys in a dictionary?',
+        question: 'Which method returns a list-like view of all keys in a dictionary?',
         options: ['dict.keys()', 'dict.getKeys()', 'dict.all()', 'dict.index()'],
         correctIndex: 0,
         explanation: 'The `keys()` method returns a view object that displays a list of all the keys in the dictionary.'
@@ -86,6 +107,27 @@ export const pythonIntermediateTopics: Record<string, QuizTopic> = {
         options: ['dict.remove()', 'dict.delete()', 'dict.clear()', 'dict.empty()'],
         correctIndex: 2,
         explanation: 'The `clear()` method empties the entire dictionary.'
+      },
+      {
+        id: 'py_int_dict_6',
+        question: 'How do you update a dictionary `d1` with the key-value pairs from another dictionary `d2`?',
+        options: ['d1.add(d2)', 'd1.update(d2)', 'd1.merge(d2)', 'd1.append(d2)'],
+        correctIndex: 1,
+        explanation: 'The `.update()` method adds d2\'s keys to d1, overwriting any existing keys.'
+      },
+      {
+        id: 'py_int_dict_7',
+        question: 'What is the output of `d = {"a":1}; d.setdefault("a", 2)`?',
+        options: ['1', '2', 'None', 'Error'],
+        correctIndex: 0,
+        explanation: '`setdefault` returns the existing value if the key exists. It only sets the default value if the key is missing.'
+      },
+      {
+        id: 'py_int_dict_8',
+        question: 'How do you merge two dictionaries (d1 and d2) into a new dictionary in Python 3.9+?',
+        options: ['d3 = d1 + d2', 'd3 = d1 | d2', 'd3 = merge(d1, d2)', 'd3 = d1.concat(d2)'],
+        correctIndex: 1,
+        explanation: 'Python 3.9 introduced the `|` merge operator for dictionaries.'
       }
     ]
   }
