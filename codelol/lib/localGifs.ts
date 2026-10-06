@@ -13,6 +13,10 @@ export const tamilRoastingGifs = manifest.tamil.wrong.map(toSupabaseUrl);
 export const generalHappyGifs = manifest.general.right.map(toSupabaseUrl);
 export const generalRoastingGifs = manifest.general.wrong.map(toSupabaseUrl);
 
+let lastGifIndex = -1;
+
+let lastGifIndex = -1;
+
 export function getResultGif(isCorrect: boolean, humorPref: 'general' | 'tamil' = 'general'): string {
   const happyGifs = humorPref === 'tamil' && tamilHappyGifs.length > 0 ? tamilHappyGifs : generalHappyGifs;
   const roastingGifs = humorPref === 'tamil' && tamilRoastingGifs.length > 0 ? tamilRoastingGifs : generalRoastingGifs;
@@ -24,6 +28,13 @@ export function getResultGif(isCorrect: boolean, humorPref: 'general' | 'tamil' 
     }
     return toSupabaseUrl(isCorrect ? "/gifs/happy/happy_5.gif" : "/gifs/roasting/roasting_1.gif");
   }
-  const randomIndex = Math.floor(Math.random() * array.length);
+  
+  let randomIndex = Math.floor(Math.random() * array.length);
+  if (array.length > 1) {
+    while (randomIndex === lastGifIndex) {
+      randomIndex = Math.floor(Math.random() * array.length);
+    }
+  }
+  lastGifIndex = randomIndex;
   return array[randomIndex];
 }

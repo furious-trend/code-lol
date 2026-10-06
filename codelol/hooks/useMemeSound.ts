@@ -4,8 +4,10 @@ import { useCallback } from 'react';
 // Singletons to prevent overlapping audio if played rapidly
 let globalAudioPlayer: HTMLAudioElement | null = null;
 
+let globalLastSound = "";
 export const __resetGlobalAudioPlayer = () => {
   globalAudioPlayer = null;
+  globalLastSound = "";
 };
 
 export function useMemeSound() {
@@ -75,7 +77,13 @@ export function useMemeSound() {
     const successSounds = humorPref === 'tamil' ? tamilSuccessSounds : generalSuccessSounds;
 
     const list = isSuccess ? successSounds : failSounds;
-    const soundUrl = list[Math.floor(Math.random() * list.length)];
+    let soundUrl = list[Math.floor(Math.random() * list.length)];
+    if (list.length > 1) {
+      while (soundUrl === globalLastSound) {
+        soundUrl = list[Math.floor(Math.random() * list.length)];
+      }
+    }
+    globalLastSound = soundUrl;
     
     // Play exactly once and do not loop
     globalAudioPlayer.src = soundUrl;
