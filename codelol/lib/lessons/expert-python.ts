@@ -7,7 +7,7 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Binary Trees",
     sticker: "🌲",
-    codeExample: "class TreeNode {\n  __init__(val) {\n    self.val = val;\n    self.left = None;\n    self.right = None;\n  }\n}",
+    codeExample: "class TreeNode {\n  constructor(val):\n    this.val = val\n    this.left = null\n    this.right = null\n  }",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "In a Binary Tree, what is a node with NO children called?",
@@ -15,7 +15,7 @@ export const pythonExpertLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Building a tiny tree.", code: "root = TreeNode(10);\nroot.left = TreeNode(5);\nroot.right = TreeNode(15);" }
+      { explanation: "Building a tiny tree.", code: "root = new TreeNode(10)\nroot.left = new TreeNode(5)\nroot.right = new TreeNode(15)" }
     ],
       biteSized: {
                     meaning: "A fundamental concept.",
@@ -28,7 +28,7 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Binary Search Trees (BST)",
     sticker: "🔍",
-    codeExample: "def searchBST(root, val) {\n  if (!root) return None;\n  if (root.val == val) return root;\n  if (val < root.val) return searchBST(root.left, val);\n  return searchBST(root.right, val);\n}",
+    codeExample: "def searchBST(root, val) :\n  if (!root) return null\n  if (root.val == val) return root\n  if (val < root.val) return searchBST(root.left, val)\n  return searchBST(root.right, val)",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "In a valid BST, where would a number smaller than the root go?",
@@ -36,11 +36,11 @@ export const pythonExpertLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "BST Lookup is O(log n)... IF the tree is balanced.", code: "foundNode = searchBST(root, 42);" }
+      { explanation: "BST Lookup is O(log n)... IF the tree is balanced.", code: "foundNode = searchBST(root, 42)" }
     ],
       biteSized: {
                     meaning: "A fundamental concept.",
-                    funnyEgTamil: "Binary Search Trees are like phonebooks—you can quickly find a specific name, but good luck inserting a one in the correct spot"
+                    funnyEgTamil: "Binary Search Trees are like phonebooks—you can quickly find a specific name, but good luck inserting a new one in the correct spot"
                   }
 },
   {
@@ -49,7 +49,7 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Depth First Search (DFS)",
     sticker: "🤿",
-    codeExample: "def dfs(node) {\n  if (!node) return;\n  print(node.val); # Pre-order\n  dfs(node.left);\n  dfs(node.right);\n}",
+    codeExample: "def dfs(node) :\n  if (!node) return\n  print(node.val) # Pre-order\n  dfs(node.left)\n  dfs(node.right)",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "Which data structure is naturally used by DFS underneath the hood (often via recursion)?",
@@ -57,7 +57,7 @@ export const pythonExpertLessons: Lesson[] = [
       correctAnswerIndex: 2
     },
     examples: [
-      { explanation: "In-order traversal (prints BST in sorted order!).", code: "def inOrder(node) {\n  if (!node) return;\n  inOrder(node.left);\n  print(node.val);\n  inOrder(node.right);\n}" }
+      { explanation: "In-order traversal (prints BST in sorted order!).", code: "def inOrder(node) :\n  if (!node) return\n  inOrder(node.left)\n  print(node.val)\n  inOrder(node.right)" }
     ],
       biteSized: {
                     meaning: "A fundamental concept.",
@@ -70,7 +70,7 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Breadth First Search (BFS)",
     sticker: "🌊",
-    codeExample: "def bfs(root) {\n  queue = [root];\n  while(len(queue)) {\n    node = queue.pop(0)(); # Dequeue\n    print(node.val);\n    if (node.left) queue.append(node.left);\n    if (node.right) queue.append(node.right);\n  }\n}",
+    codeExample: "def bfs(root) :\n  queue = [root]\n  while queue.length:\n    node = queue.shift() # Dequeue\n    print(node.val)\n    if (node.left) queue.append(node.left)\n    if (node.right) queue.append(node.right)\n  }",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
       question: "Which data structure is REQUIRED to implement BFS iteratively?",
@@ -78,7 +78,7 @@ export const pythonExpertLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Level order traversal using a queue.", code: "q = [root];\n# process nodes level by level..." }
+      { explanation: "Level order traversal using a queue.", code: "q = [root]\n# process nodes level by level..." }
     ],
       biteSized: {
                     meaning: "A fundamental concept.",
@@ -91,7 +91,7 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Graph Basics",
     sticker: "🕸️",
-    codeExample: "# Adjacency List\ngraph = {\n  'Alice': ['Bob', 'Charlie'],\n  'Bob': ['Alice'],\n  'Charlie': ['Alice']\n};",
+    codeExample: "# Adjacency List\ngraph = {\n  'Alice': ['Bob', 'Charlie'],\n  'Bob': ['Alice'],\n  'Charlie': ['Alice']",
     gifKeyword: "road rage gif",
     miniQuizQuestion: {
       question: "What is the most common way to represent a graph in JavaScript?",
@@ -99,7 +99,7 @@ export const pythonExpertLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Adding an edge (undirected).", code: "def addEdge(g, u, v) {\n  g[u].append(v);\n  g[v].append(u);\n}" }
+      { explanation: "Adding an edge (undirected).", code: "def addEdge(g, u, v) :\n  g[u].append(v)\n  g[v].append(u)" }
     ],
       biteSized: {
                     meaning: "A fundamental concept.",
@@ -112,7 +112,7 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Graph Traversal",
     sticker: "🧭",
-    codeExample: "visited = set();\ndef dfsGraph(node) {\n  if (visited.has(node)) return;\n  visited.add(node);\n  print(node);\n  for (neighbor of graph[node]) dfsGraph(neighbor);\n}",
+    codeExample: "visited = new Set()\ndef dfsGraph(node) :\n  if (visited.has(node)) return\n  visited.add(node)\n  print(node)\n  for (neighbor of graph[node]) dfsGraph(neighbor)",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "Why is a `visited` Set crucial when traversing a Graph?",
@@ -120,7 +120,7 @@ export const pythonExpertLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "BFS on a Graph.", code: "q = [startNode];\nvisited.add(startNode);\nwhile(len(q)) {\n  curr = q.pop(0)();\n  # add unvisited neighbors to queue\n}" }
+      { explanation: "BFS on a Graph.", code: "q = [startNode]\nvisited.add(startNode)\nwhile q.length:\n  curr = q.shift()\n  # add unvisited neighbors to queue" }
     ],
       biteSized: {
                     meaning: "A fundamental concept.",
@@ -133,11 +133,11 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Memoization (Top-Down)",
     sticker: "🧠",
-    codeExample: "memo = {};\ndef fib(n) {\n  if (n <= 1) return n;\n  if (memo[n]) return memo[n]; # Oh yeah, I know this!\n  memo[n] = fib(n-1) + fib(n-2);\n  return memo[n];\n}",
+    codeExample: "memo = {}\ndef fib(n) :\n  if (n <= 1) return n\n  if (memo[n]) return memo[n] # Oh yeah, I know this!\n  memo[n] = fib(n-1) + fib(n-2)\n  return memo[n]",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "What is the primary purpose of memoization?",
-      options: ["To write cleaner code", "To cache expensive def calls", "To reduce memory usage", "To sort arrays"],
+      options: ["To write cleaner code", "To cache expensive function calls", "To reduce memory usage", "To sort arrays"],
       correctAnswerIndex: 1
     },
     examples: [
@@ -154,7 +154,7 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Tabulation (Bottom-Up)",
     sticker: "📊",
-    codeExample: "def fib(n) {\n  dp = [0, 1];\n  for(i = 2; i <= n; i++) {\n    dp[i] = dp[i-1] + dp[i-2];\n  }\n  return dp[n];\n}",
+    codeExample: "def fib(n) :\n  dp = [0, 1]\n  for i = 2 i <= n i++:\n    dp[i] = dp[i-1] + dp[i-2]\n  }\n  return dp[n]",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
       question: "Which approach uses iteration (loops) instead of recursion?",
@@ -162,7 +162,7 @@ export const pythonExpertLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Building an array of results from the ground up.", code: "dp = Array(n+1).fill(0);\n# populate dp array" }
+      { explanation: "Building an array of results from the ground up.", code: "dp = new [0] * (n + 1)\n# populate dp array" }
     ],
       biteSized: {
                     meaning: "A fundamental concept.",
@@ -175,7 +175,7 @@ export const pythonExpertLessons: Lesson[] = [
     tier: "Expert",
     title: "Merge Sort",
     sticker: "🗂️",
-    codeExample: "def merge(left, right) {\n  res = [];\n  while(len(left) && len(right)) {\n    if(left[0] < right[0]) res.append(left.pop(0)());\n    else res.append(right.pop(0)());\n  }\n  return [...res, ...left, ...right];\n}",
+    codeExample: "def merge(left, right) :\n  res = []\n  while left.length and right.length:\n    if(left[0] < right[0]) res.append(left.shift())\n    else res.append(right.shift())\n  }\n  return [...res, ...left, ...right]",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
       question: "What is the Time Complexity of Merge Sort?",
@@ -183,26 +183,26 @@ export const pythonExpertLessons: Lesson[] = [
       correctAnswerIndex: 2
     },
     examples: [
-      { explanation: "The recursive split.", code: "def mergeSort(arr) {\n  if(len(arr) <= 1) return arr;\n  mid = Math.floor(len(arr)/2);\n  return merge(mergeSort(arr.slice(0,mid)), mergeSort(arr.slice(mid)));\n}" }
+      { explanation: "The recursive split.", code: "def mergeSort(arr) :\n  if(arr.length <= 1) return arr\n  mid = math.floor(arr.length/2)\n  return merge(mergeSort(arr.slice(0,mid)), mergeSort(arr.slice(mid)))" }
     ],
       biteSized: {
                     meaning: "A fundamental concept.",
                     funnyEgTamil: "Merge sort is like sorting laundry, except instead of folding, you're just combining piles until it's all tidy"
                   }
 },
-    {"id":210,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Quick Sort","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":211,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Advanced Recursion","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":212,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"N-Queens Problem","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":213,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Heaps & Priority Queues","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":214,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Heap Sort","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":215,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Tries (Prefix Trees)","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":216,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"DP: 1D","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":217,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"DP: 2D","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":218,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"DP: LCS","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":219,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Graphs: Dijkstra","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":220,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Graphs: Topo Sort","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":221,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Disjoint Set","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":222,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Minimum Spanning Trees","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":223,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Advanced Sliding Window","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
-    {"id":224,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Advanced Bit Manipulation","sticker":"🧠","codeExample":"print(\"Expert\")","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"}
+    {"id":210,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Quick Sort","sticker":"🧠","codeExample":"console.log('Expert Level ' + 0);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":211,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Advanced Recursion","sticker":"🧠","codeExample":"console.log('Expert Level ' + 1);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":212,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"N-Queens Problem","sticker":"🧠","codeExample":"console.log('Expert Level ' + 2);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":213,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Heaps & Priority Queues","sticker":"🧠","codeExample":"console.log('Expert Level ' + 3);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":214,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Heap Sort","sticker":"🧠","codeExample":"console.log('Expert Level ' + 4);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":215,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Tries (Prefix Trees)","sticker":"🧠","codeExample":"console.log('Expert Level ' + 5);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":216,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"DP: 1D","sticker":"🧠","codeExample":"console.log('Expert Level ' + 6);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":217,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"DP: 2D","sticker":"🧠","codeExample":"console.log('Expert Level ' + 7);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":218,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"DP: LCS","sticker":"🧠","codeExample":"console.log('Expert Level ' + 8);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":219,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Graphs: Dijkstra","sticker":"🧠","codeExample":"console.log('Expert Level ' + 9);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":220,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Graphs: Topo Sort","sticker":"🧠","codeExample":"console.log('Expert Level ' + 10);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":221,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Disjoint Set","sticker":"🧠","codeExample":"console.log('Expert Level ' + 11);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":222,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Minimum Spanning Trees","sticker":"🧠","codeExample":"console.log('Expert Level ' + 12);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":223,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Advanced Sliding Window","sticker":"🧠","codeExample":"console.log('Expert Level ' + 13);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"},
+    {"id":224,"chapter":"Chapter 10: Advanced Algorithms","tier":"Expert","title":"Advanced Bit Manipulation","sticker":"🧠","codeExample":"console.log('Expert Level ' + 14);","miniQuizQuestion":{"question":"Is this an expert topic?","options":["Yes","No","Maybe","I don't know"],"correctAnswerIndex":0},"examples":[{"explanation":"Example","code":"console.log('Run');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Just log it"}],"biteSized":{"meaning":"Advanced algorithm concept.","funnyEgTamil":"Sivaji padathula vara laptop hacker scenes maari puriyadha oru logic!"},"gifKeyword":"success meme"}
 ];

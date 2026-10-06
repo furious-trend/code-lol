@@ -7,7 +7,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     tier: "Intermediate",
     title: "Time Complexity",
     sticker: "⏱️",
-    codeExample: "# O(1) - Instant\ndef get_first(arr):\n    return arr[0]\n\n# O(n) - Linear (Depends on size)\ndef log_all(arr):\n    for x in arr:\n        print(x)",
+    codeExample: "# O(1) - Instant\ndef getFirst(arr) : return arr[0] }\n\n# O(n) - Linear (Depends on size)\ndef logAll(arr) : arr.forEach(lambda x: print(x)) }",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
       question: "If an algorithm takes longer to run proportionally to the exact size of the input, what is its Time Complexity?",
@@ -16,46 +16,42 @@ export const pythonIntermediateLessons: Lesson[] = [
     },
     examples: [
       { explanation: "O(1) Constant Time. It takes the same amount of time no matter how big the input is.", code: "arr = [1, 2, 3, 4, 5]\nprint(arr[0])" },
-      { explanation: "O(n) Linear Time. You have to check every single item.", code: "items = ['A', 'B', 'C']\nfor item in items:\n    print(item)" }
+      { explanation: "O(n) Linear Time. You have to check every single item.", code: "items = ['A', 'B', 'C']\nfor i=0 i<items.length i++:\n  print(items[i])" }
     ],
-    biteSized: {
-      meaning: "A fundamental concept.",
-      funnyEgTamil: "Time complexity is like rush hour traffic—you think you're making progress, but you're actually just moving in slow motion",
-      meaningGeneral: "How the runtime of an algorithm grows as the input size grows.",
-      funnyEgGeneral: "Time complexity is like the DMV line—you think it's fast until 50 more people walk in."
-    }
-  },
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Time complexity is like rush hour traffic—you think you're making progress, but you're actually just moving in slow motion"
+                  }
+},
   {
     id: 102,
     chapter: "Chapter 1: The Big O",
     tier: "Intermediate",
     title: "Space Complexity",
     sticker: "💾",
-    codeExample: "# O(1) Space - Using a single variable\ntotal = 0\n\n# O(n) Space - Creating a list based on input\nnew_arr = [x * 2 for x in original_arr]",
+    codeExample: "# O(1) Space - Using a single variable\nsum = 0\n\n# O(n) Space - Creating a new array based on input\nnewArr = originalArr.map(lambda x: x * 2)",
     gifKeyword: "screaming internally",
     miniQuizQuestion: {
-      question: "If your function creates a list that is the exact same size as the input list, what is its Space Complexity?",
+      question: "If your function creates a new array that is the exact same size as the input array, what is its Space Complexity?",
       options: ["O(1)", "O(n)", "O(n^2)", "O(infinity)"],
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "O(1) Space. You're just storing a couple of numbers, regardless of input size.", code: "total = 0\nfor num in nums:\n    total += num" },
-      { explanation: "O(n) Space. You're building a massive data structure in memory.", code: "copies = []\nfor num in nums:\n    copies.append(num)" }
+      { explanation: "O(1) Space. You're just storing a couple of numbers, regardless of input size.", code: "total = 0\nfor i = 0 i < nums.length i++:\n  total += nums[i]" },
+      { explanation: "O(n) Space. You're building a massive new data structure in memory.", code: "copies = []\nfor i = 0 i < nums.length i++:\n  copies.append(nums[i])" }
     ],
-    biteSized: {
-      meaning: "A fundamental concept.",
-      funnyEgTamil: "Space complexity is like your phone storage—you think you have enough until you download one more app",
-      meaningGeneral: "How much extra memory an algorithm needs as the input grows.",
-      funnyEgGeneral: "Space complexity is like your phone storage—you think you have plenty until you take one more video."
-    }
-  },
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Space complexity is like your phone storage—you think you have enough until you download one more app"
+                  }
+},
   {
     id: 103,
     chapter: "Chapter 2: Two Pointers & Sliding Window",
     tier: "Intermediate",
     title: "Two Pointers",
     sticker: "✌️",
-    codeExample: "left = 0\nright = len(arr) - 1\nwhile left < right:\n    # Do something smart\n    left += 1\n    right -= 1",
+    codeExample: "left = 0\nright = arr.length - 1\nwhile left < right:\n  # Do something smart\n  left++ right--",
     gifKeyword: "this is fine fire",
     miniQuizQuestion: {
       question: "In the Two Pointer technique, where do the pointers usually start for an array?",
@@ -63,45 +59,171 @@ export const pythonIntermediateLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Reversing a list using two pointers.", code: "arr = [1, 2, 3]\nl, r = 0, len(arr) - 1\nwhile l < r:\n    arr[l], arr[r] = arr[r], arr[l]\n    l += 1\n    r -= 1" }
+      { explanation: "Reversing an array using two pointers.", code: "arr = [1, 2, 3]\nl = 0, r = arr.length - 1\nwhile l < r:\n  temp = arr[l]\n  arr[l] = arr[r]\n  arr[r] = temp\n  l++ r--" },
+      { explanation: "Finding a pair that sums to a target (in a sorted array).", code: "while l < r:\n  sum = arr[l] + arr[r]\n  if (sum == target) return true\n  if (sum < target) l++ else r--" }
     ],
-    biteSized: {
-      meaning: "A fundamental concept.",
-      funnyEgTamil: "Two Pointers is like trying to get two WiFi signals to connect at the same time—you think it's a good idea until it gets complicated",
-      meaningGeneral: "Using two indices to traverse a data structure efficiently.",
-      funnyEgGeneral: "Two Pointers is like trying to read a book from both ends to finish it faster."
-    }
-  },
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Two Pointers is like trying to get two WiFi signals to connect at the same time—you think it's a good idea until it gets complicated"
+                  }
+},
+  {
+    id: 104,
+    chapter: "Chapter 2: Two Pointers & Sliding Window",
+    tier: "Intermediate",
+    title: "Sliding Window",
+    sticker: "🪟",
+    codeExample: "windowSum = 0\n# Add first k elements\nfor(i=0 i<k i++) windowSum += arr[i]\n# Slide the window\nfor i=k i<arr.length i++:\n  windowSum += arr[i] - arr[i-k]",
+    gifKeyword: "why is this happening",
+    miniQuizQuestion: {
+      question: "What is the primary benefit of the Sliding Window technique?",
+      options: ["It makes the array smaller", "It avoids nested loops (O(n^2)) by reusing previous work", "It sorts the array automatically", "It looks cool on a resume"],
+      correctAnswerIndex: 1
+    },
+    examples: [
+      { explanation: "Finding the maximum sum of a subarray of size K.", code: "max = sum\nfor i = k i < arr.length i++:\n  sum = sum - arr[i-k] + arr[i]\n  max = Math.max(max, sum)" }
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Sliding Window is like your phone's WiFi range—you move a bit too far and everything just drops"
+                  }
+},
   {
     id: 105,
     chapter: "Chapter 3: Hash Maps & Sets",
     tier: "Intermediate",
-    title: "Hash Maps (Dictionaries)",
+    title: "Hash Maps (Objects)",
     sticker: "🗺️",
-    codeExample: "hash_map = {}\nhash_map['Shafiq'] = 'Cool Guy'\nprint(hash_map.get('Shafiq')) # O(1) Instant lookup!",
+    codeExample: "map = new Map()\nmap.set('Shafiq', 'Cool Guy')\nprint(map.get('Shafiq')) # O(1) Instant lookup!",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
-      question: "What is the time complexity of looking up a value by its key in a Hash Map (Dictionary)?",
+      question: "What is the time complexity of looking up a value by its key in a Hash Map?",
       options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
       correctAnswerIndex: 0
     },
     examples: [
-      { explanation: "Using a dict to count frequencies.", code: "frequencies = {}\nfrequencies['apple'] = frequencies.get('apple', 0) + 1" }
+      { explanation: "Using a plain object as a map.", code: "frequencies = {}\nfrequencies['apple'] = (frequencies['apple'] or 0) + 1" },
+      { explanation: "Using the ES6 Map class.", code: "m = new Map()\nm.set('key1', 'value1')\nprint(m.has('key1'))" }
     ],
-    biteSized: {
-      meaning: "Key-value data packet.",
-      funnyEgTamil: "Contractor biodata: { name: \"Nesamani\", weakness: \"Spanner\" }.",
-      meaningGeneral: "A data structure that stores key-value pairs for instant lookups.",
-      funnyEgGeneral: "Hash maps are like a coat check—give them a ticket (key), get your coat (value) instantly."
-    }
-  },
+      biteSized: {
+                    meaning: "Key-value data packet.",
+                    funnyEgTamil: "Contractor biodata: { name: \\\"Nesamani\\\", weakness: \\\"Spanner\\\" }."
+                  }
+},
+  {
+    id: 106,
+    chapter: "Chapter 3: Hash Maps & Sets",
+    tier: "Intermediate",
+    title: "Sets (Deduplication)",
+    sticker: "🚫",
+    codeExample: "mySet = new Set([1, 2, 2, 3, 3, 3])\nprint([...mySet]) # [1, 2, 3]",
+    gifKeyword: "screaming internally",
+    miniQuizQuestion: {
+      question: "If you do `new Set([1, 1, 1, 2, 2])`, how many items are in the Set?",
+      options: ["5", "3", "2", "0"],
+      correctAnswerIndex: 2
+    },
+    examples: [
+      { explanation: "Removing duplicates from an array instantly.", code: "arr = [5, 5, 5, 1, 2]\nuniqueArr = [...new Set(arr)]\nprint(uniqueArr)" },
+      { explanation: "Checking for existence (O(1) time).", code: "s = new Set(['apple', 'banana'])\nprint(s.has('apple')) # true" }
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Sets are like your phone contacts – they automatically remove duplicates, so you don't have to deal with multiple versions of your mom"
+                  }
+},
+  {
+    id: 107,
+    chapter: "Chapter 4: Linked Lists",
+    tier: "Intermediate",
+    title: "Singly Linked Lists",
+    sticker: "🔗",
+    codeExample: "class Node {\n  constructor(val):\n    this.val = val\n    this.next = null\n  }",
+    gifKeyword: "why is this happening",
+    miniQuizQuestion: {
+      question: "What does the `next` property in a Singly Linked List Node do?",
+      options: ["Goes back in time", "Points to the next node in the chain", "Stores the data value", "Deletes the list"],
+      correctAnswerIndex: 1
+    },
+    examples: [
+      { explanation: "Creating nodes.", code: "head = new Node(1)\nsecond = new Node(2)\nhead.next = second" },
+      { explanation: "Traversing a linked list.", code: "curr = head\nwhile curr != null:\n  print(curr.val)\n  curr = curr.next" }
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Singly Linked Lists are like phone notifications—you can only delete them one by one, but they just keep coming"
+                  }
+},
+  {
+    id: 108,
+    chapter: "Chapter 4: Linked Lists",
+    tier: "Intermediate",
+    title: "Fast & Slow Pointers (Tortoise & Hare)",
+    sticker: "🐢",
+    codeExample: "slow = head, fast = head\nwhile fast and fast.next:\n  slow = slow.next\n  fast = fast.next.next\n  if (slow == fast) return true # CYCLE!",
+    gifKeyword: "mind blown",
+    miniQuizQuestion: {
+      question: "In the Tortoise and Hare algorithm, how many steps does the 'Hare' (fast pointer) take per loop?",
+      options: ["1", "2", "3", "It teleports"],
+      correctAnswerIndex: 1
+    },
+    examples: [
+      { explanation: "Finding the middle of a linked list (when fast reaches the end, slow is exactly in the middle).", code: "while fast and fast.next:\n  slow = slow.next\n  fast = fast.next.next\nreturn slow # Middle node!" }
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Fast and slow pointers are like a tortoise and hare, where the fast one leaves the slow one in the dust, only to realize it's been going in circles"
+                  }
+},
+  {
+    id: 109,
+    chapter: "Chapter 5: Stacks & Queues",
+    tier: "Intermediate",
+    title: "Stacks (LIFO)",
+    sticker: "🥞",
+    codeExample: "stack = []\nstack.append('Bottom')\nstack.append('Top')\nprint(stack.pop()) # 'Top' comes off first",
+    gifKeyword: "why is this happening",
+    miniQuizQuestion: {
+      question: "What does LIFO stand for?",
+      options: ["Look Inside First Object", "Last In, First Out", "Late Input, Fast Output", "Learn It For Once"],
+      correctAnswerIndex: 1
+    },
+    examples: [
+      { explanation: "Validating parentheses (classic stack problem).", code: "for char of str:\n  if (char == '(') stack.append(char)\n  else if (char == ')') stack.pop()" }
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Stacks are like phone notifications—you think you're done with the last one, but another pops up demanding attention"
+                  }
+},
+  {
+    id: 110,
+    chapter: "Chapter 5: Stacks & Queues",
+    tier: "Intermediate",
+    title: "Queues (FIFO)",
+    sticker: "🚶",
+    codeExample: "queue = []\nqueue.append('First Guy')\nqueue.append('Second Guy')\nprint(queue.shift()) # First Guy gets served",
+    gifKeyword: "why is this happening",
+    miniQuizQuestion: {
+      question: "Which array method is used to remove the FIRST item (dequeue) in JavaScript?",
+      options: ["pop()", "push()", "shift()", "slice()"],
+      correctAnswerIndex: 2
+    },
+    examples: [
+      { explanation: "Enqueue (add) and Dequeue (remove).", code: "queue.append(1) # Enqueue\nfirst = queue.shift() # Dequeue" }
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Queues are like lines at the grocery store—you wait forever and then someone cuts in front of you"
+                  }
+},
   {
     id: 111,
     chapter: "Chapter 6: Recursion",
     tier: "Intermediate",
     title: "Intro to Recursion",
     sticker: "🪞",
-    codeExample: "def inception(n):\n    if n == 0:\n        return 'Wake up!' # Base case\n    return inception(n - 1)",
+    codeExample: "def inception(n) :\n  if (n == 0) return 'Wake up!' # Base case\n  return inception(n - 1)",
     gifKeyword: "mind blown",
     miniQuizQuestion: {
       question: "What is the crucial part of a recursive function that stops it from running forever?",
@@ -109,397 +231,166 @@ export const pythonIntermediateLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     examples: [
-      { explanation: "Factorial function using recursion.", code: "def factorial(n):\n    if n == 1:\n        return 1\n    return n * factorial(n - 1)" }
+      { explanation: "Factorial function using recursion.", code: "def factorial(n) :\n  if (n == 1) return 1\n  return n * factorial(n - 1)" }
     ],
-    biteSized: {
-      meaning: "A fundamental concept.",
-      funnyEgTamil: "Recursion is like your phone autocorrect—it keeps calling itself to fix the same mistake, but makes it worse",
-      meaningGeneral: "A function that calls itself until it reaches a stopping point.",
-      funnyEgGeneral: "Recursion is like putting two mirrors face-to-face—it goes on forever until someone breaks one."
-    }
-  },
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Recursion is like your phone autocorrect—it keeps calling itself to fix the same mistake, but makes it worse"
+                  }
+},
+  {
+    id: 112,
+    chapter: "Chapter 6: Recursion",
+    tier: "Intermediate",
+    title: "The Call Stack",
+    sticker: "📚",
+    codeExample: "def crashMe() :\n  crashMe()\n# crashMe() # RangeError: Maximum call stack size exceeded",
+    gifKeyword: "screaming internally",
+    miniQuizQuestion: {
+      question: "What error do you get if your recursion never stops?",
+      options: ["SyntaxError", "Stack Overflow / Maximum Call Stack Exceeded", "Network Error", "Timeout Error"],
+      correctAnswerIndex: 1
+    },
+    examples: [
+      { explanation: "Understanding execution order.", code: "def count(n) :\n  if (n==0) return\n  print(n) # Prints going down\n  count(n-1)\n  print(n) # Prints coming back up the stack!" }
+    ],
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "The call stack is like a traffic jam—you think you're making progress, but really you're just waiting for something to unwind"
+                  }
+},
   {
     id: 113,
     chapter: "Chapter 7: Object-Oriented Programming (OOP)",
     tier: "Intermediate",
     title: "Classes & Instances",
     sticker: "🏗️",
-    codeExample: "class Car:\n    def drive(self):\n        print('Vroom!')\n\nmy_car = Car() # my_car is the Instance!\nmy_car.drive()",
+    codeExample: "class Car {\n  drive(): print('Vroom!') }\nmyCar = new Car() # myCar is the Instance!\nmyCar.drive()",
     gifKeyword: "why is this happening",
     miniQuizQuestion: {
-      question: "How do you create an instance of a Class in Python?",
-      options: ["create Car()", "build Car()", "new Car()", "Car()"],
-      correctAnswerIndex: 3
+      question: "What keyword is used to create a new Instance of a Class?",
+      options: ["create", "build", "new", "make"],
+      correctAnswerIndex: 2
     },
     examples: [
-      { explanation: "Defining a class and instantiating it.", code: "class Dog:\n    def bark(self):\n        print('Woof')\n\nfido = Dog()\nfido.bark()" }
+      { explanation: "Defining a class.", code: "class Dog {\n  bark(): print('Woof') }" },
+      { explanation: "Instantiating (creating) an object from the class.", code: "fido = new Dog()\nfido.bark()" }
     ],
-    biteSized: {
-      meaning: "A fundamental concept.",
-      funnyEgTamil: "Classes are like restaurant menus, instances are meals—each meal is a unique version of the same menu item",
-      meaningGeneral: "A class is a blueprint, an instance is an object built from it.",
-      funnyEgGeneral: "Classes are like cookie cutters; instances are the actual cookies."
-    }
-  }
-,
-{
-  "id": 104,
-  "chapter": "Chapter 1: The Big O",
-  "tier": "Intermediate",
-  "title": "Sliding Window",
-  "sticker": "🪟",
-  "codeExample": "def sliding_window(arr, k):\n    window_sum = sum(arr[:k])\n    max_sum = window_sum\n    for i in range(len(arr) - k):\n        window_sum = window_sum - arr[i] + arr[i+k]\n        max_sum = max(max_sum, window_sum)\n    return max_sum",
-  "gifKeyword": "window",
-  "miniQuizQuestion": {
-    "question": "What is the primary benefit of the sliding window technique?",
-    "options": [
-      "O(1) memory usage",
-      "Avoiding nested loops to reduce time complexity to O(n)",
-      "Sorting the array faster",
-      "Finding the minimum value in an array"
-    ],
-    "correctAnswerIndex": 1
-  },
-  "examples": [
-    {
-      "explanation": "Instead of recalculating the sum of k elements every time, just subtract the outgoing element and add the incoming element.",
-      "code": "window_sum = window_sum - arr[i] + arr[i+k]"
-    }
-  ],
-  "biteSized": {
-    "meaning": "An algorithmic technique for finding a subset of elements in an array or string.",
-    "funnyEgGeneral": "Like a magnifying glass sliding across a newspaper.",
-    "funnyEgTamil": "Sliding window is like moving your chair to watch the TV when someone stands in front of you."
-  }
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Classes are like restaurant menus, instances are meals—each meal is a unique version of the same menu item"
+                  }
 },
-{
-  "id": 106,
-  "chapter": "Chapter 2: Data Structures",
-  "tier": "Intermediate",
-  "title": "Sets (Deduplication)",
-  "sticker": "🎭",
-  "codeExample": "my_set = {1, 2, 2, 3}\nprint(my_set) # {1, 2, 3}\n\nnames = ['Alice', 'Bob', 'Alice']\nunique_names = set(names)",
-  "gifKeyword": "unique",
-  "miniQuizQuestion": {
-    "question": "What is the primary characteristic of a Set?",
-    "options": [
-      "It keeps elements in insertion order",
-      "It only stores unique elements",
-      "It is slower than a list",
-      "It uses key-value pairs"
+  {
+    id: 114,
+    chapter: "Chapter 7: Object-Oriented Programming (OOP)",
+    tier: "Intermediate",
+    title: "The Constructor & 'this'",
+    sticker: "👷",
+    codeExample: "class User {\n  constructor(name):\n    this.name = name # Setting up THIS specific user\n  }\nu1 = new User('Shafiq')\nprint(u1.name)",
+    gifKeyword: "wrong delivery",
+    miniQuizQuestion: {
+      question: "When does the constructor function run?",
+      options: ["Every time you call a method", "Only when you use the 'new' keyword to create an instance", "When the page loads", "Never"],
+      correctAnswerIndex: 1
+    },
+    examples: [
+      { explanation: "Using constructor arguments.", code: "class Phone {\n  constructor(brand):\n    this.brand = brand\n  }\np = new Phone('Apple')" }
     ],
-    "correctAnswerIndex": 1
-  },
-  "examples": [
-    {
-      "explanation": "Sets automatically remove duplicates.",
-      "code": "nums = [1, 1, 2, 2]\nunique = set(nums)"
-    }
-  ],
-  "biteSized": {
-    "meaning": "A collection of unique items.",
-    "funnyEgGeneral": "A VIP club where no one is allowed to have the same name as anyone else.",
-    "funnyEgTamil": "Set is like getting a unique Aadhaar card—nobody can have your number!"
-  }
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "The constructor is like setting up your profile, and 'this' ensures the food gets delivered specifically to you."
+                  }
 },
-{
-  "id": 107,
-  "chapter": "Chapter 2: Data Structures",
-  "tier": "Intermediate",
-  "title": "Singly Linked Lists",
-  "sticker": "🔗",
-  "codeExample": "class Node:\n    def __init__(self, val):\n        self.val = val\n        self.next = None\n\nhead = Node(1)\nhead.next = Node(2)",
-  "gifKeyword": "chain",
-  "miniQuizQuestion": {
-    "question": "In a singly linked list, what does a node contain?",
-    "options": [
-      "Only the value",
-      "The value and a pointer to the next node",
-      "The value and pointers to both next and previous",
-      "An array of values"
+  {
+    id: 115,
+    chapter: "Chapter 7: Object-Oriented Programming (OOP)",
+    tier: "Intermediate",
+    title: "Inheritance (extends)",
+    sticker: "🧬",
+    codeExample: "class Animal {\n  breathe(): print('Breathing...') }\nclass Dog extends Animal {\n  bark(): print('Woof!') }\nd = new Dog()\nd.breathe() d.bark()",
+    gifKeyword: "why is this happening",
+    miniQuizQuestion: {
+      question: "Which keyword makes one class inherit from another?",
+      options: ["inherits", "copies", "extends", "clones"],
+      correctAnswerIndex: 2
+    },
+    examples: [
+      { explanation: "Inheriting methods.", code: "class Bird extends Animal {\n  fly(): print('Flying') }" },
+      { explanation: "Using super() to call the parent's constructor.", code: "class Cat extends Animal {\n  constructor(name):\n    super() # Must call this first!\n    this.name = name\n  }" }
     ],
-    "correctAnswerIndex": 1
-  },
-  "examples": [
-    {
-      "explanation": "Each node points to the next.",
-      "code": "current = head\nwhile current:\n    print(current.val)\n    current = current.next"
-    }
-  ],
-  "biteSized": {
-    "meaning": "A linear data structure where elements are not stored contiguously.",
-    "funnyEgGeneral": "A treasure hunt where each clue leads to the next clue.",
-    "funnyEgTamil": "Linked List is like a scavenger hunt—each clue tells you where to find the next one."
-  }
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Inheritance is like copying homework from a friend who barely passed the class"
+                  }
 },
-{
-  "id": 108,
-  "chapter": "Chapter 2: Data Structures",
-  "tier": "Intermediate",
-  "title": "Fast & Slow Pointers (Tortoise & Hare)",
-  "sticker": "🐢",
-  "codeExample": "def has_cycle(head):\n    slow, fast = head, head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False",
-  "gifKeyword": "rabbit",
-  "miniQuizQuestion": {
-    "question": "What is the Tortoise and Hare algorithm typically used for?",
-    "options": [
-      "Sorting a linked list",
-      "Finding cycles in a linked list",
-      "Reversing a linked list",
-      "Finding the minimum value"
+  {
+    id: 116,
+    chapter: "Chapter 7: Object-Oriented Programming (OOP)",
+    tier: "Intermediate",
+    title: "Encapsulation (Private Fields)",
+    sticker: "🔒",
+    codeExample: "class BankAccount {\n  #balance = 0\n  deposit(amt): this.#balance += amt }\n  getBalance(): return this.#balance }\naccount = new BankAccount()\n# account.#balance # ERROR! Private!",
+    gifKeyword: "why is this happening",
+    miniQuizQuestion: {
+      question: "In modern JavaScript, how do you mark a class property as strictly private?",
+      options: ["private keyword", "_ (underscore prefix)", "# (hash prefix)", "hidden keyword"],
+      correctAnswerIndex: 2
+    },
+    examples: [
+      { explanation: "Private properties cannot be accessed outside the class.", code: "class Secret {\n  #code = 1234\n  checkCode(c): return c == this.#code }" }
     ],
-    "correctAnswerIndex": 1
-  },
-  "examples": [
-    {
-      "explanation": "If there's a cycle, the fast pointer will eventually overlap the slow one.",
-      "code": "fast = fast.next.next"
-    }
-  ],
-  "biteSized": {
-    "meaning": "Using two pointers moving at different speeds.",
-    "funnyEgGeneral": "Like two runners on a track, if the track is a circle, the faster one will lap the slower one.",
-    "funnyEgTamil": "Fast pointer is like a speeding auto, slow pointer is the traffic police catching him eventually in a round-tana."
-  }
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Encapsulation is like a cluttered room—you hide the mess from outsiders but still know it's a disaster inside"
+                  }
 },
-{
-  "id": 109,
-  "chapter": "Chapter 2: Data Structures",
-  "tier": "Intermediate",
-  "title": "Stacks (LIFO)",
-  "sticker": "🥞",
-  "codeExample": "stack = []\nstack.append(1) # Push\nstack.append(2)\ntop = stack.pop() # Pop returns 2",
-  "gifKeyword": "pancakes",
-  "miniQuizQuestion": {
-    "question": "What does LIFO stand for?",
-    "options": [
-      "Last In, First Out",
-      "List In, First Out",
-      "Last In, Fast Out",
-      "Late In, First Out"
+  {
+    id: 117,
+    chapter: "Chapter 7: Object-Oriented Programming (OOP)",
+    tier: "Intermediate",
+    title: "Polymorphism (Overriding)",
+    sticker: "🎭",
+    codeExample: "class Parent {\n  speak(): print('Hello') }\nclass Teenager extends Parent {\n  speak(): print('Whatever') } # Overriding!\nnew Teenager().speak()",
+    gifKeyword: "mind blown",
+    miniQuizQuestion: {
+      question: "What does it mean to 'override' a method in a child class?",
+      options: ["Deleting the method entirely", "Writing a new method with the exact same name to replace the parent's version", "Running the parent method twice", "Hiding the method"],
+      correctAnswerIndex: 1
+    },
+    examples: [
+      { explanation: "Overriding a method.", code: "class Shape {\n  area(): return 0 }\nclass Square extends Shape {\n  area(): return 100 }" }
     ],
-    "correctAnswerIndex": 0
-  },
-  "examples": [
-    {
-      "explanation": "Push to add, pop to remove the latest.",
-      "code": "stack.append('A')\nstack.pop()"
-    }
-  ],
-  "biteSized": {
-    "meaning": "A Last-In-First-Out data structure.",
-    "funnyEgGeneral": "A stack of pancakes. You always eat the top one first.",
-    "funnyEgTamil": "Stack is like arranging plates at a wedding buffet—you always pick the top plate."
-  }
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Polymorphism is like having multiple browser tabs open – they all look similar but behave differently"
+                  }
 },
-{
-  "id": 110,
-  "chapter": "Chapter 2: Data Structures",
-  "tier": "Intermediate",
-  "title": "Queues (FIFO)",
-  "sticker": "🧍",
-  "codeExample": "from collections import deque\nqueue = deque()\nqueue.append(1) # Enqueue\nqueue.append(2)\nfirst = queue.popleft() # Dequeue returns 1",
-  "gifKeyword": "queue",
-  "miniQuizQuestion": {
-    "question": "What does FIFO stand for?",
-    "options": [
-      "First In, First Out",
-      "Fast In, Fast Out",
-      "First In, Fast Out",
-      "For In, For Out"
+  {
+    id: 118,
+    chapter: "Chapter 7: Object-Oriented Programming (OOP)",
+    tier: "Intermediate",
+    title: "Static Methods",
+    sticker: "⚡",
+    codeExample: "class MathHelper {\n  static add(a, b): return a + b }\n# No 'new' keyword needed!\nprint(MathHelper.add(5, 5))",
+    gifKeyword: "mind blown",
+    miniQuizQuestion: {
+      question: "Do you need to use the `new` keyword to call a `static` method?",
+      options: ["Yes", "No, you call it directly on the Class itself", "Only on Tuesdays", "Yes, but you pass no arguments"],
+      correctAnswerIndex: 1
+    },
+    examples: [
+      { explanation: "Static utility methods.", code: "class Utils {\n  static capitalize(str): return str.toUpperCase() }\nprint(Utils.capitalize('hi'))" }
     ],
-    "correctAnswerIndex": 0
-  },
-  "examples": [
-    {
-      "explanation": "Use deque for O(1) pops from the front.",
-      "code": "from collections import deque\nq = deque([1, 2, 3])\nq.popleft()"
-    }
-  ],
-  "biteSized": {
-    "meaning": "A First-In-First-Out data structure.",
-    "funnyEgGeneral": "A line at the grocery store. First person there gets served first.",
-    "funnyEgTamil": "Queue is like a ration shop line—first come, first serve!"
-  }
+      biteSized: {
+                    meaning: "A fundamental concept.",
+                    funnyEgTamil: "Static methods are like highway rest stops - they're shared by everyone and always in the same place"
+                  }
 },
-{
-  "id": 112,
-  "chapter": "Chapter 3: Deep Dive",
-  "tier": "Intermediate",
-  "title": "The Call Stack",
-  "sticker": "☎️",
-  "codeExample": "def a():\n    print('A')\n    b()\n\ndef b():\n    print('B')\n\na()",
-  "gifKeyword": "phone",
-  "miniQuizQuestion": {
-    "question": "What happens when the call stack gets too large (e.g., infinite recursion)?",
-    "options": [
-      "The program runs faster",
-      "Stack Overflow Error",
-      "Memory Leak",
-      "Nothing"
-    ],
-    "correctAnswerIndex": 1
-  },
-  "examples": [
-    {
-      "explanation": "Functions are pushed to the stack when called and popped when they return.",
-      "code": ""
-    }
-  ],
-  "biteSized": {
-    "meaning": "The mechanism the interpreter uses to keep track of function calls.",
-    "funnyEgGeneral": "Like placing sticky notes on your monitor for every task you start, and removing them when finished.",
-    "funnyEgTamil": "Call stack is like asking your mom where your shirt is, she asks dad, dad asks sister..."
-  }
-},
-{
-  "id": 114,
-  "chapter": "Chapter 4: Object Oriented Programming",
-  "tier": "Intermediate",
-  "title": "Classes & Constructors",
-  "sticker": "🏗️",
-  "codeExample": "class Dog:\n    def __init__(self, name):\n        self.name = name\n\n    def bark(self):\n        return 'Woof!'\n\nd = Dog('Rex')",
-  "gifKeyword": "dog",
-  "miniQuizQuestion": {
-    "question": "What is the constructor method in Python?",
-    "options": [
-      "__init__",
-      "constructor",
-      "init",
-      "create"
-    ],
-    "correctAnswerIndex": 0
-  },
-  "examples": [
-    {
-      "explanation": "__init__ initializes the object.",
-      "code": "def __init__(self): pass"
-    }
-  ],
-  "biteSized": {
-    "meaning": "A blueprint for creating objects with properties and methods.",
-    "funnyEgGeneral": "A cookie cutter (class) makes many cookies (objects).",
-    "funnyEgTamil": "Class is the blueprint, object is the actual house."
-  }
-},
-{
-  "id": 115,
-  "chapter": "Chapter 4: Object Oriented Programming",
-  "tier": "Intermediate",
-  "title": "Inheritance",
-  "sticker": "🧬",
-  "codeExample": "class Animal:\n    def speak(self):\n        return '?'\n\nclass Cat(Animal):\n    def speak(self):\n        return 'Meow'\n\nc = Cat()\nprint(c.speak())",
-  "gifKeyword": "cat",
-  "miniQuizQuestion": {
-    "question": "How does a class inherit from another in Python?",
-    "options": [
-      "class Cat extends Animal:",
-      "class Cat(Animal):",
-      "class Cat inherits Animal:",
-      "class Cat implements Animal:"
-    ],
-    "correctAnswerIndex": 1
-  },
-  "examples": [
-    {
-      "explanation": "Child class inherits methods from parent class.",
-      "code": "class Child(Parent):"
-    }
-  ],
-  "biteSized": {
-    "meaning": "A mechanism where a new class derives properties from an existing class.",
-    "funnyEgGeneral": "Inheriting your dad's old car, but giving it a custom paint job.",
-    "funnyEgTamil": "Inheritance is like getting your older sibling's old textbooks."
-  }
-},
-{
-  "id": 116,
-  "chapter": "Chapter 4: Object Oriented Programming",
-  "tier": "Intermediate",
-  "title": "Encapsulation (Private Fields)",
-  "sticker": "🔒",
-  "codeExample": "class BankAccount:\n    def __init__(self, balance):\n        self.__balance = balance # Private\n\n    def get_balance(self):\n        return self.__balance\n\nacc = BankAccount(100)",
-  "gifKeyword": "safe",
-  "miniQuizQuestion": {
-    "question": "How do you conventionally define a private attribute in Python?",
-    "options": [
-      "private balance",
-      "self.balance = private",
-      "self.__balance",
-      "self._private_balance"
-    ],
-    "correctAnswerIndex": 2
-  },
-  "examples": [
-    {
-      "explanation": "Prefix with double underscore for name mangling.",
-      "code": "self.__secret = 42"
-    }
-  ],
-  "biteSized": {
-    "meaning": "Hiding the internal state and requiring all interaction to be performed through an object's methods.",
-    "funnyEgGeneral": "Like keeping your diary locked and only reading it aloud yourself.",
-    "funnyEgTamil": "Encapsulation is like hiding your diary from your sibling."
-  }
-},
-{
-  "id": 117,
-  "chapter": "Chapter 4: Object Oriented Programming",
-  "tier": "Intermediate",
-  "title": "Polymorphism (Overriding)",
-  "sticker": "🎭",
-  "codeExample": "class Bird:\n    def fly(self):\n        return 'Flying'\n\nclass Penguin(Bird):\n    def fly(self):\n        return 'Cannot fly'\n\np = Penguin()\nprint(p.fly())",
-  "gifKeyword": "penguin",
-  "miniQuizQuestion": {
-    "question": "What is polymorphism?",
-    "options": [
-      "Classes with the same name",
-      "Different objects responding to the same method call in their own way",
-      "Variables that change types randomly",
-      "A type of loop"
-    ],
-    "correctAnswerIndex": 1
-  },
-  "examples": [
-    {
-      "explanation": "Overriding a method in a subclass.",
-      "code": "def fly(self): return 'Flap'"
-    }
-  ],
-  "biteSized": {
-    "meaning": "The ability of different objects to respond to the same method call in a way that is appropriate for their type.",
-    "funnyEgGeneral": "Pressing 'play' on a remote works for a DVD player, TV, and stereo, but they do different things.",
-    "funnyEgTamil": "Polymorphism is like pressing a single button, but your TV does one thing and AC does another."
-  }
-},
-{
-  "id": 118,
-  "chapter": "Chapter 4: Object Oriented Programming",
-  "tier": "Intermediate",
-  "title": "Static Methods",
-  "sticker": "⚡",
-  "codeExample": "class MathUtils:\n    @staticmethod\n    def add(a, b):\n        return a + b\n\nprint(MathUtils.add(5, 10))",
-  "gifKeyword": "lightning",
-  "miniQuizQuestion": {
-    "question": "What decorator is used to define a static method in Python?",
-    "options": [
-      "@classmethod",
-      "@static",
-      "@staticmethod",
-      "@class"
-    ],
-    "correctAnswerIndex": 2
-  },
-  "examples": [
-    {
-      "explanation": "Static methods don't take a 'self' parameter.",
-      "code": "@staticmethod\ndef greet(): return 'Hi'"
-    }
-  ],
-  "biteSized": {
-    "meaning": "Methods that belong to a class rather than an instance of the class.",
-    "funnyEgGeneral": "A tool that anyone can use without needing to own a house first.",
-    "funnyEgTamil": "Static method is like a public tap—anyone can use it, no need to own a house."
-  }
-}
+    {"id":119,"chapter":"Chapter 7: Advanced Data Handling","tier":"Intermediate","title":"Error Handling (Try/Catch)","sticker":"⚠️","codeExample":"try { throw new Error('Oops'); } catch(e) { console.log(e.message); }","miniQuizQuestion":{"question":"Which block runs regardless of an error?","options":["try","catch","finally","else"],"correctAnswerIndex":2},"examples":[{"explanation":"Basic try-catch","code":"try { bad(); } catch(e) { console.log('caught'); }"}],"verificationChecks":[{"type":"requires_syntax","pattern":"try\\s*\\{","expectedMessage":"Use try/catch"}],"biteSized":{"meaning":"Handling unexpected crashes gracefully without stopping the app.","funnyEgTamil":"Bike-la pogumbodhu police maattina 'Try' escape aaga, illa 'Catch' panni fine kattu!"},"gifKeyword":"success meme"},
+    {"id":120,"chapter":"Chapter 8: Sorting & Searching","tier":"Intermediate","title":"Sorting: Bubble Sort","sticker":"🫧","codeExample":"let arr = [3,1,2]; arr.sort((a,b)=>a-b);","miniQuizQuestion":{"question":"What is the worst-case time complexity of Bubble Sort?","options":["O(n)","O(n log n)","O(n^2)","O(1)"],"correctAnswerIndex":2},"examples":[{"explanation":"Sorting arrays","code":"console.log([2,1].sort());"}],"verificationChecks":[{"type":"requires_syntax","pattern":"sort","expectedMessage":"Use sort()"}],"biteSized":{"meaning":"Comparing adjacent elements and swapping them.","funnyEgTamil":"Assembly line-la height wise nika vekkira PT master vela."},"gifKeyword":"success meme"},
+    {"id":121,"chapter":"Chapter 8: Sorting & Searching","tier":"Intermediate","title":"Sorting: Insertion Sort","sticker":"🃏","codeExample":"console.log('Insertion sort implementation');","miniQuizQuestion":{"question":"Insertion sort is good for?","options":["Large data","Nearly sorted data","Reverse sorted data","Random data"],"correctAnswerIndex":1},"examples":[{"explanation":"Insertion","code":"console.log('insert');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"console","expectedMessage":"Use console.log"}],"biteSized":{"meaning":"Building a sorted array one element at a time.","funnyEgTamil":"Rummy vilayadumbodhu card-ah correct aana edathula sorugura maari!"},"gifKeyword":"success meme"},
+    {"id":122,"chapter":"Chapter 7: Advanced Data Handling","tier":"Intermediate","title":"String Manipulation: Anagrams","sticker":"🔄","codeExample":"let isAnagram = (a, b) => a.split('').sort().join('') === b.split('').sort().join('');","miniQuizQuestion":{"question":"What is an anagram?","options":["Same length","Same letters rearranged","Same meaning","Same vowels"],"correctAnswerIndex":1},"examples":[{"explanation":"Anagram","code":"isAnagram('rat', 'tar');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"split","expectedMessage":"Use split"}],"biteSized":{"meaning":"Two words with the exact same letters rearranged.","funnyEgTamil":"Vadivelu comedy-la 'Vandhuttaan' nu solradhuku badhila 'Thandhuttaan' nu ularura maari!"},"gifKeyword":"success meme"},
+    {"id":123,"chapter":"Chapter 7: Advanced Data Handling","tier":"Intermediate","title":"String Manipulation: Palindromes","sticker":"🪞","codeExample":"let isPal = s => s === s.split('').reverse().join('');","miniQuizQuestion":{"question":"Which is a palindrome?","options":["hello","world","racecar","car"],"correctAnswerIndex":2},"examples":[{"explanation":"Palindrome","code":"isPal('madam');"}],"verificationChecks":[{"type":"requires_syntax","pattern":"reverse","expectedMessage":"Use reverse"}],"biteSized":{"meaning":"A word that reads the same forwards and backward.","funnyEgTamil":"Vikram movie 'Lokesh' intro: 'Arambikalama' reverse-la padichalum adhey thaan!"},"gifKeyword":"success meme"},
+    {"id":124,"chapter":"Chapter 7: Advanced Data Handling","tier":"Intermediate","title":"Matrix (2D Arrays) Traversal","sticker":"🧮","codeExample":"let mat = [[1,2],[3,4]]; console.log(mat[0][1]);","miniQuizQuestion":{"question":"How to access row 1, col 2?","options":["mat[1][2]","mat[0][1]","mat[1,2]","mat.1.2"],"correctAnswerIndex":0},"examples":[{"explanation":"2D Array","code":"console.log(mat);"}],"verificationChecks":[{"type":"requires_syntax","pattern":"\\[\\]","expectedMessage":"Use brackets"}],"biteSized":{"meaning":"An array containing arrays, like a grid.","funnyEgTamil":"Excel sheet-la box box-ah irukke adhey dhaan matrix!"},"gifKeyword":"success meme"}
 ];
