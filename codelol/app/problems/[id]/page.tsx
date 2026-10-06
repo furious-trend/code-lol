@@ -264,9 +264,17 @@ let _log = [];
 })();
 `;
       }
+    } else if (activeLang === "c" && problem.testHarnessC) {
+      testSuite = problem.testHarnessC.replace("{{USER_CODE}}", code);
+    } else if (activeLang === "cpp" && problem.testHarnessCpp) {
+      testSuite = problem.testHarnessCpp.replace("{{USER_CODE}}", code);
+    } else if (activeLang === "java" && problem.testHarnessJava) {
+      testSuite = problem.testHarnessJava.replace("{{USER_CODE}}", code.replace(/public\\s+class\\s+Main/g, "class UserMain").replace(/public\\s+static\\s+void\\s+main/g, "public static void user_main"));
     } else {
-      // For C, C++, Java, we simply run the code and do not auto-test right now.
-      testSuite = code;
+      setRawOutput("Sorry, " + activeLang.toUpperCase() + " is not fully supported for this specific problem yet (missing test harness). Try JavaScript or Python!");
+      setLoadingMsg("Unsupported Language");
+      setIsSubmitting(false);
+      return;
     }
 
 

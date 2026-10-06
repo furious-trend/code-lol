@@ -186,7 +186,7 @@ for i, tc in enumerate(_tc):
 print('===TEST_RESULTS===')
 print(json.dumps({'passed': _passed, 'total': len(_tc), 'log': _log}))
 `;
-    } else {
+    } else if (learningLanguage === "javascript") {
       testSuite = `
 ${code}
 
@@ -232,6 +232,16 @@ let _log = [];
   console.log(JSON.stringify({ passed: _passed, total: _tc.length, log: _log }));
 })();
 `;
+    } else if (learningLanguage === "c" && problem.testHarnessC) {
+      testSuite = problem.testHarnessC.replace("{{USER_CODE}}", code);
+    } else if (learningLanguage === "cpp" && problem.testHarnessCpp) {
+      testSuite = problem.testHarnessCpp.replace("{{USER_CODE}}", code);
+    } else if (learningLanguage === "java" && problem.testHarnessJava) {
+      testSuite = problem.testHarnessJava.replace("{{USER_CODE}}", code.replace(/public\s+class\s+Main/g, "class UserMain").replace(/public\s+static\s+void\s+main/g, "public static void user_main"));
+    } else {
+      setRawOutput("Language " + learningLanguage + " is not fully supported for this problem yet.");
+      setIsSubmitting(false);
+      return;
     }
 
     try {
