@@ -10,7 +10,7 @@ export const __resetGlobalAudioPlayer = () => {
 
 export function useMemeSound() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321';
-  const SOUND_BASE_URL = `${supabaseUrl}/storage/v1/object/public/sounds`;
+  const SOUND_BASE_URL = "";
 
   const playMemeSound = useCallback((isSuccess: boolean, humorPref: 'general' | 'tamil' = 'general') => {
     if (typeof window === 'undefined') return '';
