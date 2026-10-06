@@ -390,5 +390,290 @@ export const pythonBeginnerTopics: Record<string, QuizTopic> = {
         explanation: 'The `del` statement removes the key-value pair entirely. You can also use `d.pop("key")` if you want to get the value before it\'s removed.'
       }
     ]
+  },
+  strings_py: {
+    id: 'strings_py',
+    title: 'Python Strings',
+    tier: 'Beginner',
+    icon: '🔤',
+    color: 'hover:border-blue-500',
+    questions: [
+      {
+        id: 'py_str_1',
+        question: 'Which method converts a string to all uppercase?',
+        options: ['str.upper()', 'str.capitalize()', 'str.toUpperCase()', 'str.upper'],
+        correctIndex: 0,
+        explanation: '`str.upper()` returns a new string with all characters converted to uppercase.'
+      },
+      {
+        id: 'py_str_2',
+        question: 'What does `"hello"[1:3]` return?',
+        options: ['"he"', '"el"', '"ell"', '"hel"'],
+        correctIndex: 1,
+        explanation: 'String slicing `[1:3]` returns characters from index 1 up to (but not including) index 3, so "el".'
+      },
+      {
+        id: 'py_str_3',
+        question: 'How do you check if a substring exists in a string?',
+        options: ['str.contains("sub")', '"sub" in str', 'str.find("sub") != -1 only', 'str.has("sub")'],
+        correctIndex: 1,
+        explanation: 'The `in` operator is the most Pythonic way to check for a substring: `"world" in "hello world"` returns True.'
+      },
+      {
+        id: 'py_str_4',
+        question: 'What is an f-string?',
+        options: ['A fast string', 'A formatted string literal using f"..."', 'A frozen string', 'A file string'],
+        correctIndex: 1,
+        explanation: 'f-strings (formatted string literals) allow you to embed expressions inside string constants using curly braces: `f"Hello {name}"`.'
+      },
+      {
+        id: 'py_str_5',
+        question: 'What does `"  hello  ".strip()` return?',
+        options: ['"  hello  "', '"hello"', '"hello  "', '"  hello"'],
+        correctIndex: 1,
+        explanation: '`.strip()` removes leading and trailing whitespace (including spaces, tabs, newlines) from a string.'
+      },
+      {
+        id: 'py_str_6',
+        question: 'Which method splits a string into a list?',
+        options: ['str.split()', 'str.break()', 'str.divide()', 'str.cut()'],
+        correctIndex: 0,
+        explanation: '`str.split()` splits a string by whitespace by default, or by a specified separator.'
+      },
+      {
+        id: 'py_str_7',
+        question: 'How do you repeat a string 3 times in Python?',
+        options: ['str * 3', 'str.repeat(3)', 'str + str + str only', 'repeat(str, 3)'],
+        correctIndex: 0,
+        explanation: 'You can use the `*` operator to repeat a string: `"ha" * 3` gives `"hahaha"`.'
+      },
+      {
+        id: 'py_str_8',
+        question: 'What does `"hello".replace("l", "r")` return?',
+        options: ['"herlo"', '"herro"', '"hello"', '"hrrro"'],
+        correctIndex: 1,
+        explanation: '`.replace(old, new)` replaces ALL occurrences of the old substring with the new one, so both "l"s become "r"s.'
+      }
+    ]
+  },
+  conditionals_py: {
+    id: 'conditionals_py',
+    title: 'Python Conditionals',
+    tier: 'Beginner',
+    icon: '🔀',
+    color: 'hover:border-yellow-500',
+    questions: [
+      {
+        id: 'py_cond_1',
+        question: 'What keyword is used for "else if" in Python?',
+        options: ['elseif', 'else if', 'elif', 'otherwise'],
+        correctIndex: 2,
+        explanation: 'Python uses `elif` as a shorthand for "else if".'
+      },
+      {
+        id: 'py_cond_2',
+        question: 'What is the Python equivalent of a ternary operator?',
+        options: ['x if condition else y', 'condition ? x : y', 'if condition then x else y', 'x when condition otherwise y'],
+        correctIndex: 0,
+        explanation: 'Python\'s conditional expression is `value_if_true if condition else value_if_false`.'
+      },
+      {
+        id: 'py_cond_3',
+        question: 'Which comparison operator checks if two values are NOT equal?',
+        options: ['!=', '<>', 'not ==', '!=='],
+        correctIndex: 0,
+        explanation: 'Python uses `!=` to check inequality. The `<>` operator existed in Python 2 but was removed in Python 3.'
+      },
+      {
+        id: 'py_cond_4',
+        question: 'What does `and` do in a conditional?',
+        options: ['Returns True if at least one condition is true', 'Returns True only if both conditions are true', 'Combines values', 'Negates a condition'],
+        correctIndex: 1,
+        explanation: '`and` is a logical operator that returns True only if BOTH operands are truthy.'
+      },
+      {
+        id: 'py_cond_5',
+        question: 'Which values are considered "falsy" in Python?',
+        options: ['0, "", None, False, []', 'Only False and None', 'Only 0 and False', '"false", 0, None'],
+        correctIndex: 0,
+        explanation: 'Falsy values in Python include: False, None, 0, 0.0, "" (empty string), [] (empty list), {} (empty dict), () (empty tuple).'
+      },
+      {
+        id: 'py_cond_6',
+        question: 'What does the `not` keyword do?',
+        options: ['Checks if a value is None', 'Negates/inverts a boolean value', 'Checks for inequality', 'Removes a value'],
+        correctIndex: 1,
+        explanation: '`not True` returns `False` and `not False` returns `True`. It inverts the boolean value.'
+      }
+    ]
+  },
+  tuples_py: {
+    id: 'tuples_py',
+    title: 'Python Tuples',
+    tier: 'Beginner',
+    icon: '🎯',
+    color: 'hover:border-orange-500',
+    questions: [
+      {
+        id: 'py_tup_1',
+        question: 'How do you create a tuple in Python?',
+        options: ['[1, 2, 3]', '{1, 2, 3}', '(1, 2, 3)', 'tuple[1, 2, 3]'],
+        correctIndex: 2,
+        explanation: 'Tuples are created with parentheses `()`. They are ordered and immutable (cannot be changed after creation).'
+      },
+      {
+        id: 'py_tup_2',
+        question: 'What makes a tuple different from a list?',
+        options: ['Tuples are faster but ordered', 'Tuples are immutable (cannot be changed)', 'Tuples can only hold numbers', 'Tuples are unordered'],
+        correctIndex: 1,
+        explanation: 'The key difference is immutability — once a tuple is created, you cannot add, remove, or change its elements.'
+      },
+      {
+        id: 'py_tup_3',
+        question: 'How do you create a tuple with a single element?',
+        options: ['(1)', '(1,)', '[1]', 'tuple(1)'],
+        correctIndex: 1,
+        explanation: 'A single-element tuple requires a trailing comma: `(1,)`. Without it, `(1)` is just the integer 1 in parentheses.'
+      },
+      {
+        id: 'py_tup_4',
+        question: 'What is tuple unpacking?',
+        options: ['Converting a tuple to a list', 'Assigning tuple elements to variables in one line', 'Removing elements from a tuple', 'Printing a tuple'],
+        correctIndex: 1,
+        explanation: 'Tuple unpacking: `a, b, c = (1, 2, 3)` assigns 1 to a, 2 to b, and 3 to c in one line.'
+      },
+      {
+        id: 'py_tup_5',
+        question: 'Can you use a tuple as a dictionary key?',
+        options: ['No, only strings can be keys', 'Yes, because tuples are hashable (immutable)', 'No, only numbers can be keys', 'Yes, but only if it contains strings'],
+        correctIndex: 1,
+        explanation: 'Since tuples are immutable, they are hashable and can be used as dictionary keys. Lists cannot because they are mutable.'
+      }
+    ]
+  },
+  sets_py: {
+    id: 'sets_py',
+    title: 'Python Sets',
+    tier: 'Beginner',
+    icon: '🔵',
+    color: 'hover:border-cyan-500',
+    questions: [
+      {
+        id: 'py_set_1',
+        question: 'What is a key property of a Python set?',
+        options: ['Ordered and allows duplicates', 'Unordered and no duplicate elements', 'Ordered and no duplicates', 'Unordered and allows duplicates'],
+        correctIndex: 1,
+        explanation: 'Sets are unordered collections with no duplicate elements. Adding a duplicate value to a set has no effect.'
+      },
+      {
+        id: 'py_set_2',
+        question: 'How do you create an empty set?',
+        options: ['{}', 'set()', '[]', 'empty_set()'],
+        correctIndex: 1,
+        explanation: '`{}` creates an empty dictionary, NOT an empty set. You must use `set()` to create an empty set.'
+      },
+      {
+        id: 'py_set_3',
+        question: 'Which method adds an element to a set?',
+        options: ['.append()', '.push()', '.add()', '.insert()'],
+        correctIndex: 2,
+        explanation: 'Sets use `.add()` to add a single element. `.append()` is for lists, `.push()` is not a Python built-in.'
+      },
+      {
+        id: 'py_set_4',
+        question: 'What does the `|` operator do between two sets?',
+        options: ['Intersection (common elements)', 'Union (all elements from both)', 'Difference', 'Symmetric difference'],
+        correctIndex: 1,
+        explanation: '`set_a | set_b` returns the union — all unique elements from both sets combined. `set_a & set_b` is intersection.'
+      },
+      {
+        id: 'py_set_5',
+        question: 'What is the fastest way to remove duplicates from a list in Python?',
+        options: ['Use a for loop', 'Use list.remove()', 'Convert to a set: list(set(my_list))', 'Sort and compare neighbors'],
+        correctIndex: 2,
+        explanation: 'Converting a list to a set automatically removes duplicates, then converting back to a list gives you a unique list (order not guaranteed).'
+      }
+    ]
+  },
+  type_conversion_py: {
+    id: 'type_conversion_py',
+    title: 'Type Conversion',
+    tier: 'Beginner',
+    icon: '🔄',
+    color: 'hover:border-violet-500',
+    questions: [
+      {
+        id: 'py_type_1',
+        question: 'How do you convert the string "42" to an integer?',
+        options: ['Integer("42")', 'int("42")', '"42".toInt()', 'parse("42")'],
+        correctIndex: 1,
+        explanation: 'The `int()` built-in function converts a compatible string or float to an integer.'
+      },
+      {
+        id: 'py_type_2',
+        question: 'What does `str(100)` return?',
+        options: ['100 (integer)', '"100" (string)', 'True', 'Error'],
+        correctIndex: 1,
+        explanation: '`str()` converts a value to its string representation, so `str(100)` gives the string `"100"`.'
+      },
+      {
+        id: 'py_type_3',
+        question: 'What is the result of `float("3.14")`?',
+        options: ['"3.14"', '3 (integer)', '3.14 (float)', 'Error'],
+        correctIndex: 2,
+        explanation: '`float()` converts a string or integer to a floating-point number.'
+      },
+      {
+        id: 'py_type_4',
+        question: 'What does `bool(0)` return?',
+        options: ['True', 'False', '0', 'Error'],
+        correctIndex: 1,
+        explanation: '`bool(0)` returns `False`. In Python, 0, empty strings, empty lists, and None all evaluate to False.'
+      },
+      {
+        id: 'py_type_5',
+        question: 'What does `type(42)` return?',
+        options: ['"int"', '<class \'int\'>', '42', 'int'],
+        correctIndex: 1,
+        explanation: '`type()` returns the type object. In Python, types are represented as `<class \'typename\'>`.'
+      }
+    ]
+  },
+  error_handling_basics_py: {
+    id: 'error_handling_basics_py',
+    title: 'Error Handling Basics',
+    tier: 'Beginner',
+    icon: '⚠️',
+    color: 'hover:border-red-400',
+    questions: [
+      {
+        id: 'py_err_1',
+        question: 'Which block is used to catch exceptions in Python?',
+        options: ['catch', 'except', 'rescue', 'handle'],
+        correctIndex: 1,
+        explanation: 'Python uses `try...except` blocks to catch exceptions. Unlike JavaScript which uses `catch`, Python uses `except`.'
+      },
+      {
+        id: 'py_err_2',
+        question: 'What does the `finally` block do?',
+        options: ['Runs only if no error occurs', 'Runs only if an error occurs', 'Always runs, whether or not an exception occurred', 'Suppresses the error'],
+        correctIndex: 2,
+        explanation: '`finally` is always executed after the try/except blocks, making it ideal for cleanup like closing files.'
+      },
+      {
+        id: 'py_err_3',
+        question: 'What error is raised when you divide by zero?',
+        options: ['ValueError', 'ZeroDivisionError', 'MathError', 'ArithmeticException'],
+        correctIndex: 1,
+        explanation: 'Python raises `ZeroDivisionError` when you attempt to divide by zero.'
+      },
+      {
+        id: 'py_err_4',
+        question: 'How do you raise an exception manually?',
+        options: ['throw ValueError("msg")', 'raise ValueError("msg")', 'error("msg")', 'trigger ValueError("msg")'],
+        correctIndex: 1,
+        explanation: 'The `raise` keyword is used to manually throw exceptions in Python.'
+      }
+    ]
   }
 };

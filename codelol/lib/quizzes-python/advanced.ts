@@ -130,5 +130,153 @@ export const pythonAdvancedTopics: Record<string, QuizTopic> = {
         explanation: '`@property` allows you to access a method like it\'s an attribute, enabling computed properties or getters/setters without changing syntax.'
       }
     ]
+  },
+  context_managers: {
+    id: 'context_managers',
+    title: 'Python Context Managers',
+    tier: 'Advanced',
+    icon: '📦',
+    color: 'hover:border-purple-500',
+    questions: [
+      {
+        id: 'py_adv_ctx_1',
+        question: 'Which statement is used to trigger a context manager?',
+        options: ['use', 'context', 'with', 'manage'],
+        correctIndex: 2,
+        explanation: 'The `with` statement is used to wrap the execution of a block with methods defined by a context manager.'
+      },
+      {
+        id: 'py_adv_ctx_2',
+        question: 'What two dunder methods must a class implement to act as a context manager?',
+        options: ['__enter__ and __exit__', '__start__ and __stop__', '__init__ and __del__', '__open__ and __close__'],
+        correctIndex: 0,
+        explanation: 'A context manager must implement the `__enter__()` and `__exit__()` methods.'
+      },
+      {
+        id: 'py_adv_ctx_3',
+        question: 'What does the `contextlib.contextmanager` decorator allow you to do?',
+        options: ['Create context managers using try/finally without a class', 'Create async context managers', 'Decorate any function automatically', 'Skip the __exit__ method'],
+        correctIndex: 0,
+        explanation: '`@contextlib.contextmanager` lets you write a generator function with a `yield` statement to define the __enter__ and __exit__ logic.'
+      },
+      {
+        id: 'py_adv_ctx_4',
+        question: 'What is the main advantage of using `with open(...)` instead of `open()` + `close()`?',
+        options: ['Faster file access', 'Automatic cleanup even if an exception occurs', 'Supports more file modes', 'Enables async file access'],
+        correctIndex: 1,
+        explanation: 'The `with` block guarantees the file is closed via `__exit__`, even if an exception occurs inside the block.'
+      }
+    ]
+  },
+  modules_packages: {
+    id: 'modules_packages',
+    title: 'Modules & Packages',
+    tier: 'Advanced',
+    icon: '📚',
+    color: 'hover:border-pink-500',
+    questions: [
+      {
+        id: 'py_adv_mod_1',
+        question: 'How do you import a specific function from a module?',
+        options: ['import function from module', 'include function in module', 'from module import function', 'module.function()'],
+        correctIndex: 2,
+        explanation: 'The `from ... import ...` syntax is used to import specific attributes or functions from a module.'
+      },
+      {
+        id: 'py_adv_mod_2',
+        question: 'What file is required to make Python treat a directory as a package (prior to Python 3.3)?',
+        options: ['__package__.py', '__init__.py', 'setup.py', 'main.py'],
+        correctIndex: 1,
+        explanation: 'An `__init__.py` file was required to make a directory a regular package. It can be empty or execute initialization code.'
+      },
+      {
+        id: 'py_adv_mod_3',
+        question: 'What does `import module as alias` do?',
+        options: ['Renames the module file', 'Creates a copy of the module', 'Allows you to reference the module by the alias name', 'Makes the module private'],
+        correctIndex: 2,
+        explanation: 'Aliasing allows shorter names: `import numpy as np` lets you use `np.array()` instead of `numpy.array()`.'
+      },
+      {
+        id: 'py_adv_mod_4',
+        question: 'What is the purpose of `if __name__ == "__main__":`?',
+        options: ['Makes the file executable', 'Runs code only when the file is run directly, not when imported', 'Defines the module name', 'Hides the module from imports'],
+        correctIndex: 1,
+        explanation: 'This guard ensures that certain code (like tests or demo runs) only executes when the script is run directly, not when it is imported as a module.'
+      }
+    ]
+  },
+  closures_scoping_py: {
+    id: 'closures_scoping_py',
+    title: 'Closures & Scoping',
+    tier: 'Advanced',
+    icon: '🔒',
+    color: 'hover:border-amber-500',
+    questions: [
+      {
+        id: 'py_adv_cls_1',
+        question: 'What is a closure in Python?',
+        options: ['A way to close files', 'A function that retains access to variables from its enclosing scope', 'A class that inherits from multiple parents', 'A locked module'],
+        correctIndex: 1,
+        explanation: 'A closure is a function that remembers the values of variables from the outer scope even when the outer function has finished executing.'
+      },
+      {
+        id: 'py_adv_cls_2',
+        question: 'What does the LEGB rule define in Python?',
+        options: ['Loop execution guidelines', 'Variable lookup order: Local, Enclosing, Global, Built-in', 'List, Enumerate, Generator, Boolean', 'Lambda expression syntax'],
+        correctIndex: 1,
+        explanation: 'LEGB is the scoping rule: Python looks for a variable name in Local scope first, then Enclosing, then Global, then Built-in scopes.'
+      },
+      {
+        id: 'py_adv_cls_3',
+        question: 'What keyword allows a nested function to modify a variable in its enclosing scope?',
+        options: ['global', 'nonlocal', 'outer', 'shared'],
+        correctIndex: 1,
+        explanation: '`nonlocal` allows an inner function to modify a variable from its immediately enclosing (but not global) scope.'
+      },
+      {
+        id: 'py_adv_cls_4',
+        question: 'What is the `global` keyword used for?',
+        options: ['Import global modules', 'Declare a variable accessible from anywhere globally', 'Modify a global variable inside a function', 'Export a function'],
+        correctIndex: 2,
+        explanation: 'Inside a function, `global var_name` tells Python you want to modify the global-scope variable rather than creating a new local one.'
+      }
+    ]
+  },
+  type_hints_py: {
+    id: 'type_hints_py',
+    title: 'Type Hints & Annotations',
+    tier: 'Advanced',
+    icon: '🏷️',
+    color: 'hover:border-sky-500',
+    questions: [
+      {
+        id: 'py_adv_type_1',
+        question: 'What is the syntax to add a type hint to a function parameter?',
+        options: ['def foo(x: int):', 'def foo(int x):', 'def foo(x as int):', 'def foo(x = int):'],
+        correctIndex: 0,
+        explanation: 'Type hints use the colon syntax: `def foo(x: int, y: str) -> bool:`. They are optional and not enforced at runtime.'
+      },
+      {
+        id: 'py_adv_type_2',
+        question: 'What does `Optional[str]` mean in Python type hints?',
+        options: ['The parameter is optional (has a default)', 'The value can be either str or None', 'A string that can be empty', 'A required string parameter'],
+        correctIndex: 1,
+        explanation: '`Optional[str]` is shorthand for `Union[str, None]`, meaning the value can be either a string or None.'
+      },
+      {
+        id: 'py_adv_type_3',
+        question: 'Which tool is commonly used to enforce type hints in Python?',
+        options: ['pyflakes', 'black', 'mypy', 'pylint'],
+        correctIndex: 2,
+        explanation: '`mypy` is the most popular static type checker for Python. It analyzes type hints and reports errors without running the code.'
+      },
+      {
+        id: 'py_adv_type_4',
+        question: 'What does the `->` syntax mean in a function definition?',
+        options: ['Arrow function syntax', 'Indicates the return type', 'Lambda shorthand', 'Inheritance syntax'],
+        correctIndex: 1,
+        explanation: '`def greet(name: str) -> str:` indicates the function is expected to return a `str`. This is the return type annotation.'
+      }
+    ]
   }
 };
