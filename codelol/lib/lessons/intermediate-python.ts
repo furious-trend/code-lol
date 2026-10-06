@@ -167,7 +167,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "An algorithmic technique for finding a subset of elements in an array or string.",
+    "meaning": "An algorithmic technique for finding a subset of elements in an array or string.",
     "funnyEgGeneral": "Like a magnifying glass sliding across a newspaper.",
     "funnyEgTamil": "Sliding window is like moving your chair to watch the TV when someone stands in front of you."
   }
@@ -197,7 +197,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "A collection of unique items.",
+    "meaning": "A collection of unique items.",
     "funnyEgGeneral": "A VIP club where no one is allowed to have the same name as anyone else.",
     "funnyEgTamil": "Set is like getting a unique Aadhaar card—nobody can have your number!"
   }
@@ -227,7 +227,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "A linear data structure where elements are not stored contiguously.",
+    "meaning": "A linear data structure where elements are not stored contiguously.",
     "funnyEgGeneral": "A treasure hunt where each clue leads to the next clue.",
     "funnyEgTamil": "Linked List is like a scavenger hunt—each clue tells you where to find the next one."
   }
@@ -257,7 +257,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "Using two pointers moving at different speeds.",
+    "meaning": "Using two pointers moving at different speeds.",
     "funnyEgGeneral": "Like two runners on a track, if the track is a circle, the faster one will lap the slower one.",
     "funnyEgTamil": "Fast pointer is like a speeding auto, slow pointer is the traffic police catching him eventually in a round-tana."
   }
@@ -287,7 +287,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "A Last-In-First-Out data structure.",
+    "meaning": "A Last-In-First-Out data structure.",
     "funnyEgGeneral": "A stack of pancakes. You always eat the top one first.",
     "funnyEgTamil": "Stack is like arranging plates at a wedding buffet—you always pick the top plate."
   }
@@ -317,7 +317,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "A First-In-First-Out data structure.",
+    "meaning": "A First-In-First-Out data structure.",
     "funnyEgGeneral": "A line at the grocery store. First person there gets served first.",
     "funnyEgTamil": "Queue is like a ration shop line—first come, first serve!"
   }
@@ -347,7 +347,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "The mechanism the interpreter uses to keep track of function calls.",
+    "meaning": "The mechanism the interpreter uses to keep track of function calls.",
     "funnyEgGeneral": "Like placing sticky notes on your monitor for every task you start, and removing them when finished.",
     "funnyEgTamil": "Call stack is like asking your mom where your shirt is, she asks dad, dad asks sister..."
   }
@@ -377,7 +377,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "A blueprint for creating objects with properties and methods.",
+    "meaning": "A blueprint for creating objects with properties and methods.",
     "funnyEgGeneral": "A cookie cutter (class) makes many cookies (objects).",
     "funnyEgTamil": "Class is the blueprint, object is the actual house."
   }
@@ -407,7 +407,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "A mechanism where a new class derives properties from an existing class.",
+    "meaning": "A mechanism where a new class derives properties from an existing class.",
     "funnyEgGeneral": "Inheriting your dad's old car, but giving it a custom paint job.",
     "funnyEgTamil": "Inheritance is like getting your older sibling's old textbooks."
   }
@@ -437,7 +437,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "Hiding the internal state and requiring all interaction to be performed through an object's methods.",
+    "meaning": "Hiding the internal state and requiring all interaction to be performed through an object's methods.",
     "funnyEgGeneral": "Like keeping your diary locked and only reading it aloud yourself.",
     "funnyEgTamil": "Encapsulation is like hiding your diary from your sibling."
   }
@@ -467,7 +467,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "The ability of different objects to respond to the same method call in a way that is appropriate for their type.",
+    "meaning": "The ability of different objects to respond to the same method call in a way that is appropriate for their type.",
     "funnyEgGeneral": "Pressing 'play' on a remote works for a DVD player, TV, and stereo, but they do different things.",
     "funnyEgTamil": "Polymorphism is like pressing a single button, but your TV does one thing and AC does another."
   }
@@ -497,7 +497,7 @@ export const pythonIntermediateLessons: Lesson[] = [
     }
   ],
   "biteSized": {
-    "meaningGeneral": "Methods that belong to a class rather than an instance of the class.",
+    "meaning": "Methods that belong to a class rather than an instance of the class.",
     "funnyEgGeneral": "A tool that anyone can use without needing to own a house first.",
     "funnyEgTamil": "Static method is like a public tap—anyone can use it, no need to own a house."
   }
