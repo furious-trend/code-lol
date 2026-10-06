@@ -11,7 +11,19 @@ import { pythonExpertLessons } from './expert-python';
 import { interviewLessons } from './interview';
 import { pythonInterviewLessons } from './interview-python';
 
-// Default export (JS)
+
+import { cIntermediateLessons } from './intermediate-c';
+import { cExpertLessons } from './expert-c';
+import { cInterviewLessons } from './interview-c';
+
+import { cppIntermediateLessons } from './intermediate-cpp';
+import { cppExpertLessons } from './expert-cpp';
+import { cppInterviewLessons } from './interview-cpp';
+
+import { javaIntermediateLessons } from './intermediate-java';
+import { javaExpertLessons } from './expert-java';
+import { javaInterviewLessons } from './interview-java';
+\n// Default export (JS)
 export const allLessons: Lesson[] = [
   ...beginnerLessons,
   ...intermediateLessons,
@@ -26,7 +38,25 @@ export const pythonAllLessons: Lesson[] = [
   ...pythonInterviewLessons
 ].slice(0, 65);
 
-export const getLessonCategories = (lang: string = 'javascript') => {
+export const cAllLessons: Lesson[] = [
+  ...cBeginnerLessons,
+  ...cIntermediateLessons,
+  ...cExpertLessons,
+  ...cInterviewLessons
+];
+export const cppAllLessons: Lesson[] = [
+  ...cppBeginnerLessons,
+  ...cppIntermediateLessons,
+  ...cppExpertLessons,
+  ...cppInterviewLessons
+];
+export const javaAllLessons: Lesson[] = [
+  ...javaBeginnerLessons,
+  ...javaIntermediateLessons,
+  ...javaExpertLessons,
+  ...javaInterviewLessons
+];
+\nexport const getLessonCategories = (lang: string = 'javascript') => {
   const getBeginner = () => {
     if (lang === 'python') return pythonBeginnerLessons;
     if (lang === 'c') return cBeginnerLessons;
@@ -66,9 +96,9 @@ export const getLessonCategories = (lang: string = 'javascript') => {
 
 export const getAllLessons = (lang: string = 'javascript') => {
   if (lang === 'python') return pythonAllLessons;
-  if (lang === 'c') return cBeginnerLessons;
-  if (lang === 'cpp') return cppBeginnerLessons;
-  if (lang === 'java') return javaBeginnerLessons;
+  if (lang === 'c') return cAllLessons;
+  if (lang === 'cpp') return cppAllLessons;
+  if (lang === 'java') return javaAllLessons;
   return allLessons;
 };
 
