@@ -138,13 +138,6 @@ export default async function Home() {
             <h3 className="text-xl font-bold mb-2">Quiz Zone</h3>
             <p className="text-sm text-zinc-400">Test your knowledge and earn XP.</p>
           </Link>
-          
-          <Link href="/projects" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/10">
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-orange-500/10 rounded-full blur-2xl group-hover:bg-orange-500/20 transition-all"></div>
-            <div className="text-3xl mb-4">🚀</div>
-            <h3 className="text-xl font-bold mb-2">Projects</h3>
-            <p className="text-sm text-zinc-400">Build real-world applications from scratch.</p>
-          </Link>
         </div>
       </section>
 

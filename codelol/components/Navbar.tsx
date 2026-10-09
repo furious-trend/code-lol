@@ -32,7 +32,6 @@ export default async function Navbar() {
             { name: 'Friends', path: '/friends' },
             { name: 'Quiz', path: '/quiz' },
             { name: 'Playground', path: '/playground' },
-            { name: 'Projects', path: '/projects' },
           ].map((link) => (
             <Link key={link.name} href={link.path} className="relative group hover:text-zinc-100 transition-colors py-1">
               {link.name}
