@@ -19,6 +19,7 @@ export default function LessonExplanationPage() {
   
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
+  const [isLangLoaded, setIsLangLoaded] = useState(false);
   const [lesson, setLesson] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -62,11 +63,13 @@ export default function LessonExplanationPage() {
           }
         }
       }
+      setIsLangLoaded(true);
     }
     loadPref();
   }, [supabase]);
 
   useEffect(() => {
+    if (!isLangLoaded) return;
     setIsLoading(true);
     if (isNaN(numericId)) {
       // It's a string ID, must be Python
@@ -104,7 +107,7 @@ export default function LessonExplanationPage() {
         setIsLoading(false);
       });
     }
-  }, [idParam, numericId, learningLanguage, router]);
+  }, [idParam, numericId, learningLanguage, router, isLangLoaded]);
 
   const handleExplain = async (code: string) => {
     if (!code) return;
