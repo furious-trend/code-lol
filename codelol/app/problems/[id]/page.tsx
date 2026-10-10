@@ -422,7 +422,7 @@ let _log = [];
               </span>
               <select 
                 value={activeLang}
-                onChange={(e) => {
+                onChange={async (e) => {
                   const newLang = e.target.value;
                   // Set new starter code based on selection if available
                   if (newLang === 'python' && problem.starterCodePython) {
@@ -445,6 +445,15 @@ let _log = [];
                     setCode(starters[newLang] || '');
                   }
                   setActiveLang(newLang);
+                  
+                  // Sync globally so if they click Learn or Lessons, it loads the correct language!
+                  const { data: { user } } = await supabase.auth.getUser();
+                  if (user && user.id !== 'local-guest') {
+                    await supabase.from('profiles').update({ learning_language: newLang }).eq('id', user.id);
+                  } else {
+                    localStorage.setItem('guest_lang', newLang);
+                  }
+                  router.refresh();
                 }}
                 className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-blue-500 cursor-pointer ml-auto"
               >
