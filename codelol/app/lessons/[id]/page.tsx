@@ -14,14 +14,15 @@ import { useMemeSound } from '@/hooks/useMemeSound';
 export default function LessonExplanationPage() {
   const params = useParams();
   const router = useRouter();
-  const id = Number(params.id);
+  const idParam = params.id as string;
+  const numericId = Number(idParam);
   
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const [lesson, setLesson] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const examples = lesson?.workoutSteps || lesson?.examples || [];
+  const examples = lesson?.workoutSteps || lesson?.examples || lesson?.lessons || [];
   const hasWorkoutSteps = !!lesson?.workoutSteps;
   
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -58,12 +59,28 @@ export default function LessonExplanationPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    import('@/lib/lessons').then(module => {
-      const allLessons = module.getAllLessons(learningLanguage);
-      setLesson(allLessons.find(l => l.id === id));
-      setIsLoading(false);
-    });
-  }, [id, learningLanguage]);
+    if (learningLanguage === 'python') {
+      import('@/lib/python/curriculum').then(module => {
+        const curriculum = module.pythonCurriculum;
+        let foundLesson = null;
+        for (const chapter of curriculum) {
+          const l = chapter.lessons.find((l: any) => l.id === idParam);
+          if (l) {
+            foundLesson = { ...l, chapter: chapter.title };
+            break;
+          }
+        }
+        setLesson(foundLesson);
+        setIsLoading(false);
+      });
+    } else {
+      import('@/lib/lessons').then(module => {
+        const allLessons = module.getAllLessons(learningLanguage);
+        setLesson(allLessons.find(l => l.id === numericId));
+        setIsLoading(false);
+      });
+    }
+  }, [idParam, numericId, learningLanguage]);
 
   const handleExplain = async (code: string) => {
     if (!code) return;

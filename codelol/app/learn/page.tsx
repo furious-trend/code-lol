@@ -24,7 +24,9 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
       .eq('id', user.id)
       .single();
       
-    if (profile?.learning_language) {
+    if (params.language && typeof params.language === 'string') {
+      learningLanguage = params.language;
+    } else if (profile?.learning_language) {
       learningLanguage = profile.learning_language;
     }
 
@@ -54,8 +56,11 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
     }
   } else {
     // Guest override from params for python
-    if (params.level && typeof params.level === 'string') {
-      initialLevelId = params.level;
+    if (params.language === 'python') {
+      learningLanguage = 'python';
+      if (params.level && typeof params.level === 'string') {
+        initialLevelId = params.level;
+      }
     }
   }
 
