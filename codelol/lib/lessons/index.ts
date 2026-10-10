@@ -1,15 +1,15 @@
 import { Lesson } from './types';
 import { beginnerLessons } from './beginner';
-import { pythonBeginnerLessons } from './beginner-python';
+// removed pythonBeginnerLessons
 import { cBeginnerLessons } from './beginner-c';
 import { cppBeginnerLessons } from './beginner-cpp';
 import { javaBeginnerLessons } from './beginner-java';
 import { intermediateLessons } from './intermediate';
-import { pythonIntermediateLessons } from './intermediate-python';
+// removed pythonIntermediateLessons
 import { expertLessons } from './expert';
-import { pythonExpertLessons } from './expert-python';
+// removed pythonExpertLessons
 import { interviewLessons } from './interview';
-import { pythonInterviewLessons } from './interview-python';
+// removed pythonInterviewLessons
 
 
 import { cIntermediateLessons } from './intermediate-c';
@@ -32,12 +32,7 @@ export const allLessons: Lesson[] = [
   ...interviewLessons
 ].slice(0, 65);
 
-export const pythonAllLessons: Lesson[] = [
-  ...pythonBeginnerLessons,
-  ...pythonIntermediateLessons,
-  ...pythonExpertLessons,
-  ...pythonInterviewLessons
-].slice(0, 65);
+export const pythonAllLessons: Lesson[] = [];
 
 export const cAllLessons: Lesson[] = [
   ...cBeginnerLessons,
@@ -60,7 +55,7 @@ export const javaAllLessons: Lesson[] = [
 
 export const getLessonCategories = (lang: string = 'javascript') => {
   const getBeginner = () => {
-    if (lang === 'python') return pythonBeginnerLessons;
+    if (lang === 'python') return [];
     if (lang === 'c') return cBeginnerLessons;
     if (lang === 'cpp') return cppBeginnerLessons;
     if (lang === 'java') return javaBeginnerLessons;
@@ -79,19 +74,19 @@ export const getLessonCategories = (lang: string = 'javascript') => {
       id: 'intermediate',
       name: 'Intermediate',
       sticker: '🟡',
-      lessons: lang === 'python' ? pythonIntermediateLessons : lang === 'c' ? cIntermediateLessons : lang === 'cpp' ? cppIntermediateLessons : lang === 'java' ? javaIntermediateLessons : intermediateLessons
+      lessons: lang === 'python' ? [] : lang === 'c' ? cIntermediateLessons : lang === 'cpp' ? cppIntermediateLessons : lang === 'java' ? javaIntermediateLessons : intermediateLessons
     },
     {
       id: 'expert',
       name: 'Expert',
       sticker: '🔴',
-      lessons: lang === 'python' ? pythonExpertLessons : lang === 'c' ? cExpertLessons : lang === 'cpp' ? cppExpertLessons : lang === 'java' ? javaExpertLessons : expertLessons
+      lessons: lang === 'python' ? [] : lang === 'c' ? cExpertLessons : lang === 'cpp' ? cppExpertLessons : lang === 'java' ? javaExpertLessons : expertLessons
     },
     {
       id: 'interview',
       name: 'Interview Prep',
       sticker: '👔',
-      lessons: lang === 'python' ? pythonInterviewLessons : lang === 'c' ? cInterviewLessons : lang === 'cpp' ? cppInterviewLessons : lang === 'java' ? javaInterviewLessons : interviewLessons
+      lessons: lang === 'python' ? [] : lang === 'c' ? cInterviewLessons : lang === 'cpp' ? cppInterviewLessons : lang === 'java' ? javaInterviewLessons : interviewLessons
     }
   ];
 };

@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { quizzes, QuizTopic } from '@/lib/quizzes';
-import { pythonQuizzes } from '@/lib/quizzes-python';
+// removed pythonQuizzes
 import { cQuizzes } from '@/lib/quizzes-c';
 import { cppQuizzes } from '@/lib/quizzes-cpp';
 import { javaQuizzes } from '@/lib/quizzes-java';
@@ -64,7 +64,6 @@ export default function QuizPage() {
   };
 
   const getActiveQuizzes = () => {
-    if (learningLanguage === 'python') return pythonQuizzes;
     if (learningLanguage === 'c') return cQuizzes;
     if (learningLanguage === 'cpp') return cppQuizzes;
     if (learningLanguage === 'java') return javaQuizzes;
@@ -123,11 +122,11 @@ export default function QuizPage() {
   };
 
   if (!topic) {
-    const activeQuizzes = learningLanguage === 'python' ? pythonQuizzes : quizzes;
+    const activeQuizzes = quizzes;
     const tiers = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
     const groupedTopics = tiers.map(tier => ({
       tier,
-      topics: Object.values(activeQuizzes).filter(t => t.tier === tier)
+      topics: (Object.values(activeQuizzes) as QuizTopic[]).filter(t => t.tier === tier)
     })).filter(g => g.topics.length > 0);
 
     const tierColors: Record<string, string> = {
@@ -217,7 +216,7 @@ export default function QuizPage() {
         </h2>
         
         <div className="flex flex-col gap-4">
-          {currentQuestion.options.map((option, idx) => {
+          {currentQuestion.options.map((option: string, idx: number) => {
             let buttonClass = "bg-zinc-950 border border-zinc-800 hover:border-blue-500 hover:bg-zinc-800";
             
             if (isAnswered) {

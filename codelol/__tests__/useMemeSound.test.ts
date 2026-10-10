@@ -3,7 +3,7 @@ import { useMemeSound, __resetGlobalAudioPlayer } from '../hooks/useMemeSound';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321';
-const SOUND_BASE_URL = `${supabaseUrl}/storage/v1/object/public/sounds`;
+const SOUND_BASE_URL = '';
 
 describe('useMemeSound', () => {
   let playStub: any;

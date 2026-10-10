@@ -8,6 +8,7 @@ import { getAllLessons, Lesson, Tier } from '@/lib/lessons';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { Bugsy } from '@/components/Bugsy';
+import { PythonLessonsView } from './PythonLessonsView';
 
 function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, isLearned: boolean, onToggleLearned: () => void }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -228,6 +229,7 @@ export default function LessonsPage() {
   const [activeTier, setActiveTier] = useState<Tier>('Beginner');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const [learnedLessons, setLearnedLessons] = useState<number[]>([]);
+  const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const supabase = createClient();
 
   useEffect(() => {
@@ -236,7 +238,7 @@ export default function LessonsPage() {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('learning_language, learned_lessons')
+          .select('learning_language, learned_lessons, humor_preference')
           .eq('id', user.id)
           .single();
         if (profile?.learning_language) {
@@ -244,6 +246,9 @@ export default function LessonsPage() {
         }
         if (profile?.learned_lessons) {
           setLearnedLessons(profile.learned_lessons);
+        }
+        if (profile?.humor_preference) {
+          setHumorPref(profile.humor_preference);
         }
       } else {
         const storedLessons = localStorage.getItem('learned_lessons');
@@ -256,6 +261,11 @@ export default function LessonsPage() {
         const storedLang = localStorage.getItem('guest_lang');
         if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
           setLearningLanguage(storedLang);
+        }
+
+        const storedHumor = localStorage.getItem('guest_humor');
+        if (storedHumor === 'tamil' || storedHumor === 'general') {
+          setHumorPref(storedHumor);
         }
       }
     }
@@ -309,53 +319,59 @@ export default function LessonsPage() {
           </p>
         </header>
 
-        {/* Tier Selection Tabs */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {(["Beginner", "Intermediate", "Expert", "Interview"] as Tier[]).map((tier) => (
-            <button
-              key={tier}
-              onClick={() => setActiveTier(tier)}
-              className={`px-8 py-3 rounded-full font-bold text-sm md:text-base transition-all duration-300 ${
-                activeTier === tier 
-                  ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25 scale-105'
-                  : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white'
-              }`}
-            >
-              {tier}
-            </button>
-          ))}
-        </div>
+        {learningLanguage === 'python' ? (
+          <PythonLessonsView humorPref={humorPref} />
+        ) : (
+          <>
+            {/* Tier Selection Tabs */}
+            <div className="flex flex-wrap justify-center gap-4 mb-12">
+              {(["Beginner", "Intermediate", "Expert", "Interview"] as Tier[]).map((tier) => (
+                <button
+                  key={tier}
+                  onClick={() => setActiveTier(tier)}
+                  className={`px-8 py-3 rounded-full font-bold text-sm md:text-base transition-all duration-300 ${
+                    activeTier === tier 
+                      ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25 scale-105'
+                      : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                  }`}
+                >
+                  {tier}
+                </button>
+              ))}
+            </div>
 
-        {/* Chapters and Lessons Grid */}
-        <div className="space-y-16">
-          {sortedChapters.map((chapterName, idx) => (
-            <div 
-              key={chapterName} 
-              className="animate-in fade-in slide-in-from-bottom-4 duration-500" 
-              style={{ animationDelay: `${Math.min(idx * 100, 500)}ms` }}
-            >
-              <h2 className="text-2xl md:text-3xl font-bold text-pink-400 mb-6 border-b border-zinc-800 pb-2">
-                {chapterName}
-              </h2>
-              <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
-                {groupedLessons[chapterName].map(lesson => (
-                  <LessonCard 
-                    key={lesson.id} 
-                    lesson={lesson} 
-                    isLearned={learnedLessons.includes(lesson.id)}
-                    onToggleLearned={() => handleToggleLearned(lesson.id)}
-                  />
-                ))}
-              </div>
+            {/* Chapters and Lessons Grid */}
+            <div className="space-y-16">
+              {sortedChapters.map((chapterName, idx) => (
+                <div 
+                  key={chapterName} 
+                  className="animate-in fade-in slide-in-from-bottom-4 duration-500" 
+                  style={{ animationDelay: `${Math.min(idx * 100, 500)}ms` }}
+                >
+                  <h2 className="text-2xl md:text-3xl font-bold text-pink-400 mb-6 border-b border-zinc-800 pb-2">
+                    {chapterName}
+                  </h2>
+                  <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                    {groupedLessons[chapterName].map(lesson => (
+                      <LessonCard 
+                        key={lesson.id} 
+                        lesson={lesson} 
+                        isLearned={learnedLessons.includes(lesson.id)}
+                        onToggleLearned={() => handleToggleLearned(lesson.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+              
+              {sortedChapters.length === 0 && (
+                <div className="text-center p-12 bg-zinc-900 rounded-3xl border border-zinc-800 text-zinc-400">
+                  No lessons available in this tier yet. Check back soon!
+                </div>
+              )}
             </div>
-          ))}
-          
-          {sortedChapters.length === 0 && (
-            <div className="text-center p-12 bg-zinc-900 rounded-3xl border border-zinc-800 text-zinc-400">
-              No lessons available in this tier yet. Check back soon!
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
