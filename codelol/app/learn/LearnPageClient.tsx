@@ -120,7 +120,12 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
   const lesson = allLessons[currentLevel - 1];
   
   // Editor & Run State
-  const [code, setCode] = useState('// Write your code here based on the examples!\\n');
+  const getDefaultCode = () => {
+    if (learningLanguage === 'python') return '# Write your code here based on the examples!\\n';
+    if (learningLanguage === 'c' || learningLanguage === 'cpp' || learningLanguage === 'java') return '// Write your code here based on the examples!\\n';
+    return '// Write your code here based on the examples!\\n';
+  };
+  const [code, setCode] = useState(getDefaultCode());
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [hasRunSuccessfully, setHasRunSuccessfully] = useState(false);

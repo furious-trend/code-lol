@@ -5,6 +5,7 @@ import { Bugsy } from './Bugsy'
 import { UserProgress } from './UserProgress'
 
 import { Notifications } from './Notifications'
+import { LanguageSwitcher } from './LanguageSwitcher'
 
 export default async function Navbar() {
   const supabase = await createClient()
@@ -41,6 +42,7 @@ export default async function Navbar() {
         </div>
       </div>
       <div className="flex items-center gap-4 text-zinc-300">
+        <LanguageSwitcher />
         <UserProgress />
         
         <Link href="/settings" className="text-sm hover:text-white transition-colors" title="Settings">
