@@ -59,7 +59,8 @@ export default function LessonExplanationPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    if (learningLanguage === 'python') {
+    if (isNaN(numericId)) {
+      // It's a string ID, must be Python
       import('@/lib/python/curriculum').then(module => {
         const curriculum = module.pythonCurriculum;
         let foundLesson = null;
@@ -74,13 +75,19 @@ export default function LessonExplanationPage() {
         setIsLoading(false);
       });
     } else {
+      // It's a numeric ID, search JS, C, C++, Java
       import('@/lib/lessons').then(module => {
-        const allLessons = module.getAllLessons(learningLanguage);
-        setLesson(allLessons.find(l => l.id === numericId));
+        const foundLesson = 
+          module.allLessons.find(l => l.id === numericId) ||
+          module.cAllLessons.find(l => l.id === numericId) ||
+          module.cppAllLessons.find(l => l.id === numericId) ||
+          module.javaAllLessons.find(l => l.id === numericId);
+          
+        setLesson(foundLesson);
         setIsLoading(false);
       });
     }
-  }, [idParam, numericId, learningLanguage]);
+  }, [idParam, numericId]);
 
   const handleExplain = async (code: string) => {
     if (!code) return;
