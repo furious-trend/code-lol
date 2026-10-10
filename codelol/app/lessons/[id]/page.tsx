@@ -22,8 +22,17 @@ export default function LessonExplanationPage() {
   const [lesson, setLesson] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const examples = lesson?.workoutSteps || lesson?.examples || lesson?.lessons || [];
-  const hasWorkoutSteps = !!lesson?.workoutSteps;
+  const isPython = isNaN(numericId);
+  const examples = isPython && lesson ? [
+    {
+      title: lesson.title,
+      explanation: lesson.explanation,
+      code: lesson.codeExample,
+      lineExplanation: lesson.funnyLineGeneral || "",
+      memeNote: lesson.funnyLineTamil || ""
+    }
+  ] : (lesson?.workoutSteps || lesson?.examples || lesson?.lessons || []);
+  const hasWorkoutSteps = !!lesson?.workoutSteps || isPython;
   
   const [currentSlide, setCurrentSlide] = useState(0);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
@@ -121,7 +130,7 @@ export default function LessonExplanationPage() {
       clearRoast();
     } else {
       // Auto-transition to the execution page
-      router.push(`/learn?level=${lesson.id}`);
+      router.push(isPython ? `/learn?language=python&level=${lesson.id}` : `/learn?level=${lesson.id}`);
     }
   };
 

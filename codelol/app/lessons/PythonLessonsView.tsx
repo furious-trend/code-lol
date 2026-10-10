@@ -163,12 +163,18 @@ export function PythonLessonsView({ humorPref }: { humorPref: HumorPreference })
                       <pre><code>{lesson.codeExample}</code></pre>
                     </div>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-zinc-800 flex justify-end">
+                  <div className="mt-4 pt-4 border-t border-zinc-800 flex flex-col sm:flex-row gap-3">
+                    <Link 
+                      href={`/lessons/${lesson.id}`}
+                      className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold py-2 px-4 rounded-full transition-transform text-center flex items-center justify-center gap-2 hover:scale-105 active:scale-95 text-sm"
+                    >
+                      Learn In Depth 📚
+                    </Link>
                     <Link 
                       href={`/learn?language=python&level=${lesson.id}`}
-                      className="bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 px-6 rounded-full transition-transform hover:scale-105 active:scale-95 shadow-lg text-sm"
+                      className="flex-1 bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 px-4 rounded-full transition-transform text-center flex items-center justify-center gap-2 hover:scale-105 active:scale-95 shadow-lg text-sm"
                     >
-                      Practice this 🚀
+                      Practice in Arena 🚀
                     </Link>
                   </div>
                 </div>
