@@ -1,6 +1,6 @@
 export type HumorPreference = 'tamil' | 'general';
 
-export type Tier = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+export type Tier = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert' | 'Specialized';
 
 export interface VerificationCheck {
   description: string;

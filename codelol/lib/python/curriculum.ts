@@ -1490,5 +1490,390 @@ export const pythonCurriculum: Chapter[] = [
         "expectedOutput": "2           0 RESUME                   0\n              2 RETURN_CONST             0 (None)"
       }
     ]
+  },
+  {
+    id: "ch16-datascience",
+    title: "Chapter 16: Data Science Libraries",
+    tier: "Specialized",
+    technicalCore: [
+      "NumPy arrays",
+      "Pandas dataframes",
+      "SciPy",
+      "Matplotlib plots & charts"
+    ],
+    analogyGeneral: "Data science without Pandas is like trying to organize a million-row spreadsheet with a pencil. Pandas gives you a bulldozer.",
+    analogyTamil: "Oru kodi row excel sheet-ah pencil-a vachu kutha koodadhu... Pandas use panni JCB vachu alli podanum!",
+    roastGeneral: "Using pure Python loops to process a 100MB CSV? Your CPU is crying, and your RAM just filed a restraining order.",
+    roastTamil: "For loop potu 100MB CSV-ah process panriya? Un laptop unna thooki adichutu sethurum da!",
+    lessons: [
+      {
+        id: "ch16-l1",
+        title: "NumPy & Pandas Basics",
+        explanation: "Introduction to vectorized operations and DataFrames.",
+        codeExample: "import pandas as pd\ndf = pd.DataFrame({'Roasts': [100, 200]})\nprint(df)",
+        expectedOutput: "   Roasts\n0     100\n1     200",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "What is Pandas?",
+          options: [
+            "A bear",
+            "A data manipulation library",
+            "A database",
+            "A web framework"
+          ],
+          correctAnswerIndex: 1
+        },
+        funnyLineGeneral: "Pandas: Making Excel obsolete since 2008.",
+        funnyLineTamil: "Pandas: Excel-ah close panna vandha master-u."
+      },
+      {
+        id: "ch16-l2",
+        title: "Vectorized Operations",
+        explanation: "NumPy arrays allow you to apply mathematical operations across an entire array without writing explicit loops.",
+        codeExample: "import numpy as np\narr = np.array([1, 2, 3])\nprint(arr * 10)",
+        expectedOutput: "[10 20 30]",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "Why is NumPy faster than Python lists for math?",
+          options: [
+            "Magic",
+            "Vectorized C operations",
+            "It runs on the GPU",
+            "It skips checks"
+          ],
+          correctAnswerIndex: 1
+        },
+        funnyLineGeneral: "Looping through NumPy is like walking next to your Ferrari.",
+        funnyLineTamil: "Ferrari-ah vachikitu adhu pakathula nadanthu pora mari da."
+      },
+      {
+        id: "ch16-l3",
+        title: "Data Visualization",
+        explanation: "Visualizing data is crucial. Matplotlib creates plots to understand data distributions.",
+        codeExample: "import matplotlib\nprint('Matplotlib is ready to plot!')",
+        expectedOutput: "Matplotlib is ready to plot!",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "What does Matplotlib do?",
+          options: [
+            "Cooks meth",
+            "Plots graphs and charts",
+            "Cleans data",
+            "Builds neural networks"
+          ],
+          correctAnswerIndex: 1
+        },
+        funnyLineGeneral: "A chart is worth a thousand CSV rows.",
+        funnyLineTamil: "Oru graph aayiram varthaikum samam."
+      }
+    ]
+  },
+  {
+    id: "ch17-machinelearning",
+    title: "Chapter 17: Machine Learning Engine",
+    tier: "Specialized",
+    technicalCore: [
+      "Mean/Median/Mode",
+      "Standard Deviation",
+      "Regression trees",
+      "K-means",
+      "Train/Test split",
+      "Confusion matrix"
+    ],
+    analogyGeneral: "Machine Learning is just finding the line of best fit... on steroids. And with billions of parameters.",
+    analogyTamil: "ML-na periya magic illa, namma area josiyar mari, palaiya data vachu pudhusa solluvaan, aana idhu math.",
+    roastGeneral: "Calling yourself an AI engineer because you imported scikit-learn is like calling yourself a chef because you microwaved pizza.",
+    roastTamil: "Scikit-learn import panni AI engineer-nu scene podatha, Maggie podra mathiri thaan idhuvum.",
+    lessons: [
+      {
+        id: "ch17-l1",
+        title: "Train/Test Split",
+        explanation: "You must divide your data to train the model on one chunk and test it on unseen data to prevent overfitting.",
+        codeExample: "print('Training Data: 80% | Testing Data: 20%')",
+        expectedOutput: "Training Data: 80% | Testing Data: 20%",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "Why do we split data?",
+          options: [
+            "To save space",
+            "To prevent the model from memorizing the answers",
+            "To make it run faster",
+            "Because 80/20 is a cool rule"
+          ],
+          correctAnswerIndex: 1
+        },
+        funnyLineGeneral: "Don't test on your training data. That's cheating on an open book test.",
+        funnyLineTamil: "Exam paper munnadiye therinju eluthna mari da adhu."
+      },
+      {
+        id: "ch17-l2",
+        title: "Regression vs Classification",
+        explanation: "Regression predicts a continuous number. Classification predicts a category.",
+        codeExample: "print('Regression: 100.5 | Classification: Cat')",
+        expectedOutput: "Regression: 100.5 | Classification: Cat",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "Predicting house prices is what type of problem?",
+          options: [
+            "Classification",
+            "Clustering",
+            "Regression",
+            "Dimensionality Reduction"
+          ],
+          correctAnswerIndex: 2
+        },
+        funnyLineGeneral: "If it's a number, regress. If it's a dog, classify.",
+        funnyLineTamil: "Kaasa irundha regression, naiyaa irundha classification."
+      },
+      {
+        id: "ch17-l3",
+        title: "Confusion Matrix",
+        explanation: "A confusion matrix shows True Positives, False Positives, True Negatives, and False Negatives.",
+        codeExample: "print('True Positive: 10 | False Positive: 2')",
+        expectedOutput: "True Positive: 10 | False Positive: 2",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "What does a False Positive mean?",
+          options: [
+            "Model correctly predicted true",
+            "Model incorrectly predicted true",
+            "Model correctly predicted false",
+            "Model incorrectly predicted false"
+          ],
+          correctAnswerIndex: 1
+        },
+        funnyLineGeneral: "It's called a confusion matrix because it confuses beginners.",
+        funnyLineTamil: "Pera paathiya, Unna confuse panna ve irukku."
+      }
+    ]
+  },
+  {
+    id: "ch18-dsa",
+    title: "Chapter 18: Python Data Structures & Algorithms",
+    tier: "Specialized",
+    technicalCore: [
+      "Stacks",
+      "Queues",
+      "Linked Lists",
+      "Trees",
+      "Binary Search",
+      "Sorting"
+    ],
+    analogyGeneral: "DSA is how you organize your closet so you can find a shirt in O(1) time instead of tearing the room apart in O(N).",
+    analogyTamil: "DSA-na entha porula enga vecha udane edukkalam-nu yosikkarathu. Adha vittu kuppai la thedatha.",
+    roastGeneral: "If your solution to everything is a nested for-loop, LeetCode is going to eat you alive.",
+    roastTamil: "Ellathukum O(N^2) pottu, interview-la poyee muthikaatha da.",
+    lessons: [
+      {
+        id: "ch18-l1",
+        title: "Stacks (LIFO)",
+        explanation: "A Stack follows Last-In-First-Out. In Python, you can just use a list with append() and pop().",
+        codeExample: "stack = []\nstack.append(1)\nstack.append(2)\nprint(stack.pop())",
+        expectedOutput: "2",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "Which principle does a Stack follow?",
+          options: [
+            "FIFO",
+            "LIFO",
+            "Random Access",
+            "LILO"
+          ],
+          correctAnswerIndex: 1
+        },
+        funnyLineGeneral: "Like a stack of plates. Wash the top one first.",
+        funnyLineTamil: "Mela iruka plate-ah mudhalla edukkanum, keela irunthu ilutha setharam."
+      },
+      {
+        id: "ch18-l2",
+        title: "Queues (FIFO)",
+        explanation: "A Queue follows First-In-First-Out. Use collections.deque for O(1) pops from the left.",
+        codeExample: "from collections import deque\nq = deque([1, 2, 3])\nq.popleft()\nprint(q[0])",
+        expectedOutput: "2",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "What is the best way to implement a queue in Python?",
+          options: [
+            "list",
+            "set",
+            "collections.deque",
+            "dict"
+          ],
+          correctAnswerIndex: 2
+        },
+        funnyLineGeneral: "Just a line at the grocery store. No cutting.",
+        funnyLineTamil: "Ration kade line la mudhalla vanthavan mudhalla povan."
+      },
+      {
+        id: "ch18-l3",
+        title: "Binary Search",
+        explanation: "Finds an item in a sorted array in O(log N) time by repeatedly dividing the search interval in half.",
+        codeExample: "def bin_search(arr, val):\n    return 'Found' if val in arr else 'Not Found'\nprint(bin_search([1,2,3,4,5], 3))",
+        expectedOutput: "Found",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "What is the time complexity of Binary Search?",
+          options: [
+            "O(N)",
+            "O(log N)",
+            "O(1)",
+            "O(N^2)"
+          ],
+          correctAnswerIndex: 1
+        },
+        funnyLineGeneral: "Don't read the whole dictionary to find one word.",
+        funnyLineTamil: "Dictionary-la oru word theda mudhalla paathi-ah pirippa la, adhe thaan."
+      }
+    ]
+  },
+  {
+    id: "ch19-databases",
+    title: "Chapter 19: Databases (SQL & NoSQL)",
+    tier: "Specialized",
+    technicalCore: [
+      "Connecting",
+      "CRUD operations",
+      "Queries",
+      "Joins",
+      "Collections"
+    ],
+    analogyGeneral: "A database is just a highly-organized, searchable file cabinet that multiple people can access without catching fire.",
+    analogyTamil: "Database-ngurathu namma ooru register office mari, ellam theliva pathiram panni vechurpaanga.",
+    roastGeneral: "If you are storing user passwords in plain text in a text file, please disconnect your router immediately.",
+    roastTamil: "Text file la password store pandriya? Un laptop-a thooki kadal la podu da.",
+    lessons: [
+      {
+        id: "ch19-l1",
+        title: "Relational vs NoSQL",
+        explanation: "SQL databases use tables and strict schemas. NoSQL databases use flexible JSON-like documents.",
+        codeExample: "print('SQL: Tables | NoSQL: Documents')",
+        expectedOutput: "SQL: Tables | NoSQL: Documents",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "Which of these is a NoSQL database?",
+          options: [
+            "PostgreSQL",
+            "MySQL",
+            "MongoDB",
+            "SQLite"
+          ],
+          correctAnswerIndex: 2
+        },
+        funnyLineGeneral: "SQL is a strict parent, NoSQL is the cool uncle.",
+        funnyLineTamil: "SQL-na strict officer, NoSQL-na jolly ana aalu."
+      },
+      {
+        id: "ch19-l2",
+        title: "CRUD Operations",
+        explanation: "CRUD stands for Create, Read, Update, Delete. These are the four basic functions of persistent storage.",
+        codeExample: "print('Create, Read, Update, Delete')",
+        expectedOutput: "Create, Read, Update, Delete",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "What does the 'U' in CRUD stand for?",
+          options: [
+            "Upload",
+            "Undo",
+            "Update",
+            "User"
+          ],
+          correctAnswerIndex: 2
+        },
+        funnyLineGeneral: "Without CRUD, your app is just an amnesiac calculator.",
+        funnyLineTamil: "CRUD illana un app oru memory loss patient thaan."
+      },
+      {
+        id: "ch19-l3",
+        title: "SQL Injections (Security)",
+        explanation: "Never concatenate user input directly into a SQL query. Always use parameterized queries.",
+        codeExample: "print('Always sanitize user inputs!')",
+        expectedOutput: "Always sanitize user inputs!",
+        verificationChecks: [
+          {
+            description: "Check if the code executed successfully.",
+            pattern: ".*",
+            errorMessage: "Make sure you wrote the code."
+          }
+        ],
+        miniQuiz: {
+          question: "How do you prevent SQL injection?",
+          options: [
+            "Ask hackers nicely",
+            "Use parameterized queries",
+            "Hide the database URL",
+            "Store data in txt files"
+          ],
+          correctAnswerIndex: 1
+        },
+        funnyLineGeneral: "Bobby Tables says hi.",
+        funnyLineTamil: "Input-ah sanitize pannalana app kali da."
+      }
+    ]
   }
 ];

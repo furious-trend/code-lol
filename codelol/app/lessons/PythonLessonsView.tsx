@@ -11,6 +11,11 @@ export function PythonLessonsView({ humorPref }: { humorPref: HumorPreference })
   const [learnedItems, setLearnedItems] = useState<Set<string>>(new Set());
   const supabase = createClient();
   const [userId, setUserId] = useState<string | null>(null);
+  const [localHumor, setLocalHumor] = useState<HumorPreference>(humorPref);
+
+  useEffect(() => {
+    setLocalHumor(humorPref);
+  }, [humorPref]);
 
   useEffect(() => {
     async function loadLearned() {
@@ -62,8 +67,8 @@ export function PythonLessonsView({ humorPref }: { humorPref: HumorPreference })
 
   return (
     <div className="space-y-16">
-      <div className="flex flex-wrap justify-center gap-4 mb-12">
-        {(["Beginner", "Intermediate", "Advanced", "Expert"] as Tier[]).map((tier) => (
+      <div className="flex flex-wrap justify-center gap-4 mb-8">
+        {(["Beginner", "Intermediate", "Advanced", "Expert", "Specialized"] as Tier[]).map((tier) => (
           <button
             key={tier}
             onClick={() => setActiveTier(tier)}
@@ -76,6 +81,23 @@ export function PythonLessonsView({ humorPref }: { humorPref: HumorPreference })
             {tier}
           </button>
         ))}
+      </div>
+
+      <div className="flex justify-center mb-12">
+        <div className="bg-zinc-900 p-1 rounded-full inline-flex border border-zinc-800 shadow-inner">
+          <button 
+            onClick={() => setLocalHumor('general')}
+            className={`px-6 py-2 rounded-full text-sm font-bold transition-colors ${localHumor === 'general' ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25' : 'text-zinc-400 hover:text-white'}`}
+          >
+            English
+          </button>
+          <button 
+            onClick={() => setLocalHumor('tamil')}
+            className={`px-6 py-2 rounded-full text-sm font-bold transition-colors ${localHumor === 'tamil' ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25' : 'text-zinc-400 hover:text-white'}`}
+          >
+            Tamil 🌶️
+          </button>
+        </div>
       </div>
 
       <div className="space-y-12">
@@ -107,14 +129,15 @@ export function PythonLessonsView({ humorPref }: { humorPref: HumorPreference })
                   ))}
                 </div>
               </div>
-              <div className="bg-zinc-950 p-6 rounded-xl border border-zinc-800 shadow-inner space-y-4">
-                <div>
+              <div className="bg-zinc-950 p-6 rounded-xl border border-red-900/50 shadow-[0_0_15px_rgba(220,38,38,0.1)] space-y-4 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative z-10">
                   <h4 className="text-zinc-400 font-bold uppercase text-xs mb-1">Analogy</h4>
-                  <p className="text-zinc-200">{humorPref === 'tamil' ? chapter.analogyTamil : chapter.analogyGeneral}</p>
+                  <p className="text-zinc-200">{localHumor === 'tamil' ? chapter.analogyTamil : chapter.analogyGeneral}</p>
                 </div>
-                <div>
-                  <h4 className="text-pink-500 font-bold uppercase text-xs mb-1">Roast Corner 🔥</h4>
-                  <p className="text-pink-200 italic">{humorPref === 'tamil' ? chapter.roastTamil : chapter.roastGeneral}</p>
+                <div className="relative z-10">
+                  <h4 className="text-red-500 font-bold uppercase text-xs mb-1">Roast Corner 🔥</h4>
+                  <p className="text-amber-200 italic">{localHumor === 'tamil' ? chapter.roastTamil : chapter.roastGeneral}</p>
                 </div>
               </div>
             </div>

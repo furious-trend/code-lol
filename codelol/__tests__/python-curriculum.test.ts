@@ -3,23 +3,24 @@ import { pythonCurriculum } from '../lib/python/curriculum';
 import { Chapter, Lesson } from '../lib/python/types';
 
 describe('Python Curriculum', () => {
-  it('should have exactly 15 chapters', () => {
-    expect(pythonCurriculum.length).toBe(15);
+  it('should have exactly 19 chapters', () => {
+    expect(pythonCurriculum.length).toBe(19);
   });
 
   it('should have correct tiers for each chapter', () => {
-    // Beginner = ch1-5, Intermediate = ch6-9, Advanced = ch10-12, Expert = ch13-15
+    // Beginner = ch1-5, Intermediate = ch6-9, Advanced = ch10-12, Expert = ch13-15, Specialized = ch16-19
     for (let i = 0; i < 5; i++) expect(pythonCurriculum[i].tier).toBe('Beginner');
     for (let i = 5; i < 9; i++) expect(pythonCurriculum[i].tier).toBe('Intermediate');
     for (let i = 9; i < 12; i++) expect(pythonCurriculum[i].tier).toBe('Advanced');
     for (let i = 12; i < 15; i++) expect(pythonCurriculum[i].tier).toBe('Expert');
+    for (let i = 15; i < 19; i++) expect(pythonCurriculum[i].tier).toBe('Specialized');
   });
 
   it('should have all required fields for each chapter', () => {
     pythonCurriculum.forEach(ch => {
       expect(typeof ch.id).toBe('string');
       expect(typeof ch.title).toBe('string');
-      expect(['Beginner', 'Intermediate', 'Advanced', 'Expert']).toContain(ch.tier);
+      expect(['Beginner', 'Intermediate', 'Advanced', 'Expert', 'Specialized']).toContain(ch.tier);
       expect(Array.isArray(ch.technicalCore)).toBe(true);
       expect(ch.technicalCore.length).toBeGreaterThan(0);
       expect(typeof ch.analogyGeneral).toBe('string');
