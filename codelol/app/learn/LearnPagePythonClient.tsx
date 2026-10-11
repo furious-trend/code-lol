@@ -201,10 +201,18 @@ function LessonWorkspace({
 
   const handleQuizAnswer = async (index: number) => {
     setSelectedAnswer(index);
-    if (index === lesson.miniQuiz.correctAnswerIndex) {
+    const correctIdx = lesson.miniQuiz.answerIndex ?? lesson.miniQuiz.correctAnswerIndex;
+    if (index === correctIdx) {
       setResultState('passed');
       
-      const proudLinesTamil = ["Vera level thala! 🔥", "Mass pa nee! 🚀", "Semma! Gethu panra!", "Pichutee po! 🎉"];
+      const proudLinesTamil = [
+        "Bloody sweet... output vandhuruchu da!",
+        "Appa, unga pulla urupputturuchu pa!",
+        "Vera level thala! 🔥",
+        "Mass pa nee! 🚀",
+        "Semma! Gethu panra!",
+        "Pichutee po! 🎉"
+      ];
       const proudLinesGeneral = ["Nailed it! 🚀", "You're on fire! 🔥", "Legendary!", "Flawless victory! 🏆"];
       const proudPool = humorPref === 'tamil' ? proudLinesTamil : proudLinesGeneral;
       const proudLine = proudPool[Math.floor(Math.random() * proudPool.length)];

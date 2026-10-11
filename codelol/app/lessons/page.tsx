@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Lessons library directory page grouped by chapters and tiers", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-09-23" }
+// agent-notes: { ctx: "Lessons library directory page grouped by chapters and tiers", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-10-11" }
 'use client'
 
 import { useState, useEffect } from 'react';
@@ -234,6 +234,9 @@ export default function LessonsPage() {
 
   useEffect(() => {
     async function loadData() {
+      const searchParams = new URLSearchParams(window.location.search);
+      const queryLang = searchParams.get('language') || searchParams.get('lang');
+
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase
@@ -241,7 +244,9 @@ export default function LessonsPage() {
           .select('learning_language, learned_lessons, humor_preference')
           .eq('id', user.id)
           .single();
-        if (profile?.learning_language) {
+        if (queryLang && ['python', 'javascript', 'c', 'cpp', 'java'].includes(queryLang)) {
+          setLearningLanguage(queryLang);
+        } else if (profile?.learning_language) {
           setLearningLanguage(profile.learning_language);
         }
         if (profile?.learned_lessons) {
@@ -258,9 +263,13 @@ export default function LessonsPage() {
           } catch (e) {}
         }
         
-        const storedLang = localStorage.getItem('guest_lang');
-        if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
-          setLearningLanguage(storedLang);
+        if (queryLang && ['python', 'javascript', 'c', 'cpp', 'java'].includes(queryLang)) {
+          setLearningLanguage(queryLang);
+        } else {
+          const storedLang = localStorage.getItem('guest_lang');
+          if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
+            setLearningLanguage(storedLang);
+          }
         }
 
         const storedHumor = localStorage.getItem('guest_humor');

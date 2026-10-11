@@ -40,7 +40,11 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
     }
     
     const storedLang = localStorage.getItem('guest_lang');
-    if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
+    if (storedLang === 'python') {
+      window.location.replace('/learn?language=python');
+      return;
+    }
+    if (storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
       setActiveLang(storedLang);
     }
   }, []);

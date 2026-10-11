@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "TypeScript types for general multi-language lessons and quizzes", deps: [], state: active, last: "sato@2026-10-11" }
 export type Tier = "Beginner" | "Intermediate" | "Expert" | "Interview";
 
 export type QuizQuestion = {
@@ -34,6 +35,7 @@ export interface WorkoutStep {
 
 export type Lesson = {
   id: number;
+  language?: string;
   chapter: string;
   tier: Tier;
   title: string;

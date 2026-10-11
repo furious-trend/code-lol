@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Learn page routing between multi-language client and Python arena", deps: ["./LearnPageClient", "./LearnPagePythonClient"], state: active, last: "sato@2026-10-11" }
 import { createClient } from "@/lib/supabase/server";
 import LearnPageClient from "./LearnPageClient";
 import LearnPagePythonClient from "./LearnPagePythonClient";
@@ -24,8 +25,9 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
       .eq('id', user.id)
       .single();
       
-    if (params.language && typeof params.language === 'string') {
-      learningLanguage = params.language;
+    const requestedLang = (params.language || params.lang) as string | undefined;
+    if (requestedLang && typeof requestedLang === 'string') {
+      learningLanguage = requestedLang;
     } else if (profile?.learning_language) {
       learningLanguage = profile.learning_language;
     }
@@ -56,7 +58,8 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
     }
   } else {
     // Guest override from params for python
-    if (params.language === 'python') {
+    const guestRequestedLang = (params.language || params.lang) as string | undefined;
+    if (guestRequestedLang === 'python') {
       learningLanguage = 'python';
       if (params.level && typeof params.level === 'string') {
         initialLevelId = params.level;

@@ -1,7 +1,8 @@
 // agent-notes: { ctx: "Vitest test suite for 20-chapter Python curriculum structure and roasts", deps: ["../lib/python/curriculum", "../lib/python/types"], state: active, last: "tara@2026-10-11" }
 import { describe, it, expect } from 'vitest';
-import { pythonCurriculum } from '../lib/python/curriculum';
-import { Chapter, Lesson } from '../lib/python/types';
+import { pythonCurriculum, pythonLessons } from '../lib/python/curriculum';
+import { Chapter, Lesson, PythonLesson } from '../lib/python/types';
+import { getAllLessons } from '../lib/lessons';
 
 describe('Python Curriculum', () => {
   it('should have exactly 20 chapters', () => {
@@ -77,7 +78,7 @@ describe('Python Curriculum', () => {
     });
   });
 
-  it('should have "Katuna college fees" at most 3 times across the curriculum', () => {
+  it('should have "Katuna college fees" at most 3 times and at least once across the curriculum', () => {
     let count = 0;
     const jsonStr = JSON.stringify(pythonCurriculum).toLowerCase();
     
@@ -90,6 +91,44 @@ describe('Python Curriculum', () => {
       index += 'katuna college fees'.length;
     }
     
+    expect(count).toBeGreaterThan(0);
     expect(count).toBeLessThanOrEqual(3);
+    expect(jsonStr).toContain('katuna college fees-ku naalu cow vangirukalam da!');
+  });
+
+  it('should include verified celebration lines', () => {
+    const jsonStr = JSON.stringify(pythonCurriculum).toLowerCase();
+    expect(jsonStr).toContain('bloody sweet... output vandhuruchu da!');
+    expect(jsonStr).toContain('appa, unga pulla urupputturuchu pa!');
+  });
+
+  it('should export pythonLessons conforming to the PythonLesson schema', () => {
+    expect(Array.isArray(pythonLessons)).toBe(true);
+    expect(pythonLessons.length).toBeGreaterThanOrEqual(60);
+    pythonLessons.forEach((pl: PythonLesson) => {
+      expect(typeof pl.id).toBe('string');
+      expect(typeof pl.chapterId).toBe('string');
+      expect(typeof pl.title).toBe('string');
+      expect(['beginner', 'intermediate', 'advanced', 'expert', 'specialized']).toContain(pl.tier);
+      expect(Array.isArray(pl.technicalCore)).toBe(true);
+      expect(typeof pl.englishExplanation).toBe('string');
+      expect(pl.englishExplanation.length).toBeGreaterThan(0);
+      expect(typeof pl.tamilRoast).toBe('string');
+      expect(pl.tamilRoast.length).toBeGreaterThan(0);
+      expect(typeof pl.codeExample).toBe('string');
+      expect(typeof pl.expectedOutput).toBe('string');
+      expect(Array.isArray(pl.verificationChecks)).toBe(true);
+      expect(pl.miniQuiz).toBeDefined();
+      expect(typeof pl.miniQuiz.question).toBe('string');
+      expect(Array.isArray(pl.miniQuiz.options)).toBe(true);
+      expect(typeof pl.miniQuiz.answerIndex).toBe('number');
+    });
+  });
+
+  it('should return populated Python lessons via getAllLessons("python")', () => {
+    const lessons = getAllLessons('python');
+    expect(Array.isArray(lessons)).toBe(true);
+    expect(lessons.length).toBeGreaterThanOrEqual(60);
+    expect(lessons[0].language).toBe('python');
   });
 });

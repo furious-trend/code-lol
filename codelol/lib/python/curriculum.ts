@@ -1,5 +1,5 @@
-// agent-notes: { ctx: "Zero-to-Hero 20-chapter master Python curriculum data", deps: ["./types"], state: active, last: "sato@2026-10-11" }
-import { Chapter } from './types';
+// agent-notes: { ctx: "Zero-to-Hero 20-chapter master Python curriculum data with PythonLesson exports", deps: ["./types"], state: active, last: "sato@2026-10-11" }
+import { Chapter, PythonLesson } from './types';
 
 export const pythonCurriculum: Chapter[] = [
   {
@@ -45,14 +45,18 @@ export const pythonCurriculum: Chapter[] = [
             "Semicolons",
             "Keywords"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Spacing matters. It's like personal space for your code.",
         "funnyLineTamil": "Space idavita, moochu mutti sethurum code.",
         "expectedOutput": "Indented correctly\nStill in the block",
         "practicePrompt": "Run and verify Indentation & Whitespace in the interactive arena.",
         "proudSuccessGeneral": "First Python steps unlocked without a single SyntaxError!",
-        "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!"
+        "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!",
+        "chapterId": "ch1",
+        "englishExplanation": "Python uses whitespace to define blocks instead of braces.",
+        "tamilRoast": "Space idavita, moochu mutti sethurum code."
       },
       {
         "id": "ch1-l2",
@@ -74,14 +78,18 @@ export const pythonCurriculum: Chapter[] = [
             "#",
             "--"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Comments are apologies to your future self.",
         "funnyLineTamil": "Naalaikku nee paatha unakke puriyaathu.",
         "expectedOutput": "Hello",
         "practicePrompt": "Run and verify Comments & Docstrings in the interactive arena.",
         "proudSuccessGeneral": "First Python steps unlocked without a single SyntaxError!",
-        "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!"
+        "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!",
+        "chapterId": "ch1",
+        "englishExplanation": "Use # for single line, and triple quotes for docstrings.",
+        "tamilRoast": "Naalaikku nee paatha unakke puriyaathu."
       },
       {
         "id": "ch1-l3",
@@ -103,14 +111,18 @@ export const pythonCurriculum: Chapter[] = [
             "Use parentheses",
             "Use semicolon"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Long lines are like long sentences, they need a break.",
         "funnyLineTamil": "Perusa pona, moolai hang aaidum.",
         "expectedOutput": "30",
         "practicePrompt": "Run and verify Line Continuation in the interactive arena.",
         "proudSuccessGeneral": "First Python steps unlocked without a single SyntaxError!",
-        "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!"
+        "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!",
+        "chapterId": "ch1",
+        "englishExplanation": "Use backslash or parentheses to span multiple lines.",
+        "tamilRoast": "Perusa pona, moolai hang aaidum."
       }
     ],
     "proudSuccessGeneral": "First Python steps unlocked without a single SyntaxError!",
@@ -159,14 +171,18 @@ export const pythonCurriculum: Chapter[] = [
             "128-bit",
             "Arbitrary precision"
           ],
-          "correctAnswerIndex": 3
+          "correctAnswerIndex": 3,
+          "answerIndex": 3
         },
         "funnyLineGeneral": "Python ints can hold more money than you'll ever see.",
         "funnyLineTamil": "Bank account balance-vida int thaan perusu.",
         "expectedOutput": "3.14",
         "practicePrompt": "Run and verify Integers and Floats in the interactive arena.",
         "proudSuccessGeneral": "Variables and types mastered with pristine memory safety.",
-        "proudSuccessTamil": "Adra sakka! Dynamic typing unakulla irangi velai seiyudhu!"
+        "proudSuccessTamil": "Appa, unga pulla urupputturuchu pa! Bloody sweet... output vandhuruchu da!",
+        "chapterId": "ch2",
+        "englishExplanation": "Python handles large ints automatically and floats with IEEE 754.",
+        "tamilRoast": "Bank account balance-vida int thaan perusu."
       },
       {
         "id": "ch2-l2",
@@ -188,14 +204,18 @@ export const pythonCurriculum: Chapter[] = [
             "1",
             "True"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "A string is forever, like a bad tattoo.",
         "funnyLineTamil": "String-ah maatha mudiyathu, un lachanam maari.",
         "expectedOutput": "Python",
         "practicePrompt": "Run and verify Strings and Booleans in the interactive arena.",
         "proudSuccessGeneral": "Variables and types mastered with pristine memory safety.",
-        "proudSuccessTamil": "Adra sakka! Dynamic typing unakulla irangi velai seiyudhu!"
+        "proudSuccessTamil": "Adra sakka! Dynamic typing unakulla irangi velai seiyudhu!",
+        "chapterId": "ch2",
+        "englishExplanation": "Strings are immutable. Booleans are True or False.",
+        "tamilRoast": "String-ah maatha mudiyathu, un lachanam maari."
       },
       {
         "id": "ch2-l3",
@@ -217,18 +237,22 @@ export const pythonCurriculum: Chapter[] = [
             "False",
             "Absence of a value"
           ],
-          "correctAnswerIndex": 3
+          "correctAnswerIndex": 3,
+          "answerIndex": 3
         },
         "funnyLineGeneral": "None is like your weekend plans.",
         "funnyLineTamil": "Un moolai maari, athula onnum illa.",
         "expectedOutput": "True",
         "practicePrompt": "Run and verify NoneType in the interactive arena.",
         "proudSuccessGeneral": "Variables and types mastered with pristine memory safety.",
-        "proudSuccessTamil": "Adra sakka! Dynamic typing unakulla irangi velai seiyudhu!"
+        "proudSuccessTamil": "Adra sakka! Dynamic typing unakulla irangi velai seiyudhu!",
+        "chapterId": "ch2",
+        "englishExplanation": "None represents the absence of a value.",
+        "tamilRoast": "Un moolai maari, athula onnum illa."
       }
     ],
     "proudSuccessGeneral": "Variables and types mastered with pristine memory safety.",
-    "proudSuccessTamil": "Adra sakka! Dynamic typing unakulla irangi velai seiyudhu!"
+    "proudSuccessTamil": "Appa, unga pulla urupputturuchu pa! Dynamic typing unakulla irangi velai seiyudhu!"
   },
   {
     "id": "ch3",
@@ -273,14 +297,18 @@ export const pythonCurriculum: Chapter[] = [
             "17",
             "12"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Math is hard, let Python do it.",
         "funnyLineTamil": "Kanakkula weak na, compiler kitta kelu.",
         "expectedOutput": "20",
         "practicePrompt": "Run and verify Arithmetic & Precedence in the interactive arena.",
         "proudSuccessGeneral": "Expressions and operators evaluated like a seasoned compiler.",
-        "proudSuccessTamil": "Walrus operator-eh adichu thovachitiye da!"
+        "proudSuccessTamil": "Walrus operator-eh adichu thovachitiye da!",
+        "chapterId": "ch3",
+        "englishExplanation": "PEMDAS applies. Use parentheses to be explicit.",
+        "tamilRoast": "Kanakkula weak na, compiler kitta kelu."
       },
       {
         "id": "ch3-l2",
@@ -302,14 +330,18 @@ export const pythonCurriculum: Chapter[] = [
             "Type",
             "Length"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "They might look twins, but they live in different houses.",
         "funnyLineTamil": "Paaka ore maari irukkum aana vera vera aalu.",
         "expectedOutput": "True False",
         "practicePrompt": "Run and verify Identity vs Equality in the interactive arena.",
         "proudSuccessGeneral": "Expressions and operators evaluated like a seasoned compiler.",
-        "proudSuccessTamil": "Walrus operator-eh adichu thovachitiye da!"
+        "proudSuccessTamil": "Walrus operator-eh adichu thovachitiye da!",
+        "chapterId": "ch3",
+        "englishExplanation": "== checks value, `is` checks memory identity.",
+        "tamilRoast": "Paaka ore maari irukkum aana vera vera aalu."
       },
       {
         "id": "ch3-l3",
@@ -331,14 +363,18 @@ export const pythonCurriculum: Chapter[] = [
             "Divides",
             "Compares"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "It's a walrus. It assigns while it looks at you.",
         "funnyLineTamil": "Walrus maari assign pannikite paakum.",
         "expectedOutput": "3",
         "practicePrompt": "Run and verify Walrus Operator in the interactive arena.",
         "proudSuccessGeneral": "Expressions and operators evaluated like a seasoned compiler.",
-        "proudSuccessTamil": "Walrus operator-eh adichu thovachitiye da!"
+        "proudSuccessTamil": "Walrus operator-eh adichu thovachitiye da!",
+        "chapterId": "ch3",
+        "englishExplanation": "The := operator assigns and returns a value.",
+        "tamilRoast": "Walrus maari assign pannikite paakum."
       }
     ],
     "proudSuccessGeneral": "Expressions and operators evaluated like a seasoned compiler.",
@@ -367,7 +403,7 @@ export const pythonCurriculum: Chapter[] = [
     "analogyGeneral": "Control flow manages how your program steps through execution logic. Without proper exits, you land in infinite loops.",
     "analogyTamil": "Infinite loop-ah? Idhu Rajini padathula vara punch dialogue madhiri... mudiyave mudiyadhu!",
     "roastGeneral": "If your control flow logic was a map, even GPS couldn't save us.",
-    "roastTamil": "Un logic error output-ah paartha... appa 'Adhukku badhila oru cow vaangirukalam' nu yosipaan da!",
+    "roastTamil": "Katuna college fees-ku naalu cow vangirukalam da! If-Else logic kooda sariya ezhudha theriyaama compiler munnadi muzhikkura!",
     "lessons": [
       {
         "id": "ch4-l1",
@@ -389,14 +425,18 @@ export const pythonCurriculum: Chapter[] = [
             "elif",
             "case"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Decisions, decisions. The code makes them for you.",
         "funnyLineTamil": "Life la thaan decision thappu, code layuma?",
         "expectedOutput": "Adult",
         "practicePrompt": "Run and verify If-Elif-Else in the interactive arena.",
         "proudSuccessGeneral": "Control flow conquered with zero infinite loops.",
-        "proudSuccessTamil": "Pattern match aagi output vandhuruchu... Singam da nee!"
+        "proudSuccessTamil": "Pattern match aagi output vandhuruchu... Singam da nee!",
+        "chapterId": "ch4",
+        "englishExplanation": "Branching logic with conditionals.",
+        "tamilRoast": "Life la thaan decision thappu, code layuma?"
       },
       {
         "id": "ch4-l2",
@@ -418,14 +458,18 @@ export const pythonCurriculum: Chapter[] = [
             "If loop completes without break",
             "On error"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "An else on a loop? Yes, it's a thing.",
         "funnyLineTamil": "Loop kulla else potta aacharyama pakurane.",
         "expectedOutput": "Done smoothly",
         "practicePrompt": "Run and verify Loops and Else in the interactive arena.",
         "proudSuccessGeneral": "Control flow conquered with zero infinite loops.",
-        "proudSuccessTamil": "Pattern match aagi output vandhuruchu... Singam da nee!"
+        "proudSuccessTamil": "Pattern match aagi output vandhuruchu... Singam da nee!",
+        "chapterId": "ch4",
+        "englishExplanation": "For and while loops can have an else clause if no break happens.",
+        "tamilRoast": "Loop kulla else potta aacharyama pakurane."
       },
       {
         "id": "ch4-l3",
@@ -447,14 +491,18 @@ export const pythonCurriculum: Chapter[] = [
             "case _:",
             "else:"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Match case: finally a switch statement, but cooler.",
         "funnyLineTamil": "Switch thaan, aana konjam gethu.",
         "expectedOutput": "Not found",
         "practicePrompt": "Run and verify Match/Case in the interactive arena.",
         "proudSuccessGeneral": "Control flow conquered with zero infinite loops.",
-        "proudSuccessTamil": "Pattern match aagi output vandhuruchu... Singam da nee!"
+        "proudSuccessTamil": "Pattern match aagi output vandhuruchu... Singam da nee!",
+        "chapterId": "ch4",
+        "englishExplanation": "Structural pattern matching introduced in 3.10.",
+        "tamilRoast": "Switch thaan, aana konjam gethu."
       }
     ],
     "proudSuccessGeneral": "Control flow conquered with zero infinite loops.",
@@ -502,14 +550,18 @@ export const pythonCurriculum: Chapter[] = [
             "Index and value pairs",
             "A dictionary"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Stop keeping a counter variable manually.",
         "funnyLineTamil": "I=0 nu potu uyira vaangatha.",
         "expectedOutput": "0 a\n1 b",
         "practicePrompt": "Run and verify Enumerate in the interactive arena.",
         "proudSuccessGeneral": "Built-in functions running at native C-speed.",
-        "proudSuccessTamil": "Enumerate, zip ellam un viral nunila aadura maari aaiduchu!"
+        "proudSuccessTamil": "Enumerate, zip ellam un viral nunila aadura maari aaiduchu!",
+        "chapterId": "ch5",
+        "englishExplanation": "Get index and value at the same time.",
+        "tamilRoast": "I=0 nu potu uyira vaangatha."
       },
       {
         "id": "ch5-l2",
@@ -531,14 +583,18 @@ export const pythonCurriculum: Chapter[] = [
             "Stops at the shortest",
             "Loops the shorter one"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Zipper for your data, don't get caught.",
         "funnyLineTamil": "Zip panni kootitu po.",
         "expectedOutput": "1 x\n2 y",
         "practicePrompt": "Run and verify Zip in the interactive arena.",
         "proudSuccessGeneral": "Built-in functions running at native C-speed.",
-        "proudSuccessTamil": "Enumerate, zip ellam un viral nunila aadura maari aaiduchu!"
+        "proudSuccessTamil": "Enumerate, zip ellam un viral nunila aadura maari aaiduchu!",
+        "chapterId": "ch5",
+        "englishExplanation": "Iterate over multiple iterables in parallel.",
+        "tamilRoast": "Zip panni kootitu po."
       },
       {
         "id": "ch5-l3",
@@ -560,14 +616,18 @@ export const pythonCurriculum: Chapter[] = [
             "It takes memory",
             "It's deprecated"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Evaluating untrusted strings is asking for trouble.",
         "funnyLineTamil": "Eval potta un system evalavo kastapadum.",
         "expectedOutput": "5",
         "practicePrompt": "Run and verify Eval & Exec in the interactive arena.",
         "proudSuccessGeneral": "Built-in functions running at native C-speed.",
-        "proudSuccessTamil": "Enumerate, zip ellam un viral nunila aadura maari aaiduchu!"
+        "proudSuccessTamil": "Enumerate, zip ellam un viral nunila aadura maari aaiduchu!",
+        "chapterId": "ch5",
+        "englishExplanation": "Execute strings as code. Dangerous if untrusted.",
+        "tamilRoast": "Eval potta un system evalavo kastapadum."
       }
     ],
     "proudSuccessGeneral": "Built-in functions running at native C-speed.",
@@ -613,14 +673,18 @@ export const pythonCurriculum: Chapter[] = [
             "ZeroDivisionError",
             "MathError"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Even calculators complain about this.",
         "funnyLineTamil": "Zero-vaala divide panni enna saadhikka pora?",
         "expectedOutput": "Caught!",
         "practicePrompt": "Run and verify ZeroDivisionError in the interactive arena.",
         "proudSuccessGeneral": "All errors caught and handled gracefully before production.",
-        "proudSuccessTamil": "Bloody sweet... Exception-ah catch panni adichan paaru sixer-u!"
+        "proudSuccessTamil": "Bloody sweet... Exception-ah catch panni adichan paaru sixer-u!",
+        "chapterId": "ch6",
+        "englishExplanation": "Don't divide by zero.",
+        "tamilRoast": "Zero-vaala divide panni enna saadhikka pora?"
       },
       {
         "id": "ch6-l2",
@@ -642,14 +706,18 @@ export const pythonCurriculum: Chapter[] = [
             "KeyError",
             "LookupError"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Looking for something that's not there.",
         "funnyLineTamil": "Illatha key-ah thedina epdi varum?",
         "expectedOutput": "Key missing",
         "practicePrompt": "Run and verify Lookup Errors in the interactive arena.",
         "proudSuccessGeneral": "All errors caught and handled gracefully before production.",
-        "proudSuccessTamil": "Bloody sweet... Exception-ah catch panni adichan paaru sixer-u!"
+        "proudSuccessTamil": "Bloody sweet... Exception-ah catch panni adichan paaru sixer-u!",
+        "chapterId": "ch6",
+        "englishExplanation": "IndexError for lists, KeyError for dicts.",
+        "tamilRoast": "Illatha key-ah thedina epdi varum?"
       },
       {
         "id": "ch6-l3",
@@ -671,14 +739,18 @@ export const pythonCurriculum: Chapter[] = [
             "ParseError",
             "StringError"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "You can't force a word to be a number.",
         "funnyLineTamil": "Alphabet-ah number aaka paakuriya.",
         "expectedOutput": "Bad value",
         "practicePrompt": "Run and verify Type & Value Errors in the interactive arena.",
         "proudSuccessGeneral": "All errors caught and handled gracefully before production.",
-        "proudSuccessTamil": "Bloody sweet... Exception-ah catch panni adichan paaru sixer-u!"
+        "proudSuccessTamil": "Bloody sweet... Exception-ah catch panni adichan paaru sixer-u!",
+        "chapterId": "ch6",
+        "englishExplanation": "TypeError is bad operations, ValueError is bad data.",
+        "tamilRoast": "Alphabet-ah number aaka paakuriya."
       }
     ],
     "proudSuccessGeneral": "All errors caught and handled gracefully before production.",
@@ -721,14 +793,18 @@ export const pythonCurriculum: Chapter[] = [
             "O(log n)",
             "O(n^2)"
           ],
-          "correctAnswerIndex": 0
+          "correctAnswerIndex": 0,
+          "answerIndex": 0
         },
         "funnyLineGeneral": "Lists just keep growing.",
         "funnyLineTamil": "List perusa poite irukku.",
         "expectedOutput": "[1, 2, 3]",
         "practicePrompt": "Run and verify Lists (Dynamic Arrays) in the interactive arena.",
         "proudSuccessGeneral": "O(1) lookups achieved across all data structures.",
-        "proudSuccessTamil": "Hash table-la collision illama data save aaiduchu da!"
+        "proudSuccessTamil": "Hash table-la collision illama data save aaiduchu da!",
+        "chapterId": "ch7",
+        "englishExplanation": "Mutable, ordered sequences. O(1) append.",
+        "tamilRoast": "List perusa poite irukku."
       },
       {
         "id": "ch7-l2",
@@ -750,14 +826,18 @@ export const pythonCurriculum: Chapter[] = [
             "O(log n)",
             "O(n^2)"
           ],
-          "correctAnswerIndex": 0
+          "correctAnswerIndex": 0,
+          "answerIndex": 0
         },
         "funnyLineGeneral": "Dictionaries know exactly where everything is.",
         "funnyLineTamil": "Udaney answer varum.",
         "expectedOutput": "1",
         "practicePrompt": "Run and verify Dictionaries (Hash Tables) in the interactive arena.",
         "proudSuccessGeneral": "O(1) lookups achieved across all data structures.",
-        "proudSuccessTamil": "Hash table-la collision illama data save aaiduchu da!"
+        "proudSuccessTamil": "Hash table-la collision illama data save aaiduchu da!",
+        "chapterId": "ch7",
+        "englishExplanation": "Key-value pairs. O(1) lookup.",
+        "tamilRoast": "Udaney answer varum."
       },
       {
         "id": "ch7-l3",
@@ -779,14 +859,18 @@ export const pythonCurriculum: Chapter[] = [
             "Unique elements",
             "Lists"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "No duplicates allowed in the VIP section.",
         "funnyLineTamil": "Duplicate-ku entry illa.",
         "expectedOutput": "{1, 2}",
         "practicePrompt": "Run and verify Sets (Unique) in the interactive arena.",
         "proudSuccessGeneral": "O(1) lookups achieved across all data structures.",
-        "proudSuccessTamil": "Hash table-la collision illama data save aaiduchu da!"
+        "proudSuccessTamil": "Hash table-la collision illama data save aaiduchu da!",
+        "chapterId": "ch7",
+        "englishExplanation": "Hash-based unique collections.",
+        "tamilRoast": "Duplicate-ku entry illa."
       }
     ],
     "proudSuccessGeneral": "O(1) lookups achieved across all data structures.",
@@ -830,14 +914,18 @@ export const pythonCurriculum: Chapter[] = [
             "Both",
             "None"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Catching arguments like a net.",
         "funnyLineTamil": "Ellathiyum allikita.",
         "expectedOutput": "(1,) {'a': 2}",
         "practicePrompt": "Run and verify Args & Kwargs in the interactive arena.",
         "proudSuccessGeneral": "LEGB scope mastered without mutable default traps.",
-        "proudSuccessTamil": "Closure-um scope-um theliva purinjuruchu, ini bug varadhu!"
+        "proudSuccessTamil": "Closure-um scope-um theliva purinjuruchu, ini bug varadhu!",
+        "chapterId": "ch8",
+        "englishExplanation": "Variable length arguments.",
+        "tamilRoast": "Ellathiyum allikita."
       },
       {
         "id": "ch8-l2",
@@ -859,14 +947,18 @@ export const pythonCurriculum: Chapter[] = [
             "It persists state across calls",
             "It's immutable"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Ghosts of previous calls will haunt your list.",
         "funnyLineTamil": "Pazhaiya item ellam list la ottikitchu.",
         "expectedOutput": "[1]\n[1, 2]\n[3]\n[4]",
         "practicePrompt": "Run and verify The Default Argument Trap in the interactive arena.",
         "proudSuccessGeneral": "LEGB scope mastered without mutable default traps.",
-        "proudSuccessTamil": "Closure-um scope-um theliva purinjuruchu, ini bug varadhu!"
+        "proudSuccessTamil": "Closure-um scope-um theliva purinjuruchu, ini bug varadhu!",
+        "chapterId": "ch8",
+        "englishExplanation": "Never use [] as a default. Use None.",
+        "tamilRoast": "Pazhaiya item ellam list la ottikitchu."
       },
       {
         "id": "ch8-l3",
@@ -888,14 +980,18 @@ export const pythonCurriculum: Chapter[] = [
             "File names",
             "Classes"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "It remembers everything, like an elephant.",
         "funnyLineTamil": "Marakkave marakkathu.",
         "expectedOutput": "8",
         "practicePrompt": "Run and verify Closures in the interactive arena.",
         "proudSuccessGeneral": "LEGB scope mastered without mutable default traps.",
-        "proudSuccessTamil": "Closure-um scope-um theliva purinjuruchu, ini bug varadhu!"
+        "proudSuccessTamil": "Closure-um scope-um theliva purinjuruchu, ini bug varadhu!",
+        "chapterId": "ch8",
+        "englishExplanation": "Functions returning functions retaining state.",
+        "tamilRoast": "Marakkave marakkathu."
       }
     ],
     "proudSuccessGeneral": "LEGB scope mastered without mutable default traps.",
@@ -941,13 +1037,17 @@ export const pythonCurriculum: Chapter[] = [
             "It encrypts files",
             "It bypasses the OS"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Forget to close a file and your OS will hold a grudge.",
         "funnyLineTamil": "File-ah open pannitu close panna marandha OS kadasi varaikum kobama irukkum.",
         "practicePrompt": "Open a temporary file and write and read safely using 'with'.",
         "proudSuccessGeneral": "Resource safely cleaned up on exit!",
-        "proudSuccessTamil": "Bloody sweet... context manager clean-ah close panniruchu!"
+        "proudSuccessTamil": "Bloody sweet... context manager clean-ah close panniruchu!",
+        "chapterId": "ch9",
+        "englishExplanation": "Always open files using the with context manager. It guarantees the file descriptor is closed automatically, even if exceptions occur.",
+        "tamilRoast": "File-ah open pannitu close panna marandha OS kadasi varaikum kobama irukkum."
       },
       {
         "id": "ch9-l2",
@@ -970,13 +1070,17 @@ export const pythonCurriculum: Chapter[] = [
             "\\",
             "."
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "String concatenation for paths is a crime against operating systems.",
         "funnyLineTamil": "Path concat panna slash podadha, pathlib / operator use pannu.",
         "practicePrompt": "Build a Path with the / operator and print name and suffix.",
         "proudSuccessGeneral": "Cross-platform path handling achieved!",
-        "proudSuccessTamil": "Windows-um Linux-um ippo un friend-u da!"
+        "proudSuccessTamil": "Windows-um Linux-um ippo un friend-u da!",
+        "chapterId": "ch9",
+        "englishExplanation": "Replace brittle string concatenation with pathlib.Path for cross-platform file path manipulation.",
+        "tamilRoast": "Path concat panna slash podadha, pathlib / operator use pannu."
       },
       {
         "id": "ch9-l3",
@@ -999,13 +1103,17 @@ export const pythonCurriculum: Chapter[] = [
             "json.parse()",
             "json.read()"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Why calculate averages manually when statistics.mean() exists?",
         "funnyLineTamil": "Loop potu average kandupudikaama statistics.mean() podu da!",
         "practicePrompt": "Load JSON data and compute its mean using the statistics module.",
         "proudSuccessGeneral": "Data deserialized and metrics computed instantly!",
-        "proudSuccessTamil": "Bloody sweet... output vandhuruchu da!"
+        "proudSuccessTamil": "Bloody sweet... output vandhuruchu da!",
+        "chapterId": "ch9",
+        "englishExplanation": "The standard library includes json for structured data serialization and statistics for instant metrics.",
+        "tamilRoast": "Loop potu average kandupudikaama statistics.mean() podu da!"
       }
     ]
   },
@@ -1048,14 +1156,18 @@ export const pythonCurriculum: Chapter[] = [
             "__start__",
             "__main__"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Building blueprints for your data.",
         "funnyLineTamil": "Class potutu object create pannu.",
         "expectedOutput": "Toyota",
         "practicePrompt": "Run and verify Classes and Instances in the interactive arena.",
         "proudSuccessGeneral": "OOP principles and C3 linearization mastered with clean architecture.",
-        "proudSuccessTamil": "Class-um object-um pottu getha ninnutiye da Kaipulla!"
+        "proudSuccessTamil": "Class-um object-um pottu getha ninnutiye da Kaipulla!",
+        "chapterId": "ch10",
+        "englishExplanation": "Define blueprints.",
+        "tamilRoast": "Class potutu object create pannu."
       },
       {
         "id": "ch10-l2",
@@ -1077,14 +1189,18 @@ export const pythonCurriculum: Chapter[] = [
             "Nothing",
             "Generators"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Writing less code is always the goal.",
         "funnyLineTamil": "Auto maari code adikkum.",
         "expectedOutput": "Point(x=1, y=2)",
         "practicePrompt": "Run and verify Dataclasses in the interactive arena.",
         "proudSuccessGeneral": "OOP principles and C3 linearization mastered with clean architecture.",
-        "proudSuccessTamil": "Class-um object-um pottu getha ninnutiye da Kaipulla!"
+        "proudSuccessTamil": "Class-um object-um pottu getha ninnutiye da Kaipulla!",
+        "chapterId": "ch10",
+        "englishExplanation": "Less boilerplate for data containers.",
+        "tamilRoast": "Auto maari code adikkum."
       },
       {
         "id": "ch10-l3",
@@ -1106,14 +1222,18 @@ export const pythonCurriculum: Chapter[] = [
             "C3 Linearization",
             "Dijkstra"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Who do you inherit from first? The C3 knows.",
         "funnyLineTamil": "Appa thodara illa thatha thodara nu kandupudikum.",
         "expectedOutput": "[<class '__main__.B'>, <class '__main__.A'>, <class 'object'>]",
         "practicePrompt": "Run and verify MRO (Method Resolution Order) in the interactive arena.",
         "proudSuccessGeneral": "OOP principles and C3 linearization mastered with clean architecture.",
-        "proudSuccessTamil": "Class-um object-um pottu getha ninnutiye da Kaipulla!"
+        "proudSuccessTamil": "Class-um object-um pottu getha ninnutiye da Kaipulla!",
+        "chapterId": "ch10",
+        "englishExplanation": "How Python resolves multiple inheritance.",
+        "tamilRoast": "Appa thodara illa thatha thodara nu kandupudikum."
       }
     ],
     "proudSuccessGeneral": "OOP principles and C3 linearization mastered with clean architecture.",
@@ -1157,14 +1277,18 @@ export const pythonCurriculum: Chapter[] = [
             "Math",
             "Printing"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Two faces for your objects.",
         "funnyLineTamil": "Rendu mugam.",
         "expectedOutput": "str repr",
         "practicePrompt": "Run and verify Str and Repr in the interactive arena.",
         "proudSuccessGeneral": "Custom classes behaving seamlessly as first-class Python citizens.",
-        "proudSuccessTamil": "Dunder magic hooks unlocked... native type maari aaiduchu da!"
+        "proudSuccessTamil": "Dunder magic hooks unlocked... native type maari aaiduchu da!",
+        "chapterId": "ch11",
+        "englishExplanation": "__str__ is for users, __repr__ is for devs.",
+        "tamilRoast": "Rendu mugam."
       },
       {
         "id": "ch11-l2",
@@ -1186,14 +1310,18 @@ export const pythonCurriculum: Chapter[] = [
             "__call__",
             "__dict__"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Pretending to be a list is fun.",
         "funnyLineTamil": "List maari vesham.",
         "expectedOutput": "10",
         "practicePrompt": "Run and verify Container Emulation in the interactive arena.",
         "proudSuccessGeneral": "Custom classes behaving seamlessly as first-class Python citizens.",
-        "proudSuccessTamil": "Dunder magic hooks unlocked... native type maari aaiduchu da!"
+        "proudSuccessTamil": "Dunder magic hooks unlocked... native type maari aaiduchu da!",
+        "chapterId": "ch11",
+        "englishExplanation": "__getitem__ lets you use [] on objects.",
+        "tamilRoast": "List maari vesham."
       },
       {
         "id": "ch11-l3",
@@ -1215,14 +1343,18 @@ export const pythonCurriculum: Chapter[] = [
             "__exit__",
             "__finish__"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Always clean up after yourself.",
         "funnyLineTamil": "Velai mudinja close panniudu.",
         "expectedOutput": "Inside",
         "practicePrompt": "Run and verify Context Managers in the interactive arena.",
         "proudSuccessGeneral": "Custom classes behaving seamlessly as first-class Python citizens.",
-        "proudSuccessTamil": "Dunder magic hooks unlocked... native type maari aaiduchu da!"
+        "proudSuccessTamil": "Dunder magic hooks unlocked... native type maari aaiduchu da!",
+        "chapterId": "ch11",
+        "englishExplanation": "__enter__ and __exit__ for the 'with' statement.",
+        "tamilRoast": "Velai mudinja close panniudu."
       }
     ],
     "proudSuccessGeneral": "Custom classes behaving seamlessly as first-class Python citizens.",
@@ -1264,14 +1396,18 @@ export const pythonCurriculum: Chapter[] = [
             "[2]",
             "Error"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "One liners that actually make sense.",
         "funnyLineTamil": "Orey variyila matter mudinjathu.",
         "expectedOutput": "[0, 1, 4]",
         "practicePrompt": "Run and verify Comprehensions in the interactive arena.",
         "proudSuccessGeneral": "Lazy iteration streaming infinite data on minimal RAM.",
-        "proudSuccessTamil": "Generators-la memory save panni mass kaatita da!"
+        "proudSuccessTamil": "Generators-la memory save panni mass kaatita da!",
+        "chapterId": "ch12",
+        "englishExplanation": "Concise way to create lists.",
+        "tamilRoast": "Orey variyila matter mudinjathu."
       },
       {
         "id": "ch12-l2",
@@ -1293,14 +1429,18 @@ export const pythonCurriculum: Chapter[] = [
             "Randomly",
             "Backward"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Lazy evaluation is a feature, not a bug.",
         "funnyLineTamil": "Somberi code, aana nallathu.",
         "expectedOutput": "1\n2",
         "practicePrompt": "Run and verify Generators in the interactive arena.",
         "proudSuccessGeneral": "Lazy iteration streaming infinite data on minimal RAM.",
-        "proudSuccessTamil": "Generators-la memory save panni mass kaatita da!"
+        "proudSuccessTamil": "Generators-la memory save panni mass kaatita da!",
+        "chapterId": "ch12",
+        "englishExplanation": "Yield produces values lazily.",
+        "tamilRoast": "Somberi code, aana nallathu."
       },
       {
         "id": "ch12-l3",
@@ -1322,14 +1462,18 @@ export const pythonCurriculum: Chapter[] = [
             "Throws error",
             "Restarts"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Passing the buck to another generator.",
         "funnyLineTamil": "Adutha aalkita velai kudukrathu.",
         "expectedOutput": "[1, 2]",
         "practicePrompt": "Run and verify Yield From in the interactive arena.",
         "proudSuccessGeneral": "Lazy iteration streaming infinite data on minimal RAM.",
-        "proudSuccessTamil": "Generators-la memory save panni mass kaatita da!"
+        "proudSuccessTamil": "Generators-la memory save panni mass kaatita da!",
+        "chapterId": "ch12",
+        "englishExplanation": "Delegate to sub-generators.",
+        "tamilRoast": "Adutha aalkita velai kudukrathu."
       }
     ],
     "proudSuccessGeneral": "Lazy iteration streaming infinite data on minimal RAM.",
@@ -1371,14 +1515,18 @@ export const pythonCurriculum: Chapter[] = [
             "Provides attribute access",
             "Deletes it"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Looking like an attribute, acting like a method.",
         "funnyLineTamil": "Vesham pottu varuthu.",
         "expectedOutput": "5",
         "practicePrompt": "Run and verify Properties in the interactive arena.",
         "proudSuccessGeneral": "Metaprogramming mastered at the interpreter level.",
-        "proudSuccessTamil": "Metaclass and decorators pottu code-aye dominate pannitiye da!"
+        "proudSuccessTamil": "Metaclass and decorators pottu code-aye dominate pannitiye da!",
+        "chapterId": "ch13",
+        "englishExplanation": "Managed attribute access.",
+        "tamilRoast": "Vesham pottu varuthu."
       },
       {
         "id": "ch13-l2",
@@ -1400,14 +1548,18 @@ export const pythonCurriculum: Chapter[] = [
             "Class",
             "None"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Wrapping your code like a present.",
         "funnyLineTamil": "Gift paper-la suthuna maari.",
         "expectedOutput": "Hi",
         "practicePrompt": "Run and verify Decorators in the interactive arena.",
         "proudSuccessGeneral": "Metaprogramming mastered at the interpreter level.",
-        "proudSuccessTamil": "Metaclass and decorators pottu code-aye dominate pannitiye da!"
+        "proudSuccessTamil": "Metaclass and decorators pottu code-aye dominate pannitiye da!",
+        "chapterId": "ch13",
+        "englishExplanation": "Functions that wrap functions.",
+        "tamilRoast": "Gift paper-la suthuna maari."
       },
       {
         "id": "ch13-l3",
@@ -1429,14 +1581,18 @@ export const pythonCurriculum: Chapter[] = [
             "class",
             "meta"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Inception, but for Python classes.",
         "funnyLineTamil": "Class-ke class edukkuthu.",
         "expectedOutput": "<class '__main__.M'>",
         "practicePrompt": "Run and verify Metaclasses in the interactive arena.",
         "proudSuccessGeneral": "Metaprogramming mastered at the interpreter level.",
-        "proudSuccessTamil": "Metaclass and decorators pottu code-aye dominate pannitiye da!"
+        "proudSuccessTamil": "Metaclass and decorators pottu code-aye dominate pannitiye da!",
+        "chapterId": "ch13",
+        "englishExplanation": "Classes that create classes.",
+        "tamilRoast": "Class-ke class edukkuthu."
       }
     ],
     "proudSuccessGeneral": "Metaprogramming mastered at the interpreter level.",
@@ -1479,14 +1635,18 @@ export const pythonCurriculum: Chapter[] = [
             "run(main)",
             "start()"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Waiting politely for things to happen.",
         "funnyLineTamil": "Porumai mukkiyam.",
         "expectedOutput": "Hello",
         "practicePrompt": "Run and verify Async/Await Basics in the interactive arena.",
         "proudSuccessGeneral": "Concurrency and coroutines executing without blocking the event loop.",
-        "proudSuccessTamil": "Async/await deadlocks illama rocket maari fly pannudhu da!"
+        "proudSuccessTamil": "Async/await deadlocks illama rocket maari fly pannudhu da!",
+        "chapterId": "ch14",
+        "englishExplanation": "Define coroutines with async def.",
+        "tamilRoast": "Porumai mukkiyam."
       },
       {
         "id": "ch14-l2",
@@ -1508,14 +1668,18 @@ export const pythonCurriculum: Chapter[] = [
             "Awaitables",
             "Lists"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Don't forget to await, or it never happens.",
         "funnyLineTamil": "Wait pannati onnum kedaikathu.",
         "expectedOutput": "1",
         "practicePrompt": "Run and verify Awaiting Coroutines in the interactive arena.",
         "proudSuccessGeneral": "Concurrency and coroutines executing without blocking the event loop.",
-        "proudSuccessTamil": "Async/await deadlocks illama rocket maari fly pannudhu da!"
+        "proudSuccessTamil": "Async/await deadlocks illama rocket maari fly pannudhu da!",
+        "chapterId": "ch14",
+        "englishExplanation": "Use await to pause execution.",
+        "tamilRoast": "Wait pannati onnum kedaikathu."
       },
       {
         "id": "ch14-l3",
@@ -1537,14 +1701,18 @@ export const pythonCurriculum: Chapter[] = [
             "await",
             "async def"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Multitasking for code.",
         "funnyLineTamil": "Orey nerathula rendu velai.",
         "expectedOutput": "2",
         "practicePrompt": "Run and verify Asyncio Tasks in the interactive arena.",
         "proudSuccessGeneral": "Concurrency and coroutines executing without blocking the event loop.",
-        "proudSuccessTamil": "Async/await deadlocks illama rocket maari fly pannudhu da!"
+        "proudSuccessTamil": "Async/await deadlocks illama rocket maari fly pannudhu da!",
+        "chapterId": "ch14",
+        "englishExplanation": "Run coroutines concurrently.",
+        "tamilRoast": "Orey nerathula rendu velai."
       }
     ],
     "proudSuccessGeneral": "Concurrency and coroutines executing without blocking the event loop.",
@@ -1587,14 +1755,18 @@ export const pythonCurriculum: Chapter[] = [
             "Only in functions",
             "Only in classes"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Documentation that tools can read.",
         "funnyLineTamil": "Code-ku label ottrathu.",
         "expectedOutput": "3",
         "practicePrompt": "Run and verify Basic Type Hints in the interactive arena.",
         "proudSuccessGeneral": "Type checker approves with zero errors and bulletproof protocols.",
-        "proudSuccessTamil": "Any podama strict static types vechu production-ready aakita!"
+        "proudSuccessTamil": "Any podama strict static types vechu production-ready aakita!",
+        "chapterId": "ch15",
+        "englishExplanation": "Annotate variables and returns.",
+        "tamilRoast": "Code-ku label ottrathu."
       },
       {
         "id": "ch15-l2",
@@ -1616,14 +1788,18 @@ export const pythonCurriculum: Chapter[] = [
             "Any",
             "Union[int, str]"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "It's optional, like your attendance.",
         "funnyLineTamil": "Irukkalam illamalum pogalam.",
         "expectedOutput": "None",
         "practicePrompt": "Run and verify Unions & Optionals in the interactive arena.",
         "proudSuccessGeneral": "Type checker approves with zero errors and bulletproof protocols.",
-        "proudSuccessTamil": "Any podama strict static types vechu production-ready aakita!"
+        "proudSuccessTamil": "Any podama strict static types vechu production-ready aakita!",
+        "chapterId": "ch15",
+        "englishExplanation": "When a value can be multiple types.",
+        "tamilRoast": "Irukkalam illamalum pogalam."
       },
       {
         "id": "ch15-l3",
@@ -1645,14 +1821,18 @@ export const pythonCurriculum: Chapter[] = [
             "Dynamic",
             "Weak"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "If it walks like a duck, type hint it as a Duck.",
         "funnyLineTamil": "Vathu maari iruntha vathu nu sollu.",
         "expectedOutput": "Done",
         "practicePrompt": "Run and verify Protocols (Duck Typing) in the interactive arena.",
         "proudSuccessGeneral": "Type checker approves with zero errors and bulletproof protocols.",
-        "proudSuccessTamil": "Any podama strict static types vechu production-ready aakita!"
+        "proudSuccessTamil": "Any podama strict static types vechu production-ready aakita!",
+        "chapterId": "ch15",
+        "englishExplanation": "Structural subtyping in Python.",
+        "tamilRoast": "Vathu maari iruntha vathu nu sollu."
       }
     ],
     "proudSuccessGeneral": "Type checker approves with zero errors and bulletproof protocols.",
@@ -1694,14 +1874,18 @@ export const pythonCurriculum: Chapter[] = [
             "Manual free",
             "ARC"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Keeping track of who's looking at the object.",
         "funnyLineTamil": "Evlo per paakuranga nu count pannuthu.",
         "expectedOutput": "2",
         "practicePrompt": "Run and verify Reference Counting in the interactive arena.",
         "proudSuccessGeneral": "CPython internals and reference counting understood down to C structures.",
-        "proudSuccessTamil": "CPython bytecode and GIL-eh adichu thookita, nee thaan real Python Guru!"
+        "proudSuccessTamil": "CPython bytecode and GIL-eh adichu thookita, nee thaan real Python Guru!",
+        "chapterId": "ch16",
+        "englishExplanation": "sys.getrefcount shows active references.",
+        "tamilRoast": "Evlo per paakuranga nu count pannuthu."
       },
       {
         "id": "ch16-l2",
@@ -1723,14 +1907,18 @@ export const pythonCurriculum: Chapter[] = [
             "1 to 1000",
             "None"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Python hoards small numbers just in case.",
         "funnyLineTamil": "Chinna number ah pathrama vachuruku.",
         "expectedOutput": "True\nTrue",
         "practicePrompt": "Run and verify Integer Interning in the interactive arena.",
         "proudSuccessGeneral": "CPython internals and reference counting understood down to C structures.",
-        "proudSuccessTamil": "CPython bytecode and GIL-eh adichu thookita, nee thaan real Python Guru!"
+        "proudSuccessTamil": "CPython bytecode and GIL-eh adichu thookita, nee thaan real Python Guru!",
+        "chapterId": "ch16",
+        "englishExplanation": "Small ints are pre-allocated.",
+        "tamilRoast": "Chinna number ah pathrama vachuruku."
       },
       {
         "id": "ch16-l3",
@@ -1752,14 +1940,18 @@ export const pythonCurriculum: Chapter[] = [
             "dis",
             "bytecode"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Looking at the matrix code.",
         "funnyLineTamil": "Ulla enna oduthu nu paakurathu.",
         "expectedOutput": "2           0 RESUME                   0\n              2 RETURN_CONST             0 (None)",
         "practicePrompt": "Run and verify The Bytecode (dis) in the interactive arena.",
         "proudSuccessGeneral": "CPython internals and reference counting understood down to C structures.",
-        "proudSuccessTamil": "CPython bytecode and GIL-eh adichu thookita, nee thaan real Python Guru!"
+        "proudSuccessTamil": "CPython bytecode and GIL-eh adichu thookita, nee thaan real Python Guru!",
+        "chapterId": "ch16",
+        "englishExplanation": "Disassemble Python into CPython bytecode.",
+        "tamilRoast": "Ulla enna oduthu nu paakurathu."
       }
     ],
     "proudSuccessGeneral": "CPython internals and reference counting understood down to C structures.",
@@ -1801,13 +1993,17 @@ export const pythonCurriculum: Chapter[] = [
             "A database",
             "A web framework"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Pandas: Making Excel obsolete since 2008.",
         "funnyLineTamil": "Pandas: Excel-ah close panna vandha master-u.",
         "practicePrompt": "Run and verify NumPy & Pandas Basics in the interactive arena.",
         "proudSuccessGeneral": "Vectorized operations processing millions of rows in milliseconds.",
-        "proudSuccessTamil": "Pandas and NumPy JCB maari data-vai alli potturuchu da!"
+        "proudSuccessTamil": "Pandas and NumPy JCB maari data-vai alli potturuchu da!",
+        "chapterId": "ch17-datascience",
+        "englishExplanation": "Introduction to vectorized operations and DataFrames.",
+        "tamilRoast": "Pandas: Excel-ah close panna vandha master-u."
       },
       {
         "id": "ch17-l2",
@@ -1830,13 +2026,17 @@ export const pythonCurriculum: Chapter[] = [
             "It runs on the GPU",
             "It skips checks"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Looping through NumPy is like walking next to your Ferrari.",
         "funnyLineTamil": "Ferrari-ah vachikitu adhu pakathula nadanthu pora mari da.",
         "practicePrompt": "Run and verify Vectorized Operations in the interactive arena.",
         "proudSuccessGeneral": "Vectorized operations processing millions of rows in milliseconds.",
-        "proudSuccessTamil": "Pandas and NumPy JCB maari data-vai alli potturuchu da!"
+        "proudSuccessTamil": "Pandas and NumPy JCB maari data-vai alli potturuchu da!",
+        "chapterId": "ch17-datascience",
+        "englishExplanation": "NumPy arrays allow you to apply mathematical operations across an entire array without writing explicit loops.",
+        "tamilRoast": "Ferrari-ah vachikitu adhu pakathula nadanthu pora mari da."
       },
       {
         "id": "ch17-l3",
@@ -1859,13 +2059,17 @@ export const pythonCurriculum: Chapter[] = [
             "Cleans data",
             "Builds neural networks"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "A chart is worth a thousand CSV rows.",
         "funnyLineTamil": "Oru graph aayiram varthaikum samam.",
         "practicePrompt": "Run and verify Data Visualization in the interactive arena.",
         "proudSuccessGeneral": "Vectorized operations processing millions of rows in milliseconds.",
-        "proudSuccessTamil": "Pandas and NumPy JCB maari data-vai alli potturuchu da!"
+        "proudSuccessTamil": "Pandas and NumPy JCB maari data-vai alli potturuchu da!",
+        "chapterId": "ch17-datascience",
+        "englishExplanation": "Visualizing data is crucial. Matplotlib creates plots to understand data distributions.",
+        "tamilRoast": "Oru graph aayiram varthaikum samam."
       }
     ],
     "proudSuccessGeneral": "Vectorized operations processing millions of rows in milliseconds.",
@@ -1909,13 +2113,17 @@ export const pythonCurriculum: Chapter[] = [
             "To make it run faster",
             "Because 80/20 is a cool rule"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Don't test on your training data. That's cheating on an open book test.",
         "funnyLineTamil": "Exam paper munnadiye therinju eluthna mari da adhu.",
         "practicePrompt": "Run and verify Train/Test Split in the interactive arena.",
         "proudSuccessGeneral": "Machine learning pipeline trained and evaluated with high accuracy.",
-        "proudSuccessTamil": "Confusion matrix-la false positive zero! ML model train aaiduchu!"
+        "proudSuccessTamil": "Confusion matrix-la false positive zero! ML model train aaiduchu!",
+        "chapterId": "ch18-machinelearning",
+        "englishExplanation": "You must divide your data to train the model on one chunk and test it on unseen data to prevent overfitting.",
+        "tamilRoast": "Exam paper munnadiye therinju eluthna mari da adhu."
       },
       {
         "id": "ch18-l2",
@@ -1938,13 +2146,17 @@ export const pythonCurriculum: Chapter[] = [
             "Regression",
             "Dimensionality Reduction"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "If it's a number, regress. If it's a dog, classify.",
         "funnyLineTamil": "Kaasa irundha regression, naiyaa irundha classification.",
         "practicePrompt": "Run and verify Regression vs Classification in the interactive arena.",
         "proudSuccessGeneral": "Machine learning pipeline trained and evaluated with high accuracy.",
-        "proudSuccessTamil": "Confusion matrix-la false positive zero! ML model train aaiduchu!"
+        "proudSuccessTamil": "Confusion matrix-la false positive zero! ML model train aaiduchu!",
+        "chapterId": "ch18-machinelearning",
+        "englishExplanation": "Regression predicts a continuous number. Classification predicts a category.",
+        "tamilRoast": "Kaasa irundha regression, naiyaa irundha classification."
       },
       {
         "id": "ch18-l3",
@@ -1967,13 +2179,17 @@ export const pythonCurriculum: Chapter[] = [
             "Model correctly predicted false",
             "Model incorrectly predicted false"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "It's called a confusion matrix because it confuses beginners.",
         "funnyLineTamil": "Pera paathiya, Unna confuse panna ve irukku.",
         "practicePrompt": "Run and verify Confusion Matrix in the interactive arena.",
         "proudSuccessGeneral": "Machine learning pipeline trained and evaluated with high accuracy.",
-        "proudSuccessTamil": "Confusion matrix-la false positive zero! ML model train aaiduchu!"
+        "proudSuccessTamil": "Confusion matrix-la false positive zero! ML model train aaiduchu!",
+        "chapterId": "ch18-machinelearning",
+        "englishExplanation": "A confusion matrix shows True Positives, False Positives, True Negatives, and False Negatives.",
+        "tamilRoast": "Pera paathiya, Unna confuse panna ve irukku."
       }
     ],
     "proudSuccessGeneral": "Machine learning pipeline trained and evaluated with high accuracy.",
@@ -2017,13 +2233,17 @@ export const pythonCurriculum: Chapter[] = [
             "Random Access",
             "LILO"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Like a stack of plates. Wash the top one first.",
         "funnyLineTamil": "Mela iruka plate-ah mudhalla edukkanum, keela irunthu ilutha setharam.",
         "practicePrompt": "Run and verify Stacks (LIFO) in the interactive arena.",
         "proudSuccessGeneral": "Classic data structures and algorithms optimized to optimal Big-O bounds.",
-        "proudSuccessTamil": "Binary search log(N)-la target-ah thookiruchu, LeetCode bayapadum!"
+        "proudSuccessTamil": "Binary search log(N)-la target-ah thookiruchu, LeetCode bayapadum!",
+        "chapterId": "ch19-dsa",
+        "englishExplanation": "A Stack follows Last-In-First-Out. In Python, you can just use a list with append() and pop().",
+        "tamilRoast": "Mela iruka plate-ah mudhalla edukkanum, keela irunthu ilutha setharam."
       },
       {
         "id": "ch19-l2",
@@ -2046,13 +2266,17 @@ export const pythonCurriculum: Chapter[] = [
             "collections.deque",
             "dict"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Just a line at the grocery store. No cutting.",
         "funnyLineTamil": "Ration kade line la mudhalla vanthavan mudhalla povan.",
         "practicePrompt": "Run and verify Queues (FIFO) in the interactive arena.",
         "proudSuccessGeneral": "Classic data structures and algorithms optimized to optimal Big-O bounds.",
-        "proudSuccessTamil": "Binary search log(N)-la target-ah thookiruchu, LeetCode bayapadum!"
+        "proudSuccessTamil": "Binary search log(N)-la target-ah thookiruchu, LeetCode bayapadum!",
+        "chapterId": "ch19-dsa",
+        "englishExplanation": "A Queue follows First-In-First-Out. Use collections.deque for O(1) pops from the left.",
+        "tamilRoast": "Ration kade line la mudhalla vanthavan mudhalla povan."
       },
       {
         "id": "ch19-l3",
@@ -2075,13 +2299,17 @@ export const pythonCurriculum: Chapter[] = [
             "O(1)",
             "O(N^2)"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Don't read the whole dictionary to find one word.",
         "funnyLineTamil": "Dictionary-la oru word theda mudhalla paathi-ah pirippa la, adhe thaan.",
         "practicePrompt": "Run and verify Binary Search in the interactive arena.",
         "proudSuccessGeneral": "Classic data structures and algorithms optimized to optimal Big-O bounds.",
-        "proudSuccessTamil": "Binary search log(N)-la target-ah thookiruchu, LeetCode bayapadum!"
+        "proudSuccessTamil": "Binary search log(N)-la target-ah thookiruchu, LeetCode bayapadum!",
+        "chapterId": "ch19-dsa",
+        "englishExplanation": "Finds an item in a sorted array in O(log N) time by repeatedly dividing the search interval in half.",
+        "tamilRoast": "Dictionary-la oru word theda mudhalla paathi-ah pirippa la, adhe thaan."
       }
     ],
     "proudSuccessGeneral": "Classic data structures and algorithms optimized to optimal Big-O bounds.",
@@ -2124,13 +2352,17 @@ export const pythonCurriculum: Chapter[] = [
             "MongoDB",
             "SQLite"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "SQL is a strict parent, NoSQL is the cool uncle.",
         "funnyLineTamil": "SQL-na strict officer, NoSQL-na jolly ana aalu.",
         "practicePrompt": "Run and verify Relational vs NoSQL in the interactive arena.",
         "proudSuccessGeneral": "Parameterized queries and database transactions committed safely.",
-        "proudSuccessTamil": "Bloody sweet... SQL injection block aagi database secure aaiduchu da!"
+        "proudSuccessTamil": "Bloody sweet... SQL injection block aagi database secure aaiduchu da!",
+        "chapterId": "ch20-databases",
+        "englishExplanation": "SQL databases use tables and strict schemas. NoSQL databases use flexible JSON-like documents.",
+        "tamilRoast": "SQL-na strict officer, NoSQL-na jolly ana aalu."
       },
       {
         "id": "ch20-l2",
@@ -2153,13 +2385,17 @@ export const pythonCurriculum: Chapter[] = [
             "Update",
             "User"
           ],
-          "correctAnswerIndex": 2
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Without CRUD, your app is just an amnesiac calculator.",
         "funnyLineTamil": "CRUD illana un app oru memory loss patient thaan.",
         "practicePrompt": "Run and verify CRUD Operations in the interactive arena.",
         "proudSuccessGeneral": "Parameterized queries and database transactions committed safely.",
-        "proudSuccessTamil": "Bloody sweet... SQL injection block aagi database secure aaiduchu da!"
+        "proudSuccessTamil": "Bloody sweet... SQL injection block aagi database secure aaiduchu da!",
+        "chapterId": "ch20-databases",
+        "englishExplanation": "CRUD stands for Create, Read, Update, Delete. These are the four basic functions of persistent storage.",
+        "tamilRoast": "CRUD illana un app oru memory loss patient thaan."
       },
       {
         "id": "ch20-l3",
@@ -2182,16 +2418,40 @@ export const pythonCurriculum: Chapter[] = [
             "Hide the database URL",
             "Store data in txt files"
           ],
-          "correctAnswerIndex": 1
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
         "funnyLineGeneral": "Bobby Tables says hi.",
         "funnyLineTamil": "Input-ah sanitize pannalana app kali da.",
         "practicePrompt": "Run and verify SQL Injections (Security) in the interactive arena.",
         "proudSuccessGeneral": "Parameterized queries and database transactions committed safely.",
-        "proudSuccessTamil": "Bloody sweet... SQL injection block aagi database secure aaiduchu da!"
+        "proudSuccessTamil": "Bloody sweet... SQL injection block aagi database secure aaiduchu da!",
+        "chapterId": "ch20-databases",
+        "englishExplanation": "Never concatenate user input directly into a SQL query. Always use parameterized queries.",
+        "tamilRoast": "Input-ah sanitize pannalana app kali da."
       }
     ],
     "proudSuccessGeneral": "Parameterized queries and database transactions committed safely.",
     "proudSuccessTamil": "Bloody sweet... SQL injection block aagi database secure aaiduchu da!"
   }
 ];
+
+export const pythonLessons: PythonLesson[] = pythonCurriculum.flatMap(chapter =>
+  chapter.lessons.map(lesson => ({
+    id: lesson.id,
+    chapterId: chapter.id,
+    title: lesson.title,
+    tier: chapter.tier.toLowerCase() as 'beginner' | 'intermediate' | 'advanced' | 'expert' | 'specialized',
+    technicalCore: chapter.technicalCore,
+    englishExplanation: lesson.englishExplanation || lesson.explanation,
+    tamilRoast: lesson.tamilRoast || lesson.funnyLineTamil || chapter.roastTamil,
+    codeExample: lesson.codeExample,
+    expectedOutput: lesson.expectedOutput,
+    verificationChecks: lesson.verificationChecks.map(vc => vc.description || vc.pattern),
+    miniQuiz: {
+      question: lesson.miniQuiz.question,
+      options: lesson.miniQuiz.options,
+      answerIndex: lesson.miniQuiz.answerIndex ?? lesson.miniQuiz.correctAnswerIndex
+    }
+  }))
+);
