@@ -1,19 +1,26 @@
+// agent-notes: { ctx: "Vitest test suite for 20-chapter Python curriculum structure and roasts", deps: ["../lib/python/curriculum", "../lib/python/types"], state: active, last: "tara@2026-10-11" }
 import { describe, it, expect } from 'vitest';
 import { pythonCurriculum } from '../lib/python/curriculum';
 import { Chapter, Lesson } from '../lib/python/types';
 
 describe('Python Curriculum', () => {
-  it('should have exactly 19 chapters', () => {
-    expect(pythonCurriculum.length).toBe(19);
+  it('should have exactly 20 chapters', () => {
+    expect(pythonCurriculum.length).toBe(20);
   });
 
   it('should have correct tiers for each chapter', () => {
-    // Beginner = ch1-5, Intermediate = ch6-9, Advanced = ch10-12, Expert = ch13-15, Specialized = ch16-19
+    // Beginner = ch1-5 (5), Intermediate = ch6-9 (4), Advanced = ch10-13 (4), Expert = ch14-16 (3), Specialized = ch17-20 (4)
     for (let i = 0; i < 5; i++) expect(pythonCurriculum[i].tier).toBe('Beginner');
     for (let i = 5; i < 9; i++) expect(pythonCurriculum[i].tier).toBe('Intermediate');
-    for (let i = 9; i < 12; i++) expect(pythonCurriculum[i].tier).toBe('Advanced');
-    for (let i = 12; i < 15; i++) expect(pythonCurriculum[i].tier).toBe('Expert');
-    for (let i = 15; i < 19; i++) expect(pythonCurriculum[i].tier).toBe('Specialized');
+    for (let i = 9; i < 13; i++) expect(pythonCurriculum[i].tier).toBe('Advanced');
+    for (let i = 13; i < 16; i++) expect(pythonCurriculum[i].tier).toBe('Expert');
+    for (let i = 16; i < 20; i++) expect(pythonCurriculum[i].tier).toBe('Specialized');
+  });
+
+  it('should include Chapter 9 covering File Handling & System Integration', () => {
+    const fileCh = pythonCurriculum.find(ch => ch.title.toLowerCase().includes('file handling'));
+    expect(fileCh).toBeDefined();
+    expect(fileCh?.tier).toBe('Intermediate');
   });
 
   it('should have all required fields for each chapter', () => {

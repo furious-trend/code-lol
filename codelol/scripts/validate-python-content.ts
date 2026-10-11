@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Content validator running curriculum code examples via python3", deps: ["../lib/python/curriculum"], state: active, last: "sato@2026-10-11" }
 import { pythonCurriculum } from '../lib/python/curriculum';
 import { execSync } from 'child_process';
 import { writeFileSync } from 'fs';
@@ -5,8 +6,8 @@ import { writeFileSync } from 'fs';
 function validate() {
     let failed = false;
 
-    if (pythonCurriculum.length < 15) {
-        console.error(`Expected at least 15 chapters, found ${pythonCurriculum.length}`);
+    if (pythonCurriculum.length < 20) {
+        console.error(`Expected at least 20 chapters, found ${pythonCurriculum.length}`);
         failed = true;
     }
 

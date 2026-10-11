@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "TypeScript types for Python 20-chapter master curriculum", deps: [], state: active, last: "sato@2026-10-11" }
 export type HumorPreference = 'tamil' | 'general';
 
 export type Tier = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert' | 'Specialized';
@@ -24,6 +25,9 @@ export interface Lesson {
   miniQuiz: MiniQuiz;
   funnyLineGeneral: string;
   funnyLineTamil: string;
+  practicePrompt?: string;
+  proudSuccessGeneral?: string;
+  proudSuccessTamil?: string;
 }
 
 export interface Chapter {
@@ -35,5 +39,7 @@ export interface Chapter {
   analogyTamil: string;
   roastGeneral: string;
   roastTamil: string;
+  proudSuccessGeneral?: string;
+  proudSuccessTamil?: string;
   lessons: Lesson[];
 }

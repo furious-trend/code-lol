@@ -30,7 +30,10 @@ export default function LessonExplanationPage() {
       explanation: lesson.explanation,
       code: lesson.codeExample,
       lineExplanation: lesson.funnyLineGeneral || "",
-      memeNote: lesson.funnyLineTamil || ""
+      memeNote: lesson.funnyLineTamil || "",
+      proudGeneral: lesson.proudSuccessGeneral || "",
+      proudTamil: lesson.proudSuccessTamil || "",
+      practicePrompt: lesson.practicePrompt || ""
     }
   ] : (lesson?.workoutSteps || lesson?.examples || lesson?.lessons || []);
   const hasWorkoutSteps = !!lesson?.workoutSteps || isPython;
@@ -90,6 +93,37 @@ export default function LessonExplanationPage() {
             if (l) {
               foundLesson = { ...l, chapter: chapter.title };
               break;
+            }
+          }
+
+          // Legacy ID alias lookup fallback
+          if (!foundLesson) {
+            const aliasMap: Record<string, string> = {
+              'ch16-l1': 'ch17-l1',
+              'ch16-l2': 'ch17-l2',
+              'ch16-l3': 'ch17-l3',
+              'ch17-l1': 'ch18-l1',
+              'ch17-l2': 'ch18-l2',
+              'ch17-l3': 'ch18-l3',
+              'ch18-l1': 'ch19-l1',
+              'ch18-l2': 'ch19-l2',
+              'ch18-l3': 'ch19-l3',
+              'ch19-l1': 'ch20-l1',
+              'ch19-l2': 'ch20-l2',
+              'ch19-l3': 'ch20-l3',
+              'ch9-files-l1': 'ch9-l1',
+              'ch9-files-l2': 'ch9-l2',
+              'ch9-files-l3': 'ch9-l3',
+            };
+            const mappedId = aliasMap[idParam];
+            if (mappedId) {
+              for (const chapter of pythonCurriculum || []) {
+                const l = chapter.lessons?.find((l: any) => l.id === mappedId);
+                if (l) {
+                  foundLesson = { ...l, chapter: chapter.title };
+                  break;
+                }
+              }
             }
           }
 
@@ -301,6 +335,16 @@ export default function LessonExplanationPage() {
                       <p className="mt-4 text-sm text-yellow-400 italic font-mono">
                         Note: {currentExample.memeNote}
                       </p>
+                    )}
+                    {(currentExample?.proudTamil || currentExample?.proudGeneral) && (
+                      <div className="mt-4 p-4 rounded-xl bg-emerald-950/30 border border-emerald-900/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 block mb-1">
+                          🎉 Proud Victory Quote
+                        </span>
+                        <p className="text-sm text-emerald-200 font-medium italic">
+                          &quot;{humorPref === 'tamil' ? currentExample.proudTamil || currentExample.proudGeneral : currentExample.proudGeneral || currentExample.proudTamil}&quot;
+                        </p>
+                      </div>
                     )}
                   </>
                 ) : (

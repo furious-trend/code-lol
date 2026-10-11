@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Python master curriculum view with dual-language tracks and proud victory cards", deps: ["@/lib/python/curriculum", "@/lib/python/types"], state: active, last: "sato@2026-10-11" }
 'use client'
 
 import { useState, useEffect } from 'react';
@@ -120,13 +121,15 @@ export function PythonLessonsView({ humorPref }: { humorPref: HumorPreference })
               </label>
             </div>
             
-            <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-zinc-950 p-6 rounded-xl border border-zinc-800 shadow-inner">
-                <h4 className="text-zinc-400 font-bold uppercase text-xs mb-3">Technical Core</h4>
-                <div className="flex flex-wrap gap-2">
-                  {chapter.technicalCore.map(tc => (
-                    <span key={tc} className="text-xs bg-zinc-800 text-zinc-300 px-3 py-1 rounded-full">{tc}</span>
-                  ))}
+            <div className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="bg-zinc-950 p-6 rounded-xl border border-zinc-800 shadow-inner flex flex-col justify-between">
+                <div>
+                  <h4 className="text-zinc-400 font-bold uppercase text-xs mb-3">Technical Core</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {chapter.technicalCore.map(tc => (
+                      <span key={tc} className="text-xs bg-zinc-800 text-zinc-300 px-3 py-1 rounded-full">{tc}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
               <div className="bg-zinc-950 p-6 rounded-xl border border-red-900/50 shadow-[0_0_15px_rgba(220,38,38,0.1)] space-y-4 relative overflow-hidden group">
@@ -139,6 +142,22 @@ export function PythonLessonsView({ humorPref }: { humorPref: HumorPreference })
                   <h4 className="text-red-500 font-bold uppercase text-xs mb-1">Roast Corner 🔥</h4>
                   <p className="text-amber-200 italic">{localHumor === 'tamil' ? chapter.roastTamil : chapter.roastGeneral}</p>
                 </div>
+              </div>
+              <div className="bg-zinc-950 p-6 rounded-xl border border-emerald-900/50 shadow-[0_0_15px_rgba(16,185,129,0.15)] space-y-3 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-40"></div>
+                <div className="relative z-10 flex items-center justify-between">
+                  <h4 className="text-emerald-400 font-bold uppercase text-xs tracking-wider flex items-center gap-1.5">
+                    <span>🎉</span> Proud Victory Quote
+                  </h4>
+                  {learnedItems.has(chapter.id) && (
+                    <span className="text-[11px] bg-emerald-900/60 text-emerald-300 font-semibold px-2 py-0.5 rounded-full border border-emerald-700/50">
+                      Mastered ✓
+                    </span>
+                  )}
+                </div>
+                <p className="relative z-10 text-emerald-200 font-medium italic">
+                  &quot;{localHumor === 'tamil' ? chapter.proudSuccessTamil || 'Bloody sweet... output vandhuruchu da!' : chapter.proudSuccessGeneral || 'Clean code, zero errors!'}&quot;
+                </p>
               </div>
             </div>
 
@@ -162,6 +181,11 @@ export function PythonLessonsView({ humorPref }: { humorPref: HumorPreference })
                     <div className="bg-black p-3 rounded-lg border border-zinc-800 font-mono text-xs text-zinc-300 overflow-x-auto mb-4 shadow-inner">
                       <pre><code>{lesson.codeExample}</code></pre>
                     </div>
+                    {lesson.practicePrompt && (
+                      <div className="mb-4 text-xs font-mono text-pink-300/80 bg-pink-950/20 px-3 py-1.5 rounded-lg border border-pink-900/30">
+                        ⚡ <span className="font-semibold text-pink-200">Practice Hook:</span> {lesson.practicePrompt}
+                      </div>
+                    )}
                   </div>
                   <div className="mt-4 pt-4 border-t border-zinc-800 flex flex-col sm:flex-row gap-3">
                     <Link 
