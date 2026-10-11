@@ -27,7 +27,30 @@ vi.mock('@/lib/supabase/client', () => ({
 // Mock the lessons library
 vi.mock('@/lib/lessons', () => ({
   getAllLessons: vi.fn(),
-  allLessons: [] // required by import
+  allLessons: [],
+  cAllLessons: [],
+  cppAllLessons: [],
+  javaAllLessons: [],
+  pythonAllLessons: []
+}));
+
+vi.mock('@/lib/python/curriculum', () => ({
+  pythonCurriculum: [
+    {
+      id: 'ch1',
+      title: 'Chapter 1: Intro',
+      lessons: [
+        {
+          id: 'ch1-l1',
+          title: 'Python Hello',
+          explanation: 'Intro to Python',
+          codeExample: 'print("Hello")',
+          funnyLineGeneral: 'Snake goes sss',
+          funnyLineTamil: 'Paambu da'
+        }
+      ]
+    }
+  ]
 }));
 
 describe('LessonExplanationPage', () => {
@@ -38,8 +61,7 @@ describe('LessonExplanationPage', () => {
     (useRouter as any).mockReturnValue({ push: mockPush });
     (useParams as any).mockReturnValue({ id: '1' });
     
-    // Default mock lesson with the new schema
-    (lessons.getAllLessons as any).mockReturnValue([
+    const mockLessonList = [
       {
         id: 1,
         chapter: "Chapter 1",
@@ -66,7 +88,12 @@ describe('LessonExplanationPage', () => {
         ],
         examples: [{ explanation: "Ex 1", code: "console.log(x)" }]
       }
-    ]);
+    ];
+    (lessons.getAllLessons as any).mockReturnValue(mockLessonList);
+    (lessons as any).allLessons = mockLessonList;
+    (lessons as any).cAllLessons = [];
+    (lessons as any).cppAllLessons = [];
+    (lessons as any).javaAllLessons = [];
   });
 
   it('renders the new DeepConcept fields', async () => {
@@ -99,6 +126,25 @@ describe('LessonExplanationPage', () => {
     await waitFor(() => {
       expect(screen.getByText('Step 1')).toBeTruthy();
       expect(screen.getByText('Set x')).toBeTruthy();
+    });
+  });
+
+  it('renders python lesson smoothly when given string id', async () => {
+    (useParams as any).mockReturnValue({ id: 'ch1-l1' });
+    render(<LessonExplanationPage />);
+
+    await waitFor(() => {
+      expect(screen.getAllByText('Python Hello').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText('Intro to Python')).toBeTruthy();
+    });
+  });
+
+  it('shows lesson not found state when lesson does not exist', async () => {
+    (useParams as any).mockReturnValue({ id: '99999' });
+    render(<LessonExplanationPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Lesson not found/i)).toBeTruthy();
     });
   });
 });

@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Individual lesson deep-dive explanation page with interactive concepts and code", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-09-23" }
+// agent-notes: { ctx: "Individual lesson deep-dive explanation page with interactive concepts and code", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-10-11" }
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -42,14 +42,9 @@ export default function LessonExplanationPage() {
 
   useEffect(() => {
     async function loadPref() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        if (user.id === 'local-guest') {
-          const storedHumor = localStorage.getItem('guest_humor');
-          if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
-          const storedLang = localStorage.getItem('guest_lang');
-          if (storedLang === 'python' || storedLang === 'javascript') setLearningLanguage(storedLang);
-        } else {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && user.id !== 'local-guest') {
           const { data: profile } = await supabase
             .from('profiles')
             .select('humor_preference, learning_language')
@@ -61,9 +56,21 @@ export default function LessonExplanationPage() {
           if (profile?.learning_language) {
             setLearningLanguage(profile.learning_language);
           }
+        } else {
+          const storedHumor = localStorage.getItem('guest_humor');
+          if (storedHumor === 'tamil' || storedHumor === 'general') {
+            setHumorPref(storedHumor);
+          }
+          const storedLang = localStorage.getItem('guest_lang');
+          if (storedLang) {
+            setLearningLanguage(storedLang);
+          }
         }
+      } catch (err) {
+        console.error("Error loading user preferences:", err);
+      } finally {
+        setIsLangLoaded(true);
       }
-      setIsLangLoaded(true);
     }
     loadPref();
   }, [supabase]);
@@ -71,43 +78,86 @@ export default function LessonExplanationPage() {
   useEffect(() => {
     if (!isLangLoaded) return;
     setIsLoading(true);
-    if (isNaN(numericId)) {
-      // It's a string ID, must be Python
-      if (learningLanguage !== 'python') {
-        router.push('/lessons');
-        return;
-      }
-      import('@/lib/python/curriculum').then(module => {
-        const curriculum = module.pythonCurriculum;
-        let foundLesson = null;
-        for (const chapter of curriculum) {
-          const l = chapter.lessons.find((l: any) => l.id === idParam);
-          if (l) {
-            foundLesson = { ...l, chapter: chapter.title };
-            break;
+
+    async function fetchLesson() {
+      try {
+        if (isNaN(numericId)) {
+          // String ID, look up in Python curriculum first
+          const { pythonCurriculum } = await import('@/lib/python/curriculum');
+          let foundLesson: any = null;
+          for (const chapter of pythonCurriculum || []) {
+            const l = chapter.lessons?.find((l: any) => l.id === idParam);
+            if (l) {
+              foundLesson = { ...l, chapter: chapter.title };
+              break;
+            }
+          }
+
+          if (foundLesson) {
+            setLesson(foundLesson);
+            setLearningLanguage('python');
+          } else {
+            // Fallback: search general lessons by string match
+            const lessonsMod = await import('@/lib/lessons');
+            const otherLesson = 
+              lessonsMod.allLessons?.find((l: any) => String(l.id) === idParam) ||
+              lessonsMod.cAllLessons?.find((l: any) => String(l.id) === idParam) ||
+              lessonsMod.cppAllLessons?.find((l: any) => String(l.id) === idParam) ||
+              lessonsMod.javaAllLessons?.find((l: any) => String(l.id) === idParam);
+            setLesson(otherLesson || null);
+          }
+        } else {
+          // Numeric ID, search JS, C, C++, Java lessons
+          const lessonsMod = await import('@/lib/lessons');
+          let foundLang: string | null = null;
+          let foundLesson = lessonsMod.allLessons?.find(l => l.id === numericId);
+          if (foundLesson) {
+            foundLang = 'javascript';
+          } else if (lessonsMod.cAllLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.cAllLessons.find(l => l.id === numericId);
+            foundLang = 'c';
+          } else if (lessonsMod.cppAllLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.cppAllLessons.find(l => l.id === numericId);
+            foundLang = 'cpp';
+          } else if (lessonsMod.javaAllLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.javaAllLessons.find(l => l.id === numericId);
+            foundLang = 'java';
+          }
+
+          if (foundLesson) {
+            setLesson(foundLesson);
+            if (foundLang && foundLang !== learningLanguage) {
+              setLearningLanguage(foundLang);
+            }
+          } else {
+            // Fallback: check Python curriculum by ID match
+            const { pythonCurriculum } = await import('@/lib/python/curriculum');
+            let pyLesson: any = null;
+            for (const chapter of pythonCurriculum || []) {
+              const l = chapter.lessons?.find((l: any) => String(l.id) === String(numericId));
+              if (l) {
+                pyLesson = { ...l, chapter: chapter.title };
+                break;
+              }
+            }
+            if (pyLesson) {
+              setLesson(pyLesson);
+              setLearningLanguage('python');
+            } else {
+              setLesson(null);
+            }
           }
         }
-        setLesson(foundLesson);
+      } catch (err) {
+        console.error("Error loading lesson:", err);
+        setLesson(null);
+      } finally {
         setIsLoading(false);
-      });
-    } else {
-      // It's a numeric ID, search JS, C, C++, Java
-      if (learningLanguage === 'python') {
-        router.push('/lessons');
-        return;
       }
-      import('@/lib/lessons').then(module => {
-        const foundLesson = 
-          module.allLessons.find(l => l.id === numericId) ||
-          module.cAllLessons.find(l => l.id === numericId) ||
-          module.cppAllLessons.find(l => l.id === numericId) ||
-          module.javaAllLessons.find(l => l.id === numericId);
-          
-        setLesson(foundLesson);
-        setIsLoading(false);
-      });
     }
-  }, [idParam, numericId, learningLanguage, router, isLangLoaded]);
+
+    fetchLesson();
+  }, [idParam, numericId, isLangLoaded]);
 
   const handleExplain = async (code: string) => {
     if (!code) return;
@@ -239,6 +289,11 @@ export default function LessonExplanationPage() {
                 {hasWorkoutSteps ? (
                   <>
                     <h2 className="text-xl font-bold mb-4 text-white">{currentExample?.title || "Workout Step"}</h2>
+                    {isPython && currentExample?.explanation && (
+                      <p className="text-zinc-300 mb-4 leading-relaxed">
+                        {currentExample.explanation}
+                      </p>
+                    )}
                     <p className="text-lg text-zinc-300 leading-relaxed font-medium">
                       {currentExample?.lineExplanation}
                     </p>
