@@ -1,7 +1,7 @@
-// agent-notes: { ctx: "Lessons library directory page grouped by chapters and tiers", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-10-11" }
+// agent-notes: { ctx: "Lessons library directory page with multi-language switching", deps: ["@/lib/lessons", "@/components/RoastCard", "@/components/LanguageToggleBar"], state: active, last: "sato@2026-10-12" }
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { getAllLessons, Lesson, Tier } from '@/lib/lessons';
@@ -9,6 +9,7 @@ import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { Bugsy } from '@/components/Bugsy';
 import { PythonLessonsView } from './PythonLessonsView';
+import { LanguageToggleBar } from '@/components/LanguageToggleBar';
 
 function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, isLearned: boolean, onToggleLearned: () => void }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -225,7 +226,75 @@ function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, is
   );
 }
 
-export default function LessonsPage() {
+function DefaultLessonsView({
+  activeTier,
+  setActiveTier,
+  sortedChapters,
+  groupedLessons,
+  learnedLessons,
+  onToggleLearned,
+}: {
+  activeTier: Tier;
+  setActiveTier: (tier: Tier) => void;
+  sortedChapters: string[];
+  groupedLessons: Record<string, Lesson[]>;
+  learnedLessons: number[];
+  onToggleLearned: (lessonId: number) => void;
+}) {
+  return (
+    <>
+      {/* Tier Selection Tabs */}
+      <div className="flex flex-wrap justify-center gap-4 mb-12">
+        {(["Beginner", "Intermediate", "Expert", "Interview"] as Tier[]).map((tier) => (
+          <button
+            key={tier}
+            onClick={() => setActiveTier(tier)}
+            className={`px-8 py-3 rounded-full font-bold text-sm md:text-base transition-all duration-300 ${
+              activeTier === tier 
+                ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25 scale-105'
+                : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white'
+            }`}
+          >
+            {tier}
+          </button>
+        ))}
+      </div>
+
+      {/* Chapters and Lessons Grid */}
+      <div className="space-y-16">
+        {sortedChapters.map((chapterName, idx) => (
+          <div 
+            key={chapterName} 
+            className="animate-in fade-in slide-in-from-bottom-4 duration-500" 
+            style={{ animationDelay: `${Math.min(idx * 100, 500)}ms` }}
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-pink-400 mb-6 border-b border-zinc-800 pb-2">
+              {chapterName}
+            </h2>
+            <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+              {groupedLessons[chapterName].map(lesson => (
+                <LessonCard 
+                  key={lesson.id} 
+                  lesson={lesson} 
+                  isLearned={learnedLessons.includes(lesson.id)}
+                  onToggleLearned={() => onToggleLearned(lesson.id)}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+        
+        {sortedChapters.length === 0 && (
+          <div className="text-center p-12 bg-zinc-900 rounded-3xl border border-zinc-800 text-zinc-400">
+            No lessons available in this tier yet. Check back soon!
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+function LessonsPageContent() {
   const [activeTier, setActiveTier] = useState<Tier>('Beginner');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const [learnedLessons, setLearnedLessons] = useState<number[]>([]);
@@ -235,47 +304,53 @@ export default function LessonsPage() {
   useEffect(() => {
     async function loadData() {
       const searchParams = new URLSearchParams(window.location.search);
-      const queryLang = searchParams.get('language') || searchParams.get('lang');
+      const queryLang = searchParams.get('lang') || searchParams.get('language');
 
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('learning_language, learned_lessons, humor_preference')
-          .eq('id', user.id)
-          .single();
-        if (queryLang && ['python', 'javascript', 'c', 'cpp', 'java'].includes(queryLang)) {
-          setLearningLanguage(queryLang);
-        } else if (profile?.learning_language) {
-          setLearningLanguage(profile.learning_language);
-        }
-        if (profile?.learned_lessons) {
-          setLearnedLessons(profile.learned_lessons);
-        }
-        if (profile?.humor_preference) {
-          setHumorPref(profile.humor_preference);
-        }
+      // 1. Search params have highest precedence
+      if (queryLang && ['python', 'javascript', 'c', 'cpp', 'java'].includes(queryLang)) {
+        setLearningLanguage(queryLang);
       } else {
-        const storedLessons = localStorage.getItem('learned_lessons');
-        if (storedLessons) {
-          try {
-            setLearnedLessons(JSON.parse(storedLessons));
-          } catch (e) {}
+        // 2. Synchronous fallback to client storage
+        const storedLang = localStorage.getItem('guest_lang');
+        if (storedLang && ['python', 'javascript', 'c', 'cpp', 'java'].includes(storedLang)) {
+          setLearningLanguage(storedLang);
         }
-        
-        if (queryLang && ['python', 'javascript', 'c', 'cpp', 'java'].includes(queryLang)) {
-          setLearningLanguage(queryLang);
-        } else {
-          const storedLang = localStorage.getItem('guest_lang');
-          if (storedLang === 'python' || storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
-            setLearningLanguage(storedLang);
+      }
+
+      const storedLessons = localStorage.getItem('learned_lessons');
+      if (storedLessons) {
+        try {
+          setLearnedLessons(JSON.parse(storedLessons));
+        } catch {}
+      }
+
+      const storedHumor = localStorage.getItem('guest_humor');
+      if (storedHumor === 'tamil' || storedHumor === 'general') {
+        setHumorPref(storedHumor);
+      }
+
+      // 3. Authenticated profile check wrapped in safe try/catch
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && user.id !== 'local-guest') {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('learning_language, learned_lessons, humor_preference')
+            .eq('id', user.id)
+            .single();
+
+          if (!queryLang && profile?.learning_language) {
+            setLearningLanguage(profile.learning_language);
+          }
+          if (profile?.learned_lessons) {
+            setLearnedLessons(profile.learned_lessons);
+          }
+          if (profile?.humor_preference) {
+            setHumorPref(profile.humor_preference);
           }
         }
-
-        const storedHumor = localStorage.getItem('guest_humor');
-        if (storedHumor === 'tamil' || storedHumor === 'general') {
-          setHumorPref(storedHumor);
-        }
+      } catch {
+        // Non-blocking: guests and offline local sessions stay intact
       }
     }
     loadData();
@@ -289,10 +364,14 @@ export default function LessonsPage() {
     
     setLearnedLessons(newLessons);
     
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.from('profiles').update({ learned_lessons: newLessons }).eq('id', user.id);
-    } else {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && user.id !== 'local-guest') {
+        await supabase.from('profiles').update({ learned_lessons: newLessons }).eq('id', user.id);
+      } else {
+        localStorage.setItem('learned_lessons', JSON.stringify(newLessons));
+      }
+    } catch {
       localStorage.setItem('learned_lessons', JSON.stringify(newLessons));
     }
   };
@@ -319,69 +398,46 @@ export default function LessonsPage() {
   return (
     <div className="min-h-screen bg-zinc-950 p-6 md:p-12 font-sans selection:bg-pink-500/30">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-12 text-center">
+        <header className="mb-8 text-center">
           <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-pink-400 to-purple-600 mb-4 animate-in fade-in slide-in-from-top-4 duration-500">
             Learn To Code, Without The Boring Parts.
           </h1>
-          <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-6">
             Select your skill level and get roasted while you learn.
           </p>
+          <LanguageToggleBar 
+            activeLanguage={learningLanguage} 
+            onLanguageChange={(lang) => setLearningLanguage(lang)} 
+          />
         </header>
 
         {learningLanguage === 'python' ? (
           <PythonLessonsView humorPref={humorPref} />
         ) : (
-          <>
-            {/* Tier Selection Tabs */}
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              {(["Beginner", "Intermediate", "Expert", "Interview"] as Tier[]).map((tier) => (
-                <button
-                  key={tier}
-                  onClick={() => setActiveTier(tier)}
-                  className={`px-8 py-3 rounded-full font-bold text-sm md:text-base transition-all duration-300 ${
-                    activeTier === tier 
-                      ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25 scale-105'
-                      : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white'
-                  }`}
-                >
-                  {tier}
-                </button>
-              ))}
-            </div>
-
-            {/* Chapters and Lessons Grid */}
-            <div className="space-y-16">
-              {sortedChapters.map((chapterName, idx) => (
-                <div 
-                  key={chapterName} 
-                  className="animate-in fade-in slide-in-from-bottom-4 duration-500" 
-                  style={{ animationDelay: `${Math.min(idx * 100, 500)}ms` }}
-                >
-                  <h2 className="text-2xl md:text-3xl font-bold text-pink-400 mb-6 border-b border-zinc-800 pb-2">
-                    {chapterName}
-                  </h2>
-                  <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
-                    {groupedLessons[chapterName].map(lesson => (
-                      <LessonCard 
-                        key={lesson.id} 
-                        lesson={lesson} 
-                        isLearned={learnedLessons.includes(lesson.id)}
-                        onToggleLearned={() => handleToggleLearned(lesson.id)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ))}
-              
-              {sortedChapters.length === 0 && (
-                <div className="text-center p-12 bg-zinc-900 rounded-3xl border border-zinc-800 text-zinc-400">
-                  No lessons available in this tier yet. Check back soon!
-                </div>
-              )}
-            </div>
-          </>
+          <DefaultLessonsView
+            activeTier={activeTier}
+            setActiveTier={setActiveTier}
+            sortedChapters={sortedChapters}
+            groupedLessons={groupedLessons}
+            learnedLessons={learnedLessons}
+            onToggleLearned={handleToggleLearned}
+          />
         )}
       </div>
     </div>
+  );
+}
+
+export default function LessonsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-zinc-950 p-6 md:p-12 font-sans flex items-center justify-center">
+          <div className="text-zinc-500 font-bold animate-pulse">Loading Library...</div>
+        </div>
+      }
+    >
+      <LessonsPageContent />
+    </Suspense>
   );
 }

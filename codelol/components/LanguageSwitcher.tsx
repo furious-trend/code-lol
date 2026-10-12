@@ -1,30 +1,53 @@
+// agent-notes: { ctx: "Global language dropdown switcher with cookie and query sync", deps: ["@/lib/supabase/client"], state: active, last: "sato@2026-10-12" }
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+
+function setClientLanguageCookie(lang: string) {
+  if (typeof document !== 'undefined') {
+    document.cookie = `learning_language=${lang}; path=/; max-age=31536000; SameSite=Lax`;
+  }
+}
+
+function setClientLanguageStorage(lang: string) {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    localStorage.setItem('guest_lang', lang);
+  }
+}
 
 export function LanguageSwitcher() {
   const [activeLang, setActiveLang] = useState<string>('javascript');
-  const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
     async function loadLang() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user && user.id !== 'local-guest') {
-        const { data } = await supabase
-          .from('profiles')
-          .select('learning_language')
-          .eq('id', user.id)
-          .single();
-        if (data?.learning_language) {
-          setActiveLang(data.learning_language);
-        }
-      } else {
-        const stored = localStorage.getItem('guest_lang');
-        if (stored) setActiveLang(stored);
+      const searchParams = new URLSearchParams(window.location.search);
+      const queryLang = searchParams.get('lang') || searchParams.get('language');
+      if (queryLang && ['javascript', 'python', 'c', 'cpp', 'java'].includes(queryLang)) {
+        setActiveLang(queryLang);
+        return;
       }
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && user.id !== 'local-guest') {
+          const { data } = await supabase
+            .from('profiles')
+            .select('learning_language')
+            .eq('id', user.id)
+            .single();
+          if (data?.learning_language) {
+            setActiveLang(data.learning_language);
+            return;
+          }
+        }
+      } catch {
+        // Fall back to local storage
+      }
+
+      const stored = localStorage.getItem('guest_lang');
+      if (stored) setActiveLang(stored);
     }
     loadLang();
   }, [supabase]);
@@ -33,18 +56,36 @@ export function LanguageSwitcher() {
     const newLang = e.target.value;
     setActiveLang(newLang);
     
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user && user.id !== 'local-guest') {
-      await supabase.from('profiles').update({ learning_language: newLang }).eq('id', user.id);
-    } else {
-      localStorage.setItem('guest_lang', newLang);
+    // 1. Synchronize cookie for Server Components
+    setClientLanguageCookie(newLang);
+
+    // 2. Local storage for client guest preference
+    setClientLanguageStorage(newLang);
+
+    // 3. Supabase profile update if authenticated
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && user.id !== 'local-guest') {
+        await supabase.from('profiles').update({ learning_language: newLang }).eq('id', user.id);
+      }
+    } catch {
+      // Non-blocking
     }
     
-    // Refresh current page to apply new language
-    router.refresh();
-    
-    // Quick reload just to ensure all client states drop and remount with new language
-    window.location.reload();
+    // 4. Update URL with searchParams
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', newLang);
+    url.searchParams.delete('language');
+
+    // Clean incompatible level params between python and multi-lang
+    const currentLevel = url.searchParams.get('level');
+    if (newLang !== 'python' && currentLevel && currentLevel.startsWith('ch')) {
+      url.searchParams.delete('level');
+    } else if (newLang === 'python' && currentLevel && /^\d+$/.test(currentLevel)) {
+      url.searchParams.delete('level');
+    }
+
+    window.location.href = url.toString();
   };
 
   return (

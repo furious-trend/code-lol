@@ -1,6 +1,7 @@
-// agent-notes: { ctx: "Multi-language lessons index providing allLessons and categories", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-11" }
+// agent-notes: { ctx: "Multi-language lessons index providing allLessons, curriculum, and categories", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-12" }
 import { Lesson, Tier } from './types';
 import { pythonCurriculum } from '../python/curriculum';
+export { pythonCurriculum };
 import { beginnerLessons } from './beginner';
 // removed pythonBeginnerLessons
 import { cBeginnerLessons } from './beginner-c';
@@ -164,6 +165,33 @@ export const getAllLessons = (lang: string = 'javascript') => {
   if (lang === 'cpp') return cppAllLessons;
   if (lang === 'java') return javaAllLessons;
   return allLessons;
+};
+
+/**
+ * Returns curriculum data based on selected language.
+ * When language is 'python', returns pythonCurriculum (chapters & lessons).
+ */
+export const getCurriculum = (lang: string = 'javascript') => {
+  if (lang === 'python') {
+    return {
+      type: 'python' as const,
+      curriculum: pythonCurriculum,
+      lessons: pythonAllLessons,
+    };
+  }
+  return {
+    type: 'standard' as const,
+    lessons: getAllLessons(lang),
+    categories: getLessonCategories(lang),
+  };
+};
+
+/**
+ * Returns curriculum chapters for Python or lessons for other languages.
+ */
+export const getLessonsByLanguage = (lang: string = 'javascript') => {
+  if (lang === 'python') return pythonCurriculum;
+  return getAllLessons(lang);
 };
 
 export * from './types';

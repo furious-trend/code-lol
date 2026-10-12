@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Bugsy } from './Bugsy'
 import { UserProgress } from './UserProgress'
@@ -9,7 +10,32 @@ import { LanguageSwitcher } from './LanguageSwitcher'
 
 export default async function Navbar() {
   const supabase = await createClient()
+  const cookieStore = await cookies()
+  const cookieLang = cookieStore.get('learning_language')?.value
   const { data: { user } } = await supabase.auth.getUser()
+
+  let activeLang = cookieLang
+  if (!activeLang && user) {
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('learning_language')
+        .eq('id', user.id)
+        .single()
+      if (profile?.learning_language) {
+        activeLang = profile.learning_language
+      }
+    } catch {
+      // Non-blocking
+    }
+  }
+
+  const getLocalizedPath = (basePath: string) => {
+    if (activeLang && (basePath === '/learn' || basePath === '/lessons')) {
+      return `${basePath}?lang=${activeLang}`
+    }
+    return basePath
+  }
 
   const handleLogout = async () => {
     'use server'
@@ -34,7 +60,7 @@ export default async function Navbar() {
             { name: 'Quiz', path: '/quiz' },
             { name: 'Playground', path: '/playground' },
           ].map((link) => (
-            <Link key={link.name} href={link.path} className="relative group hover:text-zinc-100 transition-colors py-1">
+            <Link key={link.name} href={getLocalizedPath(link.path)} className="relative group hover:text-zinc-100 transition-colors py-1">
               {link.name}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
             </Link>

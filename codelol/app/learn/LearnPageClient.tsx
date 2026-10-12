@@ -1,8 +1,8 @@
-// agent-notes: { ctx: "Client component for interactive lesson workspace and code execution", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-09-23" }
+// agent-notes: { ctx: "Client component for interactive lesson workspace and code execution", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-10-12" }
 'use client'
 
 import { useState, useEffect } from 'react';
-import Editor, { loader } from '@monaco-editor/react';
+import Editor from '@monaco-editor/react';
 import { getAllLessons } from '@/lib/lessons';
 
 
@@ -33,6 +33,10 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
   const [isLoadingLevel, setIsLoadingLevel] = useState(false);
   
   useEffect(() => {
+    setActiveLang(learningLanguage);
+  }, [learningLanguage]);
+
+  useEffect(() => {
     // If we're a guest (initial props were defaults), read from localStorage
     const storedHumor = localStorage.getItem('guest_humor');
     if (storedHumor === 'tamil' || storedHumor === 'general') {
@@ -40,14 +44,14 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
     }
     
     const storedLang = localStorage.getItem('guest_lang');
-    if (storedLang === 'python') {
-      window.location.replace('/learn?language=python');
+    if (storedLang === 'python' && learningLanguage !== 'python') {
+      window.location.replace('/learn?lang=python');
       return;
     }
-    if (storedLang === 'javascript' || storedLang === 'c' || storedLang === 'cpp' || storedLang === 'java') {
+    if (storedLang && ['javascript', 'c', 'cpp', 'java'].includes(storedLang) && storedLang !== learningLanguage) {
       setActiveLang(storedLang);
     }
-  }, []);
+  }, [learningLanguage]);
 
   const allLessons = getAllLessons(activeLang);
 
