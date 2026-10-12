@@ -11,7 +11,17 @@ import { Bugsy } from '@/components/Bugsy';
 import { PythonLessonsView } from './PythonLessonsView';
 import { LanguageToggleBar } from '@/components/LanguageToggleBar';
 
-function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, isLearned: boolean, onToggleLearned: () => void }) {
+function LessonCard({ 
+  lesson, 
+  isLearned, 
+  onToggleLearned,
+  learningLanguage = 'javascript'
+}: { 
+  lesson: Lesson; 
+  isLearned: boolean; 
+  onToggleLearned: () => void;
+  learningLanguage?: string;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
@@ -209,13 +219,13 @@ function LessonCard({ lesson, isLearned, onToggleLearned }: { lesson: Lesson, is
         
         <div className="flex gap-4">
           <Link 
-            href={`/lessons/${lesson.id}`}
+            href={`/lessons/${lesson.id}?lang=${learningLanguage}`}
             className={`flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold py-3 px-6 rounded-full transition-transform text-center flex items-center justify-center gap-2 ${isExpanded ? 'hover:scale-105 active:scale-95' : 'opacity-80 hover:opacity-100'}`}
           >
             Learn In Depth 📚
           </Link>
           <Link 
-            href={`/learn?level=${lesson.id}`}
+            href={`/learn?lang=${learningLanguage}&level=${lesson.id}`}
             className={`flex-1 bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-3 px-6 rounded-full transition-transform text-center flex items-center justify-center gap-2 ${isExpanded ? 'hover:scale-105 active:scale-95' : 'opacity-80 hover:opacity-100'}`}
           >
             Practice in Arena 🚀
@@ -233,6 +243,7 @@ function DefaultLessonsView({
   groupedLessons,
   learnedLessons,
   onToggleLearned,
+  learningLanguage = "javascript",
 }: {
   activeTier: Tier;
   setActiveTier: (tier: Tier) => void;
@@ -240,6 +251,7 @@ function DefaultLessonsView({
   groupedLessons: Record<string, Lesson[]>;
   learnedLessons: number[];
   onToggleLearned: (lessonId: number) => void;
+  learningLanguage?: string;
 }) {
   return (
     <>
@@ -278,6 +290,7 @@ function DefaultLessonsView({
                   lesson={lesson} 
                   isLearned={learnedLessons.includes(lesson.id)}
                   onToggleLearned={() => onToggleLearned(lesson.id)}
+                  learningLanguage={learningLanguage}
                 />
               ))}
             </div>
@@ -411,7 +424,7 @@ function LessonsPageContent() {
           />
         </header>
 
-        {learningLanguage === 'python' ? (
+        {learningLanguage === "python" ? (
           <PythonLessonsView humorPref={humorPref} />
         ) : (
           <DefaultLessonsView
@@ -421,6 +434,7 @@ function LessonsPageContent() {
             groupedLessons={groupedLessons}
             learnedLessons={learnedLessons}
             onToggleLearned={handleToggleLearned}
+            learningLanguage={learningLanguage}
           />
         )}
       </div>

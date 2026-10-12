@@ -7,9 +7,17 @@ describe('executeCode', () => {
     global.fetch = vi.fn();
   });
 
-  it('should execute javascript code correctly', async () => {
+  it('should execute javascript code correctly via /api/run', async () => {
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ output: 'hello js\n', error: '' })
+    });
     const result = await executeCode('javascript', 'console.log("hello js");');
     expect(result.output).toContain('hello js');
+    expect(global.fetch).toHaveBeenCalledWith('/api/run', expect.objectContaining({
+      method: 'POST',
+      body: JSON.stringify({ language: 'javascript', code: 'console.log("hello js");' })
+    }));
   });
 
   it('should execute python code by calling /api/run', async () => {

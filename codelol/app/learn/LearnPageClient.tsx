@@ -44,11 +44,7 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
     }
     
     const storedLang = localStorage.getItem('guest_lang');
-    if (storedLang === 'python' && learningLanguage !== 'python') {
-      window.location.replace('/learn?lang=python');
-      return;
-    }
-    if (storedLang && ['javascript', 'c', 'cpp', 'java'].includes(storedLang) && storedLang !== learningLanguage) {
+    if (storedLang && ['javascript', 'python', 'c', 'cpp', 'java'].includes(storedLang) && storedLang !== learningLanguage) {
       setActiveLang(storedLang);
     }
   }, [learningLanguage]);

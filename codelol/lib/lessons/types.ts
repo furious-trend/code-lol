@@ -26,11 +26,15 @@ export interface BiteSizedHumor {
 }
 
 export interface WorkoutStep {
-  stepNumber: number;
+  stepNumber?: number;
   title: string;
   code: string;
   lineExplanation: string;
   memeNote?: string;
+  explanation?: string;
+  proudGeneral?: string;
+  proudTamil?: string;
+  practicePrompt?: string;
 }
 
 export type Lesson = {

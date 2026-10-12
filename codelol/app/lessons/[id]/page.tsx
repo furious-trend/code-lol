@@ -23,7 +23,7 @@ export default function LessonExplanationPage() {
   const [lesson, setLesson] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const isPython = isNaN(numericId);
+  const isPython = learningLanguage === "python" || isNaN(numericId) || lesson?.language === "python";
   const examples = isPython && lesson ? [
     {
       title: lesson.title,
@@ -134,19 +134,38 @@ export default function LessonExplanationPage() {
             // Fallback: search general lessons by string match
             const lessonsMod = await import('@/lib/lessons');
             const otherLesson = 
+              (learningLanguage === "python" ? lessonsMod.pythonAllLessons?.find((l: any) => String(l.id) === idParam) : null) ||
               lessonsMod.allLessons?.find((l: any) => String(l.id) === idParam) ||
+              lessonsMod.pythonAllLessons?.find((l: any) => String(l.id) === idParam) ||
               lessonsMod.cAllLessons?.find((l: any) => String(l.id) === idParam) ||
               lessonsMod.cppAllLessons?.find((l: any) => String(l.id) === idParam) ||
               lessonsMod.javaAllLessons?.find((l: any) => String(l.id) === idParam);
             setLesson(otherLesson || null);
           }
         } else {
-          // Numeric ID, search JS, C, C++, Java lessons
+          // Numeric ID, check active language first, then fallback
           const lessonsMod = await import('@/lib/lessons');
           let foundLang: string | null = null;
-          let foundLesson = lessonsMod.allLessons?.find(l => l.id === numericId);
-          if (foundLesson) {
+          let foundLesson: any = null;
+
+          if (learningLanguage === 'python' && lessonsMod.pythonAllLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.pythonAllLessons.find(l => l.id === numericId);
+            foundLang = 'python';
+          } else if (learningLanguage === 'c' && lessonsMod.cAllLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.cAllLessons.find(l => l.id === numericId);
+            foundLang = 'c';
+          } else if (learningLanguage === 'cpp' && lessonsMod.cppAllLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.cppAllLessons.find(l => l.id === numericId);
+            foundLang = 'cpp';
+          } else if (learningLanguage === 'java' && lessonsMod.javaAllLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.javaAllLessons.find(l => l.id === numericId);
+            foundLang = 'java';
+          } else if (lessonsMod.allLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.allLessons.find(l => l.id === numericId);
             foundLang = 'javascript';
+          } else if (lessonsMod.pythonAllLessons?.find(l => l.id === numericId)) {
+            foundLesson = lessonsMod.pythonAllLessons.find(l => l.id === numericId);
+            foundLang = 'python';
           } else if (lessonsMod.cAllLessons?.find(l => l.id === numericId)) {
             foundLesson = lessonsMod.cAllLessons.find(l => l.id === numericId);
             foundLang = 'c';

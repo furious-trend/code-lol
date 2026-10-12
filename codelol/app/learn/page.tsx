@@ -40,24 +40,18 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
       learningLanguage = cookieLang;
     }
 
-    if (learningLanguage === 'python') {
-      if (params.level && typeof params.level === 'string' && params.level.startsWith('ch')) {
-        initialLevelId = params.level;
-      }
-    } else {
-      const activeLevel = profile?.current_level;
-      if (activeLevel) {
-        const lessons = getAllLessons(learningLanguage);
-        const maxLevel = Math.min(activeLevel, lessons.length);
-        highestUnlockedLevel = Math.max(1, maxLevel);
-        currentLevel = highestUnlockedLevel;
-        
-        // Override currentLevel if a valid level query param is provided and unlocked
-        if (params.level && typeof params.level === 'string') {
-          const requestedLevel = parseInt(params.level, 10);
-          if (!isNaN(requestedLevel) && requestedLevel >= 1 && requestedLevel <= highestUnlockedLevel) {
-            currentLevel = requestedLevel;
-          }
+    const activeLevel = (learningLanguage === 'python' && profile?.python_current_level) ? profile.python_current_level : profile?.current_level;
+    if (activeLevel) {
+      const lessons = getAllLessons(learningLanguage);
+      const maxLevel = Math.min(activeLevel, lessons.length);
+      highestUnlockedLevel = Math.max(1, maxLevel);
+      currentLevel = highestUnlockedLevel;
+      
+      // Override currentLevel if a valid level query param is provided and unlocked
+      if (params.level && typeof params.level === 'string') {
+        const requestedLevel = parseInt(params.level, 10);
+        if (!isNaN(requestedLevel) && requestedLevel >= 1 && requestedLevel <= highestUnlockedLevel) {
+          currentLevel = requestedLevel;
         }
       }
     }
@@ -73,11 +67,7 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
       learningLanguage = cookieLang;
     }
 
-    if (learningLanguage === 'python') {
-      if (params.level && typeof params.level === 'string' && params.level.startsWith('ch')) {
-        initialLevelId = params.level;
-      }
-    } else if (params.level && typeof params.level === 'string') {
+    if (params.level && typeof params.level === 'string') {
       const requestedLevel = parseInt(params.level, 10);
       if (!isNaN(requestedLevel) && requestedLevel >= 1) {
         currentLevel = requestedLevel;
@@ -91,7 +81,7 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
         <LanguageToggleBar activeLanguage={learningLanguage} />
       </div>
       <Suspense fallback={<Loading />}>
-        {learningLanguage === 'python' ? (
+        {learningLanguage === "python" ? (
           <LearnPagePythonClient 
             initialLevelId={initialLevelId}
             initialHumorPref={humorPref}

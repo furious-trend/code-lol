@@ -10,15 +10,27 @@ describe('POST /api/run', () => {
     process.env.ONLINECOMPILER_API_KEY = 'test_key';
   });
 
-  it('should return 400 for javascript', async () => {
+  it('should map javascript to typescript-deno and return output', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ output: 'hello js', error: '' })
+    });
+
     const req = new Request('http://localhost/api/run', {
       method: 'POST',
-      body: JSON.stringify({ language: 'javascript', code: 'console.log(1)' })
+      body: JSON.stringify({ language: 'javascript', code: 'console.log("hello js")' })
     });
     const res = await POST(req);
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(200);
     const data = await res.json();
-    expect(data.error).toContain('External execution is disabled for javascript');
+    
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const callArgs = mockFetch.mock.calls[0];
+    expect(callArgs[0]).toBe('https://api.onlinecompiler.io/api/run-code-sync/');
+    const parsedBody = JSON.parse(callArgs[1].body);
+    expect(parsedBody.compiler).toBe('typescript-deno');
+    expect(parsedBody.code).toBe('console.log("hello js")');
+    expect(data.output).toBe('hello js');
   });
 
   it('should map python to python-3.14 and return output', async () => {
