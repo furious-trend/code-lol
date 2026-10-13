@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Learn page routing with deterministic language cascade, mounting W3Schools tutorial platform", deps: ["./LearnPageClient", "./LearnPagePythonClient", "@/lib/lessons", "@/lib/supabase/server"], state: active, last: "sato@2026-10-13" }
+// agent-notes: { ctx: "Learn page routing with deterministic language cascade, mounting interactive library platform", deps: ["./LearnPageClient", "./LearnPagePythonClient", "@/lib/lessons", "@/lib/supabase/server"], state: active, last: "sato@2026-10-13" }
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import LearnPageClient from "./LearnPageClient";

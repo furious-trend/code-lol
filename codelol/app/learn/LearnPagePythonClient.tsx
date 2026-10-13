@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Python tutorial workspace delegating to unified W3Schools tutorial platform", deps: ["./UnifiedTutorialClient", "@/lib/python/curriculum", "@/lib/python/types"], state: active, last: "sato@2026-10-13" }
+// agent-notes: { ctx: "Python tutorial workspace delegating to unified interactive library platform", deps: ["./UnifiedTutorialClient", "@/lib/python/curriculum", "@/lib/python/types"], state: active, last: "sato@2026-10-13" }
 'use client';
 
 import React from 'react';
