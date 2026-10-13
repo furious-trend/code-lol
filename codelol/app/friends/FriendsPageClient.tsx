@@ -1,7 +1,18 @@
+// agent-notes: { ctx: "Interactive friends page client with search, real-time requests, and friends list", deps: ["@/lib/friends", "@/lib/supabase/client"], state: active, last: "sato@2026-10-13" }
 'use client';
 
-import { useState, useCallback } from 'react';
-import { searchUsers, sendFriendRequest, acceptFriendRequest, getPendingRequests, getFriends, Profile, FriendRequest } from '@/lib/friends';
+import { useState, useCallback, useEffect } from 'react';
+import { 
+  searchUsers, 
+  sendFriendRequest, 
+  acceptFriendRequest, 
+  getPendingRequests, 
+  getFriends, 
+  getOutgoingRequests,
+  Profile, 
+  FriendRequest 
+} from '@/lib/friends';
+import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import debounce from 'lodash.debounce';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
@@ -9,24 +20,66 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 interface FriendsPageClientProps {
   initialPendingRequests: FriendRequest[];
   initialFriends: FriendRequest[];
+  initialOutgoingRequests?: FriendRequest[];
 }
 
-export default function FriendsPageClient({ initialPendingRequests, initialFriends }: FriendsPageClientProps) {
+export default function FriendsPageClient({ 
+  initialPendingRequests, 
+  initialFriends,
+  initialOutgoingRequests = []
+}: FriendsPageClientProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Profile[]>([]);
   const [pendingRequests, setPendingRequests] = useState<FriendRequest[]>(initialPendingRequests);
   const [friends, setFriends] = useState<FriendRequest[]>(initialFriends);
+  const [outgoingRequests, setOutgoingRequests] = useState<FriendRequest[]>(initialOutgoingRequests);
   const [isSearching, setIsSearching] = useState(false);
   const [requestStatus, setRequestStatus] = useState<Record<string, 'sent' | 'failed' | null>>({});
 
   const loadFriendsData = async () => {
-    const [pending, accepted] = await Promise.all([
-      getPendingRequests(),
-      getFriends()
-    ]);
-    setPendingRequests(pending);
-    setFriends(accepted);
+    try {
+      const [pending, accepted, outgoing] = await Promise.all([
+        getPendingRequests(),
+        getFriends(),
+        typeof getOutgoingRequests === 'function' ? getOutgoingRequests() : Promise.resolve([])
+      ]);
+      setPendingRequests(pending || []);
+      setFriends(accepted || []);
+      setOutgoingRequests(outgoing || []);
+    } catch (e) {
+      console.error('Error loading friends data:', e);
+    }
   };
+
+  useEffect(() => {
+    loadFriendsData();
+
+    const handleUpdate = () => {
+      loadFriendsData();
+    };
+    window.addEventListener('codelol-friends-update', handleUpdate);
+
+    const supabase = createClient();
+    const channel = supabase
+      .channel('public:friendships_page')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'friendships',
+        },
+        () => {
+          loadFriendsData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      window.removeEventListener('codelol-friends-update', handleUpdate);
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const executeSearch = async (query: string) => {
     if (!query.trim()) {
@@ -56,14 +109,21 @@ export default function FriendsPageClient({ initialPendingRequests, initialFrien
     setRequestStatus(prev => ({ ...prev, [userId]: success ? 'sent' : 'failed' }));
     if (!success && error) {
       alert(`Failed to send friend request: ${error}`);
+    } else if (success) {
+      loadFriendsData();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('codelol-friends-update'));
+      }
     }
-    if (success) setTimeout(() => setRequestStatus(prev => ({ ...prev, [userId]: null })), 3000);
   };
 
   const handleAcceptRequest = async (requestId: string) => {
     const success = await acceptFriendRequest(requestId);
     if (success) {
       loadFriendsData();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('codelol-friends-update'));
+      }
     }
   };
 
@@ -89,11 +149,36 @@ export default function FriendsPageClient({ initialPendingRequests, initialFrien
                 />
               </div>
 
+              {isSearching && (
+                <p className="mt-4 text-xs text-zinc-400">Searching players...</p>
+              )}
+
               {searchResults.length > 0 && (
                 <div className="mt-6 space-y-4">
-                  {searchResults.map((user) => (
-                    <TiltCard key={user.id} user={user} requestStatus={requestStatus[user.id]} onSendRequest={handleSendRequest} />
-                  ))}
+                  {searchResults.map((user) => {
+                    const isFriend = friends.some(
+                      f => f.profiles?.id === user.id || f.user_id === user.id || f.friend_id === user.id
+                    );
+                    const incomingReq = pendingRequests.find(
+                      req => req.user_id === user.id || req.profiles?.id === user.id
+                    );
+                    const isOutgoing = outgoingRequests.some(
+                      req => req.friend_id === user.id || req.profiles?.id === user.id
+                    );
+
+                    return (
+                      <TiltCard 
+                        key={user.id} 
+                        user={user} 
+                        requestStatus={requestStatus[user.id]} 
+                        isFriend={isFriend}
+                        hasIncomingRequest={incomingReq?.id}
+                        hasOutgoingRequest={isOutgoing}
+                        onSendRequest={handleSendRequest}
+                        onAcceptRequest={handleAcceptRequest}
+                      />
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -107,7 +192,7 @@ export default function FriendsPageClient({ initialPendingRequests, initialFrien
                       <span className="font-bold">{req.profiles?.display_name || 'Someone'} wants to be friends!</span>
                       <button
                         onClick={() => handleAcceptRequest(req.id)}
-                        className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg font-bold w-full sm:w-auto"
+                        className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg font-bold w-full sm:w-auto transition-colors"
                       >
                         Accept
                       </button>
@@ -124,7 +209,7 @@ export default function FriendsPageClient({ initialPendingRequests, initialFrien
             
             {friends.length === 0 ? (
               <div className="text-center py-12 text-zinc-500">
-                <div className="text-6xl mb-4">😿</div>
+                <div className="text-6xl mb-4">😸</div>
                 <p>You have no friends yet.</p>
                 <p className="text-sm">Use the search to find someone!</p>
               </div>
@@ -153,7 +238,25 @@ export default function FriendsPageClient({ initialPendingRequests, initialFrien
   );
 }
 
-function TiltCard({ user, requestStatus, onSendRequest }: { user: Profile, requestStatus?: 'sent' | 'failed' | null, onSendRequest: (id: string) => void }) {
+interface TiltCardProps {
+  user: Profile;
+  requestStatus?: 'sent' | 'failed' | null;
+  isFriend?: boolean;
+  hasIncomingRequest?: string;
+  hasOutgoingRequest?: boolean;
+  onSendRequest: (id: string) => void;
+  onAcceptRequest?: (requestId: string) => void;
+}
+
+function TiltCard({ 
+  user, 
+  requestStatus, 
+  isFriend,
+  hasIncomingRequest,
+  hasOutgoingRequest,
+  onSendRequest,
+  onAcceptRequest
+}: TiltCardProps) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   
@@ -171,6 +274,8 @@ function TiltCard({ user, requestStatus, onSendRequest }: { user: Profile, reque
     y.set(0);
   }
 
+  const isSent = requestStatus === 'sent' || hasOutgoingRequest;
+
   return (
     <motion.div
       data-testid={`profile-card-${user.id}`}
@@ -183,15 +288,28 @@ function TiltCard({ user, requestStatus, onSendRequest }: { user: Profile, reque
         {user.display_name || 'Unknown Coder'}
       </span>
       <div className="flex flex-col items-end gap-1" style={{ transform: "translateZ(40px)" }}>
-        <button
-          onClick={() => onSendRequest(user.id)}
-          disabled={requestStatus === 'sent'}
-          className={`text-sm font-bold disabled:opacity-50 text-white px-3 py-1 rounded-lg shadow-lg transition-all ${
-            requestStatus === 'sent' ? 'bg-zinc-700 text-zinc-300' : 'bg-cyan-500 hover:bg-cyan-400 shadow-cyan-500/50 cyan'
-          }`}
-        >
-          {requestStatus === 'sent' ? 'Sent ✓' : 'Add Friend'}
-        </button>
+        {isFriend ? (
+          <span className="text-sm font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-3 py-1 rounded-lg">
+            Friends ✓
+          </span>
+        ) : hasIncomingRequest && onAcceptRequest ? (
+          <button
+            onClick={() => onAcceptRequest(hasIncomingRequest)}
+            className="text-sm font-bold bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded-lg shadow-lg transition-all"
+          >
+            Accept
+          </button>
+        ) : (
+          <button
+            onClick={() => onSendRequest(user.id)}
+            disabled={isSent}
+            className={`text-sm font-bold disabled:opacity-50 text-white px-3 py-1 rounded-lg shadow-lg transition-all ${
+              isSent ? 'bg-zinc-700 text-zinc-300' : 'bg-cyan-500 hover:bg-cyan-400 shadow-cyan-500/50 cyan'
+            }`}
+          >
+            {isSent ? 'Sent ✓' : 'Add Friend'}
+          </button>
+        )}
         {requestStatus === 'failed' && (
           <span className="text-xs text-red-400">Failed to send</span>
         )}
@@ -199,3 +317,4 @@ function TiltCard({ user, requestStatus, onSendRequest }: { user: Profile, reque
     </motion.div>
   );
 }
+

@@ -3,13 +3,37 @@
 -- Trigger function for friend requests
 CREATE OR REPLACE FUNCTION public.handle_friend_request_notification()
 RETURNS TRIGGER AS $$
+DECLARE
+  sender_name text;
 BEGIN
   IF TG_OP = 'INSERT' AND NEW.status = 'pending' THEN
+    SELECT display_name INTO sender_name FROM public.profiles WHERE id = NEW.user_id;
     INSERT INTO public.notifications (user_id, type, title, payload)
-    VALUES (NEW.friend_id, 'friend_request', 'New Friend Request', jsonb_build_object('friend_id', NEW.user_id));
+    VALUES (
+      NEW.friend_id,
+      'friend_request',
+      COALESCE('Friend request from ' || sender_name, 'New Friend Request'),
+      jsonb_build_object(
+        'friend_id', NEW.user_id,
+        'sender_id', NEW.user_id,
+        'sender_name', sender_name,
+        'display_name', sender_name
+      )
+    );
   ELSIF TG_OP = 'UPDATE' AND OLD.status = 'pending' AND NEW.status = 'accepted' THEN
+    SELECT display_name INTO sender_name FROM public.profiles WHERE id = NEW.friend_id;
     INSERT INTO public.notifications (user_id, type, title, payload)
-    VALUES (NEW.user_id, 'platform_update', 'Friend Request Accepted', jsonb_build_object('friend_id', NEW.friend_id));
+    VALUES (
+      NEW.user_id,
+      'platform_update',
+      COALESCE(sender_name || ' accepted your friend request', 'Friend Request Accepted'),
+      jsonb_build_object(
+        'friend_id', NEW.friend_id,
+        'sender_id', NEW.friend_id,
+        'sender_name', sender_name,
+        'display_name', sender_name
+      )
+    );
   END IF;
   RETURN NEW;
 END;

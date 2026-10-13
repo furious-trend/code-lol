@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Unit tests for FriendsPageClient UI and interactions", deps: ["../app/friends/FriendsPageClient", "../lib/friends"], state: active, last: "sato@2026-10-13" }
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import FriendsPageClient from '../app/friends/FriendsPageClient';
@@ -8,7 +9,8 @@ vi.mock('../lib/friends', () => ({
   sendFriendRequest: vi.fn(),
   acceptFriendRequest: vi.fn(),
   getPendingRequests: vi.fn(),
-  getFriends: vi.fn()
+  getFriends: vi.fn(),
+  getOutgoingRequests: vi.fn(),
 }));
 
 vi.mock('lodash.debounce', () => ({
@@ -20,6 +22,7 @@ describe('Friends Page UI', () => {
     vi.clearAllMocks();
     (friendsLib.getPendingRequests as any).mockResolvedValue([]);
     (friendsLib.getFriends as any).mockResolvedValue([]);
+    (friendsLib.getOutgoingRequests as any).mockResolvedValue([]);
   });
 
   it('renders Friends page and allows searching', async () => {

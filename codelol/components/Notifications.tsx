@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Navbar notification center with friend request username display", deps: ["@/lib/supabase/client", "@/lib/friends"], state: active, last: "sato@2026-10-13" }
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -25,13 +26,13 @@ export function Notifications() {
     if (senderIds.length === 0) return;
     const { data: profiles } = await supabase
       .from('profiles')
-      .select('id, display_name, username')
+      .select('id, display_name')
       .in('id', senderIds);
       
     if (profiles) {
       const names: Record<string, string> = {};
       profiles.forEach((p: any) => {
-        names[p.id] = p.display_name || p.username || 'A player';
+        names[p.id] = p.display_name || 'A player';
       });
       setSenderNames(prev => ({ ...prev, ...names }));
     }
@@ -52,7 +53,7 @@ export function Notifications() {
         setNotifications(data);
         
         const senderIds = data
-          .map(n => n.payload?.friend_id || n.payload?.challenger_id || n.payload?.sender_id)
+          .map(n => n.payload?.friend_id || n.payload?.challenger_id || n.payload?.sender_id || n.payload?.user_id)
           .filter(Boolean);
         await fetchSenderNames(senderIds);
       }
@@ -77,7 +78,7 @@ export function Notifications() {
           async (payload) => {
             const newNotif = payload.new as Notification;
             setNotifications((prev) => [newNotif, ...prev]);
-            const senderId = newNotif.payload?.friend_id || newNotif.payload?.challenger_id || newNotif.payload?.sender_id;
+            const senderId = newNotif.payload?.friend_id || newNotif.payload?.challenger_id || newNotif.payload?.sender_id || newNotif.payload?.user_id;
             if (senderId) await fetchSenderNames([senderId]);
           }
         )
@@ -120,21 +121,33 @@ export function Notifications() {
     );
   };
 
+  const getSenderName = (notif: Notification) => {
+    const senderId = notif.payload?.friend_id || notif.payload?.sender_id || notif.payload?.challenger_id || notif.payload?.user_id;
+    return (senderId && senderNames[senderId]) || notif.payload?.sender_name || notif.payload?.display_name || notif.payload?.username;
+  };
+
   const handleAcceptFriend = async (notif: Notification) => {
-    if (notif.payload?.friend_id) {
+    const senderId = notif.payload?.friend_id || notif.payload?.sender_id || notif.payload?.user_id;
+    if (senderId) {
+      const { data: userData } = await supabase.auth.getUser();
+      const currentUserId = userData.user?.id || notif.user_id;
+
       // Find the request ID by querying pending requests from this friend
       const { data: pending } = await supabase
         .from('friendships')
         .select('id')
-        .eq('friend_id', notif.user_id)
-        .eq('user_id', notif.payload.friend_id)
+        .eq('friend_id', currentUserId)
+        .eq('user_id', senderId)
         .eq('status', 'pending')
-        .single();
+        .maybeSingle();
         
       if (pending) {
         await acceptFriendRequest(pending.id);
       }
       await markAsRead(notif.id);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('codelol-friends-update'));
+      }
     }
   };
 
@@ -184,10 +197,10 @@ export function Notifications() {
                 notifications.map(notif => (
                   <div key={notif.id} className={`bg-zinc-800/50 p-3 rounded-xl border mb-2 ${notif.is_read ? 'border-zinc-800/30 opacity-70' : 'border-zinc-700/50'}`}>
                     <p className="text-sm font-medium text-white mb-1">
-                      {notif.type === 'friend_request' && senderNames[notif.payload?.friend_id]
-                        ? `Friend request from ${senderNames[notif.payload.friend_id]}`
-                        : (notif.type === 'battle_invite' || notif.title?.toLowerCase().includes('invite')) && senderNames[notif.payload?.challenger_id || notif.payload?.sender_id]
-                        ? `Battle invite from ${senderNames[notif.payload.challenger_id || notif.payload.sender_id]}`
+                      {notif.type === 'friend_request'
+                        ? `Friend request from ${getSenderName(notif) || 'A coder'}`
+                        : (notif.type === 'battle_invite' || notif.title?.toLowerCase().includes('invite'))
+                        ? `Battle invite from ${getSenderName(notif) || 'A player'}`
                         : notif.title}
                     </p>
                     
