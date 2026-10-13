@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Lessons library directory page with multi-language switching", deps: ["@/lib/lessons", "@/components/RoastCard", "@/components/LanguageToggleBar"], state: active, last: "sato@2026-10-12" }
+// agent-notes: { ctx: "Lessons library directory page with multi-language switching", deps: ["@/lib/lessons", "@/components/RoastCard", "@/components/LanguageToggleBar"], state: active, last: "sato@2026-10-13" }
 'use client'
 
 import { useState, useEffect, Suspense } from 'react';
@@ -422,6 +422,15 @@ function LessonsPageContent() {
             activeLanguage={learningLanguage} 
             onLanguageChange={(lang) => setLearningLanguage(lang)} 
           />
+          <div className="flex justify-center mt-5">
+            <Link
+              href={`/learn?lang=${learningLanguage}`}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-900/40 transition-all active:scale-95 cursor-pointer"
+            >
+              <span>Open in W3Schools Interactive Hub</span>
+              <span className="text-base font-black">»</span>
+            </Link>
+          </div>
         </header>
 
         {learningLanguage === "python" ? (

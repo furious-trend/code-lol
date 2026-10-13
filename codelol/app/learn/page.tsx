@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Learn page routing with deterministic language cascade and arena toggle", deps: ["./LearnPageClient", "./LearnPagePythonClient", "@/components/LanguageToggleBar"], state: active, last: "sato@2026-10-12" }
+// agent-notes: { ctx: "Learn page routing with deterministic language cascade, mounting W3Schools tutorial platform", deps: ["./LearnPageClient", "./LearnPagePythonClient", "@/lib/lessons", "@/lib/supabase/server"], state: active, last: "sato@2026-10-13" }
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import LearnPageClient from "./LearnPageClient";
@@ -7,9 +7,12 @@ import { getAllLessons } from "@/lib/lessons";
 import { Suspense } from "react";
 import Loading from "./loading";
 import { HumorPreference } from "@/lib/python/types";
-import { LanguageToggleBar } from "@/components/LanguageToggleBar";
 
-export default async function LearnPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+export default async function LearnPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const supabase = await createClient();
   const params = await searchParams;
   const cookieStore = await cookies();
@@ -18,12 +21,15 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
   let currentLevel = 1;
   let highestUnlockedLevel = 1;
   let humorPref: HumorPreference = 'general';
-  let learningLanguage = 'javascript';
-  let initialLevelId = 'ch1-l1'; // Default for python
+  let learningLanguage = 'python';
+  let initialLevelId = 'ch1-l1';
 
   const requestedLang = (params.lang || params.language) as string | undefined;
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (user && user.id !== 'local-guest') {
     const { data: profile } = await supabase
       .from('profiles')
@@ -40,14 +46,17 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
       learningLanguage = cookieLang;
     }
 
-    const activeLevel = (learningLanguage === 'python' && profile?.python_current_level) ? profile.python_current_level : profile?.current_level;
+    const activeLevel =
+      learningLanguage === 'python' && profile?.python_current_level
+        ? profile.python_current_level
+        : profile?.current_level;
+
     if (activeLevel) {
       const lessons = getAllLessons(learningLanguage);
-      const maxLevel = Math.min(activeLevel, lessons.length);
+      const maxLevel = Math.min(Number(activeLevel) || 1, lessons.length);
       highestUnlockedLevel = Math.max(1, maxLevel);
       currentLevel = highestUnlockedLevel;
-      
-      // Override currentLevel if a valid level query param is provided and unlocked
+
       if (params.level && typeof params.level === 'string') {
         const requestedLevel = parseInt(params.level, 10);
         if (!isNaN(requestedLevel) && requestedLevel >= 1 && requestedLevel <= highestUnlockedLevel) {
@@ -75,20 +84,21 @@ export default async function LearnPage({ searchParams }: { searchParams: Promis
     }
   }
 
+  if (params.topic && typeof params.topic === 'string') {
+    initialLevelId = params.topic;
+  }
+
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-zinc-950">
-      <div className="pt-2 px-4 flex justify-between items-center border-b border-zinc-900 bg-zinc-950/80 backdrop-blur z-20">
-        <LanguageToggleBar activeLanguage={learningLanguage} />
-      </div>
       <Suspense fallback={<Loading />}>
         {learningLanguage === "python" ? (
-          <LearnPagePythonClient 
+          <LearnPagePythonClient
             initialLevelId={initialLevelId}
             initialHumorPref={humorPref}
           />
         ) : (
-          <LearnPageClient 
-            initialLevel={currentLevel} 
+          <LearnPageClient
+            initialLevel={currentLevel}
             highestUnlockedLevel={highestUnlockedLevel}
             initialHumorPref={humorPref}
             learningLanguage={learningLanguage}

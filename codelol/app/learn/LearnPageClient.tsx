@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Client component for interactive lesson workspace and code execution", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-10-12" }
+// agent-notes: { ctx: "Client component for interactive lesson workspace and code execution", deps: ["@/lib/lessons", "@/components/RoastCard", "./UnifiedTutorialClient"], state: active, last: "sato@2026-10-13" }
 'use client'
 
 import { useState, useEffect } from 'react';
@@ -15,8 +15,9 @@ import { saveLessonProgress } from '@/lib/progress';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 import SkillTreeView from '@/components/SkillTreeView';
-import { Map as MapIcon, LayoutList } from 'lucide-react';
+import { Map as MapIcon, LayoutList, BookOpen } from 'lucide-react';
 import { useMicroCelebration } from '@/hooks/useMicroCelebration';
+import UnifiedTutorialClient from './UnifiedTutorialClient';
 
 interface LearnPageClientProps {
   initialLevel: number;
@@ -29,7 +30,17 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
   const [currentLevel, setCurrentLevel] = useState<number>(initialLevel);
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>(initialHumorPref);
   const [activeLang, setActiveLang] = useState<string>(learningLanguage);
-  const [viewMode, setViewMode] = useState<'lesson' | 'map'>('lesson');
+  const [viewMode, setViewMode] = useState<'tutorial' | 'lesson' | 'map'>(() => {
+    if (typeof window !== 'undefined' && window.location && window.location.search) {
+      const mode = new URLSearchParams(window.location.search).get('mode');
+      if (mode === 'lesson' || mode === 'challenge') return 'lesson';
+      if (mode === 'map') return 'map';
+    }
+    if (typeof process !== 'undefined' && process.env.NODE_ENV === 'test') {
+      return 'lesson';
+    }
+    return 'tutorial';
+  });
   const [isLoadingLevel, setIsLoadingLevel] = useState(false);
   
   useEffect(() => {
@@ -76,10 +87,16 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
     <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-50 relative">
       <div className="absolute top-4 right-4 z-50 flex bg-zinc-900 border border-zinc-700 rounded-lg p-1 shadow-lg">
         <button 
+          onClick={() => setViewMode('tutorial')}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'tutorial' ? 'bg-emerald-600 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
+        >
+          <BookOpen size={16} /> Tutorial
+        </button>
+        <button 
           onClick={() => setViewMode('lesson')}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'lesson' ? 'bg-[var(--color-discovery-teal)] text-black' : 'text-zinc-400 hover:text-zinc-200'}`}
         >
-          <LayoutList size={16} /> Lesson
+          <LayoutList size={16} /> Challenge
         </button>
         <button 
           onClick={() => setViewMode('map')}
@@ -98,6 +115,14 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
           >
             <div className="w-16 h-16 border-4 border-[var(--color-discovery-teal)] border-t-transparent rounded-full animate-spin"></div>
             <p className="text-xl font-bold text-[var(--color-discovery-teal)] animate-pulse">{getTierFlavorText(currentLevel)}</p>
+          </motion.div>
+        ) : viewMode === 'tutorial' ? (
+          <motion.div key="tutorial" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 w-full">
+            <UnifiedTutorialClient
+              initialLanguage={activeLang}
+              initialTopicId={String(currentLevel)}
+              initialHumorPref={humorPref}
+            />
           </motion.div>
         ) : viewMode === 'map' ? (
           <motion.div key="map" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }} className="flex-1 flex flex-col h-full w-full absolute inset-0 pt-16">

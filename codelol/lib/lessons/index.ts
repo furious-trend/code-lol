@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Multi-language lessons index providing allLessons, curriculum, and categories", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-12" }
+// agent-notes: { ctx: "Multi-language lessons index providing allLessons, curriculum, and categories", deps: ["./types", "../python/curriculum", "./unifiedTopics"], state: active, last: "sato@2026-10-13" }
 import { Lesson, Tier } from "./types";
 import { pythonCurriculum } from "../python/curriculum";
 export { pythonCurriculum };
@@ -231,4 +231,4 @@ export const getLessonsByLanguage = (lang: string = "javascript") => {
 };
 
 export * from "./types";
-
+export * from "./unifiedTopics";
