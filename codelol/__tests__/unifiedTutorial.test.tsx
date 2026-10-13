@@ -91,7 +91,7 @@ describe('W3Schools TutorialSidebar Component', () => {
       />
     );
 
-    expect(screen.getByText(/Python Tutorial/i)).toBeTruthy();
+    expect(screen.getByText(/Python Library/i)).toBeTruthy();
     expect(screen.getByText('Python Basics')).toBeTruthy();
     expect(screen.getByText('Control Flow')).toBeTruthy();
     expect(screen.getByText('Python Syntax')).toBeTruthy();
@@ -109,7 +109,7 @@ describe('W3Schools TutorialSidebar Component', () => {
       />
     );
 
-    const searchInput = screen.getByPlaceholderText(/Filter topics/i);
+    const searchInput = screen.getByPlaceholderText(/Filter.*topics/i);
     fireEvent.change(searchInput, { target: { value: 'Variables' } });
 
     expect(screen.getByText('Python Variables')).toBeTruthy();
@@ -149,8 +149,8 @@ describe('W3Schools TutorialSidebar Component', () => {
   });
 });
 
-describe('W3Schools ExampleCard Component', () => {
-  it('renders example code and handles "Try it Yourself »" click', () => {
+describe('LiveExampleCard Component', () => {
+  it('renders example code and handles "Try It Live »" click', () => {
     const onTry = vi.fn();
     render(
       <ExampleCard
@@ -164,7 +164,7 @@ describe('W3Schools ExampleCard Component', () => {
     expect(screen.getByText('Example')).toBeTruthy();
     expect(screen.getByText(/Hello, World!/)).toBeTruthy();
 
-    const tryBtn = screen.getByRole('button', { name: /Try it Yourself/i });
+    const tryBtn = screen.getByRole('button', { name: /Try It Live|Try it Yourself/i });
     fireEvent.click(tryBtn);
     expect(onTry).toHaveBeenCalled();
   });

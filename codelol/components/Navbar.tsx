@@ -52,7 +52,6 @@ export default async function Navbar() {
         </Link>
         <div className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
           {[
-            { name: 'Learn', path: '/learn' },
             { name: 'Library', path: '/lessons' },
             { name: 'Problems', path: '/problems' },
             { name: 'Battle', path: '/battle' },
