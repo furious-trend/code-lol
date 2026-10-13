@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Direct messaging API for chatting with friends and creating message notifications", deps: ["@/lib/supabase/client"], state: active, last: "sato@2026-10-13" }
 import { createClient } from '@/lib/supabase/client';
 
 export interface Message {
@@ -12,7 +13,7 @@ export interface Message {
 export async function sendMessage(receiverId: string, content: string): Promise<boolean> {
   const supabase = createClient();
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return false;
+  if (!userData?.user) return false;
 
   const { error } = await supabase
     .from('messages')
@@ -26,6 +27,43 @@ export async function sendMessage(receiverId: string, content: string): Promise<
   if (error) {
     console.error('Error sending message:', error);
     return false;
+  }
+
+  // Create notification for receiver
+  try {
+    let senderName = 'A friend';
+    const fromProfiles = supabase.from('profiles');
+    if (typeof fromProfiles.select === 'function') {
+      const { data: myProfile } = await fromProfiles
+        .select('display_name')
+        .eq('id', userData.user.id)
+        .maybeSingle();
+      if (myProfile?.display_name) {
+        senderName = myProfile.display_name;
+      }
+    }
+
+    const preview = content.length > 50 ? content.slice(0, 47) + '...' : content;
+    const fromNotifs = supabase.from('notifications');
+    if (typeof fromNotifs.insert === 'function') {
+      await fromNotifs.insert({
+        user_id: receiverId,
+        type: 'platform_update',
+        title: `Message from ${senderName}`,
+        payload: {
+          type: 'message',
+          message_type: 'direct_message',
+          sender_id: userData.user.id,
+          friend_id: userData.user.id,
+          sender_name: senderName,
+          display_name: senderName,
+          content,
+          preview
+        }
+      });
+    }
+  } catch {
+    // Non-blocking
   }
 
   return true;

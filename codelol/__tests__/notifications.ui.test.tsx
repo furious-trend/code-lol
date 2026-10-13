@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Unit tests for Notifications component showing sender username", deps: ["../components/Notifications", "@/lib/friends", "@/lib/supabase/client"], state: active, last: "sato@2026-10-13" }
+// agent-notes: { ctx: "Unit tests for Notifications component showing sender username and message notifications", deps: ["../components/Notifications", "@/lib/friends", "@/lib/supabase/client"], state: active, last: "sato@2026-10-13" }
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Notifications } from '../components/Notifications';
@@ -11,6 +11,21 @@ const mockNotifications = [
     type: 'friend_request',
     title: 'New Friend Request',
     payload: { friend_id: 'sender-user-123' },
+    is_read: false,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'notif-2',
+    user_id: 'current-user-id',
+    type: 'message',
+    title: 'New Message',
+    payload: {
+      type: 'message',
+      sender_id: 'sender-user-123',
+      friend_id: 'sender-user-123',
+      content: 'Hello, are you ready for a battle?',
+      preview: 'Hello, are you ready for a battle?'
+    },
     is_read: false,
     created_at: new Date().toISOString()
   }
@@ -90,6 +105,21 @@ describe('Notifications Component', () => {
     await waitFor(() => {
       expect(screen.getByText('Friend request from CoderMaster99')).toBeDefined();
     });
+  });
+
+  it('displays message notification with sender username and message preview', async () => {
+    render(<Notifications />);
+
+    const bellBtn = screen.getByRole('button');
+    fireEvent.click(bellBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('💬 Message from CoderMaster99')).toBeDefined();
+      expect(screen.getByText('"Hello, are you ready for a battle?"')).toBeDefined();
+    });
+
+    const replyLink = screen.getByRole('link', { name: /reply/i });
+    expect(replyLink.getAttribute('href')).toBe('/messages?friend=sender-user-123');
   });
 
   it('allows accepting friend request directly from notification', async () => {

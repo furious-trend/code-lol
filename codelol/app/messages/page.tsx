@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Direct messages page with conversation list and chat thread", deps: ["@/lib/friends", "@/hooks/useMessages", "@/lib/supabase/client"], state: active, last: "sato@2026-10-13" }
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -25,6 +26,13 @@ export default function MessagesPage() {
       }
       const accepted = await getFriends();
       setFriends(accepted);
+
+      if (typeof window !== 'undefined') {
+        const urlFriend = new URLSearchParams(window.location.search).get('friend');
+        if (urlFriend) {
+          setSelectedFriendId(urlFriend);
+        }
+      }
     }
     loadInitial();
   }, []);
