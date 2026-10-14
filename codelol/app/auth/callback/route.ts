@@ -32,6 +32,6 @@ export async function GET(request: Request) {
     }
   }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+  // Return the user to the login page if visited without a valid code
+  return NextResponse.redirect(`${origin}/login`)
 }
