@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Authentication login page with Google OAuth and Email OTP", deps: ["@/lib/supabase/client", "@/components/Bugsy"], state: active, last: "sato@2026-10-13" }
+// agent-notes: { ctx: "Authentication login page with Sign In, Sign Up tabs, Username/Email OTP, and Google OAuth", deps: ["@/lib/supabase/client", "@/components/Bugsy"], state: active, last: "sato@2026-10-14" }
 'use client';
 
 import { useState } from 'react';
@@ -9,13 +9,24 @@ import { Bugsy, BugsyMood } from '@/components/Bugsy';
 
 export default function Login() {
   const router = useRouter();
+  const [tab, setTab] = useState<'signin' | 'signup'>('signin');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [email, setEmail] = useState('');
+
+  // Sign In State (Username or Email)
+  const [signInIdentifier, setSignInIdentifier] = useState('');
+
+  // Sign Up State (Email & Optional Username)
+  const [signUpEmail, setSignUpEmail] = useState('');
+  const [signUpUsername, setSignUpUsername] = useState('');
+
+  // OTP Verification State
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [activeEmail, setActiveEmail] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
+
   const supabase = createClient();
 
   const handleOAuth = async (provider: 'google') => {
@@ -31,8 +42,90 @@ export default function Login() {
     }
   };
 
-  const handleSendOtp = async (e?: React.FormEvent) => {
+  const handleSignIn = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    const identifier = signInIdentifier.trim();
+    if (!identifier) {
+      setError('Please enter your email or username.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setInfoMessage('');
+
+    let targetEmail = identifier;
+
+    // Check if the input is a username (no '@') or an email
+    if (!identifier.includes('@')) {
+      // Look up email by username or display_name
+      try {
+        const { data: profile, error: profileErr } = await supabase
+          .from('profiles')
+          .select('email, id')
+          .or(`username.ilike.${identifier},display_name.ilike.${identifier}`)
+          .maybeSingle();
+
+        if (profileErr || !profile || !profile.email) {
+          setError('User does not exist. Please sign up first.');
+          setLoading(false);
+          return;
+        }
+        targetEmail = profile.email;
+      } catch {
+        setError('User does not exist. Please sign up first.');
+        setLoading(false);
+        return;
+      }
+    } else {
+      // Check if user exists before signing in
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('id, email')
+          .ilike('email', identifier)
+          .maybeSingle();
+
+        if (!profile) {
+          setError('User does not exist. Please sign up first.');
+          setLoading(false);
+          return;
+        }
+      } catch {
+        // Fallback to Supabase auth check below
+      }
+    }
+
+    // Attempt Sign In with OTP (shouldCreateUser: false prevents creating new accounts on Sign In)
+    const { error: otpError } = await supabase.auth.signInWithOtp({
+      email: targetEmail,
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
+      },
+    });
+
+    if (otpError) {
+      const msg = otpError.message.toLowerCase();
+      if (msg.includes('signups not allowed') || msg.includes('user not found') || msg.includes('invalid')) {
+        setError('User does not exist. Please sign up first.');
+      } else {
+        setError(otpError.message);
+      }
+      setLoading(false);
+    } else {
+      setActiveEmail(targetEmail);
+      setOtpSent(true);
+      setInfoMessage(`We sent a 6-digit login code to ${targetEmail}`);
+      setLoading(false);
+    }
+  };
+
+  const handleSignUp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const email = signUpEmail.trim();
+    const username = signUpUsername.trim();
+
     if (!email || !email.includes('@')) {
       setError('Please enter a valid email address.');
       return;
@@ -42,20 +135,59 @@ export default function Login() {
     setError('');
     setInfoMessage('');
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
+    // Check if an account already exists with this email
+    try {
+      const { data: existingProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .ilike('email', email)
+        .maybeSingle();
+
+      if (existingProfile) {
+        setError('An account with this email already exists. Please sign in.');
+        setLoading(false);
+        return;
+      }
+    } catch {
+      // Continue
+    }
+
+    // Check if username is already taken (if provided)
+    if (username) {
+      try {
+        const { data: existingUsername } = await supabase
+          .from('profiles')
+          .select('id')
+          .ilike('username', username)
+          .maybeSingle();
+
+        if (existingUsername) {
+          setError('This username is already taken. Please choose another.');
+          setLoading(false);
+          return;
+        }
+      } catch {
+        // Continue
+      }
+    }
+
+    // Sign up with OTP (shouldCreateUser: true creates account)
+    const { error: otpError } = await supabase.auth.signInWithOtp({
+      email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
+        data: username ? { username } : undefined,
+        emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback?intent=signup`,
       },
     });
 
-    if (error) {
-      setError(error.message);
+    if (otpError) {
+      setError(otpError.message);
       setLoading(false);
     } else {
+      setActiveEmail(email);
       setOtpSent(true);
-      setInfoMessage(`We sent a 6-digit verification code to ${email.trim()}`);
+      setInfoMessage(`We sent a 6-digit verification code to ${email}`);
       setLoading(false);
     }
   };
@@ -70,14 +202,14 @@ export default function Login() {
     setLoading(true);
     setError('');
 
-    const { error } = await supabase.auth.verifyOtp({
-      email: email.trim(),
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      email: activeEmail,
       token: otp.trim(),
       type: 'email',
     });
 
-    if (error) {
-      setError(error.message);
+    if (verifyError) {
+      setError(verifyError.message);
       setLoading(false);
     } else {
       setSuccess(true);
@@ -87,7 +219,7 @@ export default function Login() {
     }
   };
 
-  const handleResetEmail = () => {
+  const handleReset = () => {
     setOtpSent(false);
     setOtp('');
     setError('');
@@ -144,9 +276,51 @@ export default function Login() {
             CodeLOL
           </h1>
           <p className="text-xs text-zinc-400 mt-1 font-medium">
-            {otpSent ? 'Check your email for the login code' : 'Level up your code humor & mastery'}
+            {otpSent 
+              ? 'Check your email for the 6-digit code' 
+              : tab === 'signin' 
+                ? 'Welcome back! Sign in to continue' 
+                : 'Create an account to start coding & laughing'}
           </p>
         </motion.div>
+
+        {/* Tab Switcher (Only visible before OTP is sent) */}
+        {!otpSent && (
+          <motion.div variants={itemVariants} className="flex p-1 mb-6 bg-zinc-950/80 rounded-xl border border-zinc-800/80 relative">
+            <button
+              type="button"
+              onClick={() => { setTab('signin'); setError(''); }}
+              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all relative z-10 ${
+                tab === 'signin' ? 'text-white' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              Sign In
+              {tab === 'signin' && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg -z-10 shadow-md"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => { setTab('signup'); setError(''); }}
+              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all relative z-10 ${
+                tab === 'signup' ? 'text-white' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              Sign Up
+              {tab === 'signup' && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg -z-10 shadow-md"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
+            </button>
+          </motion.div>
+        )}
 
         {/* Status notifications */}
         <AnimatePresence mode="wait">
@@ -178,45 +352,98 @@ export default function Login() {
         <div className="space-y-6">
           {!otpSent ? (
             <>
-              {/* Step 1: Send OTP Form */}
-              <motion.form variants={itemVariants} onSubmit={handleSendOtp} className="space-y-3">
-                <div>
-                  <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
-                    Email Address
-                  </label>
-                  <div className="relative">
+              {tab === 'signin' ? (
+                /* ================= SIGN IN TAB ================= */
+                <motion.form variants={itemVariants} onSubmit={handleSignIn} className="space-y-3">
+                  <div>
+                    <label htmlFor="signin-id" className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+                      Username or Email
+                    </label>
                     <input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="name@example.com"
+                      id="signin-id"
+                      type="text"
+                      value={signInIdentifier}
+                      onChange={(e) => setSignInIdentifier(e.target.value)}
+                      placeholder="name@example.com or username"
                       disabled={loading}
                       required
                       className="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all disabled:opacity-50"
                     />
                   </div>
-                </div>
 
-                <motion.button 
-                  type="submit"
-                  disabled={loading}
-                  whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(59, 130, 246, 0.3)" }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 px-4 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white rounded-xl font-bold shadow-lg shadow-blue-600/20 transition-all disabled:opacity-50 text-sm"
-                >
-                  {loading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <span>Send Code</span>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </>
-                  )}
-                </motion.button>
-              </motion.form>
+                  <motion.button 
+                    type="submit"
+                    disabled={loading}
+                    whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(59, 130, 246, 0.3)" }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full py-3 px-4 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-bold shadow-lg shadow-blue-600/20 transition-all disabled:opacity-50 text-sm"
+                  >
+                    {loading ? (
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <span>Send Login Code</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </>
+                    )}
+                  </motion.button>
+                </motion.form>
+              ) : (
+                /* ================= SIGN UP TAB ================= */
+                <motion.form variants={itemVariants} onSubmit={handleSignUp} className="space-y-3">
+                  <div>
+                    <label htmlFor="signup-email" className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+                      Email Address
+                    </label>
+                    <input
+                      id="signup-email"
+                      type="email"
+                      value={signUpEmail}
+                      onChange={(e) => setSignUpEmail(e.target.value)}
+                      placeholder="name@example.com"
+                      disabled={loading}
+                      required
+                      className="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="signup-username" className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+                      Username <span className="text-zinc-500 lowercase">(optional)</span>
+                    </label>
+                    <input
+                      id="signup-username"
+                      type="text"
+                      value={signUpUsername}
+                      onChange={(e) => setSignUpUsername(e.target.value)}
+                      placeholder="coolcoder123"
+                      disabled={loading}
+                      className="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50"
+                    />
+                  </div>
+
+                  <motion.button 
+                    type="submit"
+                    disabled={loading}
+                    whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(16, 185, 129, 0.3)" }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full py-3 px-4 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-600/20 transition-all disabled:opacity-50 text-sm"
+                  >
+                    {loading ? (
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <span>Create Account</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </>
+                    )}
+                  </motion.button>
+                </motion.form>
+              )}
 
               {/* Divider */}
               <motion.div variants={itemVariants} className="relative flex items-center justify-center">
@@ -253,15 +480,15 @@ export default function Login() {
               </motion.div>
             </>
           ) : (
-            /* Step 2: Verify OTP Form */
+            /* ================= STEP 2: VERIFY OTP FORM ================= */
             <motion.form variants={itemVariants} onSubmit={handleVerifyOtp} className="space-y-4">
               <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3 flex items-center justify-between text-xs">
                 <span className="text-zinc-300 truncate max-w-[220px]">
-                  Sent to <strong className="text-white">{email}</strong>
+                  Sent to <strong className="text-white">{activeEmail}</strong>
                 </span>
                 <button
                   type="button"
-                  onClick={handleResetEmail}
+                  onClick={handleReset}
                   className="text-blue-400 hover:text-blue-300 font-semibold transition-colors underline"
                 >
                   Change
@@ -298,14 +525,14 @@ export default function Login() {
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
-                  'Verify & Sign In'
+                  tab === 'signup' ? 'Verify & Create Account' : 'Verify & Sign In'
                 )}
               </motion.button>
 
               <div className="flex items-center justify-between text-xs pt-1">
                 <button
                   type="button"
-                  onClick={() => handleSendOtp()}
+                  onClick={() => tab === 'signup' ? handleSignUp() : handleSignIn()}
                   disabled={loading}
                   className="text-zinc-400 hover:text-zinc-200 transition-colors"
                 >
@@ -313,7 +540,7 @@ export default function Login() {
                 </button>
                 <button
                   type="button"
-                  onClick={handleResetEmail}
+                  onClick={handleReset}
                   className="text-zinc-500 hover:text-zinc-300 transition-colors"
                 >
                   Cancel

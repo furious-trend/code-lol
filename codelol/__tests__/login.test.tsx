@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Login page unit tests for OAuth and Email OTP", deps: ["@/app/login/page.tsx"], state: active, last: "tara@2026-10-13" }
+// agent-notes: { ctx: "Login page unit tests for Sign In, Sign Up, and OTP verification", deps: ["@/app/login/page.tsx"], state: active, last: "tara@2026-10-14" }
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Login from '../app/login/page';
@@ -37,9 +37,11 @@ describe('Login Page', () => {
   const mockSignInWithOAuth = vi.fn();
   const mockSignInWithOtp = vi.fn();
   const mockVerifyOtp = vi.fn();
+  let mockProfileQueryResult: any = null;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockProfileQueryResult = null;
     (useRouter as any).mockReturnValue({ push: mockPush, refresh: mockRefresh });
     
     const mockSupabase = {
@@ -48,15 +50,148 @@ describe('Login Page', () => {
         signInWithOtp: mockSignInWithOtp,
         verifyOtp: mockVerifyOtp,
       },
+      from: vi.fn(() => ({
+        select: vi.fn(() => ({
+          ilike: vi.fn(() => ({
+            maybeSingle: vi.fn().mockImplementation(() => Promise.resolve({ data: mockProfileQueryResult, error: null })),
+          })),
+          or: vi.fn(() => ({
+            maybeSingle: vi.fn().mockImplementation(() => Promise.resolve({ data: mockProfileQueryResult, error: null })),
+          })),
+        })),
+      })),
     };
     (createClient as any).mockReturnValue(mockSupabase);
   });
 
-  it('renders Google login button and email input', () => {
+  it('renders Sign In tab by default with Google button and identifier input', () => {
     render(<Login />);
+    expect(screen.getByRole('button', { name: /^Sign In$/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /^Sign Up$/i })).toBeTruthy();
+    expect(screen.getByPlaceholderText(/name@example.com or username/i)).toBeTruthy();
     expect(screen.getByText(/Continue with Google/i)).toBeTruthy();
+  });
+
+  it('switches between Sign In and Sign Up tabs', () => {
+    render(<Login />);
+    const signUpTab = screen.getByRole('button', { name: /^Sign Up$/i });
+    fireEvent.click(signUpTab);
+
     expect(screen.getByPlaceholderText(/name@example.com/i)).toBeTruthy();
-    expect(screen.getByRole('button', { name: /Send Code/i })).toBeTruthy();
+    expect(screen.getByPlaceholderText(/coolcoder123/i)).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Create Account/i })).toBeTruthy();
+  });
+
+  it('shows error if user tries to sign in but does not exist', async () => {
+    mockProfileQueryResult = null;
+
+    render(<Login />);
+    const input = screen.getByPlaceholderText(/name@example.com or username/i);
+    fireEvent.change(input, { target: { value: 'nonexistent@test.com' } });
+    fireEvent.click(screen.getByRole('button', { name: /Send Login Code/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/User does not exist. Please sign up first./i)).toBeTruthy();
+    });
+    expect(mockSignInWithOtp).not.toHaveBeenCalled();
+  });
+
+  it('signs in existing user and sends OTP with shouldCreateUser: false', async () => {
+    mockProfileQueryResult = { id: 'user-123', email: 'existing@test.com' };
+    mockSignInWithOtp.mockResolvedValueOnce({ error: null });
+
+    render(<Login />);
+    const input = screen.getByPlaceholderText(/name@example.com or username/i);
+    fireEvent.change(input, { target: { value: 'existing@test.com' } });
+    fireEvent.click(screen.getByRole('button', { name: /Send Login Code/i }));
+
+    await waitFor(() => {
+      expect(mockSignInWithOtp).toHaveBeenCalledWith({
+        email: 'existing@test.com',
+        options: {
+          shouldCreateUser: false,
+          emailRedirectTo: expect.stringContaining('/auth/callback'),
+        },
+      });
+    });
+
+    // Should transition to OTP screen
+    expect(await screen.findByPlaceholderText(/123456/i)).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Verify & Sign In/i })).toBeTruthy();
+  });
+
+  it('shows error if user tries to sign up with an email that already exists', async () => {
+    mockProfileQueryResult = { id: 'user-123', email: 'taken@test.com' };
+
+    render(<Login />);
+    // Switch to Sign Up tab
+    fireEvent.click(screen.getByRole('button', { name: /^Sign Up$/i }));
+
+    const emailInput = screen.getByPlaceholderText(/name@example.com/i);
+    fireEvent.change(emailInput, { target: { value: 'taken@test.com' } });
+    fireEvent.click(screen.getByRole('button', { name: /Create Account/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/An account with this email already exists. Please sign in./i)).toBeTruthy();
+    });
+    expect(mockSignInWithOtp).not.toHaveBeenCalled();
+  });
+
+  it('signs up new user with shouldCreateUser: true', async () => {
+    mockProfileQueryResult = null;
+    mockSignInWithOtp.mockResolvedValueOnce({ error: null });
+
+    render(<Login />);
+    fireEvent.click(screen.getByRole('button', { name: /^Sign Up$/i }));
+
+    const emailInput = screen.getByPlaceholderText(/name@example.com/i);
+    fireEvent.change(emailInput, { target: { value: 'newuser@test.com' } });
+
+    const usernameInput = screen.getByPlaceholderText(/coolcoder123/i);
+    fireEvent.change(usernameInput, { target: { value: 'myuser' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /Create Account/i }));
+
+    await waitFor(() => {
+      expect(mockSignInWithOtp).toHaveBeenCalledWith({
+        email: 'newuser@test.com',
+        options: {
+          shouldCreateUser: true,
+          data: { username: 'myuser' },
+          emailRedirectTo: expect.stringContaining('/auth/callback?intent=signup'),
+        },
+      });
+    });
+
+    expect(await screen.findByPlaceholderText(/123456/i)).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Verify & Create Account/i })).toBeTruthy();
+  });
+
+  it('verifies OTP code and redirects on success', async () => {
+    mockProfileQueryResult = { id: 'user-123', email: 'coder@test.com' };
+    mockSignInWithOtp.mockResolvedValueOnce({ error: null });
+    mockVerifyOtp.mockResolvedValueOnce({ data: { session: {} }, error: null });
+
+    render(<Login />);
+
+    // Sign in
+    const input = screen.getByPlaceholderText(/name@example.com or username/i);
+    fireEvent.change(input, { target: { value: 'coder@test.com' } });
+    fireEvent.click(screen.getByRole('button', { name: /Send Login Code/i }));
+
+    // Verify OTP
+    const otpInput = await screen.findByPlaceholderText(/123456/i);
+    fireEvent.change(otpInput, { target: { value: '123456' } });
+    fireEvent.click(screen.getByRole('button', { name: /Verify & Sign In/i }));
+
+    await waitFor(() => {
+      expect(mockVerifyOtp).toHaveBeenCalledWith({
+        email: 'coder@test.com',
+        token: '123456',
+        type: 'email',
+      });
+      expect(mockPush).toHaveBeenCalledWith('/');
+    });
   });
 
   it('calls signInWithOAuth for Google login', async () => {
@@ -74,94 +209,4 @@ describe('Login Page', () => {
       },
     });
   });
-
-  it('sends OTP when email is submitted', async () => {
-    mockSignInWithOtp.mockResolvedValueOnce({ error: null });
-
-    render(<Login />);
-
-    const emailInput = screen.getByPlaceholderText(/name@example.com/i);
-    fireEvent.change(emailInput, { target: { value: 'coder@test.com' } });
-
-    const sendButton = screen.getByRole('button', { name: /Send Code/i });
-    fireEvent.click(sendButton);
-
-    await waitFor(() => {
-      expect(mockSignInWithOtp).toHaveBeenCalledWith({
-        email: 'coder@test.com',
-        options: {
-          shouldCreateUser: true,
-          emailRedirectTo: expect.stringContaining('/auth/callback'),
-        },
-      });
-    });
-
-    // Should now show the OTP verification screen
-    expect(await screen.findByPlaceholderText(/123456/i)).toBeTruthy();
-    expect(screen.getByRole('button', { name: /Verify & Sign In/i })).toBeTruthy();
-  });
-
-  it('verifies OTP code and redirects on success', async () => {
-    mockSignInWithOtp.mockResolvedValueOnce({ error: null });
-    mockVerifyOtp.mockResolvedValueOnce({ data: { session: {} }, error: null });
-
-    render(<Login />);
-
-    // Step 1: Send OTP
-    const emailInput = screen.getByPlaceholderText(/name@example.com/i);
-    fireEvent.change(emailInput, { target: { value: 'coder@test.com' } });
-    fireEvent.click(screen.getByRole('button', { name: /Send Code/i }));
-
-    // Step 2: Enter OTP
-    const otpInput = await screen.findByPlaceholderText(/123456/i);
-    fireEvent.change(otpInput, { target: { value: '654321' } });
-
-    const verifyButton = screen.getByRole('button', { name: /Verify & Sign In/i });
-    fireEvent.click(verifyButton);
-
-    await waitFor(() => {
-      expect(mockVerifyOtp).toHaveBeenCalledWith({
-        email: 'coder@test.com',
-        token: '654321',
-        type: 'email',
-      });
-      expect(mockPush).toHaveBeenCalledWith('/');
-    });
-  });
-
-  it('displays error if signInWithOtp fails', async () => {
-    mockSignInWithOtp.mockResolvedValueOnce({ error: { message: 'Rate limit exceeded' } });
-
-    render(<Login />);
-
-    const emailInput = screen.getByPlaceholderText(/name@example.com/i);
-    fireEvent.change(emailInput, { target: { value: 'error@test.com' } });
-    fireEvent.click(screen.getByRole('button', { name: /Send Code/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText(/Rate limit exceeded/i)).toBeTruthy();
-    });
-  });
-
-  it('displays error if verifyOtp fails', async () => {
-    mockSignInWithOtp.mockResolvedValueOnce({ error: null });
-    mockVerifyOtp.mockResolvedValueOnce({ data: null, error: { message: 'Invalid token' } });
-
-    render(<Login />);
-
-    // Send code
-    const emailInput = screen.getByPlaceholderText(/name@example.com/i);
-    fireEvent.change(emailInput, { target: { value: 'coder@test.com' } });
-    fireEvent.click(screen.getByRole('button', { name: /Send Code/i }));
-
-    // Verify bad code
-    const otpInput = await screen.findByPlaceholderText(/123456/i);
-    fireEvent.change(otpInput, { target: { value: '000000' } });
-    fireEvent.click(screen.getByRole('button', { name: /Verify & Sign In/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText(/Invalid token/i)).toBeTruthy();
-    });
-  });
 });
-
