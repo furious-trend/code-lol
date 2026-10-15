@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Authentication login page with Sign In, Sign Up tabs, Username/Email OTP, and Google OAuth", deps: ["@/lib/supabase/client", "@/components/Bugsy"], state: active, last: "sato@2026-10-14" }
+// agent-notes: { ctx: "Authentication login page with Sign In, Sign Up tabs, Username/Email OTP, and Google OAuth", deps: ["@/lib/supabase/client", "@/components/Bugsy"], state: active, last: "sato@2026-10-15" }
 'use client';
 
 import { useState } from 'react';
@@ -24,7 +24,7 @@ function getAuthErrorMessage(error: unknown): string {
   }
   const lower = msg.toLowerCase();
   if (lower.includes('sending confirmation email') || lower.includes('error sending')) {
-    return 'Failed to deliver email. Your SMTP provider (Resend test sandbox) only sends to the account owner. Please switch to Brevo in Supabase SMTP settings to send to any email.';
+    return 'Failed to deliver email. Please check your email address or SMTP configuration.';
   }
   if (lower.includes('signups not allowed') || lower.includes('user not found')) {
     return 'User does not exist. Please sign up first.';
@@ -526,7 +526,7 @@ export default function Login() {
                   autoComplete="one-time-code"
                   maxLength={6}
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   placeholder="123456"
                   disabled={loading}
                   autoFocus

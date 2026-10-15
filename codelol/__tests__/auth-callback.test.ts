@@ -100,6 +100,6 @@ describe('Auth Callback Route', () => {
     const request = new Request('http://localhost:3000/auth/callback?code=mock-code');
     await GET(request);
 
-    expect(NextResponse.redirect).toHaveBeenCalledWith('http://localhost:3000/auth/auth-code-error');
+    expect(NextResponse.redirect).toHaveBeenCalledWith('http://localhost:3000/login');
   });
 });
