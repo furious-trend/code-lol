@@ -7,6 +7,31 @@ import { createClient } from '@/lib/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bugsy, BugsyMood } from '@/components/Bugsy';
 
+function getAuthErrorMessage(error: unknown): string {
+  if (!error) return 'An unexpected error occurred.';
+  const err = error as Record<string, unknown>;
+  let msg = typeof error === 'string' ? error : (err.message as string) || (err.msg as string) || (err.error_description as string) || '';
+  if (!msg || msg === '{}' || typeof msg !== 'string') {
+    try {
+      const str = JSON.stringify(error);
+      if (str && str !== '{}') msg = str;
+    } catch {
+      msg = '';
+    }
+  }
+  if (!msg || msg === '{}') {
+    msg = 'Error sending verification email. Please check your Supabase SMTP configuration.';
+  }
+  const lower = msg.toLowerCase();
+  if (lower.includes('sending confirmation email') || lower.includes('error sending')) {
+    return 'Failed to deliver email. Your SMTP provider (Resend test sandbox) only sends to the account owner. Please switch to Brevo in Supabase SMTP settings to send to any email.';
+  }
+  if (lower.includes('signups not allowed') || lower.includes('user not found')) {
+    return 'User does not exist. Please sign up first.';
+  }
+  return msg;
+}
+
 export default function Login() {
   const router = useRouter();
   const [tab, setTab] = useState<'signin' | 'signup'>('signin');
@@ -37,7 +62,7 @@ export default function Login() {
       options: { redirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback` },
     });
     if (error) {
-      setError(error.message);
+      setError(getAuthErrorMessage(error));
       setLoading(false);
     }
   };
@@ -106,12 +131,7 @@ export default function Login() {
     });
 
     if (otpError) {
-      const msg = otpError.message.toLowerCase();
-      if (msg.includes('signups not allowed') || msg.includes('user not found') || msg.includes('invalid')) {
-        setError('User does not exist. Please sign up first.');
-      } else {
-        setError(otpError.message);
-      }
+      setError(getAuthErrorMessage(otpError));
       setLoading(false);
     } else {
       setActiveEmail(targetEmail);
@@ -182,7 +202,7 @@ export default function Login() {
     });
 
     if (otpError) {
-      setError(otpError.message);
+      setError(getAuthErrorMessage(otpError));
       setLoading(false);
     } else {
       setActiveEmail(email);
@@ -209,7 +229,7 @@ export default function Login() {
     });
 
     if (verifyError) {
-      setError(verifyError.message);
+      setError(getAuthErrorMessage(verifyError));
       setLoading(false);
     } else {
       setSuccess(true);
