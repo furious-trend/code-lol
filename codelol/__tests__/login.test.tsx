@@ -82,8 +82,25 @@ describe('Login Page', () => {
     expect(screen.getByRole('button', { name: /Create Account/i })).toBeTruthy();
   });
 
-  it('shows error if user tries to sign in but does not exist', async () => {
+  it('shows error if username does not exist', async () => {
     mockProfileQueryResult = null;
+
+    render(<Login />);
+    const input = screen.getByPlaceholderText(/name@example.com or username/i);
+    // Use a username (no '@') — triggers profiles DB lookup
+    fireEvent.change(input, { target: { value: 'unknownuser' } });
+    fireEvent.click(screen.getByRole('button', { name: /Send Login Code/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/User does not exist. Please sign up first./i)).toBeTruthy();
+    });
+    expect(mockSignInWithOtp).not.toHaveBeenCalled();
+  });
+
+  it('shows error if email user does not exist (Supabase auth rejects)', async () => {
+    mockSignInWithOtp.mockResolvedValueOnce({
+      error: { message: 'Signups not allowed for otp' }
+    });
 
     render(<Login />);
     const input = screen.getByPlaceholderText(/name@example.com or username/i);
@@ -93,7 +110,6 @@ describe('Login Page', () => {
     await waitFor(() => {
       expect(screen.getByText(/User does not exist. Please sign up first./i)).toBeTruthy();
     });
-    expect(mockSignInWithOtp).not.toHaveBeenCalled();
   });
 
   it('signs in existing user and sends OTP with shouldCreateUser: false', async () => {
@@ -116,7 +132,7 @@ describe('Login Page', () => {
     });
 
     // Should transition to OTP screen
-    expect(await screen.findByPlaceholderText(/123456/i)).toBeTruthy();
+    expect(await screen.findByPlaceholderText(/12345678/i)).toBeTruthy();
     expect(screen.getByRole('button', { name: /Verify & Sign In/i })).toBeTruthy();
   });
 
@@ -163,7 +179,7 @@ describe('Login Page', () => {
       });
     });
 
-    expect(await screen.findByPlaceholderText(/123456/i)).toBeTruthy();
+    expect(await screen.findByPlaceholderText(/12345678/i)).toBeTruthy();
     expect(screen.getByRole('button', { name: /Verify & Create Account/i })).toBeTruthy();
   });
 
@@ -180,14 +196,14 @@ describe('Login Page', () => {
     fireEvent.click(screen.getByRole('button', { name: /Send Login Code/i }));
 
     // Verify OTP
-    const otpInput = await screen.findByPlaceholderText(/123456/i);
-    fireEvent.change(otpInput, { target: { value: '123456' } });
+    const otpInput = await screen.findByPlaceholderText(/12345678/i);
+    fireEvent.change(otpInput, { target: { value: '12345678' } });
     fireEvent.click(screen.getByRole('button', { name: /Verify & Sign In/i }));
 
     await waitFor(() => {
       expect(mockVerifyOtp).toHaveBeenCalledWith({
         email: 'coder@test.com',
-        token: '123456',
+        token: '12345678',
         type: 'email',
       });
       expect(mockPush).toHaveBeenCalledWith('/');

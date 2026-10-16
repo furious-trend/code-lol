@@ -26,8 +26,14 @@ function getAuthErrorMessage(error: unknown): string {
   if (lower.includes('sending confirmation email') || lower.includes('error sending')) {
     return 'Failed to deliver email. Please check your email address or SMTP configuration.';
   }
-  if (lower.includes('signups not allowed') || lower.includes('user not found')) {
+  if (lower.includes('signups not allowed') || lower.includes('user not found') || lower.includes('otp_disabled')) {
     return 'User does not exist. Please sign up first.';
+  }
+  if (lower.includes('token has expired') || lower.includes('otp expired')) {
+    return 'Code has expired. Please request a new one.';
+  }
+  if (lower.includes('invalid') && (lower.includes('token') || lower.includes('otp') || lower.includes('code'))) {
+    return 'Invalid code. Please check your email and try again.';
   }
   return msg;
 }
@@ -102,24 +108,9 @@ export default function Login() {
         setLoading(false);
         return;
       }
-    } else {
-      // Check if user exists before signing in
-      try {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('id, email')
-          .ilike('email', identifier)
-          .maybeSingle();
-
-        if (!profile) {
-          setError('User does not exist. Please sign up first.');
-          setLoading(false);
-          return;
-        }
-      } catch {
-        // Fallback to Supabase auth check below
-      }
     }
+    // For email inputs: don't check profiles — Google OAuth users exist in auth.users
+    // but profiles RLS may block the query. Let Supabase Auth decide via shouldCreateUser: false.
 
     // Attempt Sign In with OTP (shouldCreateUser: false prevents creating new accounts on Sign In)
     const { error: otpError } = await supabase.auth.signInWithOtp({
@@ -517,27 +508,27 @@ export default function Login() {
 
               <div>
                 <label htmlFor="otp" className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
-                  6-Digit OTP Code
+                  OTP Code
                 </label>
                 <input
                   id="otp"
                   type="text"
                   inputMode="numeric"
                   autoComplete="one-time-code"
-                  maxLength={6}
+                  maxLength={8}
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  placeholder="123456"
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                  placeholder="12345678"
                   disabled={loading}
                   autoFocus
                   required
-                  className="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3.5 text-center text-2xl font-mono font-bold tracking-[0.4em] text-zinc-100 placeholder-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50"
+                  className="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3.5 text-center text-2xl font-mono font-bold tracking-[0.35em] text-zinc-100 placeholder-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all disabled:opacity-50"
                 />
               </div>
 
               <motion.button 
                 type="submit"
-                disabled={loading || otp.trim().length === 0}
+                disabled={loading || otp.trim().length < 6}
                 whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(16, 185, 129, 0.3)" }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full py-3 px-4 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-600/20 transition-all disabled:opacity-50 text-sm"
