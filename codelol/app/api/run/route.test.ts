@@ -1,5 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { POST } from './route';
+import { createClient } from '@/lib/supabase/server';
+import { checkUserRateLimit } from '@/lib/userRateLimit';
+
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(),
+}));
+
+vi.mock('@/lib/userRateLimit', () => ({
+  checkUserRateLimit: vi.fn(),
+}));
 
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
@@ -8,6 +18,15 @@ describe('POST /api/run', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.ONLINECOMPILER_API_KEY = 'test_key';
+    (createClient as any).mockResolvedValue({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({
+          data: { user: { id: 'test-user-id' } },
+          error: null,
+        }),
+      },
+    });
+    (checkUserRateLimit as any).mockResolvedValue({ allowed: true });
   });
 
   it('should map javascript to typescript-deno and return output', async () => {

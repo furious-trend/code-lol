@@ -47,6 +47,9 @@ export async function proxy(request: NextRequest) {
   if (!user && !isPublicRoute) {
     // Unauthenticated user trying to access a protected route
     url.pathname = '/login';
+    if (path && path !== '/') {
+      url.searchParams.set('next', path);
+    }
     return NextResponse.redirect(url);
   }
 

@@ -50,30 +50,35 @@ export default async function Navbar() {
         <Link href="/" className="font-bold text-xl text-zinc-100 tracking-tight flex items-center gap-2">
           <Bugsy size={28} mood="idle" /> CodeLOL
         </Link>
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
-          {[
-            { name: 'Library', path: '/lessons' },
-            { name: 'Problems', path: '/problems' },
-            { name: 'Battle', path: '/battle' },
-            { name: 'Friends', path: '/friends' },
-            { name: 'Quiz', path: '/quiz' },
-            { name: 'Playground', path: '/playground' },
-          ].map((link) => (
-            <Link key={link.name} href={getLocalizedPath(link.path)} className="relative group hover:text-zinc-100 transition-colors py-1">
-              {link.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
-            </Link>
-          ))}
-        </div>
+        {/* Nav links: only visible to authenticated users */}
+        {user && (
+          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
+            {[
+              { name: 'Library', path: '/lessons' },
+              { name: 'Problems', path: '/problems' },
+              { name: 'Battle', path: '/battle' },
+              { name: 'Friends', path: '/friends' },
+              { name: 'Quiz', path: '/quiz' },
+              { name: 'Playground', path: '/playground' },
+            ].map((link) => (
+              <Link key={link.name} href={getLocalizedPath(link.path)} className="relative group hover:text-zinc-100 transition-colors py-1">
+                {link.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
       <div className="flex items-center gap-4 text-zinc-300">
-        <LanguageSwitcher />
-        <UserProgress />
-        
-        <Link href="/settings" className="text-sm hover:text-white transition-colors" title="Settings">
-          ⚙️
-        </Link>
-        
+        {/* Widgets: only visible to authenticated users */}
+        {user && <LanguageSwitcher />}
+        {user && <UserProgress />}
+        {user && (
+          <Link href="/settings" className="text-sm hover:text-white transition-colors" title="Settings">
+            ⚙️
+          </Link>
+        )}
+
         {user ? (
           <>
             <Notifications />

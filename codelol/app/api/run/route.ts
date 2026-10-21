@@ -1,5 +1,7 @@
-// agent-notes: { ctx: "API proxy for OnlineCompiler.io multi-language code execution", deps: ["next/server"], state: active, last: "sato@2026-10-12" }
+// agent-notes: { ctx: "API proxy for OnlineCompiler.io multi-language code execution with server auth, body bounds, and rate limiting", deps: ["next/server", "@/lib/supabase/server", "@/lib/userRateLimit"], state: active, last: "sato@2026-10-16" }
 import { NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { checkUserRateLimit } from '@/lib/userRateLimit';
 
 const COMPILER_MAP: Record<string, string> = {
   // Python
@@ -65,14 +67,81 @@ async function fetchWithTimeout(resource: string, options: RequestInit & { timeo
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { language, code, assertions } = body;
+    // 1. Supabase server auth verification
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    const compiler = COMPILER_MAP[language];
+    if (!user || authError) {
+      return NextResponse.json(
+        { error: 'Unauthorized. Please log in to run code.' },
+        { status: 401 }
+      );
+    }
+
+    // 2. Parse and enforce body bounds
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: 'Invalid JSON payload.' },
+        { status: 400 }
+      );
+    }
+
+    const { language, code, assertions } = body || {};
+
+    if (!language || typeof language !== 'string') {
+      return NextResponse.json(
+        { error: 'Language is required.' },
+        { status: 400 }
+      );
+    }
+
+    const compiler = COMPILER_MAP[language.toLowerCase()];
     if (!compiler) {
       return NextResponse.json(
         { error: `Language '${language}' is not supported.` },
         { status: 400 }
+      );
+    }
+
+    if (code === undefined || code === null || typeof code !== 'string') {
+      return NextResponse.json(
+        { error: 'Code string is required.' },
+        { status: 400 }
+      );
+    }
+
+    // Enforce body bounds: max 20,000 characters (~20KB)
+    if (code.length > 20000) {
+      return NextResponse.json(
+        { error: 'Code exceeds maximum allowed size (20KB limit).' },
+        { status: 400 }
+      );
+    }
+
+    // Bounds on assertions
+    if (assertions !== undefined && !Array.isArray(assertions)) {
+      return NextResponse.json(
+        { error: 'Assertions must be an array.' },
+        { status: 400 }
+      );
+    }
+
+    if (Array.isArray(assertions) && assertions.length > 20) {
+      return NextResponse.json(
+        { error: 'Too many assertions (maximum 20 allowed).' },
+        { status: 400 }
+      );
+    }
+
+    // 3. DB-backed rate limiting
+    const rateLimit = await checkUserRateLimit(supabase, user.id, 20, 60);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: rateLimit.error || 'Too many requests. Please wait a moment before running code again 🐢' },
+        { status: 429 }
       );
     }
 

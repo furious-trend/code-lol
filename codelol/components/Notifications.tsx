@@ -269,7 +269,7 @@ export function Notifications() {
 
                       {isMsg && (notif.payload?.preview || notif.payload?.content) && (
                         <p className="text-xs text-zinc-400 italic mb-2 line-clamp-2">
-                          "{notif.payload?.preview || notif.payload?.content}"
+                          &quot;{notif.payload?.preview || notif.payload?.content}&quot;
                         </p>
                       )}
                       

@@ -23,7 +23,7 @@ export function analyzeComplexity(code: string, language: string = 'javascript')
 
   // 1. Detect Recursion
   // First, find function names
-  let funcNames: string[] = [];
+  const funcNames: string[] = [];
   if (language === 'python') {
     const defRegex = /def\s+([a-zA-Z0-9_]+)\s*\(/g;
     let match;
@@ -61,8 +61,6 @@ export function analyzeComplexity(code: string, language: string = 'javascript')
   // 2. Detect Loop Depth
   if (language === 'python') {
     const lines = cleanCode.split('\n');
-    let currentDepth = 0;
-    const depths: number[] = [];
 
     // Track active loop indentations
     const activeLoopIndents: number[] = [];
@@ -90,12 +88,6 @@ export function analyzeComplexity(code: string, language: string = 'javascript')
     }
   } else {
     // C-style languages (JS, C, C++, Java)
-    let currentDepth = 0;
-    
-    // We'll iterate through tokens to properly track {} depth within loops
-    let depthTokens = [];
-    const loopRegex = /\b(for|while)\b/g;
-    
     // Create a simplified token stream of { } and loop keywords
     const regex = /\b(for|while)\b|\{|\}/g;
     let match;

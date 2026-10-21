@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const { Client } = require('pg');
 
-const client = new Client({
-  connectionString: 'postgresql://postgres:shafiqmaadheshadhi@db.brxautcammfkxupmweyc.supabase.co:5432/postgres',
-});
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  console.error("DATABASE_URL environment variable is required.");
+  process.exit(1);
+}
+
+const client = new Client({ connectionString });
 
 const sql = `
 create table if not exists public.profiles (

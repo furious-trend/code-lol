@@ -8,6 +8,9 @@ import { useRouter } from 'next/navigation';
 // Mock the Next.js router
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: vi.fn(() => ({
+    get: vi.fn((key: string) => (key === 'next' ? '/' : null)),
+  })),
 }));
 
 // Mock Supabase client

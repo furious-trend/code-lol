@@ -40,3 +40,20 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /public/gifs/
+
+# logs and test outputs
+*.log
+*.log.*
+*-test.txt
+*-output.txt
+final-*.txt
+eslint_report.txt
+after.log
+before.log
+update.log
+
+# scratch and virtual environments
+/scratch/
+/venv/
+supabase/.temp/
+

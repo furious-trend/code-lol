@@ -4,7 +4,12 @@ import Login from "../app/login/page";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
-vi.mock("next/navigation", () => ({ useRouter: vi.fn() }));
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+  useSearchParams: vi.fn(() => ({
+    get: vi.fn((key: string) => (key === 'next' ? '/' : null)),
+  })),
+}));
 vi.mock("@/lib/supabase/client", () => ({ createClient: vi.fn() }));
 vi.mock("@/components/Bugsy", () => ({ Bugsy: () => <div data-testid="bugsy" /> }));
 
