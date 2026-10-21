@@ -82,6 +82,7 @@ export function InteractiveCompiler({
         }
 
         playMemeSound(true, humorPref);
+        await handleRoast(code, out, true, '', humorPref);
         onCodeRunSuccess?.();
       }
     } catch (err: any) {
