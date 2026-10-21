@@ -1,8 +1,9 @@
-// agent-notes: { ctx: "Authentication login page with Sign In, Sign Up tabs, Username/Email OTP, and Google OAuth", deps: ["@/lib/supabase/client", "@/components/Bugsy"], state: active, last: "sato@2026-10-15" }
+// agent-notes: { ctx: "Authentication login page with Sign In, Sign Up tabs, Username/Email OTP, Google OAuth, ?next= redirect, and Suspense", deps: ["@/lib/supabase/client", "@/components/Bugsy"], state: active, last: "sato@2026-10-16" }
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bugsy, BugsyMood } from '@/components/Bugsy';
@@ -38,8 +39,10 @@ function getAuthErrorMessage(error: unknown): string {
   return msg;
 }
 
-export default function Login() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get('next') || '/';
   const [tab, setTab] = useState<'signin' | 'signup'>('signin');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -225,7 +228,7 @@ export default function Login() {
     } else {
       setSuccess(true);
       setLoading(false);
-      router.push('/');
+      router.push(nextPath);
       router.refresh();
     }
   };
@@ -515,10 +518,10 @@ export default function Login() {
                   type="text"
                   inputMode="numeric"
                   autoComplete="one-time-code"
-                  maxLength={8}
+                  maxLength={6}
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 8))}
-                  placeholder="12345678"
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  placeholder="123456"
                   disabled={loading}
                   autoFocus
                   required
@@ -562,5 +565,22 @@ export default function Login() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-white p-4">
+          <div className="w-full max-w-md p-8 rounded-3xl bg-zinc-900/70 border border-zinc-800/60 shadow-2xl flex flex-col items-center justify-center space-y-4">
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <p className="text-zinc-400 text-sm font-medium">Loading CodeLOL...</p>
+          </div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
