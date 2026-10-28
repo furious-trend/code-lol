@@ -1,31 +1,6 @@
-export type Difficulty = 'Beginner' | 'Intermediate' | 'Expert';
+// agent-notes: { ctx: "Legacy problems collection preserving backward compatibility for battles and leaderboard", deps: ["./types"], state: canonical, last: "sato@2026-10-28" }
+import { Difficulty, TestCase, Problem } from './types';
 
-export interface TestCase {
-  input: unknown[];
-  expected: unknown;
-}
-
-export interface Problem {
-  id: string;
-  title: string;
-  level: string;
-  difficulty: Difficulty;
-  description: string;
-  starterCode: string;
-  starterCodePython?: string;
-  starterCodeC?: string;
-  starterCodeCpp?: string;
-  starterCodeJava?: string;
-  testHarnessC?: string;
-  testHarnessCpp?: string;
-  testHarnessJava?: string;
-  testCases: TestCase[];
-  miniQuizQuestion?: {
-    question: string;
-    options: string[];
-    correctAnswerIndex: number;
-  };
-}
 
 // 1. Define our handful of real, hand-crafted problems
 const handCraftedProblems: Record<string, Partial<Problem>> = {

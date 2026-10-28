@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Progress tracking for problems, lessons, quizzes, and dual-gate module completion", deps: ["./supabase/client"], state: active, last: "sato@2026-10-28" }
 import { createClient } from './supabase/client';
 
 interface CompletionOptions {
@@ -5,6 +6,55 @@ interface CompletionOptions {
   timeComplexity?: string;
   spaceComplexity?: string;
   pointsAwarded?: number;
+}
+
+export type ModuleCompletionStatus =
+  | 'not_started'
+  | 'lesson_read'
+  | 'challenge_solved'
+  | 'completed';
+
+/**
+ * Returns the granular 3-step completion state of a module:
+ * - 'not_started': neither lesson nor challenge completed
+ * - 'lesson_read': only the curriculum lesson read
+ * - 'challenge_solved': only the coding challenge passed
+ * - 'completed': both lesson read and coding challenge solved (100% mastery)
+ */
+export function getModuleCompletionStatus(
+  moduleId: string,
+  problemId: string,
+  language: string,
+  learnedTopicIds: Set<string>,
+  solvedProblemIds: Set<string>
+): ModuleCompletionStatus {
+  const isLessonRead = learnedTopicIds.has(moduleId);
+  const isProblemSolved =
+    solvedProblemIds.has(problemId) ||
+    solvedProblemIds.has(`${problemId}-${language}`) ||
+    solvedProblemIds.has(problemId.replace(`-${language}`, ''));
+
+  if (isLessonRead && isProblemSolved) return 'completed';
+  if (isLessonRead) return 'lesson_read';
+  if (isProblemSolved) return 'challenge_solved';
+  return 'not_started';
+}
+
+/**
+ * Evaluates whether a module is 100% complete by verifying that
+ * both the curriculum lesson was learned and the coding challenge was solved.
+ */
+export function isModuleComplete(
+  moduleId: string,
+  problemId: string,
+  language: string,
+  learnedTopicIds: Set<string>,
+  solvedProblemIds: Set<string>
+): boolean {
+  return (
+    getModuleCompletionStatus(moduleId, problemId, language, learnedTopicIds, solvedProblemIds) ===
+    'completed'
+  );
 }
 
 /**

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
-import { problems } from '@/lib/problems';
+import { problems, getModuleProblem, resolveActiveLanguage, ModuleProblem } from '@/lib/problems';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { useMemeSound } from '@/hooks/useMemeSound';
@@ -17,17 +17,41 @@ import { createClient } from '@/lib/supabase/client';
 import confetti from 'canvas-confetti';
 import { getResultGif } from '@/lib/localGifs';
 
+function getSearchParam(key: string): string | null {
+  if (typeof window !== 'undefined' && window.location && window.location.search) {
+    try {
+      return new URLSearchParams(window.location.search).get(key);
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
 export default function ProblemSolverPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
-  
-  const problem = problems.find(p => p.id === id);
+  const queryLang = getSearchParam('lang') || getSearchParam('language');
+
+
+  const [activeLang, setActiveLang] = useState<string>(() => {
+    const localGuest = typeof window !== 'undefined' ? localStorage.getItem('guest_lang') : null;
+    if (typeof resolveActiveLanguage === 'function') {
+      return resolveActiveLanguage(queryLang, null, localGuest);
+    }
+    return queryLang || 'javascript';
+  });
+
+  const moduleProb = typeof getModuleProblem === 'function' ? getModuleProblem(id, activeLang) : undefined;
+  const problem = moduleProb || problems.find((p: any) => p.id === id);
   
   // Find next problem in the same category
-  const categoryProblems = problems.filter(p => p?.difficulty === problem?.difficulty);
-  const catIdx = categoryProblems.findIndex(p => p.id === problem?.id);
+  const categoryProblems = problems.filter((p: any) => p?.difficulty === (problem as any)?.difficulty || (problem as any)?.tier);
+  const catIdx = categoryProblems.findIndex((p: any) => p.id === problem?.id);
   const nextProblem = catIdx !== -1 && catIdx < categoryProblems.length - 1 ? categoryProblems[catIdx + 1] : null;
+
+
   
   const [code, setCode] = useState(problem?.starterCode || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,7 +72,12 @@ export default function ProblemSolverPage() {
   const supabase = createClient();
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
-  const [activeLang, setActiveLang] = useState<string>('javascript');
+  const [isLessonRead, setIsLessonRead] = useState(false);
+  const [showHints, setShowHints] = useState(false);
+
+  const hints = (problem as any)?.hints;
+  const moduleId = (problem as any)?.moduleId;
+  const chapterId = (problem as any)?.chapterId;
 
   useEffect(() => {
     async function loadPref() {
@@ -58,9 +87,15 @@ export default function ProblemSolverPage() {
           const storedHumor = localStorage.getItem('guest_humor');
           if (storedHumor === 'tamil' || storedHumor === 'general') setHumorPref(storedHumor);
           const storedLang = localStorage.getItem('guest_lang');
-          if (storedLang === 'python' || storedLang === 'javascript') {
+          if (storedLang && ['python', 'javascript', 'c', 'cpp', 'java'].includes(storedLang) && !queryLang) {
             setLearningLanguage(storedLang);
             setActiveLang(storedLang);
+          }
+          if (moduleId) {
+            const guestTopics = localStorage.getItem(`learned_topics_${activeLang}`);
+            if (guestTopics && JSON.parse(guestTopics).includes(moduleId)) {
+              setIsLessonRead(true);
+            }
           }
         } else {
           const { data: profile } = await supabase
@@ -71,14 +106,25 @@ export default function ProblemSolverPage() {
           if (profile?.humor_preference) {
             setHumorPref(profile.humor_preference);
           }
-          if (profile?.learning_language) {
-            setLearningLanguage(profile.learning_language); setActiveLang(profile.learning_language);
+          if (profile?.learning_language && !queryLang) {
+            setLearningLanguage(profile.learning_language);
+            setActiveLang(profile.learning_language);
+          }
+          if (moduleId) {
+            const { data: prog } = await supabase
+              .from('library_progress')
+              .select('learned')
+              .eq('user_id', user.id)
+              .eq('item_id', moduleId)
+              .eq('learned', true)
+              .maybeSingle();
+            if (prog?.learned) setIsLessonRead(true);
           }
         }
       }
     }
     loadPref();
-  }, [supabase]);
+  }, [supabase, activeLang, moduleId, queryLang]);
 
   // Sync state if problem loads
   useEffect(() => {
@@ -183,13 +229,15 @@ export default function ProblemSolverPage() {
     
     let testSuite = '';
     
-    if (activeLang === 'python' || activeLang === 'javascript') {
+    if ((problem as any)?.testHarness) {
+      testSuite = (problem as any).testHarness.replace("{{USER_CODE}}", code);
+    } else if (activeLang === 'python' || activeLang === 'javascript') {
       if (activeLang === 'python') {
         testSuite = `
 ${code}
 
 import json
-_tc = json.loads('${JSON.stringify(problem.testCases).replace(/'/g, "\\'")}')
+_tc = json.loads('${JSON.stringify(problem.testCases || []).replace(/'/g, "\\'")}')
 _passed = 0
 _log = []
 
@@ -217,7 +265,7 @@ print(json.dumps({'passed': _passed, 'total': len(_tc), 'log': _log}))
         testSuite = `
 ${code}
 
-const _tc = ${JSON.stringify(problem.testCases)};
+const _tc = ${JSON.stringify(problem.testCases || [])};
 let _passed = 0;
 let _log = [];
 
@@ -269,7 +317,7 @@ let _log = [];
     } else if (activeLang === "cpp" && problem.testHarnessCpp) {
       testSuite = problem.testHarnessCpp.replace("{{USER_CODE}}", code);
     } else if (activeLang === "java" && problem.testHarnessJava) {
-      testSuite = problem.testHarnessJava.replace("{{USER_CODE}}", code.replace(/public\\s+class\\s+Main/g, "class UserMain").replace(/public\\s+static\\s+void\\s+main/g, "public static void user_main"));
+      testSuite = problem.testHarnessJava.replace("{{USER_CODE}}", code.replace(/public\s+class\s+Main/g, "class UserMain").replace(/public\s+static\s+void\s+main/g, "public static void user_main"));
     } else {
       setRawOutput("Sorry, " + activeLang.toUpperCase() + " is not fully supported for this specific problem yet (missing test harness). Try JavaScript or Python!");
       setLoadingMsg("Unsupported Language");
@@ -291,33 +339,19 @@ let _log = [];
       
       const outputLines = data.output.split('\n');
       
-      
-      if (activeLang !== 'javascript' && activeLang !== 'python') {
-        // Just show output
-        setRawOutput(data.output || "Code ran successfully with no output.");
-        setSuccessMsg("Executed Successfully!");
-        setTestResults({ passed: 1, total: 1, log: ["Execution Output:", ...(data.output || "No output").split('\n')] });
-        
-        // Wait for roast and GIF to fully load
-        const playedSound = playMemeSound(true, humorPref);
-        handleRoast(code, data.output || "Code ran successfully with no output.", true, playedSound, humorPref);
-        
-        setIsSubmitting(false);
-        return;
-      }
-
       // Parse the output to find our test results
-      const resultsIdx = outputLines.findIndex((l: string) => l === '===TEST_RESULTS===');
+      const resultsIdx = outputLines.findIndex((l: string) => l.trim() === '===TEST_RESULTS===');
+      const jsonLine = resultsIdx !== -1
+        ? outputLines.slice(resultsIdx + 1).find((l: string) => l.trim().length > 0)
+        : null;
 
-      
-      if (resultsIdx !== -1 && outputLines[resultsIdx + 1]) {
+      if (jsonLine) {
         try {
-          const parsedResults = JSON.parse(outputLines[resultsIdx + 1]);
+          const parsedResults = JSON.parse(jsonLine);
           setTestResults(parsedResults);
           
           if (parsedResults.passed === parsedResults.total) {
             // Calculate solve time
-            // eslint-disable-next-line
             const solveTimeMs = startTimeRef.current ? Date.now() - startTimeRef.current : 0;
             
             // Check milestone before save
@@ -358,7 +392,13 @@ let _log = [];
               setShowMilestone(true);
             }
             
-            setSuccessMsg(getRandomSuccessMessage());
+            if (isLessonRead) {
+              setSuccessMsg("🏆 Module Complete! Both lesson read & challenge conquered!");
+            } else if (moduleId) {
+              setSuccessMsg("🎉 Accepted! Next: Read the curriculum lesson to 100% finish this module!");
+            } else {
+              setSuccessMsg(getRandomSuccessMessage());
+            }
             setNudgeMsg(getRandomNudgeMessage());
             const playedSound = playMemeSound(true, humorPref);
             
@@ -377,18 +417,28 @@ let _log = [];
             // Automatically trigger the roast (meme/joke) on test failure
             handleRoast(code, data.output, false, playedSound, humorPref);
           }
-          
-        } catch (e) {
-          setRawOutput("Failed to parse test results.\n" + data.output);
-          const playedSound = playMemeSound(false, humorPref);
-          handleRoast(code, "Failed to parse test results.\n" + data.output, false, playedSound, humorPref);
+          setIsSubmitting(false);
+          return;
+        } catch (parseErr) {
+          console.error("Failed to parse test results JSON:", parseErr);
         }
-      } else {
-        // Syntax error or runtime error before our tests could even run
-        setRawOutput("Execution Error:\n" + data.output);
-        const playedSound = playMemeSound(false, humorPref);
-        handleRoast(code, "Execution Error:\n" + data.output, false, playedSound, humorPref);
       }
+      
+      if (activeLang !== 'javascript' && activeLang !== 'python') {
+        // Fallback for execution without ===TEST_RESULTS===
+        setRawOutput(data.output || "Code ran successfully with no output.");
+        setSuccessMsg("Executed Successfully!");
+        setTestResults({ passed: 1, total: 1, log: ["Execution Output:", ...(data.output || "No output").split('\n')] });
+        
+        // Wait for roast and GIF to fully load
+        const playedSound = playMemeSound(true, humorPref);
+        handleRoast(code, data.output || "Code ran successfully with no output.", true, playedSound, humorPref);
+        
+        setIsSubmitting(false);
+        return;
+      }
+      setRawOutput(data.output || "Execution completed with no test results.");
+
     } catch (err) {
       setRawOutput("Network Error. Please try again.");
       const playedSound = playMemeSound(false, humorPref);
@@ -411,14 +461,30 @@ let _log = [];
         {/* Problem Description Area (Scrollable) */}
         <div className="flex-1 p-6 md:p-10 overflow-y-auto">
           <div className="mb-6 pb-6 border-b border-zinc-800">
-            <Link href="/problems" className="text-zinc-500 hover:text-blue-400 mb-6 inline-block font-medium transition-colors">
-              ← Back to Problems
-            </Link>
+            <div className="flex items-center justify-between mb-4">
+              <Link href={`/problems?lang=${activeLang}`} className="text-zinc-500 hover:text-blue-400 inline-block font-medium transition-colors text-sm">
+                ← Back to Problems ({activeLang.toUpperCase()})
+              </Link>
+              {moduleId && (
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-mono font-bold">
+                    Module {moduleId}
+                  </span>
+                  <Link
+                    href={`/lessons?lang=${activeLang}&topic=${moduleId}`}
+                    className="text-xs text-zinc-400 hover:text-blue-400 flex items-center gap-1 transition-colors font-medium"
+                  >
+                    <span>Curriculum Lesson 📖</span>
+                    {isLessonRead ? <span className="text-green-400">✅</span> : <span className="text-zinc-500">○</span>}
+                  </Link>
+                </div>
+              )}
+            </div>
             
             <div className="flex items-center gap-4 mt-2">
               <h1 className="text-3xl font-bold">{problem.title}</h1>
               <span className={`px-3 py-1 rounded-full text-xs font-bold border ${badgeColor}`}>
-                {problem.difficulty}
+                {(problem as any).difficulty || (problem as any).tier}
               </span>
               <select 
                 value={activeLang}
@@ -471,6 +537,29 @@ let _log = [];
             {formatDescription(problem.description)}
           </div>
 
+          {hints && (
+            <div className="mt-6 p-4 rounded-xl border border-zinc-800 bg-zinc-900/60 backdrop-blur">
+              <button
+                onClick={() => setShowHints(!showHints)}
+                type="button"
+                className="flex items-center justify-between w-full font-bold text-sm text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer"
+              >
+                <span className="flex items-center gap-2">💡 Need a Hint?</span>
+                <span className="text-xs text-zinc-500 font-semibold">{showHints ? 'Hide Hint' : 'Reveal Hint'}</span>
+              </button>
+              {showHints && (
+                <div className="mt-3 space-y-2 text-xs sm:text-sm text-zinc-300 animate-in fade-in duration-200">
+                  <p><strong className="text-zinc-400">Concept:</strong> {hints.english}</p>
+                  {hints.tamilRoast && (
+                    <p className="p-2.5 rounded-lg bg-pink-950/30 border border-pink-500/20 text-pink-300 font-medium">
+                      <strong>Bugsy's Tamil Roast 🌶️:</strong> {hints.tamilRoast}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {problem.miniQuizQuestion && (
             <div className="mt-12 bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-lg mb-4">
               <h3 className="text-xl font-bold text-pink-400 mb-4 flex items-center gap-2">
@@ -478,7 +567,7 @@ let _log = [];
               </h3>
               <p className="text-zinc-200 text-lg mb-6">{problem.miniQuizQuestion.question}</p>
               <div className="flex flex-col gap-3">
-                {problem.miniQuizQuestion.options.map((opt, idx) => {
+                {problem.miniQuizQuestion.options.map((opt: string, idx: number) => {
                   const isCorrect = idx === problem.miniQuizQuestion!.correctAnswerIndex;
                   const isSelected = quizAnswered === idx;
                   

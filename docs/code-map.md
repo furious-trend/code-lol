@@ -37,29 +37,33 @@ core ────── (no deps — foundational types)
 
 ## Package / Module Summaries
 
-<!-- For each package or major module, document:
-### @scope/package-name — Short Description
+### `codelol/lib/problems/` — Multi-Language Curriculum-Aligned Problems
 
-**Purpose:** What it does.
+**Purpose:** Provides coding challenges partitioned by programming language (JavaScript, Python, C, C++, Java) and mapped to curriculum modules.
 
 | Module | Key Exports | Notes |
 |--------|------------|-------|
-| `src/foo.ts` | `FooClass`, `fooHelper()` | Entry point |
-| `src/bar.ts` | `BarSchema`, `BarType` | Zod schemas |
+| `lib/problems/types.ts` | `ModuleProblem`, `ChapterProblemGroup`, `SupportedProblemLanguage`, `ProblemTier` | Core interfaces & schemas |
+| `lib/problems/index.ts` | `getModuleProblems()`, `getModuleProblem()`, `getProblemsByChapter()`, `resolveActiveLanguage()`, `problems` | Primary API aggregator & legacy export |
+| `lib/problems/python.ts` | `pythonModuleProblems` | Python curriculum module challenges with test harnesses |
+| `lib/problems/javascript.ts` | `javascriptModuleProblems` | JavaScript challenges with runner wrappers |
+| `lib/problems/c.ts`, `cpp.ts`, `java.ts` | `cModuleProblems`, `cppModuleProblems`, `javaModuleProblems` | C, C++, Java challenges with hidden harnesses |
+| `lib/problems/legacy.ts` | `problems` | Backwards compatibility for battle & leaderboard |
 
-**External deps:** list key dependencies
-**Internal deps:** list workspace dependencies
--->
+### `codelol/lib/progress.ts` — Dual-Gate Progress & Module Completion
+
+**Purpose:** Evaluates module and problem completion states for authenticated and guest users.
+
+| Module | Key Exports | Notes |
+|--------|------------|-------|
+| `lib/progress.ts` | `isModuleComplete()`, `getModuleCompletionStatus()`, `saveProblemCompletion()` | 3-step completion logic (Not Started, In Progress, 100% Completed) |
 
 ## Test Inventory
 
-<!-- List test files, counts, and focus areas -->
-<!-- Example:
 | Package | Test Files | Tests | Focus |
 |---------|-----------|-------|-------|
-| core | 3 | 24 | Schema validation, config loading |
-| api | 5 | 41 | Route handlers, middleware |
--->
+| problems | `__tests__/moduleProblems.test.tsx` | 19 | Language filtering, schema validation, chapter grouping, 3-step completion |
+| problems-ui | `__tests__/problemsDashboard.test.tsx`, `__tests__/problems.ui.test.tsx` | 3 | Dashboard filter toggles, execution feedback animations |
 
 ## Key Type Flow
 

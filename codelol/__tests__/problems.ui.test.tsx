@@ -41,7 +41,10 @@ vi.mock('@/lib/problems', () => ({
       starterCode: 'function twoSum(nums, target) {}',
       testCases: []
     }
-  ]
+  ],
+  resolveActiveLanguage: vi.fn().mockReturnValue('javascript'),
+  getModuleProblem: vi.fn(),
+  getProblemsByChapter: vi.fn().mockReturnValue([]),
 }));
 
 // Mock hooks
