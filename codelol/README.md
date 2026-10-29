@@ -44,7 +44,7 @@ Open [http://localhost:3000](http://localhost:3000) to view CodeLOL.
 CodeLOL enforces strict quality gates across testing, type safety, and linting:
 
 ```bash
-# Run full Vitest test suite (41 files, 187 tests)
+# Run full Vitest test suite (41 files, 192 tests)
 npx vitest run
 
 # Run TypeScript type verification

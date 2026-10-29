@@ -13,7 +13,7 @@
 - **Code Execution Engines:**
   - **JavaScript:** Client-side isolated iframe (`sandbox="allow-scripts"`, strictly NO `allow-same-origin`, 5000ms timeout) via `lib/executor.ts`
   - **Python, C, C++, Java:** Server-side proxy via `app/api/run/route.ts` to OnlineCompiler.io
-- **Testing:** Vitest 4.1 + React Testing Library (jsdom), 41 test suites, 187 unit tests
+- **Testing:** Vitest 4.1 + React Testing Library (jsdom), 41 test suites, 192 unit tests
 - **Deployment & Hosting:** Vercel
 
 ## Core Features & Subsystems
@@ -41,4 +41,4 @@
 5. **Operational Integrity & Audit Status**
    - Scratch files with test credentials purged.
    - PostgreSQL connections strictly consume `process.env.DATABASE_URL`.
-   - 100% green test suite: 41 of 41 test files passing, 187 of 187 tests passing.
+   - 100% green test suite: 41 of 41 test files passing, 192 of 192 tests passing.

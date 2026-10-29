@@ -1,11 +1,11 @@
-// agent-notes: { ctx: "Problem solver page with script problem runner and roast feedback", deps: ["@/lib/problems", "@/lib/executor", "@/lib/progress"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "Problem solver page with solution gating, progressive hints, forfeit XP handling, and roast feedback", deps: ["@/lib/problems", "@/lib/executor", "@/lib/progress", "@/components/Bugsy"], state: active, last: "sato@2026-10-29" }
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
-import { problems, getModuleProblem, resolveActiveLanguage, ModuleProblem } from '@/lib/problems';
+import { problems, getModuleProblem, resolveActiveLanguage, ModuleProblem, getProblemSolution } from '@/lib/problems';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { useMemeSound } from '@/hooks/useMemeSound';
@@ -13,6 +13,7 @@ import { executeCode } from '@/lib/executor';
 import { saveProblemCompletion } from '@/lib/progress';
 import { getRandomLoadingMessage, getRandomSuccessMessage, getRandomNudgeMessage } from '@/lib/funnyCopy';
 import { MilestoneCelebration } from '@/components/MilestoneCelebration';
+import { Bugsy } from '@/components/Bugsy';
 import ReactMarkdown from 'react-markdown';
 import { createClient } from '@/lib/supabase/client';
 import confetti from 'canvas-confetti';
@@ -54,8 +55,6 @@ export default function ProblemSolverPage() {
   const catIdx = categoryProblems.findIndex((p: any) => p.id === problem?.id);
   const nextProblem = catIdx !== -1 && catIdx < categoryProblems.length - 1 ? categoryProblems[catIdx + 1] : null;
 
-
-  
   const [code, setCode] = useState(problem?.starterCode || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [testResults, setTestResults] = useState<{passed: number, total: number, log: string[]} | null>(null);
@@ -68,6 +67,15 @@ export default function ProblemSolverPage() {
   const [showMilestone, setShowMilestone] = useState(false);
   const [milestoneData, setMilestoneData] = useState<{milestone: number, type: 'problem' | 'level'} | null>(null);
   
+  // Gating & Progressive Hints State
+  const [isSolved, setIsSolved] = useState(false);
+  const [isForfeited, setIsForfeited] = useState(false);
+  const [showForfeitModal, setShowForfeitModal] = useState(false);
+  const [showHints, setShowHints] = useState(false);
+  const [showHint2, setShowHint2] = useState(false);
+  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'problem' | 'solution'>('problem');
+  const [copiedSolution, setCopiedSolution] = useState(false);
+
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -76,14 +84,20 @@ export default function ProblemSolverPage() {
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const [isLessonRead, setIsLessonRead] = useState(false);
-  const [showHints, setShowHints] = useState(false);
 
   const hints = (problem as any)?.hints;
   const moduleId = (problem as any)?.moduleId;
   const chapterId = (problem as any)?.chapterId;
 
+  const refSolution = problem ? getProblemSolution(problem, activeLang) : {
+    code: '// Reference solution',
+    explanation: 'Solve this challenge to unlock the breakdown.',
+    syntaxClue: 'Check parameter types and return requirements.'
+  };
+
   useEffect(() => {
     async function loadPref() {
+      const actualProbId = activeLang === 'python' ? `${id}-python` : id;
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         if (user.id === 'local-guest') {
@@ -99,6 +113,17 @@ export default function ProblemSolverPage() {
             if (guestTopics && JSON.parse(guestTopics).includes(moduleId)) {
               setIsLessonRead(true);
             }
+          }
+          // Check local completion / forfeit
+          const localKey = activeLang === 'python' ? 'completedProblems_python' : 'completedProblems';
+          const saved = localStorage.getItem(localKey);
+          const completed = saved ? JSON.parse(saved) : [];
+          const forfeitedRaw = localStorage.getItem('forfeitedProblems');
+          const forfeited = forfeitedRaw ? JSON.parse(forfeitedRaw) : [];
+          if (completed.includes(id) || completed.includes(actualProbId)) {
+            setIsSolved(true);
+          } else if (forfeited.includes(id) || forfeited.includes(actualProbId)) {
+            setIsForfeited(true);
           }
         } else {
           const { data: profile } = await supabase
@@ -123,11 +148,43 @@ export default function ProblemSolverPage() {
               .maybeSingle();
             if (prog?.learned) setIsLessonRead(true);
           }
+
+          // Check problem completion in Supabase
+          try {
+            const { data: comp } = await supabase
+              .from('problem_completions')
+              .select('problem_id, points_awarded')
+              .eq('user_id', user.id)
+              .in('problem_id', [id, actualProbId])
+              .maybeSingle();
+
+            if (comp) {
+              if (comp.points_awarded === 0) {
+                setIsForfeited(true);
+              } else {
+                setIsSolved(true);
+              }
+            } else {
+              // Local fallback for offline/guest sync
+              const localKey = activeLang === 'python' ? 'completedProblems_python' : 'completedProblems';
+              const saved = localStorage.getItem(localKey);
+              const completed = saved ? JSON.parse(saved) : [];
+              const forfeitedRaw = localStorage.getItem('forfeitedProblems');
+              const forfeited = forfeitedRaw ? JSON.parse(forfeitedRaw) : [];
+              if (completed.includes(id) || completed.includes(actualProbId)) {
+                setIsSolved(true);
+              } else if (forfeited.includes(id) || forfeited.includes(actualProbId)) {
+                setIsForfeited(true);
+              }
+            }
+          } catch {
+            // Non-blocking
+          }
         }
       }
     }
     loadPref();
-  }, [supabase, activeLang, moduleId, queryLang]);
+  }, [supabase, activeLang, moduleId, queryLang, id]);
 
   // Sync state if problem loads
   useEffect(() => {
@@ -214,6 +271,9 @@ export default function ProblemSolverPage() {
   };
 
   const handleProblemSuccess = async (output: string) => {
+    // Automatically unlock the solution
+    setIsSolved(true);
+
     // Calculate solve time
     const solveTimeMs = startTimeRef.current ? getTimestamp() - startTimeRef.current : 0;
     
@@ -275,6 +335,37 @@ export default function ProblemSolverPage() {
     
     // Trigger the happy roast (meme/joke) on success
     handleRoast(code, output, true, playedSound, humorPref);
+  };
+
+  const handleConfirmForfeit = async () => {
+    setIsForfeited(true);
+    setShowForfeitModal(false);
+    setActiveWorkspaceTab('solution');
+
+    // Save completion with 0 points awarded so no XP is added
+    await saveProblemCompletion(problem.id, {
+      pointsAwarded: 0,
+      solveTimeMs: 0,
+      timeComplexity: 'N/A',
+      spaceComplexity: 'N/A'
+    }, activeLang);
+
+    try {
+      const forfeitedRaw = localStorage.getItem('forfeitedProblems');
+      const forfeited = forfeitedRaw ? JSON.parse(forfeitedRaw) : [];
+      if (!forfeited.includes(problem.id)) {
+        forfeited.push(problem.id);
+        localStorage.setItem('forfeitedProblems', JSON.stringify(forfeited));
+      }
+    } catch {}
+  };
+
+  const handleCopySolution = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(refSolution.code);
+      setCopiedSolution(true);
+      setTimeout(() => setCopiedSolution(false), 2000);
+    }
   };
 
   const handleSubmit = async () => {
@@ -588,99 +679,290 @@ let _log = [];
               </select>
             </div>
 
-          </div>
-
-          <div className="prose prose-invert max-w-none">
-            {formatDescription(problem.description)}
-          </div>
-
-          {hints && (
-            <div className="mt-6 p-4 rounded-xl border border-zinc-800 bg-zinc-900/60 backdrop-blur">
+            {/* Left Panel Tabs: Description vs Solution */}
+            <div className="flex items-center gap-6 mt-4 border-b border-zinc-800">
               <button
-                onClick={() => setShowHints(!showHints)}
                 type="button"
-                className="flex items-center justify-between w-full font-bold text-sm text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer"
+                onClick={() => setActiveWorkspaceTab('problem')}
+                className={`pb-3 text-sm font-bold border-b-2 transition-all flex items-center gap-2 ${
+                  activeWorkspaceTab === 'problem'
+                    ? 'border-blue-500 text-blue-400'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300'
+                }`}
               >
-                <span className="flex items-center gap-2">💡 Need a Hint?</span>
-                <span className="text-xs text-zinc-500 font-semibold">{showHints ? 'Hide Hint' : 'Reveal Hint'}</span>
+                <span>📝 Problem Description</span>
               </button>
-              {showHints && (
-                <div className="mt-3 space-y-2 text-xs sm:text-sm text-zinc-300 animate-in fade-in duration-200">
-                  <p><strong className="text-zinc-400">Concept:</strong> {hints.english}</p>
-                  {hints.tamilRoast && (
-                    <p className="p-2.5 rounded-lg bg-pink-950/30 border border-pink-500/20 text-pink-300 font-medium">
-                      <strong>Bugsy&apos;s Tamil Roast 🌶️:</strong> {hints.tamilRoast}
+              <button
+                type="button"
+                onClick={() => setActiveWorkspaceTab('solution')}
+                className={`pb-3 text-sm font-bold border-b-2 transition-all flex items-center gap-2 ${
+                  activeWorkspaceTab === 'solution'
+                    ? 'border-emerald-500 text-emerald-400'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300'
+                }`}
+              >
+                <span>{isSolved ? '🔓 Solution & Breakdown' : isForfeited ? '🏳️ Solution (Forfeited)' : '🔒 Official Solution'}</span>
+                {isSolved && (
+                  <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                    PASSED
+                  </span>
+                )}
+                {isForfeited && !isSolved && (
+                  <span className="bg-amber-500/20 text-amber-400 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                    0 XP
+                  </span>
+                )}
+              </button>
+            </div>
+
+          </div>
+
+          {activeWorkspaceTab === 'problem' ? (
+            <>
+              <div className="prose prose-invert max-w-none">
+                {formatDescription(problem.description)}
+              </div>
+
+              {/* Progressive Hints Section */}
+              <div className="mt-6 p-4 rounded-xl border border-zinc-800 bg-zinc-900/60 backdrop-blur">
+                <button
+                  onClick={() => setShowHints(!showHints)}
+                  type="button"
+                  className="flex items-center justify-between w-full font-bold text-sm text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">💡 Progressive Hints</span>
+                  <span className="text-xs text-zinc-500 font-semibold">{showHints ? 'Hide Hints' : 'Reveal Hints'}</span>
+                </button>
+                {showHints && (
+                  <div className="mt-4 space-y-4 text-xs sm:text-sm text-zinc-300 animate-in fade-in duration-200">
+                    <div className="p-3 rounded-lg bg-zinc-950/70 border border-zinc-800">
+                      <p className="font-semibold text-yellow-400 mb-1 flex items-center gap-1.5">
+                        <span>🔍</span> Hint 1: Gentle Nudge (Logic Concept)
+                      </p>
+                      <p className="text-zinc-300 leading-relaxed">{hints?.english || "Break the task down into sequential steps."}</p>
+                    </div>
+
+                    {/* Hint 2: Syntax Clue */}
+                    <div className="p-3 rounded-lg bg-zinc-950/70 border border-zinc-800">
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold text-blue-400 flex items-center gap-1.5">
+                          <span>⌨️</span> Hint 2: Syntax Clue ({activeLang.toUpperCase()})
+                        </p>
+                        {!showHint2 && (
+                          <button
+                            type="button"
+                            onClick={() => setShowHint2(true)}
+                            className="text-[11px] font-bold text-blue-400 hover:text-blue-300 underline cursor-pointer"
+                          >
+                            Reveal Syntax Clue
+                          </button>
+                        )}
+                      </div>
+                      {showHint2 ? (
+                        <p className="text-zinc-300 mt-2 font-mono text-xs bg-zinc-900 p-2 rounded border border-zinc-800">
+                          {refSolution.syntaxClue}
+                        </p>
+                      ) : (
+                        <p className="text-zinc-500 text-xs mt-1 italic">Click above if you need the exact function or operator syntax.</p>
+                      )}
+                    </div>
+
+                    {hints?.tamilRoast && (
+                      <div className="p-3 rounded-lg bg-pink-950/30 border border-pink-500/20 text-pink-300 font-medium">
+                        <p className="font-bold text-pink-400 mb-1">Bugsy&apos;s Tamil Roast 🌶️:</p>
+                        <p>{hints.tamilRoast}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Solution Preview Bar */}
+              <div className="mt-6 p-4 rounded-xl border border-zinc-800/80 bg-zinc-900/40 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{isSolved ? '🔓' : isForfeited ? '🏳️' : '🔒'}</span>
+                  <div>
+                    <p className="text-sm font-bold text-zinc-200">
+                      {isSolved ? 'Official Solution Unlocked!' : isForfeited ? 'Solution Revealed (Forfeited)' : 'Official Reference Solution'}
                     </p>
+                    <p className="text-xs text-zinc-500">
+                      {isSolved ? 'Compare your algorithm with the reference solution.' : isForfeited ? 'Reviewed with 0 XP awarded.' : 'Locked until all test cases pass.'}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveWorkspaceTab('solution')}
+                  className="px-3.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-bold text-zinc-300 transition-colors"
+                >
+                  View Solution →
+                </button>
+              </div>
+
+              {problem.miniQuizQuestion && (
+                <div className="mt-10 bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-lg mb-4">
+                  <h3 className="text-xl font-bold text-pink-400 mb-4 flex items-center gap-2">
+                    <span>🧠</span> Quick Brain Check
+                  </h3>
+                  <p className="text-zinc-200 text-lg mb-6">{problem.miniQuizQuestion.question}</p>
+                  <div className="flex flex-col gap-3">
+                    {problem.miniQuizQuestion.options.map((opt: string, idx: number) => {
+                      const isCorrect = idx === problem.miniQuizQuestion!.correctAnswerIndex;
+                      const isSelected = quizAnswered === idx;
+                      
+                      let btnClass = "bg-zinc-800 hover:bg-zinc-700 text-zinc-300";
+                      if (quizAnswered !== null) {
+                        if (isCorrect) btnClass = "bg-green-600/20 text-green-400 border-green-500/50";
+                        else if (isSelected && !isCorrect) btnClass = "bg-red-600/20 text-red-400 border-red-500/50";
+                        else btnClass = "bg-zinc-950 text-zinc-600 opacity-50 border-zinc-900";
+                      }
+
+                      return (
+                        <motion.button
+                          key={idx}
+                          disabled={quizAnswered !== null}
+                          onClick={() => setQuizAnswered(idx)}
+                          animate={
+                            quizAnswered !== null
+                              ? isSelected
+                                ? isCorrect
+                                  ? { scale: [1, 1.1, 1], transition: { duration: 0.3 } }
+                                  : { x: [-10, 10, -10, 10, 0], transition: { duration: 0.4 } }
+                                : {}
+                              : {}
+                          }
+                          className={`text-left font-medium py-3 px-5 rounded-xl transition-all border border-transparent ${btnClass} ${quizAnswered === null ? 'hover:scale-[1.02]' : ''}`}
+                        >
+                          {opt} {quizAnswered !== null && isCorrect && "✅"}
+                          {quizAnswered !== null && isSelected && !isCorrect && "❌"}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                  
+                  {quizAnswered !== null && (
+                    <div className="mt-6 text-center animate-in fade-in slide-in-from-bottom-2 duration-300 flex flex-col items-center gap-4">
+                      <p className={`text-xl font-black tracking-wide ${quizAnswered === problem.miniQuizQuestion.correctAnswerIndex ? 'text-green-400 uppercase' : 'text-red-500 uppercase'}`}>
+                        {quizAnswered === problem.miniQuizQuestion.correctAnswerIndex 
+                          ? "BIG BRAIN ENERGY! 🧠 Now go run that code!" 
+                          : "Faaaaaaah! 🤬 Are you even trying?! Bro literally just guessed! 🗑️"}
+                      </p>
+                      
+                      {quizAnswered === problem.miniQuizQuestion.correctAnswerIndex && (
+                        <img 
+                          src={getResultGif(true, humorPref)} 
+                          alt="Success GIF" 
+                          className="w-64 rounded-xl border border-green-500/30 shadow-[0_0_30px_rgba(74,222,128,0.2)]"
+                        />
+                      )}
+
+                      {quizAnswered !== problem.miniQuizQuestion.correctAnswerIndex && (
+                        <img 
+                          src={getResultGif(false, humorPref)} 
+                          alt="Fail GIF" 
+                          className="w-64 rounded-xl border border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.2)]"
+                        />
+                      )}
+                    </div>
                   )}
                 </div>
               )}
-            </div>
-          )}
+            </>
+          ) : (
+            /* Solution Workspace View */
+            <div className="py-2 space-y-6">
+              {!isSolved && !isForfeited ? (
+                /* Locked Solution Card */
+                <div className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/60 backdrop-blur text-center flex flex-col items-center relative overflow-hidden my-4 shadow-xl">
+                  {/* Sanitized blurred dummy preview */}
+                  <div className="absolute inset-0 p-6 select-none pointer-events-none filter blur-md opacity-20 font-mono text-xs text-zinc-400 overflow-hidden" aria-hidden="true">
+                    {`// Official solution is locked until tests pass\ndef solution(*args, **kwargs):\n    # [REDACTED REFERENCE ALGORITHM]\n    return "PASSED"\n`}
+                  </div>
 
-          {problem.miniQuizQuestion && (
-            <div className="mt-12 bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-lg mb-4">
-              <h3 className="text-xl font-bold text-pink-400 mb-4 flex items-center gap-2">
-                <span>🧠</span> Quick Brain Check
-              </h3>
-              <p className="text-zinc-200 text-lg mb-6">{problem.miniQuizQuestion.question}</p>
-              <div className="flex flex-col gap-3">
-                {problem.miniQuizQuestion.options.map((opt: string, idx: number) => {
-                  const isCorrect = idx === problem.miniQuizQuestion!.correctAnswerIndex;
-                  const isSelected = quizAnswered === idx;
-                  
-                  let btnClass = "bg-zinc-800 hover:bg-zinc-700 text-zinc-300";
-                  if (quizAnswered !== null) {
-                    if (isCorrect) btnClass = "bg-green-600/20 text-green-400 border-green-500/50";
-                    else if (isSelected && !isCorrect) btnClass = "bg-red-600/20 text-red-400 border-red-500/50";
-                    else btnClass = "bg-zinc-950 text-zinc-600 opacity-50 border-zinc-900";
-                  }
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="w-16 h-16 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-3xl mb-4 shadow-xl">
+                      🔒
+                    </div>
+                    <h3 className="text-xl font-bold text-zinc-100">Solution Locked</h3>
+                    <p className="text-sm text-zinc-400 mt-2 max-w-md">
+                      Pass all test cases to unlock the official solution and breakdown.
+                    </p>
 
-                  return (
-                    <motion.button
-                      key={idx}
-                      disabled={quizAnswered !== null}
-                      onClick={() => setQuizAnswered(idx)}
-                      animate={
-                        quizAnswered !== null
-                          ? isSelected
-                            ? isCorrect
-                              ? { scale: [1, 1.1, 1], transition: { duration: 0.3 } }
-                              : { x: [-10, 10, -10, 10, 0], transition: { duration: 0.4 } }
-                            : {}
-                          : {}
-                      }
-                      className={`text-left font-medium py-3 px-5 rounded-xl transition-all border border-transparent ${btnClass} ${quizAnswered === null ? 'hover:scale-[1.02]' : ''}`}
-                    >
-                      {opt} {quizAnswered !== null && isCorrect && "✅"}
-                      {quizAnswered !== null && isSelected && !isCorrect && "❌"}
-                    </motion.button>
-                  );
-                })}
-              </div>
-              
-              {quizAnswered !== null && (
-                <div className="mt-6 text-center animate-in fade-in slide-in-from-bottom-2 duration-300 flex flex-col items-center gap-4">
-                  <p className={`text-xl font-black tracking-wide ${quizAnswered === problem.miniQuizQuestion.correctAnswerIndex ? 'text-green-400 uppercase' : 'text-red-500 uppercase'}`}>
-                    {quizAnswered === problem.miniQuizQuestion.correctAnswerIndex 
-                      ? "BIG BRAIN ENERGY! 🧠 Now go run that code!" 
-                      : "Faaaaaaah! 🤬 Are you even trying?! Bro literally just guessed! 🗑️"}
-                  </p>
-                  
-                  {quizAnswered === problem.miniQuizQuestion.correctAnswerIndex && (
-                    <img 
-                      src={getResultGif(true, humorPref)} 
-                      alt="Success GIF" 
-                      className="w-64 rounded-xl border border-green-500/30 shadow-[0_0_30px_rgba(74,222,128,0.2)]"
-                    />
+                    <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setActiveWorkspaceTab('problem')}
+                        className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-colors shadow-lg shadow-blue-500/20"
+                      >
+                        ← Back to Challenge
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowForfeitModal(true)}
+                        className="px-5 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold text-xs transition-colors"
+                      >
+                        🏳️ I Give Up (Reveal Solution)
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-zinc-500 mt-3">
+                      ⚠️ Giving up will reveal the code immediately, but awards 0 XP for this challenge.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                /* Unlocked Solution Display */
+                <div className="space-y-6 animate-in fade-in duration-300">
+                  {isSolved ? (
+                    <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold flex items-center gap-3">
+                      <span className="text-2xl">🏆</span>
+                      <div>
+                        <p className="font-bold">Challenge Passed! Compare your approach with the reference solution.</p>
+                        <p className="text-xs text-emerald-400/80 mt-0.5">Full XP awarded. Study the breakdown below to optimize your solution.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-semibold flex items-center gap-3">
+                      <span className="text-2xl">🏳️</span>
+                      <div>
+                        <p className="font-bold">Challenge Forfeited (0 XP Awarded).</p>
+                        <p className="text-xs text-amber-400/80 mt-0.5">Study the official solution and breakdown, then try solving similar problems without peeking!</p>
+                      </div>
+                    </div>
                   )}
 
-                  {quizAnswered !== problem.miniQuizQuestion.correctAnswerIndex && (
-                    <img 
-                      src={getResultGif(false, humorPref)} 
-                      alt="Fail GIF" 
-                      className="w-64 rounded-xl border border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.2)]"
-                    />
-                  )}
+                  {/* Reference Code Box */}
+                  <div className="rounded-2xl border border-zinc-800 bg-zinc-900/90 overflow-hidden shadow-2xl">
+                    <div className="px-5 py-3 border-b border-zinc-800 bg-zinc-950/80 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <span className="font-mono text-xs font-bold text-zinc-300">
+                          Official Reference Solution ({activeLang.toUpperCase()})
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleCopySolution}
+                        className="px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-mono font-medium transition-colors flex items-center gap-1.5"
+                      >
+                        <span>{copiedSolution ? '✅' : '📋'}</span>
+                        <span>{copiedSolution ? 'Copied!' : 'Copy Code'}</span>
+                      </button>
+                    </div>
+
+                    <pre className="p-5 font-mono text-sm text-emerald-300/90 overflow-x-auto leading-relaxed bg-zinc-950/90">
+                      <code>{refSolution.code}</code>
+                    </pre>
+                  </div>
+
+                  {/* Breakdown Explanation */}
+                  <div className="p-6 rounded-2xl border border-zinc-800 bg-zinc-900/60 backdrop-blur">
+                    <h4 className="text-base font-bold text-zinc-200 mb-3 flex items-center gap-2">
+                      <span>💡</span> Logic Breakdown & Approach
+                    </h4>
+                    <p className="text-sm text-zinc-300 leading-relaxed">
+                      {refSolution.explanation}
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
@@ -703,7 +985,9 @@ let _log = [];
           }`}
         >
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-zinc-400">Solution.js</h3>
+            <h3 className="font-bold text-zinc-400">
+              {activeLang === 'python' ? 'main.py' : activeLang === 'c' ? 'main.c' : activeLang === 'cpp' ? 'main.cpp' : activeLang === 'java' ? 'Solution.java' : 'solution.js'}
+            </h3>
             <div className="flex gap-3">
               <motion.button 
                 whileHover={{ scale: 1.025, boxShadow: "0 0 24px rgba(6, 182, 212, 0.35)" }}
@@ -808,6 +1092,61 @@ let _log = [];
       </div>
     </div>
     
+    {/* Forfeit Confirmation Modal */}
+    <AnimatePresence>
+      {showForfeitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            transition={{ duration: 0.2 }}
+            className="w-full max-w-lg rounded-3xl bg-zinc-900 border border-zinc-800 p-6 md:p-8 shadow-2xl relative text-center flex flex-col items-center"
+          >
+            <div className="mb-4">
+              <Bugsy mood="dizzy" size={64} />
+            </div>
+
+            <h3 className="text-2xl font-black text-white">Wait! Give Up Already? 🏳️</h3>
+
+            {/* Humor Quote */}
+            <div className="my-5 p-4 rounded-2xl bg-zinc-950/80 border border-zinc-800 text-sm leading-relaxed w-full">
+              {humorPref === 'tamil' ? (
+                <p className="text-pink-300 font-medium italic">
+                  &ldquo;Enna thala, 2 nimishathula surrender aayitiya? Exam hall-la bit adikkura maari solution-ah paaka poriya? Appa kattina fees-ku konjam kooda yosikka maatiya da?!&rdquo;
+                </p>
+              ) : (
+                <p className="text-amber-300 font-medium italic">
+                  &ldquo;Giving up already? StackOverflow is weeping. Revealing the solution will forfeit XP for this challenge.&rdquo;
+                </p>
+              )}
+            </div>
+
+            <p className="text-xs text-zinc-400 mb-6">
+              Revealing the solution will mark this challenge as completed, but with <strong className="text-red-400">0 XP</strong> added to your profile and leaderboard ranking.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
+              <button
+                type="button"
+                onClick={() => setShowForfeitModal(false)}
+                className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-sm transition-colors"
+              >
+                Never Mind, I&apos;ll Keep Trying! 💪
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmForfeit}
+                className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition-colors shadow-lg shadow-red-600/20"
+              >
+                Yes, Show Solution (0 XP) 🏳️
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+
     {showMilestone && milestoneData && (
       <MilestoneCelebration
         milestone={milestoneData.milestone}

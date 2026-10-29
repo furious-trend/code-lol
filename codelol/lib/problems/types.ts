@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "TypeScript types and interfaces for module-aligned multi-language problems", deps: [], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "TypeScript types and interfaces for module-aligned multi-language problems with reference solutions and hints", deps: [], state: active, last: "sato@2026-10-29" }
 
 export type SupportedProblemLanguage = 'javascript' | 'python' | 'c' | 'cpp' | 'java';
 
@@ -20,11 +20,14 @@ export interface ModuleProblem {
   title: string;
   description: string;
   starterCode: string;
+  solution?: string; // Reference solution code
+  solutionExplanation?: string; // Step-by-step logic breakdown
   testHarness?: string; // Hidden assertions appending ===TEST_RESULTS=== (optional for script problems)
   expectedOutput?: string; // Expected stdout for beginner script challenges
   hints: {
     english: string;
     tamilRoast: string;
+    syntaxClue?: string;
   };
   // Optional compatibility properties for legacy consumers
   difficulty?: Difficulty;
@@ -51,6 +54,8 @@ export interface Problem {
   difficulty: Difficulty;
   description: string;
   starterCode: string;
+  solution?: string;
+  solutionExplanation?: string;
   starterCodePython?: string;
   starterCodeC?: string;
   starterCodeCpp?: string;
@@ -69,6 +74,7 @@ export interface Problem {
   hints?: {
     english: string;
     tamilRoast: string;
+    syntaxClue?: string;
   };
   tier?: ProblemTier;
   expectedOutput?: string;

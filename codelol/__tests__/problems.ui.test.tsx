@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ProblemSolverPage from '../app/problems/[id]/page';
 import React from 'react';
 import * as executor from '@/lib/executor';
+import * as progress from '@/lib/progress';
 
 // Mock confetti
 vi.mock('canvas-confetti', () => ({
@@ -14,11 +15,15 @@ vi.mock('@/lib/supabase/client', () => ({
   createClient: () => ({
     auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'u1' } } }) },
     from: () => ({
-      select: () => ({
-        eq: () => ({
-          single: vi.fn().mockResolvedValue({ data: { humor_preference: 'general' } })
-        })
-      }),
+      select: () => {
+        const chain: any = {
+          eq: () => chain,
+          in: () => chain,
+          single: vi.fn().mockResolvedValue({ data: { humor_preference: 'general' } }),
+          maybeSingle: vi.fn().mockResolvedValue({ data: null })
+        };
+        return chain;
+      },
       upsert: vi.fn().mockResolvedValue({ error: null })
     })
   })
@@ -39,12 +44,21 @@ vi.mock('@/lib/problems', () => ({
       difficulty: 'Beginner',
       description: 'Find two numbers.',
       starterCode: 'function twoSum(nums, target) {}',
+      hints: {
+        english: 'Think about using a hash map to store complements.',
+        tamilRoast: 'Thala, nested for loop potu time complexity-ah nashti pannadha!'
+      },
       testCases: []
     }
   ],
   resolveActiveLanguage: vi.fn().mockReturnValue('javascript'),
   getModuleProblem: vi.fn(),
   getProblemsByChapter: vi.fn().mockReturnValue([]),
+  getProblemSolution: vi.fn().mockReturnValue({
+    code: 'function twoSum(nums, target) {\n  const map = new Map();\n  return [];\n}',
+    explanation: 'Uses a hash map to look up complements in O(n) time.',
+    syntaxClue: 'Use `new Map()` or object lookup for O(1) access.'
+  })
 }));
 
 // Mock hooks
@@ -82,8 +96,9 @@ vi.mock('framer-motion', () => {
   };
 });
 
-// Spy on executeCode
+// Spy on executeCode & saveProblemCompletion
 vi.spyOn(executor, 'executeCode');
+vi.spyOn(progress, 'saveProblemCompletion');
 
 describe('ProblemSolverPage - Execution Feedback', () => {
   beforeEach(() => {
@@ -210,4 +225,108 @@ describe('ProblemSolverPage - Execution Feedback', () => {
     });
   });
 });
+
+describe('ProblemSolverPage - Solution Gating & Progressive Hints', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+  });
+
+  it('locks the solution tab by default on initial page load and shows locked card', async () => {
+    render(<ProblemSolverPage />);
+    
+    // Switch to solution tab
+    const solutionTabBtn = screen.getByText(/Official Solution/i);
+    fireEvent.click(solutionTabBtn);
+
+    expect(screen.getByText(/Solution Locked/i)).toBeDefined();
+    expect(screen.getByText(/Pass all test cases to unlock the official solution and breakdown/i)).toBeDefined();
+    expect(screen.getByText(/I Give Up \(Reveal Solution\)/i)).toBeDefined();
+  });
+
+  it('opens humorous forfeit confirmation dialog when clicking I Give Up', async () => {
+    render(<ProblemSolverPage />);
+    
+    // Switch to solution tab and click give up
+    fireEvent.click(screen.getByText(/Official Solution/i));
+    const giveUpBtn = screen.getByText(/I Give Up \(Reveal Solution\)/i);
+    fireEvent.click(giveUpBtn);
+
+    expect(screen.getByText(/Wait! Give Up Already\? 🏳️/i)).toBeDefined();
+    expect(screen.getByText(/Giving up already\? StackOverflow is weeping/i)).toBeDefined();
+    
+    // Clicking cancel closes the modal
+    const cancelBtn = screen.getByText(/Never Mind, I'll Keep Trying!/i);
+    fireEvent.click(cancelBtn);
+    expect(screen.queryByText(/Wait! Give Up Already\?/i)).toBeNull();
+  });
+
+  it('forfeits problem with 0 XP upon confirmation and reveals reference solution', async () => {
+    render(<ProblemSolverPage />);
+    
+    fireEvent.click(screen.getByText(/Official Solution/i));
+    fireEvent.click(screen.getByText(/I Give Up \(Reveal Solution\)/i));
+
+    const confirmForfeitBtn = screen.getByText(/Yes, Show Solution \(0 XP\)/i);
+    fireEvent.click(confirmForfeitBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Challenge Forfeited \(0 XP Awarded\)/i)).toBeDefined();
+      expect(screen.getByText(/Uses a hash map to look up complements in O\(n\) time/i)).toBeDefined();
+    });
+
+    // Verify saveProblemCompletion was called with pointsAwarded: 0
+    expect(progress.saveProblemCompletion).toHaveBeenCalledWith(
+      'two-sum',
+      expect.objectContaining({ pointsAwarded: 0 }),
+      'javascript'
+    );
+  });
+
+  it('automatically unlocks solution when user runs code and passes all tests', async () => {
+    (executor.executeCode as any).mockResolvedValueOnce({
+      output: '===TEST_RESULTS===\n{"passed": 1, "total": 1, "log": ["Test 1: PASS"]}',
+      error: null
+    });
+
+    render(<ProblemSolverPage />);
+    fireEvent.click(screen.getByText(/Submit & Roast/i));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Test 1: PASS/i)).toBeDefined();
+    });
+
+    // Switch to solution tab
+    fireEvent.click(screen.getByText(/Solution & Breakdown/i));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Challenge Passed! Compare your approach with the reference solution/i)).toBeDefined();
+      expect(screen.getByText(/Official Reference Solution/i)).toBeDefined();
+      expect(screen.getByText(/Uses a hash map to look up complements in O\(n\) time/i)).toBeDefined();
+    });
+  });
+
+  it('progressively displays Hint 1 and Hint 2 (Syntax Clue)', async () => {
+    render(<ProblemSolverPage />);
+
+    // Initially hints are collapsed
+    expect(screen.queryByText(/Think about using a hash map to store complements/i)).toBeNull();
+
+    // Click to reveal progressive hints
+    fireEvent.click(screen.getByText(/Progressive Hints/i));
+
+    // Hint 1 should be visible
+    expect(screen.getByText(/Hint 1: Gentle Nudge/i)).toBeDefined();
+    expect(screen.getByText(/Think about using a hash map to store complements/i)).toBeDefined();
+
+    // Hint 2 syntax clue button should be visible, but clue text collapsed
+    expect(screen.getByText(/Reveal Syntax Clue/i)).toBeDefined();
+    expect(screen.queryByText(/Use `new Map\(\)` or object lookup/i)).toBeNull();
+
+    // Reveal Hint 2
+    fireEvent.click(screen.getByText(/Reveal Syntax Clue/i));
+    expect(screen.getByText(/Use `new Map\(\)` or object lookup for O\(1\) access/i)).toBeDefined();
+  });
+});
+
 

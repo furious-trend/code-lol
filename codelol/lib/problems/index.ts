@@ -11,6 +11,7 @@ import { pythonCurriculum } from '../python/curriculum';
 import { getUnifiedChapters } from '../lessons/unifiedTopics';
 
 export * from './types';
+export * from './solutions';
 export { pythonModuleProblems, javascriptModuleProblems, cModuleProblems, cppModuleProblems, javaModuleProblems };
 
 // Backward-compatible export for battle and leaderboard features

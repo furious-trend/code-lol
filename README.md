@@ -30,7 +30,7 @@ CodeLOL is a free, gamified coding platform that teaches programming through hum
 | **Code Editor** | Monaco Editor |
 | **Database & Auth** | Supabase (PostgreSQL, Auth with Google + Email OTP, Realtime, Storage) |
 | **Execution Engines** | **JavaScript:** Client-side sandboxed iframe (`lib/executor.ts`)<br>**Python, C, C++, Java:** Server-side via `app/api/run/route.ts` (OnlineCompiler.io) |
-| **Testing** | Vitest + Testing Library (jsdom), 41 test suites, 187 unit tests |
+| **Testing** | Vitest + Testing Library (jsdom), 41 test suites, 192 unit tests |
 | **Hosting** | Vercel (Root set to `codelol/`, `buildCommand: next build`, `outputDirectory: .next`) |
 
 ---
