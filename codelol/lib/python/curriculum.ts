@@ -1,35 +1,28 @@
-// agent-notes: { ctx: "Zero-to-Hero 20-chapter master Python curriculum data with PythonLesson exports", deps: ["./types"], state: active, last: "sato@2026-10-11" }
+// agent-notes: { ctx: "Zero-to-Hero 20-chapter master Python curriculum with beginner-friendly Chapters 1 & 2", deps: ["./types"], state: active, last: "sato@2026-10-28" }
 import { Chapter, PythonLesson } from './types';
 
 export const pythonCurriculum: Chapter[] = [
   {
     "id": "ch1",
-    "title": "Lexical Structure & Syntax Basics",
+    "title": "Python Basics: Your First Code & Printing",
     "tier": "Beginner",
     "technicalCore": [
-      "Physical vs. Logical lines",
-      "line continuation",
-      "indentation rules",
-      "whitespace semantics",
-      "comments",
-      "docstrings",
-      "identifiers",
-      "keywords",
-      "soft keywords",
-      "literals",
-      "delimiters",
-      "operators"
+      "print() function",
+      "strings and quotes",
+      "single vs double quotes",
+      "comments (#)",
+      "top-to-bottom execution"
     ],
-    "analogyGeneral": "Indentation in Python isn't just for neatness; it's the law. Mess it up, and the interpreter throws a tantrum.",
+    "analogyGeneral": "Python reads code from top to bottom. Use print() to display text, and always wrap your words inside single or double quotes.",
     "analogyTamil": "Oru indentation-ah thappaa potta... compiler un ID card-ah cancel panni college-ah vittu veliya anuppirum da!",
-    "roastGeneral": "You forgot your indentation? It's Python, not an abstract painting. Keep your code straight!",
-    "roastTamil": "Oru indentation-ah poda theriyaadha loosu... compiler-e un laptop-ah thooki kuththu-kallu mela adichu un Aadhar card-ah block panruvan!",
+    "roastGeneral": "You forgot to wrap text in quotes? Python thinks it's a variable and panics!",
+    "roastTamil": "Oru indentation-ah thappaa potta... compiler un ID card-ah cancel panni college-ah vittu veliya anuppirum da!",
     "lessons": [
       {
         "id": "ch1-l1",
-        "title": "Indentation & Whitespace",
-        "explanation": "Python uses whitespace to define blocks instead of braces.",
-        "codeExample": "if True:\n    print('Indented correctly')\n    print('Still in the block')",
+        "title": "Printing Text",
+        "explanation": "Python reads code from top to bottom. Use print() to display text, and always wrap your words inside single or double quotes.",
+        "codeExample": "print(\"Hello, CodeLOL!\")",
         "verificationChecks": [
           {
             "description": "Must use print",
@@ -38,40 +31,40 @@ export const pythonCurriculum: Chapter[] = [
           }
         ],
         "miniQuiz": {
-          "question": "What defines a code block in Python?",
+          "question": "What function do you use to display text in Python?",
           "options": [
-            "Curly braces {}",
-            "Indentation",
-            "Semicolons",
-            "Keywords"
+            "echo()",
+            "print()",
+            "console.log()",
+            "display()"
           ],
           "correctAnswerIndex": 1,
           "answerIndex": 1
         },
         "funnyLineGeneral": "Spacing matters. It's like personal space for your code.",
         "funnyLineTamil": "Space idavita, moochu mutti sethurum code.",
-        "expectedOutput": "Indented correctly\nStill in the block",
-        "practicePrompt": "Run and verify Indentation & Whitespace in the interactive arena.",
+        "expectedOutput": "Hello, CodeLOL!",
+        "practicePrompt": "Run and verify your first print statement in the interactive arena.",
         "proudSuccessGeneral": "First Python steps unlocked without a single SyntaxError!",
-        "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!",
+        "proudSuccessTamil": "Bloody sweet... output vandhuruchu da!",
         "chapterId": "ch1",
-        "englishExplanation": "Python uses whitespace to define blocks instead of braces.",
-        "tamilRoast": "Space idavita, moochu mutti sethurum code."
+        "englishExplanation": "Python reads code from top to bottom. Use print() to display text, and always wrap your words inside single or double quotes.",
+        "tamilRoast": "Quotes podaama text ezhudha nenaikuriye... unakku arive illaya da?"
       },
       {
         "id": "ch1-l2",
-        "title": "Comments & Docstrings",
-        "explanation": "Use # for single line, and triple quotes for docstrings.",
-        "codeExample": "# This is a comment\n'''\nThis is a docstring\n'''\nprint('Hello')",
+        "title": "Comments & Quotes",
+        "explanation": "In Python, words go inside quotes. Use '#' to write notes (comments) that Python ignores when running.",
+        "codeExample": "# This is a friendly note\nprint('Python is easy!')",
         "verificationChecks": [
           {
             "description": "Must use #",
             "pattern": "#",
-            "errorMessage": "Add a comment."
+            "errorMessage": "Add a comment starting with #."
           }
         ],
         "miniQuiz": {
-          "question": "Which symbol starts a comment?",
+          "question": "Which symbol starts a comment in Python?",
           "options": [
             "//",
             "/*",
@@ -83,45 +76,45 @@ export const pythonCurriculum: Chapter[] = [
         },
         "funnyLineGeneral": "Comments are apologies to your future self.",
         "funnyLineTamil": "Naalaikku nee paatha unakke puriyaathu.",
-        "expectedOutput": "Hello",
-        "practicePrompt": "Run and verify Comments & Docstrings in the interactive arena.",
+        "expectedOutput": "Python is easy!",
+        "practicePrompt": "Run and verify Comments & Quotes in the interactive arena.",
         "proudSuccessGeneral": "First Python steps unlocked without a single SyntaxError!",
         "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!",
         "chapterId": "ch1",
-        "englishExplanation": "Use # for single line, and triple quotes for docstrings.",
+        "englishExplanation": "In Python, words go inside quotes. Use '#' to write notes (comments) that Python ignores when running.",
         "tamilRoast": "Naalaikku nee paatha unakke puriyaathu."
       },
       {
         "id": "ch1-l3",
-        "title": "Line Continuation",
-        "explanation": "Use backslash or parentheses to span multiple lines.",
-        "codeExample": "total = (10 +\n         20)\nprint(total)",
+        "title": "Top to Bottom Execution",
+        "explanation": "Python runs each line one by one from top to bottom. Write statements in the order you want them executed.",
+        "codeExample": "print('Step 1: Start')\nprint('Step 2: Finish')",
         "verificationChecks": [
           {
-            "description": "Must print total",
-            "pattern": "total",
-            "errorMessage": "Use the total variable."
+            "description": "Must print both lines",
+            "pattern": "print",
+            "errorMessage": "Print both lines."
           }
         ],
         "miniQuiz": {
-          "question": "How do you implicitly continue a line?",
+          "question": "How does Python execute lines of code by default?",
           "options": [
-            "Use a comma",
-            "Use backslash",
-            "Use parentheses",
-            "Use semicolon"
+            "Bottom to top",
+            "Random order",
+            "Top to bottom",
+            "All at once"
           ],
           "correctAnswerIndex": 2,
           "answerIndex": 2
         },
-        "funnyLineGeneral": "Long lines are like long sentences, they need a break.",
+        "funnyLineGeneral": "Order matters—Python won't skip ahead for you!",
         "funnyLineTamil": "Perusa pona, moolai hang aaidum.",
-        "expectedOutput": "30",
-        "practicePrompt": "Run and verify Line Continuation in the interactive arena.",
+        "expectedOutput": "Step 1: Start\nStep 2: Finish",
+        "practicePrompt": "Run and verify Top to Bottom Execution in the interactive arena.",
         "proudSuccessGeneral": "First Python steps unlocked without a single SyntaxError!",
-        "proudSuccessTamil": "Bloody sweet... indentation sariya pochuda, Kaipulla thappichitan!",
+        "proudSuccessTamil": "Bloody sweet... output vandhuruchu da!",
         "chapterId": "ch1",
-        "englishExplanation": "Use backslash or parentheses to span multiple lines.",
+        "englishExplanation": "Python runs each line one by one from top to bottom. Write statements in the order you want them executed.",
         "tamilRoast": "Perusa pona, moolai hang aaidum."
       }
     ],
@@ -130,124 +123,118 @@ export const pythonCurriculum: Chapter[] = [
   },
   {
     "id": "ch2",
-    "title": "Built-in Primitives & Data Types",
+    "title": "Variables: Named Boxes for Your Data",
     "tier": "Beginner",
     "technicalCore": [
-      "Integers (int)",
-      "arbitrary-precision arithmetic",
-      "floats (float)",
-      "IEEE 754",
-      "complex",
-      "strings (str)",
-      "Unicode",
-      "bytes",
-      "bytearray",
-      "memoryview",
-      "booleans (bool)",
-      "NoneType"
+      "Variables",
+      "assignment (=)",
+      "integers",
+      "strings",
+      "dynamic typing",
+      "updating values"
     ],
-    "analogyGeneral": "Mixing types incorrectly causes automatic type errors because Python refuses to guess your chaotic math.",
+    "analogyGeneral": "A variable is just a labeled box to store numbers or text using the '=' sign. No need to declare data types manually.",
     "analogyTamil": "Ration shop-la rice, kerosene, and sugar-ah orey dabba-la pottu mix panna maari data types-ah mix panra un moolaiya ennnu solla!",
-    "roastGeneral": "You said you'd study at 5 AM? That's a Falsy value—sounds true, but it's fundamentally false.",
+    "roastGeneral": "Forgot to assign your variable? It's like looking for your glasses while wearing them.",
     "roastTamil": "Naalaikku kaalaila 5 manikku kandippa padikka poren' nu solradhu Falsy value—pesumbodhu true maari irukkum, aana matter zero!",
     "lessons": [
       {
         "id": "ch2-l1",
-        "title": "Integers and Floats",
-        "explanation": "Python handles large ints automatically and floats with IEEE 754.",
-        "codeExample": "large_int = 10**100\nsmall_float = 3.14\nprint(small_float)",
+        "title": "Creating Variables",
+        "explanation": "A variable is just a labeled box to store numbers or text using the '=' sign. No need to declare data types manually.",
+        "codeExample": "name = \"Mano\"\nage = 21\nprint(name)\nprint(age)",
         "verificationChecks": [
           {
-            "description": "Use **",
-            "pattern": "\\*\\*",
-            "errorMessage": "Use exponentiation."
+            "description": "Define name and age",
+            "pattern": "name.*=.*age.*=",
+            "errorMessage": "Define variables name and age."
           }
         ],
         "miniQuiz": {
-          "question": "What is the maximum size of an int in Python?",
+          "question": "Which symbol is used to assign a value to a variable in Python?",
           "options": [
-            "32-bit",
-            "64-bit",
-            "128-bit",
-            "Arbitrary precision"
+            "==",
+            ":=",
+            "=",
+            "->"
           ],
-          "correctAnswerIndex": 3,
-          "answerIndex": 3
+          "correctAnswerIndex": 2,
+          "answerIndex": 2
         },
         "funnyLineGeneral": "Python ints can hold more money than you'll ever see.",
         "funnyLineTamil": "Bank account balance-vida int thaan perusu.",
-        "expectedOutput": "3.14",
-        "practicePrompt": "Run and verify Integers and Floats in the interactive arena.",
+        "expectedOutput": "Mano\n21",
+        "practicePrompt": "Run and verify Creating Variables in the interactive arena.",
         "proudSuccessGeneral": "Variables and types mastered with pristine memory safety.",
         "proudSuccessTamil": "Appa, unga pulla urupputturuchu pa! Bloody sweet... output vandhuruchu da!",
         "chapterId": "ch2",
-        "englishExplanation": "Python handles large ints automatically and floats with IEEE 754.",
+        "englishExplanation": "A variable is just a labeled box to store numbers or text using the '=' sign. No need to declare data types manually.",
         "tamilRoast": "Bank account balance-vida int thaan perusu."
       },
       {
         "id": "ch2-l2",
-        "title": "Strings and Booleans",
-        "explanation": "Strings are immutable. Booleans are True or False.",
-        "codeExample": "name = 'Python'\nis_fun = True\nprint(name)",
+        "title": "Text in Variables",
+        "explanation": "Variables can hold text (strings inside quotes) or numbers. Python automatically figures out the data type.",
+        "codeExample": "name = \"Mano\"\nprint(\"Hello, \" + name)",
         "verificationChecks": [
           {
-            "description": "Use True",
-            "pattern": "True",
-            "errorMessage": "Define a boolean."
+            "description": "Use name variable",
+            "pattern": "name",
+            "errorMessage": "Print with the name variable."
           }
         ],
         "miniQuiz": {
-          "question": "Which of these is a Falsy value?",
+          "question": "How do you store text like Mano into a variable called name?",
           "options": [
-            "'False'",
-            "0",
-            "1",
-            "True"
+            "name = Mano",
+            "name = \"Mano\"",
+            "var name = Mano",
+            "string name = Mano"
           ],
           "correctAnswerIndex": 1,
           "answerIndex": 1
         },
         "funnyLineGeneral": "A string is forever, like a bad tattoo.",
         "funnyLineTamil": "String-ah maatha mudiyathu, un lachanam maari.",
-        "expectedOutput": "Python",
-        "practicePrompt": "Run and verify Strings and Booleans in the interactive arena.",
+        "expectedOutput": "Hello, Mano",
+        "practicePrompt": "Run and verify Text in Variables in the interactive arena.",
         "proudSuccessGeneral": "Variables and types mastered with pristine memory safety.",
         "proudSuccessTamil": "Adra sakka! Dynamic typing unakulla irangi velai seiyudhu!",
         "chapterId": "ch2",
-        "englishExplanation": "Strings are immutable. Booleans are True or False.",
+        "englishExplanation": "Variables can hold text (strings inside quotes) or numbers. Python automatically figures out the data type.",
         "tamilRoast": "String-ah maatha mudiyathu, un lachanam maari."
       },
       {
         "id": "ch2-l3",
-        "title": "NoneType",
-        "explanation": "None represents the absence of a value.",
-        "codeExample": "val = None\nprint(val is None)",
+        "title": "Updating Variables",
+        "explanation": "You can change what is inside the box anytime by assigning a new value using '='.",
+        "codeExample": "age = 21\nage = age + 1\nprint(age)",
         "verificationChecks": [
           {
-            "description": "Check None",
-            "pattern": "is None",
-            "errorMessage": "Use 'is None'."
+            "description": "Update age",
+            "pattern": "age",
+            "errorMessage": "Update age and print it."
           }
         ],
         "miniQuiz": {
-          "question": "What does None mean?",
+          "question": "What happens when you assign a new value to an existing variable in Python?",
           "options": [
-            "Zero",
-            "Empty string",
-            "False",
-            "Absence of a value"
+            "It causes an error",
+            "The old value is replaced",
+            "It creates a second variable",
+            "Python asks for confirmation"
           ],
-          "correctAnswerIndex": 3,
-          "answerIndex": 3
+          "correctAnswerIndex": 1,
+          "answerIndex": 1
         },
-        "funnyLineGeneral": "None is like your weekend plans.",
+        "funnyLineGeneral": "Variables can change—that's why they are called variables!",
         "funnyLineTamil": "Un moolai maari, athula onnum illa.",
-        "expectedOutput": "True",
-        "practicePrompt": "Run and verify NoneType in the interactive arena.",
+        "expectedOutput": "22",
+        "practicePrompt": "Run and verify Updating Variables in the interactive arena.",
         "proudSuccessGeneral": "Variables and types mastered with pristine memory safety.",
         "proudSuccessTamil": "Adra sakka! Dynamic typing unakulla irangi velai seiyudhu!",
         "chapterId": "ch2",
-        "englishExplanation": "None represents the absence of a value.",
+        "englishExplanation": "You can change what is inside the box anytime by assigning a new value using '='.",
         "tamilRoast": "Un moolai maari, athula onnum illa."
       }
     ],

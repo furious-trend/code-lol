@@ -118,11 +118,16 @@ describe('2. Module-Aligned Problem Structure (lib/problems/)', () => {
         expect(typeof p.description).toBe('string');
         expect(p.description.length).toBeGreaterThan(0);
 
-        // Starter code and hidden test harness
+        // Starter code and hidden test harness or expectedOutput
         expect(typeof p.starterCode).toBe('string');
         expect(p.starterCode.length).toBeGreaterThan(0);
-        expect(typeof p.testHarness).toBe('string');
-        expect(p.testHarness).toContain('===TEST_RESULTS===');
+        if (p.expectedOutput) {
+          expect(typeof p.expectedOutput).toBe('string');
+          expect(p.expectedOutput.length).toBeGreaterThan(0);
+        } else {
+          expect(typeof p.testHarness).toBe('string');
+          expect(p.testHarness).toContain('===TEST_RESULTS===');
+        }
 
         // Bilingual hints: English + Tamil Roast
         expect(p.hints).toBeDefined();
@@ -132,6 +137,43 @@ describe('2. Module-Aligned Problem Structure (lib/problems/)', () => {
         expect(p.hints.tamilRoast.length).toBeGreaterThan(0);
       }
     }
+  });
+
+  it('includes 4 absolute-beginner Python problems testing basic concepts without functions', () => {
+    const pyProblems = getModuleProblems('python');
+
+    // Problem 1 (Chapter 1 - Print)
+    const p1 = pyProblems.find(p => p.id === 'say-hello-to-codelol');
+    expect(p1).toBeDefined();
+    expect(p1?.chapterId).toBe('ch1');
+    expect(p1?.title).toBe('Say Hello to CodeLOL');
+    expect(p1?.expectedOutput).toBe('Hello CodeLOL');
+    expect(p1?.starterCode).toBe('# Write your print statement below\n');
+    expect(p1?.hints.tamilRoast).toContain("Quotes podama string ezhudhura?");
+
+    // Problem 2 (Chapter 2 - Variables)
+    const p2 = pyProblems.find(p => p.id === 'pocket-money-math');
+    expect(p2).toBeDefined();
+    expect(p2?.chapterId).toBe('ch2');
+    expect(p2?.title).toBe('Pocket Money Math');
+    expect(p2?.expectedOutput).toBe('75');
+    expect(p2?.hints.tamilRoast).toContain("Ration shop-la kerosene-um sarkarai-yum");
+
+    // Problem 3 (Chapter 3 - If-Else)
+    const p3 = pyProblems.find(p => p.id === 'pass-or-arrear');
+    expect(p3).toBeDefined();
+    expect(p3?.chapterId).toBe('ch3');
+    expect(p3?.title).toBe('Pass or Arrear');
+    expect(p3?.expectedOutput).toBe('PASS');
+    expect(p3?.hints.tamilRoast).toContain("Condition illadha if statement");
+
+    // Problem 4 (Chapter 4 - Loop)
+    const p4 = pyProblems.find(p => p.id === 'count-to-3');
+    expect(p4).toBeDefined();
+    expect(p4?.chapterId).toBe('ch4');
+    expect(p4?.title).toBe('Count to 3');
+    expect(p4?.expectedOutput).toBe('1\n2\n3');
+    expect(p4?.hints.tamilRoast).toContain("Infinite loop pottu terminal-ah moochu mutta vikkatha da!");
   });
 
   it('retrieves an individual problem by ID and language', () => {

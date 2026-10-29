@@ -128,4 +128,86 @@ describe('ProblemSolverPage - Execution Feedback', () => {
     const terminalWrapper = screen.getByTestId('terminal-wrapper');
     expect(terminalWrapper.className).toContain('shadow-[inset_0_0_20px_rgba(34,197,94,0.3)]');
   });
+
+  it('runs beginner script problem with expectedOutput and passes without test harness when stdout matches', async () => {
+    const { getModuleProblem } = await import('@/lib/problems');
+    (getModuleProblem as any).mockReturnValueOnce({
+      id: 'hello-world',
+      title: 'Hello World',
+      starterCode: 'print("Hello World")',
+      expectedOutput: 'Hello World',
+    });
+
+    (executor.executeCode as any).mockResolvedValueOnce({
+      output: 'Hello World\n',
+      error: null
+    });
+
+    render(<ProblemSolverPage />);
+    const submitBtn = screen.getByText(/Submit & Roast/i);
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Output matched expected: "Hello World"/i)).toBeDefined();
+    });
+
+    // Verify executeCode was called with raw user code, not wrapped in test harness
+    expect(executor.executeCode).toHaveBeenCalledWith('javascript', 'print("Hello World")');
+  });
+
+  it('fails beginner script problem when stdout does not match expectedOutput', async () => {
+    const { getModuleProblem } = await import('@/lib/problems');
+    (getModuleProblem as any).mockReturnValueOnce({
+      id: 'hello-world',
+      title: 'Hello World',
+      starterCode: 'print("Goodbye World")',
+      expectedOutput: 'Hello World',
+    });
+
+    (executor.executeCode as any).mockResolvedValueOnce({
+      output: 'Goodbye World\n',
+      error: null
+    });
+
+    render(<ProblemSolverPage />);
+    const submitBtn = screen.getByText(/Submit & Roast/i);
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Failed: 0 \/ 1 tests passed/i)).toBeDefined();
+      expect(screen.getByText(/Expected output: "Hello World"/i)).toBeDefined();
+      expect(screen.getByText(/Your output: "Goodbye World"/i)).toBeDefined();
+    });
+  });
+
+  it('handles OnlineCompiler generic failure error with friendly roast message in output box', async () => {
+    (executor.executeCode as any).mockResolvedValueOnce({
+      output: 'Internal error: code execution failed',
+      error: null
+    });
+
+    render(<ProblemSolverPage />);
+    const submitBtn = screen.getByText(/Submit & Roast/i);
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Check for missing quotes, missing colons \(:\), or indentation errors!/i)).toBeDefined();
+    });
+  });
+
+  it('handles OnlineCompiler generic failure in error field with friendly roast message in output box', async () => {
+    (executor.executeCode as any).mockResolvedValueOnce({
+      output: '',
+      error: 'code execution failed'
+    });
+
+    render(<ProblemSolverPage />);
+    const submitBtn = screen.getByText(/Submit & Roast/i);
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Check for missing quotes, missing colons \(:\), or indentation errors!/i)).toBeDefined();
+    });
+  });
 });
+

@@ -29,27 +29,16 @@ describe('POST /api/run', () => {
     (checkUserRateLimit as any).mockResolvedValue({ allowed: true });
   });
 
-  it('should map javascript to typescript-deno and return output', async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ output: 'hello js', error: '' })
-    });
-
+  it('should return 400 for javascript requests indicating client-side execution', async () => {
     const req = new Request('http://localhost/api/run', {
       method: 'POST',
       body: JSON.stringify({ language: 'javascript', code: 'console.log("hello js")' })
     });
     const res = await POST(req);
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(400);
     const data = await res.json();
-    
-    expect(mockFetch).toHaveBeenCalledTimes(1);
-    const callArgs = mockFetch.mock.calls[0];
-    expect(callArgs[0]).toBe('https://api.onlinecompiler.io/api/run-code-sync/');
-    const parsedBody = JSON.parse(callArgs[1].body);
-    expect(parsedBody.compiler).toBe('typescript-deno');
-    expect(parsedBody.code).toBe('console.log("hello js")');
-    expect(data.output).toBe('hello js');
+    expect(data.error).toContain('JavaScript must execute client-side in the browser');
+    expect(mockFetch).not.toHaveBeenCalled();
   });
 
   it('should map python to python-3.14 and return output', async () => {

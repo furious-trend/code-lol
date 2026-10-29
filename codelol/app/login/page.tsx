@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Authentication login page with Sign In, Sign Up tabs, Username/Email OTP, Google OAuth, ?next= redirect, and Suspense", deps: ["@/lib/supabase/client", "@/components/Bugsy"], state: active, last: "sato@2026-10-16" }
+// agent-notes: { ctx: "Authentication login page with Sign In, Sign Up tabs, Direct Email OTP, Google OAuth, ?next= redirect, and Suspense", deps: ["@/lib/supabase/client", "@/components/Bugsy"], state: active, last: "sato@2026-10-28" }
 'use client';
 
 import { useState, Suspense } from 'react';
@@ -78,9 +78,9 @@ function LoginForm() {
 
   const handleSignIn = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    const identifier = signInIdentifier.trim();
-    if (!identifier) {
-      setError('Please enter your email or username.');
+    const email = signInIdentifier.trim();
+    if (!email || !email.includes('@')) {
+      setError('Please enter a valid email address.');
       return;
     }
 
@@ -88,36 +88,9 @@ function LoginForm() {
     setError('');
     setInfoMessage('');
 
-    let targetEmail = identifier;
-
-    // Check if the input is a username (no '@') or an email
-    if (!identifier.includes('@')) {
-      // Look up email by username or display_name
-      try {
-        const { data: profile, error: profileErr } = await supabase
-          .from('profiles')
-          .select('email, id')
-          .or(`username.ilike.${identifier},display_name.ilike.${identifier}`)
-          .maybeSingle();
-
-        if (profileErr || !profile || !profile.email) {
-          setError('User does not exist. Please sign up first.');
-          setLoading(false);
-          return;
-        }
-        targetEmail = profile.email;
-      } catch {
-        setError('User does not exist. Please sign up first.');
-        setLoading(false);
-        return;
-      }
-    }
-    // For email inputs: don't check profiles — Google OAuth users exist in auth.users
-    // but profiles RLS may block the query. Let Supabase Auth decide via shouldCreateUser: false.
-
     // Attempt Sign In with OTP (shouldCreateUser: false prevents creating new accounts on Sign In)
     const { error: otpError } = await supabase.auth.signInWithOtp({
-      email: targetEmail,
+      email,
       options: {
         shouldCreateUser: false,
         emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
@@ -128,9 +101,9 @@ function LoginForm() {
       setError(getAuthErrorMessage(otpError));
       setLoading(false);
     } else {
-      setActiveEmail(targetEmail);
+      setActiveEmail(email);
       setOtpSent(true);
-      setInfoMessage(`We sent a 6-digit login code to ${targetEmail}`);
+      setInfoMessage(`We sent a login code to ${email}`);
       setLoading(false);
     }
   };
@@ -201,7 +174,7 @@ function LoginForm() {
     } else {
       setActiveEmail(email);
       setOtpSent(true);
-      setInfoMessage(`We sent a 6-digit verification code to ${email}`);
+      setInfoMessage(`We sent a verification code to ${email}`);
       setLoading(false);
     }
   };
@@ -291,7 +264,7 @@ function LoginForm() {
           </h1>
           <p className="text-xs text-zinc-400 mt-1 font-medium">
             {otpSent 
-              ? 'Check your email for the 6-digit code' 
+              ? 'Check your email for the verification code' 
               : tab === 'signin' 
                 ? 'Welcome back! Sign in to continue' 
                 : 'Create an account to start coding & laughing'}
@@ -368,17 +341,17 @@ function LoginForm() {
             <>
               {tab === 'signin' ? (
                 /* ================= SIGN IN TAB ================= */
-                <motion.form variants={itemVariants} onSubmit={handleSignIn} className="space-y-3">
+                <motion.form noValidate variants={itemVariants} onSubmit={handleSignIn} className="space-y-3">
                   <div>
                     <label htmlFor="signin-id" className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
-                      Username or Email
+                      Email Address
                     </label>
                     <input
                       id="signin-id"
-                      type="text"
+                      type="email"
                       value={signInIdentifier}
                       onChange={(e) => setSignInIdentifier(e.target.value)}
-                      placeholder="name@example.com or username"
+                      placeholder="name@example.com"
                       disabled={loading}
                       required
                       className="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all disabled:opacity-50"
@@ -518,10 +491,10 @@ function LoginForm() {
                   type="text"
                   inputMode="numeric"
                   autoComplete="one-time-code"
-                  maxLength={6}
+                  maxLength={8}
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  placeholder="123456"
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                  placeholder="12345678"
                   disabled={loading}
                   autoFocus
                   required
@@ -531,7 +504,7 @@ function LoginForm() {
 
               <motion.button 
                 type="submit"
-                disabled={loading || otp.trim().length < 6}
+                disabled={loading || !/^[0-9]{6,8}$/.test(otp.trim())}
                 whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(16, 185, 129, 0.3)" }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full py-3 px-4 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white rounded-xl font-bold shadow-lg shadow-emerald-600/20 transition-all disabled:opacity-50 text-sm"

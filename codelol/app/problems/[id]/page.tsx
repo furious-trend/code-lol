@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Problem solver page with script problem runner and roast feedback", deps: ["@/lib/problems", "@/lib/executor", "@/lib/progress"], state: active, last: "sato@2026-10-28" }
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -27,6 +28,8 @@ function getSearchParam(key: string): string | null {
   }
   return null;
 }
+
+const getTimestamp = () => Date.now();
 
 export default function ProblemSolverPage() {
   const params = useParams();
@@ -210,6 +213,70 @@ export default function ProblemSolverPage() {
     setCode(e.target.value);
   };
 
+  const handleProblemSuccess = async (output: string) => {
+    // Calculate solve time
+    const solveTimeMs = startTimeRef.current ? getTimestamp() - startTimeRef.current : 0;
+    
+    // Check milestone before save
+    const savedBefore = localStorage.getItem('completedProblems');
+    const completedBefore = savedBefore ? JSON.parse(savedBefore) : [];
+    const isNew = !completedBefore.includes(problem.id);
+    
+    // Fetch AI complexity estimation
+    let timeComplexity = 'O(?)';
+    let spaceComplexity = 'O(?)';
+    try {
+      const res = await fetch('/api/analyze-complexity', {
+        method: 'POST',
+        body: JSON.stringify({ code, language: activeLang })
+      });
+      if (res.ok) {
+        const complexity = await res.json();
+        timeComplexity = complexity.timeComplexity;
+        spaceComplexity = complexity.spaceComplexity;
+      }
+    } catch (err) {
+      console.error('Error fetching complexity:', err);
+    }
+
+    // Save completion via helper
+    await saveProblemCompletion(problem.id, {
+      solveTimeMs,
+      timeComplexity,
+      spaceComplexity,
+      pointsAwarded: 100 // Fixed base points for now
+    }, activeLang);
+    
+    if (isNew && (completedBefore.length + 1) % 5 === 0) {
+      setMilestoneData({
+        milestone: completedBefore.length + 1,
+        type: 'problem'
+      });
+      setShowMilestone(true);
+    }
+    
+    if (isLessonRead) {
+      setSuccessMsg("🏆 Module Complete! Both lesson read & challenge conquered!");
+    } else if (moduleId) {
+      setSuccessMsg("🎉 Accepted! Next: Read the curriculum lesson to 100% finish this module!");
+    } else {
+      setSuccessMsg(getRandomSuccessMessage());
+    }
+    setNudgeMsg(getRandomNudgeMessage());
+    const playedSound = playMemeSound(true, humorPref);
+    
+    // Trigger confetti
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#10b981', '#22c55e', '#34d399']
+    });
+    
+    // Trigger the happy roast (meme/joke) on success
+    handleRoast(code, output, true, playedSound, humorPref);
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setLoadingMsg(getRandomLoadingMessage());
@@ -217,23 +284,28 @@ export default function ProblemSolverPage() {
     setRawOutput('');
     clearRoast();
 
-    let functionName = 'solution';
-    if (activeLang === 'python') {
-       const funcNameMatch = (problem.starterCodePython || problem.starterCode).match(/def\s+([a-zA-Z0-9_]+)/);
-       if (funcNameMatch) functionName = funcNameMatch[1];
-    } else {
-       const funcNameMatch = problem.starterCode.match(/function\s+([a-zA-Z0-9_]+)/);
-       if (funcNameMatch) functionName = funcNameMatch[1];
-    }
+    const expectedOutput = (problem as any)?.expectedOutput;
+    const isScriptProblem = expectedOutput !== undefined && expectedOutput !== null;
 
-    
     let testSuite = '';
-    
-    if ((problem as any)?.testHarness) {
-      testSuite = (problem as any).testHarness.replace("{{USER_CODE}}", code);
-    } else if (activeLang === 'python' || activeLang === 'javascript') {
+
+    if (isScriptProblem) {
+      testSuite = code;
+    } else {
+      let functionName = 'solution';
       if (activeLang === 'python') {
-        testSuite = `
+         const funcNameMatch = (problem.starterCodePython || problem.starterCode).match(/def\s+([a-zA-Z0-9_]+)/);
+         if (funcNameMatch) functionName = funcNameMatch[1];
+      } else {
+         const funcNameMatch = problem.starterCode.match(/function\s+([a-zA-Z0-9_]+)/);
+         if (funcNameMatch) functionName = funcNameMatch[1];
+      }
+
+      if ((problem as any)?.testHarness) {
+        testSuite = (problem as any).testHarness.replace("{{USER_CODE}}", code);
+      } else if (activeLang === 'python' || activeLang === 'javascript') {
+        if (activeLang === 'python') {
+          testSuite = `
 ${code}
 
 import json
@@ -261,8 +333,8 @@ for i, tc in enumerate(_tc):
 print('===TEST_RESULTS===')
 print(json.dumps({'passed': _passed, 'total': len(_tc), 'log': _log}))
 `;
-      } else {
-        testSuite = `
+        } else {
+          testSuite = `
 ${code}
 
 const _tc = ${JSON.stringify(problem.testCases || [])};
@@ -311,30 +383,75 @@ let _log = [];
   console.log(JSON.stringify({ passed: _passed, total: _tc.length, log: _log }));
 })();
 `;
+        }
+      } else if (activeLang === "c" && problem.testHarnessC) {
+        testSuite = problem.testHarnessC.replace("{{USER_CODE}}", code);
+      } else if (activeLang === "cpp" && problem.testHarnessCpp) {
+        testSuite = problem.testHarnessCpp.replace("{{USER_CODE}}", code);
+      } else if (activeLang === "java" && problem.testHarnessJava) {
+        testSuite = problem.testHarnessJava.replace("{{USER_CODE}}", code.replace(/public\s+class\s+Main/g, "class UserMain").replace(/public\s+static\s+void\s+main/g, "public static void user_main"));
+      } else {
+        setRawOutput("Sorry, " + activeLang.toUpperCase() + " is not fully supported for this specific problem yet (missing test harness). Try JavaScript or Python!");
+        setLoadingMsg("Unsupported Language");
+        setIsSubmitting(false);
+        return;
       }
-    } else if (activeLang === "c" && problem.testHarnessC) {
-      testSuite = problem.testHarnessC.replace("{{USER_CODE}}", code);
-    } else if (activeLang === "cpp" && problem.testHarnessCpp) {
-      testSuite = problem.testHarnessCpp.replace("{{USER_CODE}}", code);
-    } else if (activeLang === "java" && problem.testHarnessJava) {
-      testSuite = problem.testHarnessJava.replace("{{USER_CODE}}", code.replace(/public\s+class\s+Main/g, "class UserMain").replace(/public\s+static\s+void\s+main/g, "public static void user_main"));
-    } else {
-      setRawOutput("Sorry, " + activeLang.toUpperCase() + " is not fully supported for this specific problem yet (missing test harness). Try JavaScript or Python!");
-      setLoadingMsg("Unsupported Language");
-      setIsSubmitting(false);
-      return;
     }
-
 
     try {
       const data = await executeCode(activeLang, testSuite);
       
+      const isGenericFailure = Boolean(
+        (data.error && data.error.toLowerCase().includes('code execution failed')) ||
+        (data.output && data.output.toLowerCase().includes('code execution failed'))
+      );
+
+      if (isGenericFailure) {
+        const friendlyError = "Check for missing quotes, missing colons (:), or indentation errors!";
+        setRawOutput(friendlyError);
+        const playedSound = playMemeSound(false, humorPref);
+        handleRoast(code, friendlyError, false, playedSound, humorPref);
+        setIsSubmitting(false);
+        return;
+      }
+
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);
         const playedSound = playMemeSound(false, humorPref);
         handleRoast(code, "Execution Error:\n" + data.error, false, playedSound, humorPref);
         setIsSubmitting(false);
         return;
+      }
+
+      if (isScriptProblem) {
+        const userStdout = (data.output || '').trim();
+        const targetOutput = String(expectedOutput).trim();
+
+        if (userStdout === targetOutput) {
+          const parsedResults = {
+            passed: 1,
+            total: 1,
+            log: [`Output matched expected: "${targetOutput}"`]
+          };
+          setTestResults(parsedResults);
+          await handleProblemSuccess(data.output || targetOutput);
+          setIsSubmitting(false);
+          return;
+        } else {
+          const parsedResults = {
+            passed: 0,
+            total: 1,
+            log: [
+              `Expected output: "${targetOutput}"`,
+              `Your output: "${userStdout}"`
+            ]
+          };
+          setTestResults(parsedResults);
+          const playedSound = playMemeSound(false, humorPref);
+          handleRoast(code, `Expected output: "${targetOutput}", Got: "${userStdout}"`, false, playedSound, humorPref);
+          setIsSubmitting(false);
+          return;
+        }
       }
       
       const outputLines = data.output.split('\n');
@@ -351,67 +468,7 @@ let _log = [];
           setTestResults(parsedResults);
           
           if (parsedResults.passed === parsedResults.total) {
-            // Calculate solve time
-            const solveTimeMs = startTimeRef.current ? Date.now() - startTimeRef.current : 0;
-            
-            // Check milestone before save
-            const savedBefore = localStorage.getItem('completedProblems');
-            const completedBefore = savedBefore ? JSON.parse(savedBefore) : [];
-            const isNew = !completedBefore.includes(problem.id);
-            
-            // Fetch AI complexity estimation
-            let timeComplexity = 'O(?)';
-            let spaceComplexity = 'O(?)';
-            try {
-              const res = await fetch('/api/analyze-complexity', {
-                method: 'POST',
-                body: JSON.stringify({ code, language: activeLang })
-              });
-              if (res.ok) {
-                const complexity = await res.json();
-                timeComplexity = complexity.timeComplexity;
-                spaceComplexity = complexity.spaceComplexity;
-              }
-            } catch (err) {
-              console.error('Error fetching complexity:', err);
-            }
-
-            // Save completion via helper
-            await saveProblemCompletion(problem.id, {
-              solveTimeMs,
-              timeComplexity,
-              spaceComplexity,
-              pointsAwarded: 100 // Fixed base points for now
-            }, activeLang);
-            
-            if (isNew && (completedBefore.length + 1) % 5 === 0) {
-              setMilestoneData({
-                milestone: completedBefore.length + 1,
-                type: 'problem'
-              });
-              setShowMilestone(true);
-            }
-            
-            if (isLessonRead) {
-              setSuccessMsg("🏆 Module Complete! Both lesson read & challenge conquered!");
-            } else if (moduleId) {
-              setSuccessMsg("🎉 Accepted! Next: Read the curriculum lesson to 100% finish this module!");
-            } else {
-              setSuccessMsg(getRandomSuccessMessage());
-            }
-            setNudgeMsg(getRandomNudgeMessage());
-            const playedSound = playMemeSound(true, humorPref);
-            
-            // Trigger confetti
-            confetti({
-              particleCount: 100,
-              spread: 70,
-              origin: { y: 0.6 },
-              colors: ['#10b981', '#22c55e', '#34d399']
-            });
-            
-            // Trigger the happy roast (meme/joke) on success
-            handleRoast(code, data.output, true, playedSound, humorPref);
+            await handleProblemSuccess(data.output);
           } else {
             const playedSound = playMemeSound(false, humorPref);
             // Automatically trigger the roast (meme/joke) on test failure
@@ -552,7 +609,7 @@ let _log = [];
                   <p><strong className="text-zinc-400">Concept:</strong> {hints.english}</p>
                   {hints.tamilRoast && (
                     <p className="p-2.5 rounded-lg bg-pink-950/30 border border-pink-500/20 text-pink-300 font-medium">
-                      <strong>Bugsy's Tamil Roast 🌶️:</strong> {hints.tamilRoast}
+                      <strong>Bugsy&apos;s Tamil Roast 🌶️:</strong> {hints.tamilRoast}
                     </p>
                   )}
                 </div>

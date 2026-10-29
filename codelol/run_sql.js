@@ -3,7 +3,7 @@ const { Client } = require('pg');
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
-  console.error("DATABASE_URL environment variable is required.");
+  console.error("Missing DATABASE_URL");
   process.exit(1);
 }
 

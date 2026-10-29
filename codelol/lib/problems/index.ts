@@ -30,15 +30,21 @@ export function getModuleProblems(language: string = 'python'): ModuleProblem[] 
 }
 
 export function getModuleProblem(id: string, language?: string): ModuleProblem | undefined {
+  const matchId = (p: ModuleProblem) =>
+    p.id === id ||
+    p.moduleId === id ||
+    p.id === `py-${id}` ||
+    (id.startsWith('py-') && p.id === id.replace(/^py-/, ''));
+
   if (language) {
     const list = getModuleProblems(language);
-    const found = list.find(p => p.id === id || p.moduleId === id);
+    const found = list.find(matchId);
     if (found) return found;
   }
 
   // Search across all languages if language is unspecified or not found in specified language
   for (const list of Object.values(languageProblemMap)) {
-    const found = list.find(p => p.id === id || p.moduleId === id);
+    const found = list.find(matchId);
     if (found) return found;
   }
 

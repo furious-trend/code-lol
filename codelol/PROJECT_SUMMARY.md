@@ -1,39 +1,44 @@
-# codelol - Project Summary
+<!-- agent-notes: { ctx: "Architecture and technical summary for CodeLOL application", deps: ["codelol/"], state: active, last: "diego@2026-10-29" } -->
+# CodeLOL — Project Summary & Architecture
 
 ## Overview
-**codelol** is a full-stack, gamified learning platform designed to help users learn programming languages like JavaScript and Python in a fun, interactive way. Built on modern web technologies, it features in-browser code editing, AI-assisted feedback (code roasting/verification), and a robust set of social features.
+**CodeLOL** is a free, full-stack gamified learning platform that teaches programming through humor. An automated roast engine reacts to user code with quick jokes and GIFs. Built on modern web technologies, it features in-browser code editing, dual-language humor (General & Tamil), sandboxed client-side execution for JavaScript, external compiler proxying for compiled languages, and realtime social competitions.
 
 ## Tech Stack
-- **Frontend Framework:** Next.js (v16.2.12) with React 19
+- **Frontend Framework:** Next.js 16.2 (App Router with Turbopack) & React 19.2
 - **Language:** TypeScript
-- **Styling & Animation:** Tailwind CSS (v4), Framer Motion
-- **Backend & Database:** Supabase (Auth, Postgres DB, Realtime subscriptions)
+- **Styling & Animation:** Tailwind CSS v4, Framer Motion 13, Lucide React
 - **Code Editor:** Monaco Editor (`@monaco-editor/react`)
-- **AI Integrations:** Google Generative AI (Gemini), Groq SDK
-- **Code Execution:** Piston (Docker-based execution engine)
-- **Testing:** Vitest & React Testing Library
+- **Backend & Database:** Supabase (PostgreSQL, Auth with Google OAuth + Email OTP, Realtime channels, Storage buckets)
+- **Code Execution Engines:**
+  - **JavaScript:** Client-side isolated iframe (`sandbox="allow-scripts"`, strictly NO `allow-same-origin`, 5000ms timeout) via `lib/executor.ts`
+  - **Python, C, C++, Java:** Server-side proxy via `app/api/run/route.ts` to OnlineCompiler.io
+- **Testing:** Vitest 4.1 + React Testing Library (jsdom), 41 test suites, 187 unit tests
+- **Deployment & Hosting:** Vercel
 
-## Core Features
-1. **Interactive Learning & Coding**
-   - **Lessons:** Structured lessons for different languages (Python, JavaScript).
-   - **In-Browser Editor:** Users can write and test code directly in the browser via Monaco.
-   - **Code Execution:** Code runs against a Piston backend for secure, isolated execution.
-   - **Verification:** Automatically evaluates the execution results against expected strings/RegExp.
+## Core Features & Subsystems
 
-2. **AI Assistance & "Roasting"**
-   - Integrates with Gemini and Groq to provide AI-driven feedback or humorous "roasts" on the user's submitted code.
+1. **Dual-Humor Learning Engine**
+   - **General Humor:** Developer struggles, tech memes, stack overflow jokes.
+   - **Tamil Humor:** Vadivelu, Santhanam, Rajini, Vijay, and Kollywood pop-culture references.
+   - 45 Python curriculum lessons across 15 chapters, 64 JavaScript lessons, and introductory C/C++/Java tracks.
 
-3. **Gamification & Progression**
-   - Users earn experience, levels, and rank tiers (e.g., Beginner, Intermediate, Expert) based on problem completions.
-   - Streak tracking to encourage daily learning.
+2. **Secure Code Execution Architecture**
+   - **JavaScript:** Runs locally in the user's browser inside an iframe with `sandbox="allow-scripts"`. Because `allow-same-origin` is omitted, user code cannot access `window.parent.localStorage`, parent cookies, or DOM.
+   - **Compiled Languages:** Proxied through `app/api/run/route.ts` requiring authenticated Supabase sessions, DB-backed rate limiting, and a 20KB body limit.
+   - **Zero Waste:** JavaScript requests to `/api/run` are rejected with HTTP 400 Bad Request to conserve API quota and preserve the "JS runs free in-browser" principle.
 
-4. **Social & Community**
-   - **Friend System:** Users can search for others, send friend requests, and view their friends list.
-   - **Messaging:** Direct messaging between friends using Supabase Realtime for instant delivery.
-   - **Notifications:** In-app notifications for friend requests and streak milestones.
-   - **Leaderboards:** Competitive rankings based on levels and completions.
+3. **Authentication & Session Security**
+   - Authentication via Google OAuth and direct Email OTP (supporting 6 to 8 digit codes).
+   - Zero client-side user email enumeration: client-side `.from('profiles').select('email, id')` queries have been purged.
+   - Session routing enforced at the edge by `proxy.ts`.
 
-## Architecture Highlights
-- Uses a **Hybrid Team/Agent Methodology** (outlined in `AGENTS.md` and `docs/methodology/`) prioritizing test-driven development (TDD), Architectural Decision Records (ADRs), and strict phase boundaries.
-- **Client & Server Component Separation:** Heavy use of Next.js App Router patterns, utilizing server components for data fetching and passing data to specialized `*PageClient.tsx` components.
-- **Robust Database Security:** Extensive use of PostgreSQL Row-Level Security (RLS) policies on Supabase to ensure users can only access their own data, messages, and notifications.
+4. **Gamification & Social Systems**
+   - **Realtime Battles:** 1v1 multiplayer coding matches orchestrated via Supabase Realtime channels.
+   - **Friend & Direct Messaging:** Realtime notifications, friend requests, and direct messaging.
+   - **Leaderboard:** Dynamic rankings sorted by XP, levels completed, and solve times.
+
+5. **Operational Integrity & Audit Status**
+   - Scratch files with test credentials purged.
+   - PostgreSQL connections strictly consume `process.env.DATABASE_URL`.
+   - 100% green test suite: 41 of 41 test files passing, 187 of 187 tests passing.

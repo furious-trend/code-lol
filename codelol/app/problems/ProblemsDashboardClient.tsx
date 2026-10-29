@@ -7,12 +7,17 @@ import {
   getProblemsByChapter,
   resolveActiveLanguage,
   SupportedProblemLanguage,
-  ProblemTier,
   ChapterProblemGroup,
   ModuleProblem,
 } from '@/lib/problems';
 import { isModuleComplete, getModuleCompletionStatus } from '@/lib/progress';
-import { CheckCircle2, Circle, BookOpen, Code2, Trophy, ArrowRight, Sparkles } from 'lucide-react';
+import { CheckCircle2, Circle, Code2, Trophy, ArrowRight, Sparkles } from 'lucide-react';
+
+function setLanguageCookie(lang: string) {
+  if (typeof document !== 'undefined') {
+    document.cookie = `learning_language=${lang}; path=/; max-age=31536000; SameSite=Lax`;
+  }
+}
 
 function getSearchParam(key: string): string | null {
   if (typeof window !== 'undefined' && window.location && window.location.search) {
@@ -104,7 +109,7 @@ export default function ProblemsDashboardClient({
     // 1. Client storage & cookies
     if (typeof window !== 'undefined') {
       localStorage.setItem('guest_lang', lang);
-      document.cookie = `learning_language=${lang}; path=/; max-age=31536000; SameSite=Lax`;
+      setLanguageCookie(lang);
     }
 
     // 2. URL query param update without full reload

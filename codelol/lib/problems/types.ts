@@ -20,7 +20,8 @@ export interface ModuleProblem {
   title: string;
   description: string;
   starterCode: string;
-  testHarness: string; // Hidden assertions appending ===TEST_RESULTS===
+  testHarness?: string; // Hidden assertions appending ===TEST_RESULTS=== (optional for script problems)
+  expectedOutput?: string; // Expected stdout for beginner script challenges
   hints: {
     english: string;
     tamilRoast: string;
@@ -70,6 +71,7 @@ export interface Problem {
     tamilRoast: string;
   };
   tier?: ProblemTier;
+  expectedOutput?: string;
 }
 
 export interface ChapterProblemGroup {

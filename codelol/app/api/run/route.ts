@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "API proxy for OnlineCompiler.io multi-language code execution with server auth, body bounds, and rate limiting", deps: ["next/server", "@/lib/supabase/server", "@/lib/userRateLimit"], state: active, last: "sato@2026-10-16" }
+// agent-notes: { ctx: "API proxy for OnlineCompiler.io Python, C, C++, and Java execution with client-side JS enforcement", deps: ["next/server", "@/lib/supabase/server", "@/lib/userRateLimit"], state: active, last: "sato@2026-10-28" }
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { checkUserRateLimit } from '@/lib/userRateLimit';
@@ -8,13 +8,6 @@ const COMPILER_MAP: Record<string, string> = {
   'python': 'python-3.14',
   'python-3.14': 'python-3.14',
   'py': 'python-3.14',
-
-  // JavaScript & TypeScript via OnlineCompiler.io
-  'javascript': 'typescript-deno',
-  'js': 'typescript-deno',
-  'typescript': 'typescript-deno',
-  'ts': 'typescript-deno',
-  'typescript-deno': 'typescript-deno',
 
   // C
   'c': 'gcc-15',
@@ -28,19 +21,6 @@ const COMPILER_MAP: Record<string, string> = {
   // Java
   'java': 'openjdk-25',
   'openjdk-25': 'openjdk-25',
-
-  // Additional OnlineCompiler supported environments
-  'csharp': 'dotnet-csharp-9',
-  'cs': 'dotnet-csharp-9',
-  'dotnet-csharp-9': 'dotnet-csharp-9',
-  'php': 'php-8.5',
-  'php-8.5': 'php-8.5',
-  'ruby': 'ruby-4.0',
-  'ruby-4.0': 'ruby-4.0',
-  'go': 'go-1.26',
-  'go-1.26': 'go-1.26',
-  'rust': 'rust-1.93',
-  'rust-1.93': 'rust-1.93'
 };
 
 async function fetchWithTimeout(resource: string, options: RequestInit & { timeout?: number }) {
@@ -98,7 +78,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const compiler = COMPILER_MAP[language.toLowerCase()];
+    const normalizedLang = language.toLowerCase();
+    if (normalizedLang === 'javascript' || normalizedLang === 'js') {
+      return NextResponse.json(
+        { error: 'JavaScript must execute client-side in the browser.' },
+        { status: 400 }
+      );
+    }
+
+    const compiler = COMPILER_MAP[normalizedLang];
     if (!compiler) {
       return NextResponse.json(
         { error: `Language '${language}' is not supported.` },
@@ -154,13 +142,7 @@ export async function POST(request: Request) {
     }
 
     let finalCode = code;
-    if (compiler === 'typescript-deno' && assertions && Array.isArray(assertions) && assertions.length > 0) {
-      finalCode += `\n\nconsole.log("___VERIFICATION_START___");\nconst __vr = [];\n`;
-      for (const a of assertions) {
-        finalCode += `try { __vr.push({ id: ${JSON.stringify(a.id)}, passed: Boolean(eval(${JSON.stringify(a.code)})) }); } catch(e) { __vr.push({ id: ${JSON.stringify(a.id)}, passed: false, error: (e as any)?.message || String(e) }); }\n`;
-      }
-      finalCode += `console.log(JSON.stringify(__vr));\nconsole.log("___VERIFICATION_END___");\n`;
-    } else if (compiler === 'python-3.14' && assertions && Array.isArray(assertions) && assertions.length > 0) {
+    if (compiler === 'python-3.14' && assertions && Array.isArray(assertions) && assertions.length > 0) {
       finalCode += `\n\nprint("___VERIFICATION_START___")\nimport json\n__vr = []\n`;
       for (const a of assertions) {
         finalCode += `try:\n    __vr.append({"id": ${JSON.stringify(a.id)}, "passed": bool(${a.code})})\nexcept Exception as e:\n    __vr.append({"id": ${JSON.stringify(a.id)}, "passed": False, "error": str(e)})\n`;

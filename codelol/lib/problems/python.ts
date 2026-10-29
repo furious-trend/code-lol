@@ -1,10 +1,25 @@
-// agent-notes: { ctx: "Python module coding problems aligned with pythonCurriculum chapters", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "Python module coding problems aligned with pythonCurriculum chapters with beginner script problems", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-28" }
 
 import { ModuleProblem } from './types';
 import { pythonCurriculum } from '../python/curriculum';
 
 export const pythonModuleProblems: ModuleProblem[] = [
   // Chapter 1: Lexical Structure & Syntax Basics
+  {
+    id: 'say-hello-to-codelol',
+    moduleId: 'ch1-hello',
+    chapterId: 'ch1',
+    language: 'python',
+    tier: 'beginner',
+    title: 'Say Hello to CodeLOL',
+    description: `Welcome to Python on CodeLOL!\n\nIn Python, you can output text directly to the screen using the \`print()\` function.\n\n### Task:\nWrite a print statement that outputs \`Hello CodeLOL\`.\n\nNo functions or wrappers needed—just a clean Python script!`,
+    starterCode: `# Write your print statement below\n`,
+    expectedOutput: 'Hello CodeLOL',
+    hints: {
+      english: "Use print('Hello CodeLOL') to display the greeting.",
+      tamilRoast: "Quotes podama string ezhudhura? Tea kadaila poi 'tea' nu kekkama mookala sound vitta master enna pannuvaaro, compiler adhe thaan pannudhu!"
+    }
+  },
   {
     id: 'py-ch1-l1',
     moduleId: 'ch1-l1',
@@ -97,6 +112,21 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 
   // Chapter 2: Variables, Types & Memory
   {
+    id: 'pocket-money-math',
+    moduleId: 'ch2-money',
+    chapterId: 'ch2',
+    language: 'python',
+    tier: 'beginner',
+    title: 'Pocket Money Math',
+    description: `Variables hold data that you can change and calculate with.\n\n### Task:\n1. Set \`money = 50\`\n2. Add \`25\` to it\n3. Print the total (\`75\`)`,
+    starterCode: `# Set money = 50, add 25, and print the total\nmoney = 50\n`,
+    expectedOutput: '75',
+    hints: {
+      english: "Create the variable money = 50, add 25 (money = money + 25), and print(money).",
+      tamilRoast: "Ration shop-la kerosene-um sarkarai-yum orey dabba-la potta enna aagum? Adhaan un data type mismatch! Dabba-va olunga choose pannu da."
+    }
+  },
+  {
     id: 'py-ch2-l1',
     moduleId: 'ch2-l1',
     chapterId: 'ch2',
@@ -147,6 +177,21 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 
   // Chapter 3: Numbers & Arithmetic
   {
+    id: 'pass-or-arrear',
+    moduleId: 'ch3-pass',
+    chapterId: 'ch3',
+    language: 'python',
+    tier: 'beginner',
+    title: 'Pass or Arrear',
+    description: `Control flow lets your program make decisions using \`if\` conditions.\n\n### Task:\nGiven \`marks = 40\`, check if \`marks >= 35\`.\nIf the condition is met, print \`PASS\`.`,
+    starterCode: `marks = 40\n# Check if marks >= 35 and print PASS\n`,
+    expectedOutput: 'PASS',
+    hints: {
+      english: "Use an if condition: if marks >= 35: followed by an indented print('PASS').",
+      tamilRoast: "Condition illadha if statement... Vadivelu 'Keezha vizhundhalum meesaila man ottala' nu solra maari, logic enga da?!"
+    }
+  },
+  {
     id: 'py-ch3-l1',
     moduleId: 'ch3-l1',
     chapterId: 'ch3',
@@ -189,6 +234,21 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
   },
 
   // Chapter 4: Strings & Text Processing
+  {
+    id: 'count-to-3',
+    moduleId: 'ch4-count',
+    chapterId: 'ch4',
+    language: 'python',
+    tier: 'beginner',
+    title: 'Count to 3',
+    description: `Loops allow you to repeat actions. \`range(1, 4)\` generates the numbers 1, 2, and 3.\n\n### Task:\nUse \`for i in range(1, 4):\` to print the numbers 1, 2, 3 on separate lines.`,
+    starterCode: `# Use a for loop with range(1, 4) to print numbers 1, 2, 3\n`,
+    expectedOutput: '1\n2\n3',
+    hints: {
+      english: "Write a for loop: for i in range(1, 4): followed by an indented print(i).",
+      tamilRoast: "Infinite loop pottu terminal-ah moochu mutta vikkatha da!"
+    }
+  },
   {
     id: 'py-ch4-l1',
     moduleId: 'ch4-l1',

@@ -39,12 +39,27 @@ describe('/api/run route', () => {
       },
     });
 
-    const req = createRequest({ language: 'javascript', code: 'console.log(1)' });
+    const req = createRequest({ language: 'python', code: 'print(1)' });
     const res = await POST(req);
 
     expect(res.status).toBe(401);
     const data = await res.json();
     expect(data.error).toContain('Unauthorized');
+  });
+
+  it('returns 400 when language is javascript indicating client-side execution', async () => {
+    (createClient as any).mockResolvedValue({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'user-123' } }, error: null }),
+      },
+    });
+
+    const req = createRequest({ language: 'javascript', code: 'console.log(1)' });
+    const res = await POST(req);
+
+    expect(res.status).toBe(400);
+    const data = await res.json();
+    expect(data.error).toContain('JavaScript must execute client-side in the browser');
   });
 
   it('returns 400 when language is missing or unsupported', async () => {
@@ -70,7 +85,7 @@ describe('/api/run route', () => {
     });
 
     const longCode = 'a'.repeat(20005);
-    const req = createRequest({ language: 'javascript', code: longCode });
+    const req = createRequest({ language: 'python', code: longCode });
     const res = await POST(req);
 
     expect(res.status).toBe(400);
@@ -89,7 +104,7 @@ describe('/api/run route', () => {
       error: 'Rate limit exceeded 🐢',
     });
 
-    const req = createRequest({ language: 'javascript', code: 'console.log("hello")' });
+    const req = createRequest({ language: 'python', code: 'print("hello")' });
     const res = await POST(req);
 
     expect(res.status).toBe(429);
@@ -112,7 +127,7 @@ describe('/api/run route', () => {
     });
     global.fetch = mockFetch;
 
-    const req = createRequest({ language: 'javascript', code: 'console.log("Hello World")' });
+    const req = createRequest({ language: 'python', code: 'print("Hello World")' });
     const res = await POST(req);
 
     expect(res.status).toBe(200);
