@@ -30,7 +30,7 @@
 
 3. **Authentication & Session Security**
    - Authentication via Google OAuth and direct Email OTP (supporting 6 to 8 digit codes).
-   - Zero client-side user email enumeration: client-side `.from('profiles').select('email, id')` queries have been purged.
+   - Zero client-side user email enumeration: client-side profile email lookups have been purged.
    - Session routing enforced at the edge by `proxy.ts`.
 
 4. **Gamification & Social Systems**
