@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "JavaScript module coding problems aligned with JavaScript curriculum chapters", deps: ["./types", "../lessons/index"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "JavaScript module coding problems aligned with JavaScript curriculum chapters", deps: ["./types", "../lessons/index"], state: active, last: "sato@2026-10-30" }
 
 import { ModuleProblem } from './types';
 import { allLessons as jsLessons } from '../lessons/index';
@@ -17,10 +17,8 @@ export const javascriptModuleProblems: ModuleProblem[] = [
 - Declares a variable \`total\` equal to \`price + tax\`.
 - Returns \`total\`.`,
     starterCode: `function computeCart(price, taxRate) {
-  // Use const and let
-  const tax = price * taxRate;
-  let total = price + tax;
-  return total;
+  // Write your code here
+  
 }
 `,
     testHarness: `{{USER_CODE}}
@@ -52,7 +50,7 @@ console.log("===TEST_RESULTS===");
 console.log(JSON.stringify({ passed: _passed, total: _tests.length, log: _log }));
 `,
     hints: {
-      english: "Remember that const values cannot be reassigned. Return price + (price * taxRate).",
+      english: "Compute tax from price and taxRate, then return the total price including tax.",
       tamilRoast: "Variables kooda olunga declare panna theriyaadha? Horlicks dabba la sambar podura maari let const confuse panra!"
     }
   },
@@ -65,8 +63,8 @@ console.log(JSON.stringify({ passed: _passed, total: _tests.length, log: _log })
     title: 'Type Check & Validation',
     description: `Write a function \`isValidNumber(val)\` that returns \`true\` if \`val\` is of type \`'number'\` and is NOT \`NaN\`. Otherwise return \`false\`.`,
     starterCode: `function isValidNumber(val) {
-  // Check typeof and Number.isNaN
-  return typeof val === 'number' && !Number.isNaN(val);
+  // Write your code here
+  
 }
 `,
     testHarness: `{{USER_CODE}}
@@ -114,8 +112,8 @@ console.log(JSON.stringify({ passed: _passed, total: _tests.length, log: _log })
     title: 'Strict Equality Checker',
     description: `Given two values \`a\` and \`b\`, return \`true\` if and only if they are strictly equal in both type and value (\`===\`).`,
     starterCode: `function isStrictlyEqual(a, b) {
-  // Use ===
-  return a === b;
+  // Write your code here
+  
 }
 `,
     testHarness: `{{USER_CODE}}
@@ -168,10 +166,8 @@ console.log(JSON.stringify({ passed: _passed, total: _tests.length, log: _log })
 
 Write \`calcDiscount(price, tier)\`.`,
     starterCode: `function calcDiscount(price, tier) {
-  // Write your if / switch logic
-  if (tier === 'VIP') return price * 0.8;
-  if (tier === 'REGULAR') return price * 0.9;
-  return price;
+  // Write your code here
+  
 }
 `,
     testHarness: `{{USER_CODE}}
@@ -218,7 +214,8 @@ console.log(JSON.stringify({ passed: _passed, total: _tests.length, log: _log })
     title: 'Sum of Array Elements',
     description: `Write a function \`sumArray(nums)\` that returns the sum of all numbers in the array. Return \`0\` for an empty array.`,
     starterCode: `function sumArray(nums) {
-  return nums.reduce((acc, curr) => acc + curr, 0);
+  // Write your code here
+  
 }
 `,
     testHarness: `{{USER_CODE}}
@@ -250,7 +247,7 @@ console.log("===TEST_RESULTS===");
 console.log(JSON.stringify({ passed: _passed, total: _tests.length, log: _log }));
 `,
     hints: {
-      english: "Array.prototype.reduce((sum, n) => sum + n, 0) provides a concise one-liner.",
+      english: "You can iterate through the numbers accumulating their sum, or use the reduce array method.",
       tamilRoast: "Array reduce kooda theriyala na JavaScript developer nu sollatheenga bro!"
     }
   },
@@ -268,12 +265,8 @@ console.log(JSON.stringify({ passed: _passed, total: _tests.length, log: _log })
 - \`decrement()\`: decreases value by 1 and returns it.
 - \`getValue()\`: returns current value.`,
     starterCode: `function createCounter(initialValue = 0) {
-  let count = initialValue;
-  return {
-    increment: () => ++count,
-    decrement: () => --count,
-    getValue: () => count,
-  };
+  // Write your code here
+  
 }
 `,
     testHarness: `{{USER_CODE}}
@@ -318,13 +311,8 @@ console.log(JSON.stringify({ passed: _passed, total: 3, log: _log }));
     title: 'Deep Clone Object',
     description: `Implement a robust \`deepClone(obj)\` function that copies nested objects and arrays without retaining references.`,
     starterCode: `function deepClone(obj) {
-  if (obj === null || typeof obj !== 'object') return obj;
-  if (Array.isArray(obj)) return obj.map(deepClone);
-  const copy = {};
-  for (const key of Object.keys(obj)) {
-    copy[key] = deepClone(obj[key]);
-  }
-  return copy;
+  // Write your code here
+  
 }
 `,
     testHarness: `{{USER_CODE}}
@@ -387,7 +375,7 @@ distinctChapters.forEach((chapterName, idx) => {
       title: `${chapterName}: Challenge`,
       description: `Complete the coding challenge for ${chapterName}.
 Given a number \`n\`, return \`n * 2\`.`,
-      starterCode: `function solveChallenge(n) {\n  return n * 2;\n}`,
+      starterCode: `function solveChallenge(n) {\n  // Write your code here\n  \n}`,
       testHarness: `{{USER_CODE}}
 
 const _tests = [

@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "UI tests for problem solver page gating, hints, and feedback", deps: ["../app/problems/[id]/page", "@/lib/executor", "@/lib/progress"], state: active, last: "tara@2026-10-30" }
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ProblemSolverPage from '../app/problems/[id]/page';
@@ -326,6 +327,37 @@ describe('ProblemSolverPage - Solution Gating & Progressive Hints', () => {
     // Reveal Hint 2
     fireEvent.click(screen.getByText(/Reveal Syntax Clue/i));
     expect(screen.getByText(/Use `new Map\(\)` or object lookup for O\(1\) access/i)).toBeDefined();
+  });
+
+  it('displays clean index.js editor header and does not expose reference code while unsolved', async () => {
+    render(<ProblemSolverPage />);
+
+    // Editor tab should say index.js, not solution.js
+    expect(screen.getByText('index.js')).toBeDefined();
+    expect(screen.queryByText('solution.js')).toBeNull();
+
+    // Editor textarea should contain starter code, NOT the solution
+    const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
+    expect(textarea.value).toBe('function twoSum(nums, target) {}');
+    expect(textarea.value).not.toContain('const map = new Map()');
+
+    // Reference solution must not be visible anywhere in the document
+    expect(screen.queryByText(/Uses a hash map to look up complements in O\(n\) time/i)).toBeNull();
+  });
+
+  it('allows forfeiting from the progressive hints section when stuck', async () => {
+    render(<ProblemSolverPage />);
+
+    // Open progressive hints
+    fireEvent.click(screen.getByText(/Progressive Hints/i));
+
+    // Stuck button should be present
+    const stuckBtn = screen.getByText(/Give up & reveal solution \(0 XP\)/i);
+    expect(stuckBtn).toBeDefined();
+
+    // Clicking it triggers the forfeit dialog
+    fireEvent.click(stuckBtn);
+    expect(screen.getByText(/Wait! Give Up Already\? 🏳️/i)).toBeDefined();
   });
 });
 

@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Problem solver page with solution gating, progressive hints, forfeit XP handling, and roast feedback", deps: ["@/lib/problems", "@/lib/executor", "@/lib/progress", "@/components/Bugsy"], state: active, last: "sato@2026-10-29" }
+// agent-notes: { ctx: "Problem solver page with solution gating, progressive hints, forfeit XP handling, and roast feedback", deps: ["@/lib/problems", "@/lib/executor", "@/lib/progress", "@/components/Bugsy"], state: active, last: "sato@2026-10-30" }
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -80,7 +80,11 @@ export default function ProblemSolverPage() {
   const { playMemeSound } = useMemeSound();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const startTimeRef = useRef<number | null>(null);
-  const supabase = createClient();
+  const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null);
+  if (!supabaseRef.current) {
+    supabaseRef.current = createClient();
+  }
+  const supabase = supabaseRef.current;
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const [isLessonRead, setIsLessonRead] = useState(false);
@@ -95,10 +99,27 @@ export default function ProblemSolverPage() {
     syntaxClue: 'Check parameter types and return requirements.'
   };
 
+  // Reset state when switching between problems
   useEffect(() => {
+    setIsSolved(false);
+    setIsForfeited(false);
+    setActiveWorkspaceTab('problem');
+    setShowHints(false);
+    setShowHint2(false);
+    setShowForfeitModal(false);
+    setTestResults(null);
+    setRawOutput('');
+    clearRoast();
+  }, [id]);
+
+  useEffect(() => {
+    let isCancelled = false;
+
     async function loadPref() {
       const actualProbId = activeLang === 'python' ? `${id}-python` : id;
       const { data: { user } } = await supabase.auth.getUser();
+      if (isCancelled) return;
+
       if (user) {
         if (user.id === 'local-guest') {
           const storedHumor = localStorage.getItem('guest_humor');
@@ -120,10 +141,12 @@ export default function ProblemSolverPage() {
           const completed = saved ? JSON.parse(saved) : [];
           const forfeitedRaw = localStorage.getItem('forfeitedProblems');
           const forfeited = forfeitedRaw ? JSON.parse(forfeitedRaw) : [];
-          if (completed.includes(id) || completed.includes(actualProbId)) {
-            setIsSolved(true);
-          } else if (forfeited.includes(id) || forfeited.includes(actualProbId)) {
-            setIsForfeited(true);
+          if (!isCancelled) {
+            if (completed.includes(id) || completed.includes(actualProbId)) {
+              setIsSolved(true);
+            } else if (forfeited.includes(id) || forfeited.includes(actualProbId)) {
+              setIsForfeited(true);
+            }
           }
         } else {
           const { data: profile } = await supabase
@@ -131,6 +154,7 @@ export default function ProblemSolverPage() {
             .select('humor_preference, learning_language')
             .eq('id', user.id)
             .single();
+          if (isCancelled) return;
           if (profile?.humor_preference) {
             setHumorPref(profile.humor_preference);
           }
@@ -146,6 +170,7 @@ export default function ProblemSolverPage() {
               .eq('item_id', moduleId)
               .eq('learned', true)
               .maybeSingle();
+            if (isCancelled) return;
             if (prog?.learned) setIsLessonRead(true);
           }
 
@@ -157,6 +182,8 @@ export default function ProblemSolverPage() {
               .eq('user_id', user.id)
               .in('problem_id', [id, actualProbId])
               .maybeSingle();
+
+            if (isCancelled) return;
 
             if (comp) {
               if (comp.points_awarded === 0) {
@@ -184,6 +211,10 @@ export default function ProblemSolverPage() {
       }
     }
     loadPref();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [supabase, activeLang, moduleId, queryLang, id]);
 
   // Sync state if problem loads
@@ -773,31 +804,46 @@ let _log = [];
                         <p>{hints.tamilRoast}</p>
                       </div>
                     )}
+
+                    {!isSolved && !isForfeited && (
+                      <div className="pt-2 border-t border-zinc-800/80 flex items-center justify-between">
+                        <span className="text-[11px] text-zinc-500">Still stuck after hints?</span>
+                        <button
+                          type="button"
+                          onClick={() => setShowForfeitModal(true)}
+                          className="text-[11px] font-bold text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                        >
+                          🏳️ Give up & reveal solution (0 XP)
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
 
-              {/* Solution Preview Bar */}
-              <div className="mt-6 p-4 rounded-xl border border-zinc-800/80 bg-zinc-900/40 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{isSolved ? '🔓' : isForfeited ? '🏳️' : '🔒'}</span>
-                  <div>
-                    <p className="text-sm font-bold text-zinc-200">
-                      {isSolved ? 'Official Solution Unlocked!' : isForfeited ? 'Solution Revealed (Forfeited)' : 'Official Reference Solution'}
-                    </p>
-                    <p className="text-xs text-zinc-500">
-                      {isSolved ? 'Compare your algorithm with the reference solution.' : isForfeited ? 'Reviewed with 0 XP awarded.' : 'Locked until all test cases pass.'}
-                    </p>
+              {/* Solution Status Bar (Only shown after solve or forfeit) */}
+              {(isSolved || isForfeited) && (
+                <div className="mt-6 p-4 rounded-xl border border-zinc-800/80 bg-zinc-900/40 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{isSolved ? '🔓' : '🏳️'}</span>
+                    <div>
+                      <p className="text-sm font-bold text-zinc-200">
+                        {isSolved ? 'Official Solution Unlocked!' : 'Solution Revealed (Forfeited)'}
+                      </p>
+                      <p className="text-xs text-zinc-500">
+                        {isSolved ? 'Compare your algorithm with the reference solution.' : 'Reviewed with 0 XP awarded.'}
+                      </p>
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveWorkspaceTab('solution')}
+                    className="px-3.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-bold text-zinc-300 transition-colors"
+                  >
+                    View Solution →
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveWorkspaceTab('solution')}
-                  className="px-3.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-bold text-zinc-300 transition-colors"
-                >
-                  View Solution →
-                </button>
-              </div>
+              )}
 
               {problem.miniQuizQuestion && (
                 <div className="mt-10 bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-lg mb-4">
@@ -873,20 +919,14 @@ let _log = [];
             <div className="py-2 space-y-6">
               {!isSolved && !isForfeited ? (
                 /* Locked Solution Card */
-                <div className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/60 backdrop-blur text-center flex flex-col items-center relative overflow-hidden my-4 shadow-xl">
-                  {/* Sanitized blurred dummy preview */}
-                  <div className="absolute inset-0 p-6 select-none pointer-events-none filter blur-md opacity-20 font-mono text-xs text-zinc-400 overflow-hidden" aria-hidden="true">
-                    {`// Official solution is locked until tests pass\ndef solution(*args, **kwargs):\n    # [REDACTED REFERENCE ALGORITHM]\n    return "PASSED"\n`}
+                <div className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/60 backdrop-blur text-center flex flex-col items-center my-4 shadow-xl">
+                  <div className="w-16 h-16 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-3xl mb-4 shadow-xl">
+                    🔒
                   </div>
-
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div className="w-16 h-16 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-3xl mb-4 shadow-xl">
-                      🔒
-                    </div>
-                    <h3 className="text-xl font-bold text-zinc-100">Solution Locked</h3>
-                    <p className="text-sm text-zinc-400 mt-2 max-w-md">
-                      Pass all test cases to unlock the official solution and breakdown.
-                    </p>
+                  <h3 className="text-xl font-bold text-zinc-100">Solution Locked</h3>
+                  <p className="text-sm text-zinc-400 mt-2 max-w-md">
+                    Pass all test cases to unlock the official solution and breakdown.
+                  </p>
 
                     <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
                       <button
@@ -907,7 +947,6 @@ let _log = [];
                     <p className="text-[11px] text-zinc-500 mt-3">
                       ⚠️ Giving up will reveal the code immediately, but awards 0 XP for this challenge.
                     </p>
-                  </div>
                 </div>
               ) : (
                 /* Unlocked Solution Display */
@@ -985,8 +1024,8 @@ let _log = [];
           }`}
         >
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-zinc-400">
-              {activeLang === 'python' ? 'main.py' : activeLang === 'c' ? 'main.c' : activeLang === 'cpp' ? 'main.cpp' : activeLang === 'java' ? 'Solution.java' : 'solution.js'}
+            <h3 className="font-bold text-zinc-400 font-mono text-xs">
+              {activeLang === 'python' ? 'main.py' : activeLang === 'c' ? 'main.c' : activeLang === 'cpp' ? 'main.cpp' : activeLang === 'java' ? 'Main.java' : 'index.js'}
             </h3>
             <div className="flex gap-3">
               <motion.button 

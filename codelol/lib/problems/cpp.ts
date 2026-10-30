@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "C++ module coding problems aligned with C++ curriculum chapters", deps: ["./types", "../lessons/index"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "C++ module coding problems aligned with C++ curriculum chapters", deps: ["./types", "../lessons/index"], state: active, last: "sato@2026-10-30" }
 
 import { ModuleProblem } from './types';
 import { cppAllLessons } from '../lessons/index';
@@ -16,7 +16,7 @@ export const cppModuleProblems: ModuleProblem[] = [
 
 int addNumbers(int a, int b) {
     // Write your logic here
-    return a + b;
+    return 0;
 }
 
 int main() {
@@ -42,8 +42,8 @@ int main() {
 }
 `,
     hints: {
-      english: "Return a + b directly from the addNumbers function.",
-      tamilRoast: "std::cout paathu bayapudatha! Return a + b panna mudiyatha?"
+      english: "Compute the sum of a and b using the addition operator and return it.",
+      tamilRoast: "std::cout paathu bayapudatha! Arithmetic addition logic ezhuthu!"
     }
   },
   {
@@ -58,7 +58,8 @@ int main() {
 #include <string>
 
 std::string checkEvenOdd(int n) {
-    return (n % 2 == 0) ? "Even" : "Odd";
+    // Write your logic here
+    return "";
 }
 
 int main() {
@@ -84,8 +85,8 @@ int main() {
 }
 `,
     hints: {
-      english: "Use n % 2 == 0 to check if divisible by 2.",
-      tamilRoast: "Modulo 2 panna Even/Odd theriyum, idhu 1st standard maths da!"
+      english: "Use the modulo operator to determine divisibility by 2.",
+      tamilRoast: "Modulo 2 panna Even/Odd theriyum, condition podu pa!"
     }
   }
 ];
@@ -115,7 +116,8 @@ distinctChapters.forEach((chapterName, idx) => {
       starterCode: `#include <iostream>
 
 int solveCpp(int n) {
-    return n * 2;
+    // Write your logic here
+    return 0;
 }
 
 int main() {

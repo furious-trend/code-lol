@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Reference solutions, explanations, and progressive syntax clues for problem workspace", deps: ["./types"], state: active, last: "sato@2026-10-29" }
+// agent-notes: { ctx: "Reference solutions, explanations, and progressive syntax clues for problem workspace", deps: ["./types"], state: active, last: "sato@2026-10-30" }
 
 import { ModuleProblem, Problem } from './types';
 
@@ -14,7 +14,7 @@ const SOLUTIONS_REGISTRY: Record<string, Partial<Record<string, ProblemSolution>
     python: {
       code: `print("Hello CodeLOL")`,
       explanation: "In Python, the built-in `print()` function writes strings directly to standard output (stdout). No wrapper functions or imports are required.",
-      syntaxClue: "Use the `print('...')` built-in function."
+      syntaxClue: "Use Python's built-in print() function with a string argument."
     }
   },
   'py-ch1-l1': {
@@ -23,179 +23,314 @@ const SOLUTIONS_REGISTRY: Record<string, Partial<Record<string, ProblemSolution>
     if is_logged_in:
         return "Welcome back, " + name + "!"
     return "Please log in to continue."`,
-      explanation: "Python enforces block scoping with consistent indentation (typically 4 spaces). The conditional branch handles the logged-in greeting, while the default return path handles unauthenticated users.",
-      syntaxClue: "Use `if is_logged_in:` with 4-space indentation and string concatenation or f-strings."
+      explanation: "Python enforces block scoping with consistent indentation. The conditional branch handles the authenticated greeting, while the default return path handles unauthenticated users.",
+      syntaxClue: "Use `if is_logged_in:` with 4-space indentation and string concatenation or formatting."
     }
   },
   'py-ch1-l2': {
     python: {
-      code: `def calculate_change(cost: int, paid: int) -> int:
-    return paid - cost`,
-      explanation: "Direct arithmetic subtraction `paid - cost` returns the remaining balance due back to the customer.",
-      syntaxClue: "Use the subtraction operator `-`."
+      code: `def strip_comment(line: str) -> str:
+    return line.split('#')[0].rstrip()`,
+      explanation: "Splitting on the comment marker `#` produces a list of substrings. Taking index 0 gives the content before any comment, and `.rstrip()` removes trailing whitespace.",
+      syntaxClue: "Use `.split('#')[0]` and `.rstrip()`."
     }
   },
   'pocket-money-math': {
     python: {
-      code: `print(100 - 30)`,
-      explanation: "Evaluating integer subtraction inside `print()` prints 70 to standard output.",
-      syntaxClue: "Use `print(100 - 30)`"
+      code: `money = 50
+money = money + 25
+print(money)`,
+      explanation: "Assigns 50 to a variable, increments it by 25, and evaluates the final sum to standard output.",
+      syntaxClue: "Declare a variable, add the increment, and pass it to print()."
     }
   },
   'pass-or-arrear': {
     python: {
-      code: `print("PASS")`,
-      explanation: "Prints the string PASS directly to stdout.",
-      syntaxClue: "Use `print('PASS')`"
+      code: `marks = 40
+if marks >= 35:
+    print("PASS")`,
+      explanation: "Evaluates whether the student's marks meet or exceed the passing threshold (35) before printing PASS.",
+      syntaxClue: "Use an `if marks >= 35:` conditional block."
     }
   },
   'count-to-3': {
     python: {
-      code: `print("1 2 3")`,
-      explanation: "Outputs space-separated digits to stdout as expected by the script runner.",
-      syntaxClue: "Use `print('1 2 3')`"
+      code: `for i in range(1, 4):
+    print(i)`,
+      explanation: "The `range(1, 4)` generator yields values 1, 2, and 3. The `for` loop executes `print(i)` once per iteration.",
+      syntaxClue: "Use `for i in range(1, 4):`."
     }
   },
   'py-ch2-l1': {
     python: {
-      code: `def check_eligibility(age: int, has_id: bool) -> str:
-    if age >= 18 and has_id:
-        return "Eligible"
-    return "Not Eligible"`,
-      explanation: "Both boolean conditions must be satisfied simultaneously using the `and` operator.",
-      syntaxClue: "Combine expressions with `and`: `age >= 18 and has_id`"
+      code: `def classify_type(val) -> str:
+    if isinstance(val, bool):
+        return "boolean"
+    if isinstance(val, int):
+        return "integer"
+    if isinstance(val, float):
+        return "float"
+    if isinstance(val, str):
+        return "string"
+    return "other"`,
+      explanation: "In Python, `bool` is a subclass of `int`. Checking `isinstance(val, bool)` first ensures booleans are not misclassified as integers.",
+      syntaxClue: "Check boolean types before integers using `isinstance(val, bool)`."
     }
   },
   'py-ch3-l1': {
     python: {
-      code: `def classify_score(score: int) -> str:
-    if score >= 90:
-        return "A"
-    elif score >= 80:
-        return "B"
-    elif score >= 70:
-        return "C"
-    return "F"`,
-      explanation: "Chained `if-elif-else` constructs evaluate conditions from highest to lowest threshold.",
-      syntaxClue: "Use `elif score >= threshold:` blocks in descending order."
+      code: `def batch_stats(items: int, batch_size: int) -> tuple[int, int]:
+    return (items // batch_size, items % batch_size)`,
+      explanation: "Integer floor division `//` computes the full batch count, while the modulo operator `%` gives remaining leftover items.",
+      syntaxClue: "Combine floor division `//` and remainder `%` inside a tuple."
     }
   },
   'py-ch4-l1': {
     python: {
-      code: `def sum_first_n(n: int) -> int:
-    return sum(range(1, n + 1))`,
-      explanation: "The `range(1, n + 1)` generator yields integers from 1 up to n inclusive, which `sum()` accumulates in O(n) time.",
-      syntaxClue: "Use `range(1, n + 1)` with `sum()` or a `for` loop accumulator."
+      code: `def make_slug(text: str) -> str:
+    return "-".join(text.split()).lower()`,
+      explanation: "Splitting `text.split()` without arguments collapses consecutive whitespace and strips leading/trailing spaces. Joining with `-` and lowering forms a URL slug.",
+      syntaxClue: "Combine `.split()`, `'-'.join(...)`, and `.lower()`."
     }
   },
   'py-ch5-l1': {
     python: {
-      code: `def double_numbers(nums: list[int]) -> list[int]:
-    return [x * 2 for x in nums]`,
-      explanation: "List comprehensions offer an idiomatic, readable, and performant way to transform elements in Python.",
-      syntaxClue: "Use list comprehension: `[x * 2 for x in nums]`"
+      code: `def fizz_buzz(n: int) -> str:
+    if n % 15 == 0:
+        return "FizzBuzz"
+    if n % 3 == 0:
+        return "Fizz"
+    if n % 5 == 0:
+        return "Buzz"
+    return str(n)`,
+      explanation: "Evaluates the combined divisibility (3 and 5, or 15) before individual divisibility checks, falling back to string conversion.",
+      syntaxClue: "Check `n % 15 == 0` first, followed by `% 3` and `% 5`."
     }
   },
   'py-ch6-l1': {
     python: {
-      code: `def count_word_frequencies(words: list[str]) -> dict[str, int]:
-    freq = {}
-    for w in words:
-        freq[w] = freq.get(w, 0) + 1
-    return freq`,
-      explanation: "Using `dict.get(key, 0)` safely retrieves the existing tally or defaults to 0 before incrementing.",
-      syntaxClue: "Use dictionary `.get(w, 0) + 1` inside a loop."
+      code: `def sum_evens(start: int, end: int) -> int:
+    return sum(x for x in range(start, end + 1) if x % 2 == 0)`,
+      explanation: "Generates integers from start to end inclusive, filters for even numbers with `x % 2 == 0`, and sums them.",
+      syntaxClue: "Use a generator expression with `range(start, end + 1)` and `x % 2 == 0` inside `sum()`."
     }
   },
   'py-ch7-l1': {
     python: {
-      code: `def unique_sorted(items: list[int]) -> list[int]:
-    return sorted(list(set(items)))`,
-      explanation: "Converting an iterable to a `set` strips out duplicates in O(n) time, and `sorted()` returns a new ascending list in O(n log n).",
-      syntaxClue: "Combine `set(items)` with the `sorted()` function."
+      code: `def make_multiplier(factor: int):
+    def multiplier(x: int) -> int:
+        return x * factor
+    return multiplier`,
+      explanation: "An inner function captures the `factor` parameter from its enclosing lexical scope, creating a closure.",
+      syntaxClue: "Define an inner function `def multiplier(x): return x * factor` and return it."
     }
   },
   'py-ch8-l1': {
     python: {
-      code: `def safe_divide(a: float, b: float) -> float | None:
-    try:
-        return a / b
-    except ZeroDivisionError:
-        return None`,
-      explanation: "Defensive exception handling with `try / except ZeroDivisionError` prevents runtime crashes on zero divisors.",
-      syntaxClue: "Catch `ZeroDivisionError` with `try ... except:`"
+      code: `def chunk_list(lst: list, size: int) -> list:
+    if not lst or size <= 0:
+        return []
+    return [lst[i:i + size] for i in range(0, len(lst), size)]`,
+      explanation: "Uses `range(0, len(lst), size)` with step `size` to slice sublists of length `size`.",
+      syntaxClue: "Use a list comprehension with `range(0, len(lst), size)` and slice `lst[i:i + size]`."
     }
   },
   'py-ch9-l1': {
     python: {
-      code: `def filter_even(numbers: list[int]) -> list[int]:
-    return [n for n in numbers if n % 2 == 0]`,
-      explanation: "List comprehension with a trailing `if` predicate filters elements cleanly.",
-      syntaxClue: "Filter with the modulo operator: `n % 2 == 0`"
+      code: `def word_counts(words: list[str]) -> dict:
+    counts = {}
+    for w in words:
+        counts[w] = counts.get(w, 0) + 1
+    return counts`,
+      explanation: "Iterates through words, safely retrieving current count with `.get(w, 0)` before incrementing.",
+      syntaxClue: "Use a dictionary with `dict.get(key, 0) + 1`."
     }
   },
   'py-ch10-l1': {
     python: {
-      code: `class BankAccount:
-    def __init__(self, initial_balance: float = 0.0):
-        self.balance = initial_balance
-    def deposit(self, amount: float) -> None:
-        self.balance += amount
-    def get_balance(self) -> float:
-        return self.balance`,
-      explanation: "Encapsulates balance state on `self` initialized in `__init__` and modified through instance methods.",
-      syntaxClue: "Define `__init__(self, ...)` and access instance state via `self.balance`"
+      code: `def invert_dict(d: dict) -> dict:
+    return {v: k for k, v in d.items()}`,
+      explanation: "A dictionary comprehension iterates over `d.items()`, swapping keys and values into a new dict.",
+      syntaxClue: "Use a comprehension: `{v: k for k, v in d.items()}`."
     }
   },
   'py-ch14-l1': {
     python: {
-      code: `def countdown(n: int):
-    while n > 0:
-        yield n
-        n -= 1`,
-      explanation: "Generators pause execution state and produce values one by one using `yield` without allocating an entire list in memory.",
-      syntaxClue: "Use `yield` inside a `while` loop."
+      code: `class BankAccount:
+    def __init__(self, initial_balance: int = 0):
+        self.balance = initial_balance
+
+    def deposit(self, amount: int) -> int:
+        self.balance += amount
+        return self.balance
+
+    def withdraw(self, amount: int) -> bool:
+        if amount <= self.balance:
+            self.balance -= amount
+            return True
+        return False`,
+      explanation: "Encapsulates balance state on `self`, safely validating withdrawal amount against balance.",
+      syntaxClue: "Define `__init__`, `deposit`, and `withdraw` methods updating `self.balance`."
     }
   },
   'py-ch17-l1': {
     python: {
-      code: `def log_call(func):
+      code: `def count_calls(fn):
     def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
+        wrapper.calls += 1
+        return fn(*args, **kwargs)
+    wrapper.calls = 0
     return wrapper`,
-      explanation: "A decorator takes a target function and returns a wrapper closure accepting arbitrary positional and keyword arguments.",
-      syntaxClue: "Define a closure `def wrapper(*args, **kwargs):` returning `func(*args, **kwargs)`"
+      explanation: "Decorates `fn` with a wrapper closure that tracks invocations on an attribute of the wrapper.",
+      syntaxClue: "Define a `wrapper(*args, **kwargs)` closure and set an attribute on `wrapper.calls`."
     }
   },
 
   // JavaScript Module Problems
   'js-ch1-l1': {
     javascript: {
-      code: `function sum(a, b) {
-  return a + b;
+      code: `function computeCart(price, taxRate) {
+  const tax = price * taxRate;
+  const total = price + tax;
+  return total;
 }`,
-      explanation: "The `+` addition operator computes the arithmetic sum of numerical parameters `a` and `b`.",
-      syntaxClue: "Use `return a + b;`"
+      explanation: "Calculates the tax amount using multiplication, adds it to the base price, and returns the total.",
+      syntaxClue: "Use const for tax and total calculations, returning their sum."
     }
   },
   'js-ch1-l2': {
     javascript: {
-      code: `function isEven(n) {
-  return n % 2 === 0;
+      code: `function isValidNumber(val) {
+  return typeof val === 'number' && !Number.isNaN(val);
 }`,
-      explanation: "The remainder operator `%` returns 0 when a number is evenly divisible by 2.",
-      syntaxClue: "Use `n % 2 === 0`"
+      explanation: "In JavaScript, `typeof NaN === 'number'`. Validating numbers requires both `typeof` check and `!Number.isNaN()`.",
+      syntaxClue: "Combine `typeof val === 'number'` with `!Number.isNaN(val)`."
     }
   },
   'js-ch2-l1': {
     javascript: {
-      code: `function reverseString(str) {
-  return str.split('').reverse().join('');
+      code: `function isStrictlyEqual(a, b) {
+  return a === b;
 }`,
-      explanation: "Splits string into an array of characters, reverses the array in-place, and joins it back into a string.",
-      syntaxClue: "Chain `.split('').reverse().join('')`"
+      explanation: "The strict equality operator `===` compares values without performing type coercion.",
+      syntaxClue: "Use the `===` strict equality operator."
     }
   },
+  'js-ch3-l1': {
+    javascript: {
+      code: `function calcDiscount(price, tier) {
+  if (tier === 'VIP') return price * 0.8;
+  if (tier === 'REGULAR') return price * 0.95;
+  return price;
+}`,
+      explanation: "Conditionally calculates discounted price based on the membership tier.",
+      syntaxClue: "Use conditional statements checking for tier values."
+    }
+  },
+  'js-ch5-l1': {
+    javascript: {
+      code: `function sumArray(nums) {
+  return nums.reduce((sum, n) => sum + n, 0);
+}`,
+      explanation: "The `reduce` method iterates over array elements, accumulating the running sum starting from 0.",
+      syntaxClue: "Use `nums.reduce((acc, curr) => acc + curr, 0)` or a for-loop."
+    }
+  },
+  'js-ch-inter-1': {
+    javascript: {
+      code: `function createCounter(initialValue = 0) {
+  let val = initialValue;
+  return {
+    increment: () => ++val,
+    decrement: () => --val,
+    getValue: () => val
+  };
+}`,
+      explanation: "Returns an object whose methods close over the private `val` state in the enclosing scope.",
+      syntaxClue: "Store state in a local variable and return an object with methods mutating that variable."
+    }
+  },
+  'js-ch-exp-1': {
+    javascript: {
+      code: `function deepClone(obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) return obj.map(deepClone);
+  const copy = {};
+  for (const key of Object.keys(obj)) {
+    copy[key] = deepClone(obj[key]);
+  }
+  return copy;
+}`,
+      explanation: "Recursively clones nested arrays and objects while leaving primitive types intact.",
+      syntaxClue: "Recursively check `typeof obj === 'object'` and `Array.isArray(obj)`."
+    }
+  },
+
+  // C Module Problems
+  'c-ch1-l1': {
+    c: {
+      code: `int addNumbers(int a, int b) {
+    return a + b;
+}`,
+      explanation: "Returns the arithmetic sum of parameters a and b.",
+      syntaxClue: "Use `return a + b;`."
+    }
+  },
+  'c-ch2-l1': {
+    c: {
+      code: `int maxTwo(int a, int b) {
+    return (a > b) ? a : b;
+}`,
+      explanation: "Evaluates which integer is greater using a conditional ternary operator.",
+      syntaxClue: "Use `(a > b) ? a : b` or an `if-else` statement."
+    }
+  },
+
+  // C++ Module Problems
+  'cpp-ch1-l1': {
+    cpp: {
+      code: `int addNumbers(int a, int b) {
+    return a + b;
+}`,
+      explanation: "Returns the arithmetic sum of parameters a and b.",
+      syntaxClue: "Use `return a + b;`."
+    }
+  },
+  'cpp-ch2-l1': {
+    cpp: {
+      code: `std::string checkEvenOdd(int n) {
+    return (n % 2 == 0) ? "Even" : "Odd";
+}`,
+      explanation: "Checks divisibility by 2 using the remainder operator `%` and returns the corresponding string literal.",
+      syntaxClue: "Check `n % 2 == 0`."
+    }
+  },
+
+  // Java Module Problems
+  'java-ch1-l1': {
+    java: {
+      code: `public class Solution {
+    public static int addNumbers(int a, int b) {
+        return a + b;
+    }
+}`,
+      explanation: "Static method inside class Solution returning the integer sum of a and b.",
+      syntaxClue: "Return `a + b` inside `public static int addNumbers`."
+    }
+  },
+  'java-ch2-l1': {
+    java: {
+      code: `public class Solution {
+    public static String checkEvenOdd(int n) {
+        return (n % 2 == 0) ? "Even" : "Odd";
+    }
+}`,
+      explanation: "Evaluates if n is divisible by 2 and returns string 'Even' or 'Odd'.",
+      syntaxClue: "Check `n % 2 == 0`."
+    }
+  },
+
+  // Legacy & Practice Problems
   'two-sum': {
     javascript: {
       code: `function twoSum(nums, target) {
@@ -226,6 +361,29 @@ const SOLUTIONS_REGISTRY: Record<string, Partial<Record<string, ProblemSolution>
     return a + b`,
       explanation: "Returns the sum of two integers.",
       syntaxClue: "Return `a + b`"
+    },
+    c: {
+      code: `int addNumbers(int a, int b) {
+    return a + b;
+}`,
+      explanation: "Returns the sum of two integers.",
+      syntaxClue: "Return `a + b;`"
+    },
+    cpp: {
+      code: `int addNumbers(int a, int b) {
+    return a + b;
+}`,
+      explanation: "Returns the sum of two integers.",
+      syntaxClue: "Return `a + b;`"
+    },
+    java: {
+      code: `public class Main {
+    public static int addNumbers(int a, int b) {
+        return a + b;
+    }
+}`,
+      explanation: "Returns the sum of two integers.",
+      syntaxClue: "Return `a + b;`"
     }
   }
 };
@@ -266,17 +424,49 @@ export function getProblemSolution(problem: ModuleProblem | Problem, language: s
     return {
       code: printStmt,
       explanation: `Outputs the exact expected stdout "${problem.expectedOutput}" to pass the verification check.`,
-      syntaxClue: langKey === 'python' ? "Use `print(...)`" : "Use `console.log(...)`"
+      syntaxClue: langKey === 'python' ? "Use Python's built-in print() function." : "Use console.log()."
     };
   }
 
-  // 4. Starter code completion fallback
-  const baseStarter = (langKey === 'python' && problem.starterCodePython)
-    ? problem.starterCodePython
-    : problem.starterCode;
+  // 4. Dynamic chapter problem fallbacks
+  if (problem.id.includes('solve_') || problem.id.includes('solveC') || problem.id.includes('solveCpp') || problem.id.includes('solveJava') || problem.id.includes('solveChallenge') || problem.description.includes('n * 2')) {
+    if (langKey === 'python') {
+      return {
+        code: `def solve_challenge(n: int) -> int:\n    return n * 2`,
+        explanation: "Computes and returns double the input value `n * 2`.",
+        syntaxClue: "Return `n * 2`."
+      };
+    }
+    if (langKey === 'c') {
+      return {
+        code: `int solveC(int n) {\n    return n * 2;\n}`,
+        explanation: "Computes and returns double the input value `n * 2`.",
+        syntaxClue: "Return `n * 2;`."
+      };
+    }
+    if (langKey === 'cpp') {
+      return {
+        code: `int solveCpp(int n) {\n    return n * 2;\n}`,
+        explanation: "Computes and returns double the input value `n * 2`.",
+        syntaxClue: "Return `n * 2;`."
+      };
+    }
+    if (langKey === 'java') {
+      return {
+        code: `public class Solution {\n    public static int solveJava(int n) {\n        return n * 2;\n    }\n}`,
+        explanation: "Computes and returns double the input value `n * 2`.",
+        syntaxClue: "Return `n * 2;`."
+      };
+    }
+    return {
+      code: `function solveChallenge(n) {\n  return n * 2;\n}`,
+      explanation: "Computes and returns double the input value `n * 2`.",
+      syntaxClue: "Return `n * 2;`."
+    };
+  }
 
   return {
-    code: baseStarter || "// Reference solution",
+    code: "// Reference solution available once solved",
     explanation: "Implement the required function logic and return the expected value.",
     syntaxClue: (problem.hints as any)?.syntaxClue || (problem.hints as any)?.english || "Check parameter types and return requirements."
   };

@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "C module coding problems aligned with C curriculum chapters", deps: ["./types", "../lessons/index"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "C module coding problems aligned with C curriculum chapters", deps: ["./types", "../lessons/index"], state: active, last: "sato@2026-10-30" }
 
 import { ModuleProblem } from './types';
 import { cAllLessons } from '../lessons/index';
@@ -16,7 +16,7 @@ export const cModuleProblems: ModuleProblem[] = [
 
 int addNumbers(int a, int b) {
     // Write your logic here
-    return a + b;
+    return 0;
 }
 
 int main() {
@@ -41,8 +41,8 @@ int main() {
 }
 `,
     hints: {
-      english: "Return a + b directly from the addNumbers function.",
-      tamilRoast: "C-la rendu number add panna kooda segfault varutha? Thalaiva return a + b podunga!"
+      english: "Compute the arithmetic sum of a and b and return it.",
+      tamilRoast: "C-la rendu number add panna kooda segfault varutha? Logic olunga ezhuthu!"
     }
   },
   {
@@ -56,7 +56,8 @@ int main() {
     starterCode: `#include <stdio.h>
 
 int maxTwo(int a, int b) {
-    return (a > b) ? a : b;
+    // Write your logic here
+    return 0;
 }
 
 int main() {
@@ -81,8 +82,8 @@ int main() {
 }
 `,
     hints: {
-      english: "Use the ternary operator return a > b ? a : b; or an if-else statement.",
-      tamilRoast: "Ternary operator theriyuma? a > b ? a : b podu pa!"
+      english: "Use a comparison condition or ternary expression to find the greater value.",
+      tamilRoast: "Comparison condition theriyuma? Rendu number-la edhu perusu nu kandupidi pa!"
     }
   }
 ];
@@ -112,7 +113,8 @@ distinctChapters.forEach((chapterName, idx) => {
       starterCode: `#include <stdio.h>
 
 int solveC(int n) {
-    return n * 2;
+    // Write your logic here
+    return 0;
 }
 
 int main() {

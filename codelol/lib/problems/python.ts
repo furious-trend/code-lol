@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Python module coding problems aligned with pythonCurriculum chapters with beginner script problems", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "Python module coding problems aligned with pythonCurriculum chapters with beginner script problems", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-30" }
 
 import { ModuleProblem } from './types';
 import { pythonCurriculum } from '../python/curriculum';
@@ -16,7 +16,7 @@ export const pythonModuleProblems: ModuleProblem[] = [
     starterCode: `# Write your print statement below\n`,
     expectedOutput: 'Hello CodeLOL',
     hints: {
-      english: "Use print('Hello CodeLOL') to display the greeting.",
+      english: "Use Python's built-in print() function to output the required greeting string.",
       tamilRoast: "Quotes podama string ezhudhura? Tea kadaila poi 'tea' nu kekkama mookala sound vitta master enna pannuvaaro, compiler adhe thaan pannudhu!"
     }
   },
@@ -35,10 +35,8 @@ Write a function \`greet_user(is_logged_in: bool, name: str) -> str\`:
 
 Ensure your code is properly indented!`,
     starterCode: `def greet_user(is_logged_in: bool, name: str) -> str:
-    # Fix and complete the indentation
-    if is_logged_in:
-        return "Welcome back, " + name + "!"
-    return "Please log in to continue."
+    # Write your logic here
+    pass
 `,
     testHarness: `{{USER_CODE}}
 
@@ -105,8 +103,8 @@ print("===TEST_RESULTS===")
 print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
-      english: "Use line.split('#')[0].rstrip() to cleanly remove comments and extra whitespace.",
-      tamilRoast: "Comment-ah thooki eriya kooda split('#') theriyaadha? Enna koduma Saravanan idhu!"
+      english: "Split the string on the comment delimiter and trim trailing whitespace from the first part.",
+      tamilRoast: "Comment-ah thooki eriya kooda logic theriyaadha? Enna koduma Saravanan idhu!"
     }
   },
 
@@ -119,10 +117,10 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
     tier: 'beginner',
     title: 'Pocket Money Math',
     description: `Variables hold data that you can change and calculate with.\n\n### Task:\n1. Set \`money = 50\`\n2. Add \`25\` to it\n3. Print the total (\`75\`)`,
-    starterCode: `# Set money = 50, add 25, and print the total\nmoney = 50\n`,
+    starterCode: `# Write your calculation below\n`,
     expectedOutput: '75',
     hints: {
-      english: "Create the variable money = 50, add 25 (money = money + 25), and print(money).",
+      english: "Assign 50 to a variable, update it by adding 25, and print the resulting total.",
       tamilRoast: "Ration shop-la kerosene-um sarkarai-yum orey dabba-la potta enna aagum? Adhaan un data type mismatch! Dabba-va olunga choose pannu da."
     }
   },
@@ -184,10 +182,10 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
     tier: 'beginner',
     title: 'Pass or Arrear',
     description: `Control flow lets your program make decisions using \`if\` conditions.\n\n### Task:\nGiven \`marks = 40\`, check if \`marks >= 35\`.\nIf the condition is met, print \`PASS\`.`,
-    starterCode: `marks = 40\n# Check if marks >= 35 and print PASS\n`,
+    starterCode: `marks = 40\n# Write an if statement to print PASS if marks >= 35\n`,
     expectedOutput: 'PASS',
     hints: {
-      english: "Use an if condition: if marks >= 35: followed by an indented print('PASS').",
+      english: "Use an if condition to check if marks is greater than or equal to 35, and print PASS inside the block.",
       tamilRoast: "Condition illadha if statement... Vadivelu 'Keezha vizhundhalum meesaila man ottala' nu solra maari, logic enga da?!"
     }
   },
@@ -202,7 +200,7 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 
 Write a function \`batch_stats(items: int, batch_size: int) -> tuple[int, int]\`.`,
     starterCode: `def batch_stats(items: int, batch_size: int) -> tuple[int, int]:
-    # Return (items // batch_size, items % batch_size)
+    # Write your logic here
     pass
 `,
     testHarness: `{{USER_CODE}}
@@ -242,10 +240,10 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
     tier: 'beginner',
     title: 'Count to 3',
     description: `Loops allow you to repeat actions. \`range(1, 4)\` generates the numbers 1, 2, and 3.\n\n### Task:\nUse \`for i in range(1, 4):\` to print the numbers 1, 2, 3 on separate lines.`,
-    starterCode: `# Use a for loop with range(1, 4) to print numbers 1, 2, 3\n`,
+    starterCode: `# Write a for loop to print 1, 2, 3\n`,
     expectedOutput: '1\n2\n3',
     hints: {
-      english: "Write a for loop: for i in range(1, 4): followed by an indented print(i).",
+      english: "Use a for loop with range(start, stop) where stop is 1 greater than your end number.",
       tamilRoast: "Infinite loop pottu terminal-ah moochu mutta vikkatha da!"
     }
   },
@@ -379,8 +377,8 @@ print("===TEST_RESULTS===")
 print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
-      english: "Use sum(x for x in range(start, end + 1) if x % 2 == 0).",
-      tamilRoast: "Loop poda kooda range(start, end + 1) use panna theriyadha? Enna padichiyo!"
+      english: "Iterate across the range and accumulate only values where the number is divisible by 2.",
+      tamilRoast: "Loop poda kooda range start, end use panna theriyadha? Enna padichiyo!"
     }
   },
 
@@ -426,7 +424,7 @@ print("===TEST_RESULTS===")
 print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
-      english: "Define def multiply(x): return x * factor inside make_multiplier and return multiply.",
+      english: "Define an inner function that uses factor from the outer scope, and return that function.",
       tamilRoast: "Closure puriyalana functional programming lam kanavula dhaan nadakum!"
     }
   },
@@ -469,8 +467,8 @@ print("===TEST_RESULTS===")
 print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
-      english: "Use a list comprehension with range(0, len(lst), size) and slice lst[i:i + size].",
-      tamilRoast: "List slice panna range step value 2 kudutha podhum. Idhukku 50 line code ezhuthatha!"
+      english: "Step through indices with a step equal to size, taking slice windows of that length.",
+      tamilRoast: "List slice panna range step value kudutha podhum. Idhukku 50 line code ezhuthatha!"
     }
   },
 
@@ -554,8 +552,8 @@ print("===TEST_RESULTS===")
 print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
-      english: "Use {v: k for k, v in d.items()}.",
-      tamilRoast: "Dict comprehension oru single line! {v: k for k, v in d.items()} - ithu kooda theriyadha?"
+      english: "Iterate over dictionary key-value items and construct a new mapping with positions swapped.",
+      tamilRoast: "Dict comprehension oru single line! Key-um value-um swap panna theriyadha?"
     }
   },
 
@@ -695,8 +693,8 @@ Lesson Concept: ${lesson.explanation}
 
 Write a function \`solve_${chapter.id}(n: int) -> int\` that returns \`n * 2\`.`,
       starterCode: `def solve_${chapter.id}(n: int) -> int:
-    # Complete the challenge
-    return n * 2
+    # Write your code here
+    pass
 `,
       testHarness: `{{USER_CODE}}
 

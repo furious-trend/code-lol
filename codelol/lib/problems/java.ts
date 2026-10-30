@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Java module coding problems aligned with Java curriculum chapters", deps: ["./types", "../lessons/index"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "Java module coding problems aligned with Java curriculum chapters", deps: ["./types", "../lessons/index"], state: active, last: "sato@2026-10-30" }
 
 import { ModuleProblem } from './types';
 import { javaAllLessons } from '../lessons/index';
@@ -14,7 +14,8 @@ export const javaModuleProblems: ModuleProblem[] = [
     description: `Implement the static method \`addNumbers(int a, int b)\` inside \`Solution\` class that returns their sum.`,
     starterCode: `public class Solution {
     public static int addNumbers(int a, int b) {
-        return a + b;
+        // Write your logic here
+        return 0;
     }
 
     public static void main(String[] args) {
@@ -36,8 +37,8 @@ public class Main {
 }
 `,
     hints: {
-      english: "Return a + b from the public static int addNumbers method.",
-      tamilRoast: "Java boilerplates paathu shock aagadha, return a + b podunga!"
+      english: "Compute the sum of integers a and b and return it.",
+      tamilRoast: "Java boilerplates paathu shock aagadha, addition logic ezhuthunga!"
     }
   },
   {
@@ -50,7 +51,8 @@ public class Main {
     description: `Implement \`checkEvenOdd(int n)\` inside \`Solution\` returning \`"Even"\` or \`"Odd"\`.`,
     starterCode: `public class Solution {
     public static String checkEvenOdd(int n) {
-        return (n % 2 == 0) ? "Even" : "Odd";
+        // Write your logic here
+        return "";
     }
 
     public static void main(String[] args) {
@@ -72,8 +74,8 @@ public class Main {
 }
 `,
     hints: {
-      english: "Use n % 2 == 0 and return string literal.",
-      tamilRoast: "Java-la string compare panna .equals() use pannanum, aana inga return thaan pannanum!"
+      english: "Check divisibility by 2 with modulo, then return Even or Odd.",
+      tamilRoast: "Java-la modulo operator use panni Even/Odd kandupidi pa!"
     }
   }
 ];
@@ -102,7 +104,8 @@ distinctChapters.forEach((chapterName, idx) => {
       description: `Complete the Java coding challenge for ${chapterName}. Return \`n * 2\`.`,
       starterCode: `public class Solution {
     public static int solveJava(int n) {
-        return n * 2;
+        // Write your logic here
+        return 0;
     }
 
     public static void main(String[] args) {
