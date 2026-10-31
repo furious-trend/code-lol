@@ -68,7 +68,7 @@ export function InteractiveCompiler({
         setError(res.error);
         setOutput(res.output || '');
         playMemeSound(false, humorPref);
-        await handleRoast(code, res.error, false, '', humorPref);
+        await handleRoast(code, res.error, false, '', humorPref, language);
       } else {
         const out = res.output || '(Execution completed with no standard output)';
         setOutput(out);
@@ -82,7 +82,7 @@ export function InteractiveCompiler({
         }
 
         playMemeSound(true, humorPref);
-        await handleRoast(code, out, true, '', humorPref);
+        await handleRoast(code, out, true, '', humorPref, language);
         onCodeRunSuccess?.();
       }
     } catch (err: any) {

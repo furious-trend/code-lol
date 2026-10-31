@@ -126,7 +126,7 @@ function PlaygroundContent() {
         setOutput(finalOutput);
         
         // Wait for roast and GIF to fully load
-        await handleRoast(code, finalOutput, true, '', humorPref);
+        await handleRoast(code, finalOutput, true, '', humorPref, language);
         // Play audio exactly when UI updates
         playMemeSound(true, humorPref);
         
@@ -136,7 +136,7 @@ function PlaygroundContent() {
         setOutput(errorOutput);
         
         // Wait for roast and GIF to fully load
-        await handleRoast(code, errorOutput, false, '', humorPref);
+        await handleRoast(code, errorOutput, false, '', humorPref, language);
         // Play audio exactly when UI updates
         playMemeSound(false, humorPref);
       }
@@ -144,7 +144,7 @@ function PlaygroundContent() {
       setLastRunSuccess(false);
       setOutput('Failed to execute code. Check your connection or try again later.');
       // Wait for roast and GIF to fully load
-      await handleRoast(code, 'Failed to execute code.', false, '', humorPref);
+      await handleRoast(code, 'Failed to execute code.', false, '', humorPref, language);
       // Play audio exactly when UI updates
       playMemeSound(false, humorPref);
     } finally {

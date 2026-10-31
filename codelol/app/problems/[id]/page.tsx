@@ -365,7 +365,7 @@ export default function ProblemSolverPage() {
     });
     
     // Trigger the happy roast (meme/joke) on success
-    handleRoast(code, output, true, playedSound, humorPref);
+    handleRoast(code, output, true, playedSound, humorPref, activeLang);
   };
 
   const handleConfirmForfeit = async () => {
@@ -532,7 +532,7 @@ let _log = [];
         const friendlyError = "Check for missing quotes, missing colons (:), or indentation errors!";
         setRawOutput(friendlyError);
         const playedSound = playMemeSound(false, humorPref);
-        handleRoast(code, friendlyError, false, playedSound, humorPref);
+        handleRoast(code, friendlyError, false, playedSound, humorPref, activeLang);
         setIsSubmitting(false);
         return;
       }
@@ -540,7 +540,7 @@ let _log = [];
       if (data.error) {
         setRawOutput("Execution Error:\n" + data.error);
         const playedSound = playMemeSound(false, humorPref);
-        handleRoast(code, "Execution Error:\n" + data.error, false, playedSound, humorPref);
+        handleRoast(code, "Execution Error:\n" + data.error, false, playedSound, humorPref, activeLang);
         setIsSubmitting(false);
         return;
       }
@@ -570,7 +570,7 @@ let _log = [];
           };
           setTestResults(parsedResults);
           const playedSound = playMemeSound(false, humorPref);
-          handleRoast(code, `Expected output: "${targetOutput}", Got: "${userStdout}"`, false, playedSound, humorPref);
+          handleRoast(code, `Expected output: "${targetOutput}", Got: "${userStdout}"`, false, playedSound, humorPref, activeLang);
           setIsSubmitting(false);
           return;
         }
@@ -594,7 +594,7 @@ let _log = [];
           } else {
             const playedSound = playMemeSound(false, humorPref);
             // Automatically trigger the roast (meme/joke) on test failure
-            handleRoast(code, data.output, false, playedSound, humorPref);
+            handleRoast(code, data.output, false, playedSound, humorPref, activeLang);
           }
           setIsSubmitting(false);
           return;
@@ -611,7 +611,7 @@ let _log = [];
         
         // Wait for roast and GIF to fully load
         const playedSound = playMemeSound(true, humorPref);
-        handleRoast(code, data.output || "Code ran successfully with no output.", true, playedSound, humorPref);
+        handleRoast(code, data.output || "Code ran successfully with no output.", true, playedSound, humorPref, activeLang);
         
         setIsSubmitting(false);
         return;
@@ -621,7 +621,7 @@ let _log = [];
     } catch (err) {
       setRawOutput("Network Error. Please try again.");
       const playedSound = playMemeSound(false, humorPref);
-      handleRoast(code, "Network Error. Please try again.", false, playedSound, humorPref);
+      handleRoast(code, "Network Error. Please try again.", false, playedSound, humorPref, activeLang);
     } finally {
       setIsSubmitting(false);
     }

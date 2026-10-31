@@ -49,5 +49,34 @@ describe('/api/roast route', () => {
     expect(data).toHaveProperty('fix');
     expect(data).toHaveProperty('mood');
   });
+
+  it('selects language-specific technical roast when language is provided', async () => {
+    const request = createRequest({
+      code: 'def foo():\nprint("hi")',
+      output: 'IndentationError: expected an indented block',
+      isSuccess: false,
+      humorPref: 'tamil',
+      language: 'python'
+    });
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const data = await response.json();
+    expect(data.roast).toContain('Indentation-la oru edathula 2 space');
+  });
+
+  it('selects engineering applause when isSuccess=true with language', async () => {
+    const request = createRequest({
+      code: 'int main() { return 0; }',
+      output: 'Success',
+      isSuccess: true,
+      humorPref: 'general',
+      language: 'c'
+    });
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const data = await response.json();
+    expect(data).toHaveProperty('roast');
+    expect(typeof data.roast).toBe('string');
+  });
 });
 

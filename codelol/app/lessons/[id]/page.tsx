@@ -214,7 +214,7 @@ export default function LessonExplanationPage() {
 
   const handleExplain = async (code: string) => {
     if (!code) return;
-    await handleRoast(code, undefined, undefined, undefined, humorPref);
+    await handleRoast(code, undefined, undefined, undefined, humorPref, learningLanguage);
     playMemeSound(false, humorPref); // Play meme sound when roast finishes
   };
 

@@ -1,3 +1,8 @@
+// agent-notes: { ctx: "Fallback roasts and language-specific joke engine with backward compatible exports", deps: ["./roasts"], state: active, last: "sato@2026-10-31" }
+
+export * from './roasts';
+import { SupportedLanguage, getStructuredRoast, getStructuredSuccess } from './roasts';
+
 export interface FallbackRoast {
   roast: string;
   fix: string;
@@ -822,8 +827,22 @@ export const tamilProudFallbacks: FallbackRoast[] = [
   }
 ];
 
-export function getRandomFallback(isSuccess: boolean, humorPref: 'general' | 'tamil' = 'general', errorType?: 'syntax' | 'runtime' | 'logic'): FallbackRoast {
+export function getRandomFallback(
+  isSuccess: boolean,
+  humorPref: 'general' | 'tamil' = 'general',
+  errorType?: 'syntax' | 'runtime' | 'logic',
+  language?: SupportedLanguage,
+  errorLog?: string
+): FallbackRoast {
   const isTamil = humorPref === 'tamil';
+
+  if (language) {
+    if (isSuccess) {
+      return getStructuredSuccess(language, isTamil ? 'tamil' : 'general');
+    } else {
+      return getStructuredRoast(language, errorLog || '', isTamil ? 'tamil' : 'general');
+    }
+  }
   
   if (isSuccess) {
     const list = isTamil ? tamilProudFallbacks : generalProudFallbacks;

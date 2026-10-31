@@ -259,7 +259,7 @@ let _log = [];
         setRawOutput("Execution Error:\n" + data.error);
         await updateParticipantProgress(battle.id, 0, problem!.testCases.length, code, false);
         const playedSound = playMemeSound(false, humorPref);
-        handleRoast(code, "Execution Error:\n" + data.error, false, playedSound, humorPref);
+        handleRoast(code, "Execution Error:\n" + data.error, false, playedSound, humorPref, learningLanguage);
         setIsSubmitting(false);
         return;
       }
@@ -277,23 +277,23 @@ let _log = [];
           
           await updateParticipantProgress(battle.id, parsedResults.passed, problem!.testCases.length, code, isFinished, solvedAt);
           const playedSound = playMemeSound(isFinished, humorPref);
-          handleRoast(code, data.output, isFinished, playedSound, humorPref);
+          handleRoast(code, data.output, isFinished, playedSound, humorPref, learningLanguage);
           
         } catch (e) {
           setRawOutput("Failed to parse test results.\n" + data.output);
           const playedSound = playMemeSound(false, humorPref);
-          handleRoast(code, "Failed to parse test results.\n" + data.output, false, playedSound, humorPref);
+          handleRoast(code, "Failed to parse test results.\n" + data.output, false, playedSound, humorPref, learningLanguage);
         }
       } else {
         setRawOutput("Execution Error:\n" + data.output);
         await updateParticipantProgress(battle.id, 0, problem!.testCases.length, code, false);
         const playedSound = playMemeSound(false, humorPref);
-        handleRoast(code, "Execution Error:\n" + data.output, false, playedSound, humorPref);
+        handleRoast(code, "Execution Error:\n" + data.output, false, playedSound, humorPref, learningLanguage);
       }
     } catch (err) {
       setRawOutput("Network Error. Please try again.");
       const playedSound = playMemeSound(false, humorPref);
-      handleRoast(code, "Network Error. Please try again.", false, playedSound, humorPref);
+      handleRoast(code, "Network Error. Please try again.", false, playedSound, humorPref, learningLanguage);
     } finally {
       setIsSubmitting(false);
     }

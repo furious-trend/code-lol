@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Custom hook for dispatching code roasts and handling animation states", deps: ["@/lib/moodToGif"], state: active, last: "sato@2026-10-31" }
 import { useState, useCallback } from 'react';
 import { RoastMood, moodToGifKeyword } from '@/lib/moodToGif';
 
@@ -21,7 +22,14 @@ export function useRoast() {
     setRoastError('');
   };
 
-  const handleRoast = useCallback(async (code: string, output?: string, isSuccess?: boolean, soundUrl?: string, humorPref: 'general' | 'tamil' = 'general') => {
+  const handleRoast = useCallback(async (
+    code: string,
+    output?: string,
+    isSuccess?: boolean,
+    soundUrl?: string,
+    humorPref: 'general' | 'tamil' = 'general',
+    language?: string
+  ) => {
     if (!code.trim()) {
       setRoastError('Please provide some code to roast!');
       return;
@@ -39,13 +47,13 @@ export function useRoast() {
     }, 500);
     
     try {
-      // 1. Fetch the roast from Gemini
+      // 1. Fetch the roast from API
       const roastRes = await fetch('/api/roast', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code, output, isSuccess, humorPref }),
+        body: JSON.stringify({ code, output, isSuccess, humorPref, language }),
       });
       
       const roastResponseData = await roastRes.json();

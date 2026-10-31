@@ -226,7 +226,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
           if (!new RegExp(normalizedPattern).test(code)) {
             const errorMsg = `Check Failed: ${check.expectedMessage}`;
             setOutput(errorMsg);
-            await handleRoast(code, errorMsg, false, '', humorPref);
+            await handleRoast(code, errorMsg, false, '', humorPref, learningLanguage);
             playMemeSound(false, humorPref);
             setHasRunSuccessfully(false);
             setIsRunning(false);
@@ -242,7 +242,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
       if (!regex.test(code)) {
         const errorOutput = `Error: ${lesson.topicRequirement.errorMessage}`;
         setOutput(errorOutput);
-        await handleRoast(code, errorOutput, false, '', humorPref);
+        await handleRoast(code, errorOutput, false, '', humorPref, learningLanguage);
         playMemeSound(false, humorPref);
         setIsRunning(false);
         triggerShake();
@@ -287,7 +287,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
 
         if (mismatchError) {
            setOutput(mismatchError);
-           await handleRoast(code, mismatchError, false, '', humorPref);
+           await handleRoast(code, mismatchError, false, '', humorPref, learningLanguage);
            playMemeSound(false, humorPref);
            setHasRunSuccessfully(false);
            setIsRunning(false);
@@ -301,7 +301,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
           if (!callCountResult || !callCountResult.passed) {
             const errorMsg = `${finalOutput}\n\nCheck Failed: ${expectedCallCountMsg}`;
             setOutput(errorMsg);
-            await handleRoast(code, errorMsg, false, '', humorPref);
+            await handleRoast(code, errorMsg, false, '', humorPref, learningLanguage);
             playMemeSound(false, humorPref);
             setHasRunSuccessfully(false);
             setIsRunning(false);
@@ -312,7 +312,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
 
         setOutput(finalOutput);
         
-        await handleRoast(code, finalOutput, true, '', humorPref);
+        await handleRoast(code, finalOutput, true, '', humorPref, learningLanguage);
         playMemeSound(true, humorPref);
         setHasRunSuccessfully(true);
         if (currentLevel === 1) {
@@ -327,7 +327,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
         const errorOutput = `Error: ${data.error}`;
         setOutput(errorOutput);
         
-        await handleRoast(code, errorOutput, false, '', humorPref);
+        await handleRoast(code, errorOutput, false, '', humorPref, learningLanguage);
         triggerFirstRoast();
         playMemeSound(false, humorPref);
         setHasRunSuccessfully(false);
@@ -335,7 +335,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
       }
     } catch {
       setOutput('Failed to execute code. Check your connection.');
-      await handleRoast(code, 'Failed to execute code.', false, '', humorPref);
+      await handleRoast(code, 'Failed to execute code.', false, '', humorPref, learningLanguage);
       playMemeSound(false, humorPref);
       setHasRunSuccessfully(false);
       triggerShake();
