@@ -75,3 +75,4 @@ export const languageSpecificSuccess: Partial<Record<SupportedLanguage, SuccessJ
     }
   ]
 };
+

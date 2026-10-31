@@ -173,3 +173,4 @@ export function getStructuredSuccess(
     gifKeyword: chosen.gifKeyword || (humor === 'tamil' ? 'tamil success attitude' : 'victory')
   };
 }
+

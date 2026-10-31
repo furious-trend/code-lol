@@ -1,4 +1,5 @@
 'use client';
+// agent-notes: { ctx: "Leaderboard page for global and per-problem rankings with fallback querying", deps: ["@/lib/supabase/client", "@/lib/problems", "framer-motion"], state: "active", last: "sato@2026-10-31" }
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -37,6 +38,7 @@ export default function Leaderboard() {
     
     const fetchGlobal = async () => {
       setLoading(true);
+      setError('');
       try {
         const { data, error } = await supabase
           .from('profiles')
@@ -57,6 +59,7 @@ export default function Leaderboard() {
 
     const fetchProblem = async () => {
       setLoading(true);
+      setError('');
       try {
         const { data, error } = await supabase
           .from('problem_completions')
@@ -73,9 +76,60 @@ export default function Leaderboard() {
           .order('points_awarded', { ascending: false })
           .limit(100);
 
-        if (isMounted) {
-          if (error) setError(error.message);
-          else setProblemCompletions((data as any) || []);
+        if (!error && data) {
+          if (isMounted) setProblemCompletions((data as any) || []);
+          return;
+        }
+
+        // Resilient fallback: If PostgREST relationship join or solve_time_ms column failed
+        if (error) {
+          let completionsRes = await supabase
+            .from('problem_completions')
+            .select('user_id, problem_id, solve_time_ms, time_complexity, space_complexity, points_awarded')
+            .eq('problem_id', selectedProblemId)
+            .order('points_awarded', { ascending: false })
+            .limit(100);
+
+          if (completionsRes.error) {
+            completionsRes = await supabase
+              .from('problem_completions')
+              .select('user_id, problem_id, time_complexity, space_complexity, points_awarded')
+              .eq('problem_id', selectedProblemId)
+              .order('points_awarded', { ascending: false })
+              .limit(100);
+          }
+
+          if (!completionsRes.error && completionsRes.data) {
+            const rawCompletions = completionsRes.data as any[];
+            const userIds = Array.from(new Set(rawCompletions.map(c => c.user_id).filter(Boolean)));
+            const profileMap: Record<string, string> = {};
+
+            if (userIds.length > 0) {
+              const { data: profs } = await supabase
+                .from('profiles')
+                .select('id, display_name')
+                .in('id', userIds);
+
+              if (profs) {
+                profs.forEach((p: any) => {
+                  profileMap[p.id] = p.display_name;
+                });
+              }
+            }
+
+            const formatted = rawCompletions.map(c => ({
+              ...c,
+              solve_time_ms: c.solve_time_ms ?? 0,
+              profiles: { display_name: profileMap[c.user_id] || 'Unknown User' }
+            }));
+
+            if (isMounted) {
+              setProblemCompletions(formatted);
+              return;
+            }
+          }
+
+          if (isMounted) setError(error.message);
         }
       } catch (err) {
         if (isMounted) setError(err instanceof Error ? err.message : 'Unknown error');
@@ -95,36 +149,92 @@ export default function Leaderboard() {
 
   // Realtime subscriptions
   useEffect(() => {
+    const fetchGlobalData = () => {
+      supabase
+        .from('profiles')
+        .select('id, display_name, rank_points')
+        .order('rank_points', { ascending: false })
+        .limit(100)
+        .then(({ data }) => {
+          if (data) setGlobalUsers(data);
+        });
+    };
+
+    const fetchProblemData = async () => {
+      const { data, error } = await supabase
+        .from('problem_completions')
+        .select(`
+          user_id,
+          problem_id,
+          solve_time_ms,
+          time_complexity,
+          space_complexity,
+          points_awarded,
+          profiles ( display_name )
+        `)
+        .eq('problem_id', selectedProblemId)
+        .order('points_awarded', { ascending: false })
+        .limit(100);
+
+      if (!error && data) {
+        setProblemCompletions((data as any) || []);
+        return;
+      }
+
+      // Fallback
+      let completionsRes = await supabase
+        .from('problem_completions')
+        .select('user_id, problem_id, solve_time_ms, time_complexity, space_complexity, points_awarded')
+        .eq('problem_id', selectedProblemId)
+        .order('points_awarded', { ascending: false })
+        .limit(100);
+
+      if (completionsRes.error) {
+        completionsRes = await supabase
+          .from('problem_completions')
+          .select('user_id, problem_id, time_complexity, space_complexity, points_awarded')
+          .eq('problem_id', selectedProblemId)
+          .order('points_awarded', { ascending: false })
+          .limit(100);
+      }
+
+      if (!completionsRes.error && completionsRes.data) {
+        const rawCompletions = completionsRes.data as any[];
+        const userIds = Array.from(new Set(rawCompletions.map(c => c.user_id).filter(Boolean)));
+        const profileMap: Record<string, string> = {};
+
+        if (userIds.length > 0) {
+          const { data: profs } = await supabase
+            .from('profiles')
+            .select('id, display_name')
+            .in('id', userIds);
+
+          if (profs) {
+            profs.forEach((p: any) => {
+              profileMap[p.id] = p.display_name;
+            });
+          }
+        }
+
+        const formatted = rawCompletions.map(c => ({
+          ...c,
+          solve_time_ms: c.solve_time_ms ?? 0,
+          profiles: { display_name: profileMap[c.user_id] || 'Unknown User' }
+        }));
+
+        setProblemCompletions(formatted);
+      }
+    };
+
     const channel = supabase.channel('leaderboard-updates')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => {
         if (activeTab === 'global') {
-          // Re-fetch global on any profile change (points updated)
-          supabase
-            .from('profiles')
-            .select('id, display_name, rank_points')
-            .order('rank_points', { ascending: false })
-            .limit(100)
-            .then(({ data }) => setGlobalUsers(data || []));
+          fetchGlobalData();
         }
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'problem_completions' }, () => {
         if (activeTab === 'problem') {
-          // Re-fetch problem completions
-          supabase
-            .from('problem_completions')
-            .select(`
-              user_id,
-              problem_id,
-              solve_time_ms,
-              time_complexity,
-              space_complexity,
-              points_awarded,
-              profiles ( display_name )
-            `)
-            .eq('problem_id', selectedProblemId)
-            .order('points_awarded', { ascending: false })
-            .limit(100)
-            .then(({ data }) => setProblemCompletions((data as any) || []));
+          fetchProblemData();
         }
       })
       .subscribe();

@@ -32,3 +32,4 @@ export interface FallbackRoast {
   gifKeyword: string;
   errorType?: 'syntax' | 'runtime' | 'logic';
 }
+
