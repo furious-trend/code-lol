@@ -91,3 +91,4 @@ export function DailyJokeCard({ initialJoke }: DailyJokeCardProps) {
     </div>
   );
 }
+

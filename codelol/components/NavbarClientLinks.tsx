@@ -112,3 +112,4 @@ export function NavbarClientLinks({ navLinks, activeLang }: NavbarClientLinksPro
     </>
   );
 }
+
