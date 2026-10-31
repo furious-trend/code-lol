@@ -83,7 +83,7 @@ export default function Leaderboard() {
 
         // Resilient fallback: If PostgREST relationship join or solve_time_ms column failed
         if (error) {
-          let completionsRes = await supabase
+          let completionsRes: any = await supabase
             .from('problem_completions')
             .select('user_id, problem_id, solve_time_ms, time_complexity, space_complexity, points_awarded')
             .eq('problem_id', selectedProblemId)
@@ -182,7 +182,7 @@ export default function Leaderboard() {
       }
 
       // Fallback
-      let completionsRes = await supabase
+      let completionsRes: any = await supabase
         .from('problem_completions')
         .select('user_id, problem_id, solve_time_ms, time_complexity, space_complexity, points_awarded')
         .eq('problem_id', selectedProblemId)
