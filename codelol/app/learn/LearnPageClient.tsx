@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Client component for interactive lesson workspace and code execution", deps: ["@/lib/lessons", "@/components/RoastCard", "./UnifiedTutorialClient"], state: active, last: "sato@2026-10-13" }
+// agent-notes: { ctx: "Client component for interactive lesson workspace and code execution", deps: ["@/lib/lessons", "@/components/RoastCard", "./UnifiedTutorialClient"], state: "active", last: "sato@2026-10-31" }
 'use client'
 
 import { useState, useEffect } from 'react';
@@ -408,7 +408,7 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
         </div>
         <div className="text-sm font-medium text-zinc-500 flex gap-4">
           <Link href="/" className="hover:text-zinc-300 transition-colors">Home</Link>
-          <Link href="/lessons" className="hover:text-zinc-300 transition-colors">Library</Link>
+          <Link href="/problems" className="hover:text-zinc-300 transition-colors">Problems</Link>
         </div>
       </div>
 

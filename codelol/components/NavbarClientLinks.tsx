@@ -21,7 +21,7 @@ export function NavbarClientLinks({ navLinks, activeLang }: NavbarClientLinksPro
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const getLocalizedPath = (basePath: string) => {
-    if (activeLang && (basePath === '/learn' || basePath === '/lessons')) {
+    if (activeLang && basePath === '/learn') {
       return `${basePath}?lang=${activeLang}`;
     }
     return basePath;

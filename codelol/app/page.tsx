@@ -1,11 +1,10 @@
-// agent-notes: { ctx: "Home page with hero terminal preview, interactive joke shuffle, streak card, and 7-card cyber grid", deps: ["@/lib/supabase/server", "@/lib/jokes", "@/components/Bugsy", "@/components/WelcomeToast", "@/components/DailyJokeCard", "@/components/HeroTerminalPreview"], state: "active", last: "sato@2026-10-31" }
+// agent-notes: { ctx: "Home page with interactive joke shuffle, streak card, and 6-card arcade grid", deps: ["@/lib/supabase/server", "@/lib/jokes", "@/components/Bugsy", "@/components/WelcomeToast", "@/components/DailyJokeCard"], state: "active", last: "sato@2026-10-31" }
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getJokeOfTheDay } from "@/lib/jokes";
 import { Bugsy } from "@/components/Bugsy";
 import { WelcomeToast } from "@/components/WelcomeToast";
 import { DailyJokeCard } from "@/components/DailyJokeCard";
-import { HeroTerminalPreview } from "@/components/HeroTerminalPreview";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -44,20 +43,7 @@ export default async function Home() {
       </div>
       
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center mt-4 sm:mt-8 gap-6 z-10 max-w-5xl mx-auto">
-        {/* Feature Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-purple-500/10 border border-purple-500/30 text-purple-300">
-            ⚡ 5 Languages: Python, JS, C, C++, Java
-          </span>
-          <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-pink-500/10 border border-pink-500/30 text-pink-300">
-            🎭 Dual-Humor: Dev Sarcasm & Kollywood Roasts
-          </span>
-          <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-blue-500/10 border border-blue-500/30 text-blue-300">
-            ⚔️ Live 1v1 Multiplayer Battles
-          </span>
-        </div>
-
+      <section className="flex flex-col items-center justify-center text-center mt-6 sm:mt-12 mb-8 gap-6 z-10 max-w-5xl mx-auto">
         <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-400">
           CodeLOL
         </h1>
@@ -79,11 +65,6 @@ export default async function Home() {
           >
             Enter Battle Arena ⚔️
           </Link>
-        </div>
-
-        {/* Interactive Terminal Demo Preview */}
-        <div className="w-full mt-4">
-          <HeroTerminalPreview />
         </div>
       </section>
 
@@ -135,19 +116,12 @@ export default async function Home() {
           </h2>
           <span className="text-xs font-mono text-zinc-500">Select an arcade mode</span>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <Link href="/learn" className="group relative bg-zinc-900/80 border border-zinc-800/80 rounded-3xl p-5 overflow-hidden transition-all hover:border-yellow-500/60 hover:shadow-xl hover:shadow-yellow-500/10 hover:-translate-y-1 backdrop-blur-xl">
             <div className="absolute -right-4 -top-4 w-24 h-24 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all"></div>
             <div className="text-3xl mb-3">🧠</div>
             <h3 className="text-lg font-bold mb-1 group-hover:text-yellow-400 transition-colors">Learn</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">Guides to master coding.</p>
-          </Link>
-
-          <Link href="/lessons" className="group relative bg-zinc-900/80 border border-zinc-800/80 rounded-3xl p-5 overflow-hidden transition-all hover:border-pink-500/60 hover:shadow-xl hover:shadow-pink-500/10 hover:-translate-y-1 backdrop-blur-xl">
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-pink-500/10 rounded-full blur-2xl group-hover:bg-pink-500/20 transition-all"></div>
-            <div className="text-3xl mb-3">📚</div>
-            <h3 className="text-lg font-bold mb-1 group-hover:text-pink-400 transition-colors">Lessons</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">Step-by-step guides to master coding concepts.</p>
           </Link>
           
           <Link href="/problems" className="group relative bg-zinc-900/80 border border-zinc-800/80 rounded-3xl p-5 overflow-hidden transition-all hover:border-blue-500/60 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 backdrop-blur-xl">

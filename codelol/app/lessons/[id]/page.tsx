@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Individual lesson deep-dive explanation page with interactive concepts and code", deps: ["@/lib/lessons", "@/components/RoastCard"], state: active, last: "sato@2026-10-11" }
+// agent-notes: { ctx: "Individual lesson deep-dive explanation page with interactive concepts and code", deps: ["@/lib/lessons", "@/components/RoastCard"], state: "active", last: "sato@2026-10-31" }
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -231,8 +231,8 @@ export default function LessonExplanationPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-50 p-6 text-center">
         <h1 className="text-4xl font-bold mb-4">Lesson not found 😢</h1>
-        <button onClick={() => router.push('/lessons')} className="px-6 py-2 bg-pink-600 rounded-full hover:bg-pink-500 font-bold transition-colors">
-          Go Back
+        <button onClick={() => router.push('/learn')} className="px-6 py-2 bg-pink-600 rounded-full hover:bg-pink-500 font-bold transition-colors">
+          Go to Learn
         </button>
       </div>
     );
@@ -272,9 +272,9 @@ export default function LessonExplanationPage() {
           <div className="flex-1">
             <div className="flex items-center gap-4 mb-8">
               <button 
-                onClick={() => router.push('/lessons')}
+                onClick={() => router.push('/learn')}
                 className="text-zinc-400 hover:text-white transition-colors p-2 rounded-full hover:bg-zinc-800 bg-zinc-950/50 border border-zinc-800"
-                aria-label="Go back"
+                aria-label="Go back to Learn"
               >
                 ←
               </button>

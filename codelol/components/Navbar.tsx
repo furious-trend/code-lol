@@ -11,7 +11,6 @@ import { NavbarClientLinks } from './NavbarClientLinks'
 
 export const navLinks = [
   { name: 'Learn', path: '/learn' },
-  { name: 'Library', path: '/lessons' },
   { name: 'Problems', path: '/problems' },
   { name: 'Battle', path: '/battle' },
   { name: 'Leaderboard', path: '/leaderboard' },

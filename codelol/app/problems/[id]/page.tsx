@@ -657,7 +657,7 @@ let _log = [];
                     Module {moduleId}
                   </span>
                   <Link
-                    href={`/lessons?lang=${activeLang}&topic=${moduleId}`}
+                    href={`/learn?lang=${activeLang}&topic=${moduleId}`}
                     className="text-xs text-zinc-400 hover:text-blue-400 flex items-center gap-1 transition-colors font-medium"
                   >
                     <span>Curriculum Lesson 📖</span>

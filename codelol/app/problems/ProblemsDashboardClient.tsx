@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Problems dashboard client with multi-language selector, chapter hierarchy, and dual-gate completion", deps: ["@/lib/problems", "@/lib/progress", "@/lib/supabase/client"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "Problems dashboard client with multi-language selector, chapter hierarchy, and dual-gate completion", deps: ["@/lib/problems", "@/lib/progress", "@/lib/supabase/client"], state: "active", last: "sato@2026-10-31" }
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
@@ -407,11 +407,11 @@ export default function ProblemsDashboardClient({
                               <div className="flex items-center justify-between text-xs">
                                 {/* Lesson Read Status */}
                                 <Link
-                                  href={`/lessons?lang=${activeLanguage}&topic=${problem.moduleId}`}
+                                  href={`/learn?lang=${activeLanguage}&topic=${problem.moduleId}`}
                                   className={`flex items-center gap-1.5 transition-colors ${
                                     isRead ? 'text-blue-400 hover:text-blue-300' : 'text-zinc-500 hover:text-zinc-300'
                                   }`}
-                                  title="Read lesson on Library"
+                                  title="Read lesson on Learn"
                                 >
                                   {isRead ? <CheckCircle2 size={13} /> : <Circle size={13} />}
                                   <span>Lesson 📖</span>
