@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Python module coding problems aligned with pythonCurriculum chapters with beginner script problems", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-30" }
+// agent-notes: { ctx: "Python module coding problems aligned with pythonCurriculum chapters with beginner script problems", deps: ["./types", "../python/curriculum"], state: active, last: "sato@2026-10-31" }
 
 import { ModuleProblem } from './types';
 import { pythonCurriculum } from '../python/curriculum';
@@ -12,12 +12,17 @@ export const pythonModuleProblems: ModuleProblem[] = [
     language: 'python',
     tier: 'beginner',
     title: 'Say Hello to CodeLOL',
-    description: `Welcome to Python on CodeLOL!\n\nIn Python, you can output text directly to the screen using the \`print()\` function.\n\n### Task:\nWrite a print statement that outputs \`Hello CodeLOL\`.\n\nNo functions or wrappers needed—just a clean Python script!`,
+    description: `Teaching the computer to speak your exact words. Don't add extra trailing spaces or punctuation unless asked, or the automated test runner will assume you failed at life.
+
+### Task:
+Write a print statement that outputs \`Hello CodeLOL\`.
+
+No functions or wrappers needed—just a clean Python script!`,
     starterCode: `# Write your print statement below\n`,
     expectedOutput: 'Hello CodeLOL',
     hints: {
       english: "Use Python's built-in print() function to output the required greeting string.",
-      tamilRoast: "Quotes podama string ezhudhura? Tea kadaila poi 'tea' nu kekkama mookala sound vitta master enna pannuvaaro, compiler adhe thaan pannudhu!"
+      tamilRoast: "Quotes podama string ezhudhura? Output-la kekkuradhu 'Hello World' mattum dhaan. Nee unga oor per, college per ellam sethu ezhudhuna compiler un assignment-ah thooki dustbin-la potrum!"
     }
   },
   {
@@ -254,7 +259,10 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
     language: 'python',
     tier: 'beginner',
     title: 'Meme Slug Generator',
-    description: `Convert any arbitrary string into a URL-friendly meme slug:
+    description: `Stripping spaces, removing illegal characters, and turning human titles into internet-safe web links so the browser doesn't choke on %20 garbage.
+
+### Task:
+Convert any arbitrary string into a URL-friendly meme slug:
 1. Convert to lowercase.
 2. Replace all whitespace with single hyphens (\`-\`).
 3. Strip any leading or trailing hyphens.
@@ -288,7 +296,7 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
       english: "Consider splitting by whitespace with text.split() and then joining with '-'.join(...).",
-      tamilRoast: "Text.split() potu join('-') panna mudiyatha? Ivlo chinna vishayathukku Google search ah?"
+      tamilRoast: "Space-ah hyphen-ah mathi clean link-ah maathu da. Link-la dirty character potu user-ku headache tharaatha!"
     }
   },
 
@@ -300,7 +308,9 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
     language: 'python',
     tier: 'beginner',
     title: 'Fizz Buzz Roaster',
-    description: `Classic FizzBuzz with a twist.
+    description: `The ancient interview gatekeeper test for checking whether an applicant understands basic remainder division before wasting the company's time.
+
+### Task:
 Write a function \`fizz_buzz(n: int) -> str\`:
 - If \`n\` is divisible by 3 and 5, return \`"FizzBuzz"\`
 - If \`n\` is divisible by 3, return \`"Fizz"\`
@@ -335,7 +345,7 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
       english: "Check divisibility by 15 (both 3 and 5) first!",
-      tamilRoast: "FizzBuzz fail pannina interview room kulla kooda vida maataanga bro!"
+      tamilRoast: "3-ku divide aana Fizz, 5-ku Buzz... idhu theriyaama 10 arrears vechutu MNC company interview-ku pona security thurathiruvaan!"
     }
   },
 
@@ -565,7 +575,10 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
     language: 'python',
     tier: 'advanced',
     title: 'Bank Account Class',
-    description: `Create a \`BankAccount\` class with:
+    description: `Ensuring basic reality constraints—users cannot withdraw more cash than they actually have deposited in their balance.
+
+### Task:
+Create a \`BankAccount\` class with:
 - \`__init__(self, initial_balance: int = 0)\`
 - \`deposit(self, amount: int) -> int\` (adds to balance and returns new balance)
 - \`withdraw(self, amount: int) -> bool\` (returns True if balance was sufficient and deducts amount, else False without deducting)
@@ -612,7 +625,7 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
       english: "In withdraw, verify if amount <= self.balance before updating self.balance.",
-      tamilRoast: "Kadan vaangama withdraw panna condition podu bro, bank bankrupt aaidum!"
+      tamilRoast: "Account-la ₹500 vechutu ATM-la ₹5000 edukka try panna, bank manager vandhu 'Nee padicha college enga da?' nu roasthodu senthu kepaan!"
     }
   },
 
@@ -624,7 +637,10 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
     language: 'python',
     tier: 'expert',
     title: 'Execution Counter Decorator',
-    description: `Write a decorator \`count_calls(fn)\` that counts how many times the decorated function is invoked, storing the total in \`fn.calls\`.
+    description: `Remembering how many times an event occurred without polluting the global environment with dangerous, leaking variables.
+
+### Task:
+Write a decorator \`count_calls(fn)\` that counts how many times the decorated function is invoked, storing the total in \`fn.calls\`.
 The decorated function should accept any *args and **kwargs and return the function's result.`,
     starterCode: `def count_calls(fn):
     # Implement decorator
@@ -663,7 +679,7 @@ print(json.dumps({"passed": _passed, "total": len(_tests), "log": _log}))
 `,
     hints: {
       english: "Define wrapper(*args, **kwargs), increment wrapper.calls, call fn, and return the result. Initialize wrapper.calls = 0.",
-      tamilRoast: "Decorator-kulla wrapper function vechu calls count panna mudiyala? Expert level-la Kaipulla sikkitaaru!"
+      tamilRoast: "Global variable use panni appa pocket money kanakku maari tholachu nikkaatha. Closure vachi private-ah secret lock pottu count pannu da!"
     }
   }
 ];

@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Zero-to-Hero 20-chapter master Python curriculum with beginner-friendly Chapters 1 & 2", deps: ["./types"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "Zero-to-Hero 20-chapter master Python curriculum with beginner-friendly Chapters 1 & 2", deps: ["./types"], state: active, last: "sato@2026-10-31" }
 import { Chapter, PythonLesson } from './types';
 
 export const pythonCurriculum: Chapter[] = [
@@ -13,10 +13,10 @@ export const pythonCurriculum: Chapter[] = [
       "comments (#)",
       "top-to-bottom execution"
     ],
-    "analogyGeneral": "Python reads code from top to bottom. Use print() to display text, and always wrap your words inside single or double quotes.",
-    "analogyTamil": "Oru indentation-ah thappaa potta... compiler un ID card-ah cancel panni college-ah vittu veliya anuppirum da!",
-    "roastGeneral": "You forgot to wrap text in quotes? Python thinks it's a variable and panics!",
-    "roastTamil": "Oru indentation-ah thappaa potta... compiler un ID card-ah cancel panni college-ah vittu veliya anuppirum da!",
+    "analogyGeneral": "Teaching a computer to speak using print(). If you forget quotes around your words, Python panics and assumes you are referencing an imaginary variable named after your feelings. Like shouting at a toaster without pressing the lever down and wondering why breakfast isn't ready.",
+    "analogyTamil": "Computer-ku vaai pesa kathukudukuradhu dhaan printing. String-ku quotes podama vittu, 'Yen da output varala?' nu ketta, tea kadai master kitta poi vaaya mattum asachutu tea kekkura maari! Indentation-ah thappa potta compiler un ID card-ah cancel panni veliya thurathidum!",
+    "roastGeneral": "Teaching a computer to speak using print(). If you forget quotes around your words, Python panics and assumes you are referencing an imaginary variable named after your feelings. Like shouting at a toaster without pressing the lever down and wondering why breakfast isn't ready.",
+    "roastTamil": "Computer-ku vaai pesa kathukudukuradhu dhaan printing. String-ku quotes podama vittu, 'Yen da output varala?' nu ketta, tea kadai master kitta poi vaaya mattum asachutu tea kekkura maari! Indentation-ah thappa potta compiler un ID card-ah cancel panni veliya thurathidum!",
     "lessons": [
       {
         "id": "ch1-l1",
@@ -133,10 +133,10 @@ export const pythonCurriculum: Chapter[] = [
       "dynamic typing",
       "updating values"
     ],
-    "analogyGeneral": "A variable is just a labeled box to store numbers or text using the '=' sign. No need to declare data types manually.",
-    "analogyTamil": "Ration shop-la rice, kerosene, and sugar-ah orey dabba-la pottu mix panna maari data types-ah mix panra un moolaiya ennnu solla!",
-    "roastGeneral": "Forgot to assign your variable? It's like looking for your glasses while wearing them.",
-    "roastTamil": "Naalaikku kaalaila 5 manikku kandippa padikka poren' nu solradhu Falsy value—pesumbodhu true maari irukkum, aana matter zero!",
+    "analogyGeneral": "Variables are just sticky notes slapped onto cardboard boxes in memory. Python has commitment issues: you can store an integer, dump it out, and replace it with a paragraph of text two seconds later without batting an eye.",
+    "analogyTamil": "Appa kudukura pocket money-ah oru dabba-la pottu vekkura maari dhaan variable. Ration shop-la kerosene-aiyum sarkkarai-aiyum orey thalaila kottura maari, integer-aiyum string-aiyum mix panna... un appa kattina college fees-ku compiler un mark sheet-ah direct-ah appa kitte kaatidum!",
+    "roastGeneral": "Variables are just sticky notes slapped onto cardboard boxes in memory. Python has commitment issues: you can store an integer, dump it out, and replace it with a paragraph of text two seconds later without batting an eye.",
+    "roastTamil": "Appa kudukura pocket money-ah oru dabba-la pottu vekkura maari dhaan variable. Ration shop-la kerosene-aiyum sarkkarai-aiyum orey thalaila kottura maari, integer-aiyum string-aiyum mix panna... un appa kattina college fees-ku compiler un mark sheet-ah direct-ah appa kitte kaatidum!",
     "lessons": [
       {
         "id": "ch2-l1",
@@ -259,10 +259,10 @@ export const pythonCurriculum: Chapter[] = [
       "lambda",
       "walrus operator"
     ],
-    "analogyGeneral": "Operator precedence dictates which calculation happens first. If you don't know it, your math becomes pure fiction.",
-    "analogyTamil": "Operator precedence theriyama code potta, Vadivelu train comedy maari irukkum—vangi vangi kattuva!",
-    "roastGeneral": "Comparing numbers with strings? Are you comparing apples to slightly different apples? Your logic is taking a flight with a train ticket!",
-    "roastTamil": "Comparing numbers with strings? Santhanam style-la sonna: 'Train ticket vangi flight-la eruna maari irukku da un logic!'",
+    "analogyGeneral": "Using == checks if two people are wearing identical clothes; using 'is' checks if they are literally the exact same clone standing in physical space. Confusing them is how you accidentally marry your twin's reflection.",
+    "analogyTamil": "Santhanam style-la sonna: 'Train ticket vangi flight-la eruna maari irukku da un logic!' Duplicate mobile-ah paathu original Apple phone nu nambi vangunavan maari, value onna irukkuradhukkum orey memory location-la irukkuradhukkum vidhiyasame theriyaama muzhikka koodadhu.",
+    "roastGeneral": "Using == checks if two people are wearing identical clothes; using 'is' checks if they are literally the exact same clone standing in physical space. Confusing them is how you accidentally marry your twin's reflection.",
+    "roastTamil": "Santhanam style-la sonna: 'Train ticket vangi flight-la eruna maari irukku da un logic!' Duplicate mobile-ah paathu original Apple phone nu nambi vangunavan maari, value onna irukkuradhukkum orey memory location-la irukkuradhukkum vidhiyasame theriyaama muzhikka koodadhu.",
     "lessons": [
       {
         "id": "ch3-l1",
@@ -387,10 +387,10 @@ export const pythonCurriculum: Chapter[] = [
       "loops",
       "try-except-finally"
     ],
-    "analogyGeneral": "Control flow manages how your program steps through execution logic. Without proper exits, you land in infinite loops.",
-    "analogyTamil": "Infinite loop-ah? Idhu Rajini padathula vara punch dialogue madhiri... mudiyave mudiyadhu!",
-    "roastGeneral": "If your control flow logic was a map, even GPS couldn't save us.",
-    "roastTamil": "Katuna college fees-ku naalu cow vangirukalam da! If-Else logic kooda sariya ezhudha theriyaama compiler munnadi muzhikkura!",
+    "analogyGeneral": "Decisions and loops dictate execution traffic. An infinite while loop with no exit condition is your brain at 3:00 AM replaying an awkward conversation from 2017 on an endless, un-skippable loop until your battery dies.",
+    "analogyTamil": "Katuna college fees-ku naalu cow vangirukalam da! Loop-ku exit condition vaikala na, Rajini punch dialogue maari: 'Naan oru thadava sonna...' nu mudive illama terminal moochu mutti sethuradhukulla suthikitte irukkum! Condition thappa pottu logic eludhina, Vadivelu 'Keezha vizhundhalum meesaila man ottala' nu solra maari dhaan irukkum.",
+    "roastGeneral": "Decisions and loops dictate execution traffic. An infinite while loop with no exit condition is your brain at 3:00 AM replaying an awkward conversation from 2017 on an endless, un-skippable loop until your battery dies.",
+    "roastTamil": "Katuna college fees-ku naalu cow vangirukalam da! Loop-ku exit condition vaikala na, Rajini punch dialogue maari: 'Naan oru thadava sonna...' nu mudive illama terminal moochu mutti sethuradhukulla suthikitte irukkum! Condition thappa pottu logic eludhina, Vadivelu 'Keezha vizhundhalum meesaila man ottala' nu solra maari dhaan irukkum.",
     "lessons": [
       {
         "id": "ch4-l1",
@@ -512,10 +512,10 @@ export const pythonCurriculum: Chapter[] = [
       "super",
       "zip"
     ],
-    "analogyGeneral": "Python gives you a massive toolbox out of the box, yet people still write custom code that breaks everything.",
-    "analogyTamil": "Veetla irukra mixer, grinder-ah ellam use panna theriyaama, kaiya kondu poi blades kulla vidura maari irukku un builtin usage!",
-    "roastGeneral": "Why reinvent the wheel when Python gives you the whole car?",
-    "roastTamil": "Evalavo functions irukku... aana nee mattum yen daellarum thechutu irukka?",
+    "analogyGeneral": "Python bundles a Swiss Army knife so you don't rebuild basic counting using rocks and sticks. Running eval() on raw user input is the digital equivalent of leaving your front door unlocked, inviting a burglar in, and handing them your bank PIN.",
+    "analogyTamil": "Python-e zip(), enumerate(), range() nu ready-made-ah function thandhalum, nee innum manual counter pottu cycle chain suthura maari while loop thechutu irukka. Vadivelu auto-va thallikitte madurai pora maari irukku da un manual iteration logic!",
+    "roastGeneral": "Python bundles a Swiss Army knife so you don't rebuild basic counting using rocks and sticks. Running eval() on raw user input is the digital equivalent of leaving your front door unlocked, inviting a burglar in, and handing them your bank PIN.",
+    "roastTamil": "Python-e zip(), enumerate(), range() nu ready-made-ah function thandhalum, nee innum manual counter pottu cycle chain suthura maari while loop thechutu irukka. Vadivelu auto-va thallikitte madurai pora maari irukku da un manual iteration logic!",
     "lessons": [
       {
         "id": "ch5-l1",
@@ -635,10 +635,10 @@ export const pythonCurriculum: Chapter[] = [
       "KeyError",
       "IndexError"
     ],
-    "analogyGeneral": "Exceptions are the system's way of screaming at you for doing something mathematically or logically impossible.",
-    "analogyTamil": "Zero-vaala divide panriya? Nee oru periya scientific genius thaan po! Antha error trace-ah paartha un appa-ve unna block panruvan.",
-    "roastGeneral": "Dividing by zero? Brilliant. You just ripped a hole in the space-time continuum.",
-    "roastTamil": "Zero-vaala divide panriya? Server-e vaanthi eduthu sethurum.",
+    "analogyGeneral": "An airbag for your application. Dividing by zero and expecting Python to solve it is like asking a calculator to perform magic tricks. Exceptions catch the runtime disaster before your server crashes and burns down the cloud infrastructure.",
+    "analogyTamil": "Zero-vaala divide pannitu answer edhirpaakura periya Albert Einstein nee! Server vaanthi eduthu terminal crash aaguradhukulla try...except potu thappichuko. Illana un arrears count maari unhandled error screen full-ah red color-la katti bayamuruthidum.",
+    "roastGeneral": "An airbag for your application. Dividing by zero and expecting Python to solve it is like asking a calculator to perform magic tricks. Exceptions catch the runtime disaster before your server crashes and burns down the cloud infrastructure.",
+    "roastTamil": "Zero-vaala divide pannitu answer edhirpaakura periya Albert Einstein nee! Server vaanthi eduthu terminal crash aaguradhukulla try...except potu thappichuko. Illana un arrears count maari unhandled error screen full-ah red color-la katti bayamuruthidum.",
     "lessons": [
       {
         "id": "ch6-l1",
@@ -755,10 +755,10 @@ export const pythonCurriculum: Chapter[] = [
       "Hash tables",
       "dynamic arrays"
     ],
-    "analogyGeneral": "Choosing the wrong collection data structure turns an O(1) lookup into an O(n) dumpster fire.",
-    "analogyTamil": "College canteen bench-la varisaiya ukkandhirukura gang maari list irukku, aana un moolai mattum empty dictionary!",
-    "roastGeneral": "You used a list to check for existence? The dictionary called, it wants its O(1) back.",
-    "roastTamil": "Key-value data packet... College ID card: { name: 'Mano', dept: 'Mech', arrears: 5, status: 'Vera Maari' }",
+    "analogyGeneral": "Lists are chaotic gym bags where you dump everything together. Tuples are sealed glass display cases you can never change. Dictionaries are labeled shelves that give you instant O(1) lookups instead of rifling through dirty laundry.",
+    "analogyTamil": "List na hostel bag: book, parotta, assignment ellam orey idathula kedaikkum. Dict na un college ID card: peru, department, arrears count ellam neat-ah label pottu vekka mudiyum. Set na Vadivelu dialogue maari: 'Repeat-u aaga koodadhu!' Duplicate item-ah kanda automatic-ah thooki veliya potrum.",
+    "roastGeneral": "Lists are chaotic gym bags where you dump everything together. Tuples are sealed glass display cases you can never change. Dictionaries are labeled shelves that give you instant O(1) lookups instead of rifling through dirty laundry.",
+    "roastTamil": "List na hostel bag: book, parotta, assignment ellam orey idathula kedaikkum. Dict na un college ID card: peru, department, arrears count ellam neat-ah label pottu vekka mudiyum. Set na Vadivelu dialogue maari: 'Repeat-u aaga koodadhu!' Duplicate item-ah kanda automatic-ah thooki veliya potrum.",
     "lessons": [
       {
         "id": "ch7-l1",
@@ -876,10 +876,10 @@ export const pythonCurriculum: Chapter[] = [
       "LEGB scope",
       "closures"
     ],
-    "analogyGeneral": "Mutable default arguments persist across function calls, creating bugs that haunt you like a bad memory.",
-    "analogyTamil": "Veetukulla amma thitturadhu 'Local Scope'; theruvula loud-speaker 'Global Scope'! Un scope-uh kootitu pona rendu perum oodiruvaanga.",
-    "roastGeneral": "Using a mutable default argument? Prepare for the ghosts of past function calls.",
-    "roastTamil": "Mutable default argument vekura loosu... andha list eppovumae un koodave suthum, romba paavam!",
+    "analogyGeneral": "Functions package reusable work. The mutable default argument trap (def add(x=[])) means whoever visited the factory yesterday left their dirty dishes behind, and every new visitor is forced to eat off them because the default object never resets.",
+    "analogyTamil": "Oru velaikku oruthana fix panradhu dhaan function. Default argument-la empty list vecha... un veetu fridge-ah nadu theruvula vecha maari, oorla irukura ellarum pazhaya meedhi sapattaye dump panni un function memory-ah naara adipaanga!",
+    "roastGeneral": "Functions package reusable work. The mutable default argument trap (def add(x=[])) means whoever visited the factory yesterday left their dirty dishes behind, and every new visitor is forced to eat off them because the default object never resets.",
+    "roastTamil": "Oru velaikku oruthana fix panradhu dhaan function. Default argument-la empty list vecha... un veetu fridge-ah nadu theruvula vecha maari, oorla irukura ellarum pazhaya meedhi sapattaye dump panni un function memory-ah naara adipaanga!",
     "lessons": [
       {
         "id": "ch8-l1",
@@ -996,10 +996,10 @@ export const pythonCurriculum: Chapter[] = [
       "CSV operations",
       "statistics module metrics"
     ],
-    "analogyGeneral": "Files are like documents in a filing cabinet. Open them with a context manager, or you leave the cabinet unlocked and papers flying everywhere.",
-    "analogyTamil": "File-ah open pannitu close panna maranthuta, un ration card-ah road-la tholachutu thedura maari memory leak aagi laptop tea-stall maari aayidum da!",
-    "roastGeneral": "Leaving file handles unclosed in loops? The OS garbage collector will file an eviction notice for your process.",
-    "roastTamil": "File handle close pannama loop potu sethukaatha, Nesamani mela kalla potta maari OS un process mela sigappu stone-ah thooki podum!",
+    "analogyGeneral": "Accessing storage on disk. Opening a file without the 'with' context manager is like checking into a hotel room, leaving the door wide open with your passport on the table, and boarding a plane to another country.",
+    "analogyTamil": "Xerox kadaila poi Aadhar card-ah copy edukka kuduthutu marandhu vechitu veetuku pora maari dhaan file-ah open pannitu close pannama vidradhu. Context manager 'with' use panna, velai mudinja udane automatic-ah kadhava pootitu safe-ah veliya anuppidum.",
+    "roastGeneral": "Accessing storage on disk. Opening a file without the 'with' context manager is like checking into a hotel room, leaving the door wide open with your passport on the table, and boarding a plane to another country.",
+    "roastTamil": "Xerox kadaila poi Aadhar card-ah copy edukka kuduthutu marandhu vechitu veetuku pora maari dhaan file-ah open pannitu close pannama vidradhu. Context manager 'with' use panna, velai mudinja udane automatic-ah kadhava pootitu safe-ah veliya anuppidum.",
     "proudSuccessGeneral": "Files read, parsed, and safely closed with zero leaked resources.",
     "proudSuccessTamil": "Bloody sweet... file safe-ah close aagi output vandhuruchu da!",
     "lessons": [
@@ -1118,10 +1118,10 @@ export const pythonCurriculum: Chapter[] = [
       "namedtuple",
       "__slots__"
     ],
-    "analogyGeneral": "Object-oriented programming lets you build clean blueprints, unless your blueprint looks like a collapsed building.",
-    "analogyTamil": "Class-um object-um potu code pannitu, 'En code run aagala' nu aluva paaru... Vadivelu Kaipulla style-la road-la kizhangu vizhuva!",
-    "roastGeneral": "Single inheritance, multiple inheritance... the only inheritance you're getting is technical debt.",
-    "roastTamil": "Single inheritance, multiple inheritance... un life-la inheritance-ah varudhu paththi karam-mulla loan dhaan varum!",
+    "analogyGeneral": "Classes are blueprints for houses; objects are the questionable structures built from them. Inheriting from four classes at once without understanding Method Resolution Order (MRO) is how you summon an architectural monstrosity that barks, drives, and crashes your database.",
+    "analogyTamil": "Class na building plan, object na kattina veedu. Single inheritance, multiple inheritance nu solli perusa scene poduvom... aana unmai enna na appan sothu varaathu, bank loan dhaan varum! super() olunga theriyala na appan yaaru thaatha yaaru nu class-e confuse aagi thalaila thunda potrum.",
+    "roastGeneral": "Classes are blueprints for houses; objects are the questionable structures built from them. Inheriting from four classes at once without understanding Method Resolution Order (MRO) is how you summon an architectural monstrosity that barks, drives, and crashes your database.",
+    "roastTamil": "Class na building plan, object na kattina veedu. Single inheritance, multiple inheritance nu solli perusa scene poduvom... aana unmai enna na appan sothu varaathu, bank loan dhaan varum! super() olunga theriyala na appan yaaru thaatha yaaru nu class-e confuse aagi thalaila thunda potrum.",
     "lessons": [
       {
         "id": "ch10-l1",
@@ -1239,10 +1239,10 @@ export const pythonCurriculum: Chapter[] = [
       "__enter__",
       "__exit__"
     ],
-    "analogyGeneral": "Dunder methods are Python's secret hooks that let your custom classes behave like native types.",
-    "analogyTamil": "Double underscore podurathu unaku fashion aaiducha? Dunder-ah potu code-ah sethu vechuruka da!",
-    "roastGeneral": "Using objects without dunder methods is like driving a car without a steering wheel.",
-    "roastTamil": "Dunder methods theriyaama OOP panra, brake illadha bike-ah 100 kmph-la ootura maari!",
+    "analogyGeneral": "Secret handshake hooks that teach Python how to treat your custom objects like native types. If you don't define __repr__, Python refers to your object as an anonymous memory hexadecimal address, essentially saying: 'I exist, but I have zero self-respect.'",
+    "analogyTamil": "Dunder methods theriyama OOP panradhu, accelerator irukku aana brake-um handle bar-um illadha bike-ah 100 kmph-la ootura maari! Plus symbol potta rendu object eppadi react aaganum nu class-ku solli thara secret mantra dhaan indha double underscore methods.",
+    "roastGeneral": "Secret handshake hooks that teach Python how to treat your custom objects like native types. If you don't define __repr__, Python refers to your object as an anonymous memory hexadecimal address, essentially saying: 'I exist, but I have zero self-respect.'",
+    "roastTamil": "Dunder methods theriyama OOP panradhu, accelerator irukku aana brake-um handle bar-um illadha bike-ah 100 kmph-la ootura maari! Plus symbol potta rendu object eppadi react aaganum nu class-ku solli thara secret mantra dhaan indha double underscore methods.",
     "lessons": [
       {
         "id": "ch11-l1",
@@ -1358,10 +1358,10 @@ export const pythonCurriculum: Chapter[] = [
       "yield from",
       "iterator protocol"
     ],
-    "analogyGeneral": "Generators evaluate lazily, saving memory instead of crashing your RAM with massive datasets.",
-    "analogyTamil": "Memory pathala! Un moolai mathiri computer moolayum chinnadhu da. Generator-ah use panna theriyaama 10GB RAM-ah blast panruvan.",
-    "roastGeneral": "Loading 10 million items into a list? RIP your RAM.",
-    "roastTamil": "Lazy evaluation... un moolai mathiriye romba somberi-ah memory save pannum!",
+    "analogyGeneral": "Loading a 20GB dataset directly into a Python list feeds your RAM into a burning furnace. Generators practice weaponized laziness using 'yield': they produce one single crumb of data only when you knock on the door and ask for it.",
+    "analogyTamil": "10 lakh items-ah orey dharavala memory-la load panna laptop fan helicopter maari parakkum. Generator oru somberi madhiri: kitta poi thirumba ketta mattum oru piece tharum, illana peaceful-ah thoongum. Memory-um safe, laptop-um safe!",
+    "roastGeneral": "Loading a 20GB dataset directly into a Python list feeds your RAM into a burning furnace. Generators practice weaponized laziness using 'yield': they produce one single crumb of data only when you knock on the door and ask for it.",
+    "roastTamil": "10 lakh items-ah orey dharavala memory-la load panna laptop fan helicopter maari parakkum. Generator oru somberi madhiri: kitta poi thirumba ketta mattum oru piece tharum, illana peaceful-ah thoongum. Memory-um safe, laptop-um safe!",
     "lessons": [
       {
         "id": "ch12-l1",
@@ -1477,10 +1477,10 @@ export const pythonCurriculum: Chapter[] = [
       "functools.wraps",
       "Metaclasses"
     ],
-    "analogyGeneral": "Metaprogramming lets code write code. Give it to a beginner, and it writes a direct ticket to chaos.",
-    "analogyTamil": "Metaprogramming-la erangurathukku munnadi, basic indentation poda kathukada! Compiler-e un screen-kulla irunthu veliya vanthu adipan.",
-    "roastGeneral": "Writing a metaclass? You don't even know how a normal class works.",
-    "roastTamil": "Metaprogramming panriya? Unakku adhoda spelling theriyuma da muttal!",
+    "analogyGeneral": "Syntactic plastic surgery. A decorator intercepts a function, wraps it in logging, timing, or security bubble-wrap, and sends it on its way without touching the code inside the function itself.",
+    "analogyTamil": "Oru function velai seiyum bodhu munnadiyum pinnadiyum BGM podura maari! Hero entry aaguradhukku munnadi crackers vedichu, entry aanadhukku aprom whistle adikura maari function-ah muthukula kai vechu extra velai paaka vekkuradhu dhaan decorator.",
+    "roastGeneral": "Syntactic plastic surgery. A decorator intercepts a function, wraps it in logging, timing, or security bubble-wrap, and sends it on its way without touching the code inside the function itself.",
+    "roastTamil": "Oru function velai seiyum bodhu munnadiyum pinnadiyum BGM podura maari! Hero entry aaguradhukku munnadi crackers vedichu, entry aanadhukku aprom whistle adikura maari function-ah muthukula kai vechu extra velai paaka vekkuradhu dhaan decorator.",
     "lessons": [
       {
         "id": "ch13-l1",
@@ -1597,10 +1597,10 @@ export const pythonCurriculum: Chapter[] = [
       "tasks",
       "futures"
     ],
-    "analogyGeneral": "Async programming allows your app to handle multiple tasks without blocking, provided you don't deadlock everything.",
-    "analogyTamil": "Async-ah code ezhudhi freeze aakitu, 'En laptop hang aayiduchu' nu solli thiriyuraan! Un logic-um async, moolai-um async (offline)!",
-    "roastGeneral": "You made it async but didn't await it. Now it's just a lonely coroutine crying in memory.",
-    "roastTamil": "Await podama async call panriya? Un moolai offline poyiduchu.",
+    "analogyGeneral": "Synchronous code stands at the coffee counter staring blankly at the barista until the cup is handed over. Asynchronous code takes a buzzer token, sits down, answers emails, and only walks back when the buzzer vibrates.",
+    "analogyTamil": "Tea stall-la token vangi nikkaama kaiya kattitu muzhikkuradhu synchronous blocking. Token vangitu pakkathu kadaila poi vadai saaptu buzzer adicha odi vandhu tea edukkuradhu asynchronous non-blocking I/O da!",
+    "roastGeneral": "Synchronous code stands at the coffee counter staring blankly at the barista until the cup is handed over. Asynchronous code takes a buzzer token, sits down, answers emails, and only walks back when the buzzer vibrates.",
+    "roastTamil": "Tea stall-la token vangi nikkaama kaiya kattitu muzhikkuradhu synchronous blocking. Token vangitu pakkathu kadaila poi vadai saaptu buzzer adicha odi vandhu tea edukkuradhu asynchronous non-blocking I/O da!",
     "lessons": [
       {
         "id": "ch14-l1",
@@ -1717,10 +1717,10 @@ export const pythonCurriculum: Chapter[] = [
       "protocols",
       "type guards"
     ],
-    "analogyGeneral": "Static typing saves you from passing strings where integers belong, preventing midnight runtime disasters.",
-    "analogyTamil": "Type hint podumaanu ketta, type pannuradhe periya vishayam-ngura maari muzhikkuran!",
-    "roastGeneral": "You typed it as 'Any'. That's not typing, that's giving up.",
-    "roastTamil": "Any nu type hint kudukurathu... bathil theriyama exam la eadho ezhudhi vaikra maari.",
+    "analogyGeneral": "Sticking label tags onto your code variables. Python ignores them at runtime anyway, but your IDE uses them to scream at you in red squiggly lines before you embarrass yourself in front of senior engineers.",
+    "analogyTamil": "Type hint podra nu sonna, type panna therinjaale periya vishayam nu muzhikkura maari. Production-la poi server crash aagi appa kattina fees nyaabagam varadhukku munnadiye un code-ah discipline panna indha typing warning theva.",
+    "roastGeneral": "Sticking label tags onto your code variables. Python ignores them at runtime anyway, but your IDE uses them to scream at you in red squiggly lines before you embarrass yourself in front of senior engineers.",
+    "roastTamil": "Type hint podra nu sonna, type panna therinjaale periya vishayam nu muzhikkura maari. Production-la poi server crash aagi appa kattina fees nyaabagam varadhukku munnadiye un code-ah discipline panna indha typing warning theva.",
     "lessons": [
       {
         "id": "ch15-l1",
@@ -1836,10 +1836,10 @@ export const pythonCurriculum: Chapter[] = [
       "Compilation pipeline",
       "GIL"
     ],
-    "analogyGeneral": "CPython internals expose how Python manages memory via reference counting and the GIL.",
-    "analogyTamil": "GIL-ah pathi pesura... munnadi un code-la irukra reference leak-ah thedi eduda, loosu! CPython-e un code-ah paathu aludhurum.",
-    "roastGeneral": "Trying to bypass the GIL with threads? Cute.",
-    "roastTamil": "Global Interpreter Lock... oru chocolate-ah 10 per sanda potu saapudra maari, multithreading irundhalum oruthan dhaan velai seiyum!",
+    "analogyGeneral": "The Global Interpreter Lock (GIL) is a stubborn security bouncer that only allows one thread to execute Python bytecode at a time, turning your expensive 16-core CPU into a single-lane toll booth.",
+    "analogyTamil": "Oru chocolate-ah 10 per sanda potu saapudra maari, multithreading irundhalum GIL oru thread-ah mattum dhaan velai seiya vidum. CPython chinna numbers-ah (-5 to 256) memory-la reuse panra kanja-pisinari!",
+    "roastGeneral": "The Global Interpreter Lock (GIL) is a stubborn security bouncer that only allows one thread to execute Python bytecode at a time, turning your expensive 16-core CPU into a single-lane toll booth.",
+    "roastTamil": "Oru chocolate-ah 10 per sanda potu saapudra maari, multithreading irundhalum GIL oru thread-ah mattum dhaan velai seiya vidum. CPython chinna numbers-ah (-5 to 256) memory-la reuse panra kanja-pisinari!",
     "lessons": [
       {
         "id": "ch16-l1",
@@ -1954,10 +1954,10 @@ export const pythonCurriculum: Chapter[] = [
       "SciPy",
       "Matplotlib plots & charts"
     ],
-    "analogyGeneral": "Data science without Pandas is like trying to organize a million-row spreadsheet with a pencil. Pandas gives you a bulldozer.",
-    "analogyTamil": "Oru kodi row excel sheet-ah pencil-a vachu kutha koodadhu... Pandas use panni JCB vachu alli podanum!",
-    "roastGeneral": "Using pure Python loops to process a 100MB CSV? Your CPU is crying, and your RAM just filed a restraining order.",
-    "roastTamil": "For loop potu 100MB CSV-ah process panriya? Un laptop unna thooki adichutu sethurum da!",
+    "analogyGeneral": "Running loops over 5 million numbers in plain Python takes 4 business days. NumPy and Pandas bypass Python entirely, firing raw C-level arrays directly into memory at lightning speed.",
+    "analogyTamil": "10 lakh rows-ku python-la for loop potta room heating oven aayidum. Pandas DataFrame oru turbo-charged Excel sheet maari: vectorized calculation panni sekandla mudichutu tea kudikka poirum!",
+    "roastGeneral": "Running loops over 5 million numbers in plain Python takes 4 business days. NumPy and Pandas bypass Python entirely, firing raw C-level arrays directly into memory at lightning speed.",
+    "roastTamil": "10 lakh rows-ku python-la for loop potta room heating oven aayidum. Pandas DataFrame oru turbo-charged Excel sheet maari: vectorized calculation panni sekandla mudichutu tea kudikka poirum!",
     "lessons": [
       {
         "id": "ch17-l1",
@@ -2074,10 +2074,10 @@ export const pythonCurriculum: Chapter[] = [
       "Train/Test split",
       "Confusion matrix"
     ],
-    "analogyGeneral": "Machine Learning is just finding the line of best fit... on steroids. And with billions of parameters.",
-    "analogyTamil": "ML-na periya magic illa, namma area josiyar mari, palaiya data vachu pudhusa solluvaan, aana idhu math.",
-    "roastGeneral": "Calling yourself an AI engineer because you imported scikit-learn is like calling yourself a chef because you microwaved pizza.",
-    "roastTamil": "Scikit-learn import panni AI engineer-nu scene podatha, Maggie podra mathiri thaan idhuvum.",
+    "analogyGeneral": "Teaching a program by showing it examples rather than rules. Evaluating a model on the exact data it trained on is like giving an exam paper to a student the night before—100% score on the test, but total failure when real life happens.",
+    "analogyTamil": "Exam question paper-ah munnaadiye pathukittu poi 100 mark eduthutu, 'En pulla Einstein' nu solra maari overfitting! Real-world test data vandha arrears dhaan varum. Confusion matrix un life confusion vida perisa irukkum.",
+    "roastGeneral": "Teaching a program by showing it examples rather than rules. Evaluating a model on the exact data it trained on is like giving an exam paper to a student the night before—100% score on the test, but total failure when real life happens.",
+    "roastTamil": "Exam question paper-ah munnaadiye pathukittu poi 100 mark eduthutu, 'En pulla Einstein' nu solra maari overfitting! Real-world test data vandha arrears dhaan varum. Confusion matrix un life confusion vida perisa irukkum.",
     "lessons": [
       {
         "id": "ch18-l1",
@@ -2194,10 +2194,10 @@ export const pythonCurriculum: Chapter[] = [
       "Binary Search",
       "Sorting"
     ],
-    "analogyGeneral": "DSA is how you organize your closet so you can find a shirt in O(1) time instead of tearing the room apart in O(N).",
-    "analogyTamil": "DSA-na entha porula enga vecha udane edukkalam-nu yosikkarathu. Adha vittu kuppai la thedatha.",
-    "roastGeneral": "If your solution to everything is a nested for-loop, LeetCode is going to eat you alive.",
-    "roastTamil": "Ellathukum O(N^2) pottu, interview-la poyee muthikaatha da.",
+    "analogyGeneral": "A Stack is Last-In-First-Out, exactly like your browser tabs—the last silly article you opened is the first one you slam shut when your boss walks by. A Queue is First-In-First-Out, like waiting in line at the DMV hoping your ticket gets called before you die of old age.",
+    "analogyTamil": "Stack na plate adukki vekkura maari, kadisiyil vechatha modhalla edukanum. Queue na ration shop line, modhalla ninnadhukku dhaan kerosine kedaikkum! Binary search theriyama 1-la irundhu linear search panna, madurai bus stand-la aal theduradha maari tholanjiruva.",
+    "roastGeneral": "A Stack is Last-In-First-Out, exactly like your browser tabs—the last silly article you opened is the first one you slam shut when your boss walks by. A Queue is First-In-First-Out, like waiting in line at the DMV hoping your ticket gets called before you die of old age.",
+    "roastTamil": "Stack na plate adukki vekkura maari, kadisiyil vechatha modhalla edukanum. Queue na ration shop line, modhalla ninnadhukku dhaan kerosine kedaikkum! Binary search theriyama 1-la irundhu linear search panna, madurai bus stand-la aal theduradha maari tholanjiruva.",
     "lessons": [
       {
         "id": "ch19-l1",
@@ -2313,10 +2313,10 @@ export const pythonCurriculum: Chapter[] = [
       "Joins",
       "Collections"
     ],
-    "analogyGeneral": "A database is just a highly-organized, searchable file cabinet that multiple people can access without catching fire.",
-    "analogyTamil": "Database-ngurathu namma ooru register office mari, ellam theliva pathiram panni vechurpaanga.",
-    "roastGeneral": "If you are storing user passwords in plain text in a text file, please disconnect your router immediately.",
-    "roastTamil": "Text file la password store pandriya? Un laptop-a thooki kadal la podu da.",
+    "analogyGeneral": "The permanent storage layer. Putting raw user text directly into an SQL query string is like leaving your front door wide open with a giant neon sign that says: 'Free real estate for hackers to drop all tables.'",
+    "analogyTamil": "Database na un permanent ledger book. Query-la direct string pottu SQL Injection invite panradhu, veetu lock-ah open panni 'Thiruda, unakku thevaiyana jewels eduthuko' nu board maatura maari dangerous!",
+    "roastGeneral": "The permanent storage layer. Putting raw user text directly into an SQL query string is like leaving your front door wide open with a giant neon sign that says: 'Free real estate for hackers to drop all tables.'",
+    "roastTamil": "Database na un permanent ledger book. Query-la direct string pottu SQL Injection invite panradhu, veetu lock-ah open panni 'Thiruda, unakku thevaiyana jewels eduthuko' nu board maatura maari dangerous!",
     "lessons": [
       {
         "id": "ch20-l1",
