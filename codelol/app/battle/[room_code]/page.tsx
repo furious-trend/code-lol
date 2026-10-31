@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Battle room page with multiplayer HUD, live progress meters, and dynamic countdown timer", deps: ["@/hooks/useBattle", "@/lib/battles", "@/lib/problems", "@/lib/executor", "@/components/Bugsy"], state: "active", last: "sato@2026-10-31" }
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -319,23 +320,44 @@ let _log = [];
       {showConfetti && <Confetti recycle={false} numberOfPieces={500} />}
       
       {/* Header */}
-      <header className="h-16 border-b border-zinc-800 flex items-center justify-between px-6 shrink-0 bg-zinc-950/80 backdrop-blur z-10">
-        <div className="flex items-center gap-4">
-          <Link href="/battle" className="text-zinc-500 hover:text-white transition-colors">
-            ← Leave
+      <header className="h-16 border-b border-zinc-800/80 flex items-center justify-between px-4 md:px-6 shrink-0 bg-zinc-950/90 backdrop-blur-md z-10">
+        <div className="flex items-center gap-3">
+          <Link href="/battle" className="text-xs font-semibold text-zinc-400 hover:text-white px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all">
+            ← Exit Arena
           </Link>
-          <div className="h-6 w-px bg-zinc-800"></div>
-          <h1 className="font-bold text-lg">Room: <span className="text-indigo-400 font-mono">{battle.room_code}</span></h1>
+          <div className="h-5 w-px bg-zinc-800 hidden sm:block"></div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest hidden sm:inline">Room</span>
+            <span className="text-xs md:text-sm font-mono font-black px-2.5 py-1 rounded-md bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 tracking-wider">
+              {battle.room_code}
+            </span>
+          </div>
         </div>
         
         {battle.status === 'active' && (
-          <div className={`text-2xl font-black font-mono tracking-wider ${timeRemaining !== null && timeRemaining <= 60 ? 'text-red-500 animate-pulse' : 'text-zinc-100'}`}>
-            {formatTime(timeRemaining)}
+          <div className={`flex items-center gap-2 px-4 py-1 rounded-full font-mono font-black text-lg md:text-xl tracking-wider transition-all ${
+            timeRemaining !== null && timeRemaining <= 30
+              ? 'bg-red-500/20 border border-red-500/80 text-red-400 shadow-[0_0_25px_rgba(239,68,68,0.4)] animate-pulse'
+              : timeRemaining !== null && timeRemaining <= 60
+              ? 'bg-amber-500/20 border border-amber-500/50 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
+              : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
+          }`}>
+            <span className="text-sm">⏱️</span>
+            <span>{formatTime(timeRemaining)}</span>
           </div>
         )}
 
-        <div className="text-sm text-zinc-400 font-medium bg-zinc-900 px-4 py-2 rounded-full border border-zinc-800">
-          {problem?.title}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold text-zinc-300 bg-zinc-900/90 px-3 py-1.5 rounded-lg border border-zinc-800 max-w-[140px] sm:max-w-xs truncate">
+            {problem?.title}
+          </span>
+          <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-md border ${
+            problem?.difficulty === 'Beginner' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
+            problem?.difficulty === 'Intermediate' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
+            'bg-rose-500/10 border-rose-500/30 text-rose-400'
+          }`}>
+            {problem?.difficulty}
+          </span>
         </div>
       </header>
 
@@ -409,15 +431,29 @@ let _log = [];
                 </div>
               )}
               
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Editor</span>
-                <button 
-                  onClick={handleSubmit}
-                  disabled={isSubmitting || myParticipantRecord?.finished}
-                  className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors"
-                >
-                  {isSubmitting ? '⏳ Compiling... please wait' : 'Submit Code 🚀'}
-                </button>
+              <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-black text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    Editor
+                  </span>
+                  <span className="text-[10px] font-mono uppercase font-bold px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">
+                    {learningLanguage}
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-mono text-zinc-500 hidden sm:inline">
+                    Tab: Indent
+                  </span>
+                  <button 
+                    onClick={handleSubmit}
+                    disabled={isSubmitting || myParticipantRecord?.finished}
+                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-xl transition-all shadow-[0_0_15px_rgba(99,102,241,0.3)] hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] active:scale-95"
+                  >
+                    {isSubmitting ? '⏳ Compiling... please wait' : 'Submit Code 🚀'}
+                  </button>
+                </div>
               </div>
               <textarea
                 ref={textareaRef}
@@ -426,26 +462,27 @@ let _log = [];
                 onKeyDown={handleKeyDown}
                 spellCheck={false}
                 disabled={myParticipantRecord?.finished}
-                className="flex-1 w-full bg-[#0d0d12] text-zinc-300 font-mono p-4 rounded-xl border border-zinc-800 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 resize-none shadow-inner"
+                className="flex-1 w-full bg-[#0a0a0f] text-zinc-200 font-mono text-sm p-4 rounded-2xl border border-zinc-800/90 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/40 resize-none shadow-inner leading-relaxed"
               />
             </div>
 
             {/* Output Console */}
-            <div className="h-1/3 bg-zinc-900 border-t border-zinc-800 p-4 overflow-y-auto">
-              <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2 block">Console</span>
+            <div className="h-1/3 bg-zinc-950/80 border-t border-zinc-800/80 p-4 overflow-y-auto">
+              <span className="text-[11px] font-black text-zinc-500 uppercase tracking-widest mb-2 block font-mono">Terminal Output</span>
               {testResults ? (
                 <div className="space-y-2 font-mono text-sm">
-                  <div className={`font-bold mb-2 ${testResults.passed === testResults.total ? 'text-green-400' : 'text-red-400'}`}>
-                    Tests Passed: {testResults.passed} / {testResults.total}
+                  <div className={`font-bold mb-2 flex items-center gap-2 ${testResults.passed === testResults.total ? 'text-green-400' : 'text-red-400'}`}>
+                    <span>{testResults.passed === testResults.total ? '✅' : '❌'}</span>
+                    <span>Tests Passed: {testResults.passed} / {testResults.total}</span>
                   </div>
                   {testResults.log.map((l, i) => (
-                    <div key={i} className={l.includes('PASS') ? 'text-green-300/80' : 'text-red-300/80'}>{l}</div>
+                    <div key={i} className={`text-xs px-2.5 py-1 rounded ${l.includes('PASS') ? 'text-green-300 bg-green-500/5' : 'text-red-300 bg-red-500/5'}`}>{l}</div>
                   ))}
                 </div>
               ) : rawOutput ? (
-                <div className="text-red-400 font-mono text-sm whitespace-pre-wrap">{rawOutput}</div>
+                <div className="text-red-400 font-mono text-xs whitespace-pre-wrap bg-red-500/5 p-3 rounded-xl border border-red-500/20">{rawOutput}</div>
               ) : (
-                <div className="text-zinc-600 font-mono text-sm italic">Run code to see output...</div>
+                <div className="text-zinc-600 font-mono text-xs italic">Submit your code to execute test cases...</div>
               )}
 
               {(isRoasting || roastError || roastData) && (
@@ -474,8 +511,12 @@ let _log = [];
           </div>
 
           {/* Leaderboard Sidebar (Right 1/4) */}
-          <div className="w-full md:w-1/4 bg-zinc-950 p-4 overflow-y-auto">
-            <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4 block">Live Leaderboard</span>
+          <div className="w-full md:w-1/4 bg-zinc-950 p-4 overflow-y-auto border-t md:border-t-0 border-zinc-800">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-black text-zinc-400 uppercase tracking-widest">Live Arena Standings</span>
+              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
+            </div>
+            
             <div className="flex flex-col gap-3">
               {participants.map(p => {
                 const totalTests = problem?.testCases.length || 1;
@@ -483,29 +524,44 @@ let _log = [];
                 const isMe = p.user_id === currentUserId;
                 
                 return (
-                  <div key={p.id} className={`p-4 rounded-xl border ${isMe ? 'bg-indigo-900/10 border-indigo-500/30' : 'bg-zinc-900 border-zinc-800'}`}>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-bold text-sm truncate pr-2">
-                        {p.profiles?.display_name || 'Unknown'} {isMe && '(You)'}
-                      </span>
-                      <span className="text-xs font-bold text-zinc-400 bg-zinc-950 px-2 py-1 rounded">
-                        {p.passed_tests} / {totalTests}
+                  <div key={p.id} className={`p-4 rounded-2xl border transition-all ${
+                    isMe 
+                      ? 'bg-indigo-950/20 border-indigo-500/40 shadow-[0_0_15px_rgba(99,102,241,0.15)]' 
+                      : 'bg-zinc-900/60 border-zinc-800/80 hover:border-zinc-700'
+                  }`}>
+                    <div className="flex justify-between items-center mb-2.5">
+                      <div className="flex items-center gap-2 truncate pr-2">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-[11px] ${
+                          isMe ? 'bg-indigo-600 text-white' : 'bg-zinc-800 text-zinc-400'
+                        }`}>
+                          {p.profiles?.display_name?.charAt(0).toUpperCase() || '?'}
+                        </div>
+                        <span className="font-bold text-sm truncate text-white">
+                          {p.profiles?.display_name || 'Unknown'} {isMe && <span className="text-indigo-400 text-xs">(You)</span>}
+                        </span>
+                      </div>
+                      <span className="text-xs font-mono font-bold text-zinc-300 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
+                        {p.passed_tests}/{totalTests}
                       </span>
                     </div>
                     
                     {/* Progress bar */}
-                    <div className="w-full h-2 bg-zinc-950 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-zinc-950 rounded-full overflow-hidden p-0.5 border border-zinc-800/60">
                       <div 
-                        className={`h-full transition-all duration-500 rounded-full ${p.finished ? 'bg-green-500' : 'bg-indigo-500'}`}
+                        className={`h-full transition-all duration-500 rounded-full ${
+                          p.finished 
+                            ? 'bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]' 
+                            : 'bg-gradient-to-r from-indigo-500 to-purple-500 shadow-[0_0_8px_rgba(99,102,241,0.4)]'
+                        }`}
                         style={{ width: `${progressPct}%` }}
                       />
                     </div>
                     
-                    <div className="mt-2 text-xs font-medium flex justify-between">
+                    <div className="mt-2.5 text-xs font-medium flex justify-between items-center">
                       {p.finished ? (
-                        <span className="text-green-400 flex items-center gap-1">Finished ✅</span>
+                        <span className="text-emerald-400 font-bold flex items-center gap-1">Finished ✅</span>
                       ) : (
-                        <span className="text-indigo-400/70 flex items-center gap-1 animate-pulse">Coding... 👨‍💻</span>
+                        <span className="text-indigo-400/80 font-mono text-[11px] flex items-center gap-1 animate-pulse">In combat ⚔️</span>
                       )}
                     </div>
                   </div>
@@ -513,9 +569,9 @@ let _log = [];
               })}
             </div>
             
-            <div className="mt-8">
-              <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2 block">Problem</span>
-              <p className="text-sm text-zinc-300">{problem?.title}</p>
+            <div className="mt-8 p-3 rounded-xl bg-zinc-900/40 border border-zinc-800/60">
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1 block">Objective</span>
+              <p className="text-xs font-semibold text-zinc-300">{problem?.title}</p>
             </div>
           </div>
         </div>

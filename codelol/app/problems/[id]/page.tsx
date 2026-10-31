@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Problem solver page with solution gating, progressive hints, forfeit XP handling, and roast feedback", deps: ["@/lib/problems", "@/lib/executor", "@/lib/progress", "@/components/Bugsy"], state: active, last: "sato@2026-10-30" }
+// agent-notes: { ctx: "Problem solver page with solution gating, progressive hints, Ctrl+Enter shortcuts, and roast feedback", deps: ["@/lib/problems", "@/lib/executor", "@/lib/progress", "@/components/Bugsy"], state: "active", last: "sato@2026-10-31" }
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -273,25 +273,6 @@ export default function ProblemSolverPage() {
         {text}
       </ReactMarkdown>
     );
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!startTimeRef.current) {
-      startTimeRef.current = Date.now();
-    }
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const target = e.target as HTMLTextAreaElement;
-      const start = target.selectionStart;
-      const end = target.selectionEnd;
-      const newValue = code.substring(0, start) + '  ' + code.substring(end);
-      setCode(newValue);
-      setTimeout(() => {
-        if (textareaRef.current) {
-          textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 2;
-        }
-      }, 0);
-    }
   };
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -624,6 +605,32 @@ let _log = [];
       handleRoast(code, "Network Error. Please try again.", false, playedSound, humorPref, activeLang);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!startTimeRef.current) {
+      startTimeRef.current = Date.now();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      if (!isSubmitting && !isRoasting) {
+        handleSubmit();
+      }
+      return;
+    }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const target = e.target as HTMLTextAreaElement;
+      const start = target.selectionStart;
+      const end = target.selectionEnd;
+      const newValue = code.substring(0, start) + '  ' + code.substring(end);
+      setCode(newValue);
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 2;
+        }
+      }, 0);
     }
   };
 
@@ -1024,9 +1031,15 @@ let _log = [];
           }`}
         >
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-zinc-400 font-mono text-xs">
-              {activeLang === 'python' ? 'main.py' : activeLang === 'c' ? 'main.c' : activeLang === 'cpp' ? 'main.cpp' : activeLang === 'java' ? 'Main.java' : 'index.js'}
-            </h3>
+            <div className="flex items-center gap-3">
+              <h3 className="font-bold text-zinc-400 font-mono text-xs flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                {activeLang === 'python' ? 'main.py' : activeLang === 'c' ? 'main.c' : activeLang === 'cpp' ? 'main.cpp' : activeLang === 'java' ? 'Main.java' : 'index.js'}
+              </h3>
+              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-zinc-500 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
+                <kbd className="text-zinc-400">Ctrl</kbd>+<kbd className="text-zinc-400">Enter</kbd> to Run
+              </span>
+            </div>
             <div className="flex gap-3">
               <motion.button 
                 whileHover={{ scale: 1.025, boxShadow: "0 0 24px rgba(6, 182, 212, 0.35)" }}

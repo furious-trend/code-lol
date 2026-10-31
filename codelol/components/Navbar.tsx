@@ -1,20 +1,20 @@
-// agent-notes: { ctx: "Navbar with localized navigation links, mobile drawer, user progress, and auth controls", deps: ["@/lib/supabase/server", "next/link"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "Navbar with localized navigation links, animated mobile drawer, user progress, and auth controls", deps: ["@/lib/supabase/server", "next/link", "@/components/NavbarClientLinks"], state: active, last: "sato@2026-10-31" }
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Bugsy } from './Bugsy'
 import { UserProgress } from './UserProgress'
-
 import { Notifications } from './Notifications'
 import { LanguageSwitcher } from './LanguageSwitcher'
+import { NavbarClientLinks } from './NavbarClientLinks'
 
 export const navLinks = [
   { name: 'Learn', path: '/learn' },
   { name: 'Library', path: '/lessons' },
   { name: 'Problems', path: '/problems' },
-  { name: 'Leaderboard', path: '/leaderboard' },
   { name: 'Battle', path: '/battle' },
+  { name: 'Leaderboard', path: '/leaderboard' },
   { name: 'Friends', path: '/friends' },
   { name: 'Quiz', path: '/quiz' },
   { name: 'Playground', path: '/playground' },
@@ -42,13 +42,6 @@ export default async function Navbar() {
     }
   }
 
-  const getLocalizedPath = (basePath: string) => {
-    if (activeLang && (basePath === '/learn' || basePath === '/lessons')) {
-      return `${basePath}?lang=${activeLang}`
-    }
-    return basePath
-  }
-
   const handleLogout = async () => {
     'use server'
     const supabase = await createClient()
@@ -57,54 +50,29 @@ export default async function Navbar() {
   }
 
   return (
-    <nav className="w-full h-16 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50 flex items-center justify-between px-6">
+    <nav className="w-full h-16 border-b border-zinc-800/80 bg-zinc-950/85 backdrop-blur-xl sticky top-0 z-50 flex items-center justify-between px-4 sm:px-6 shadow-sm">
       <div className="flex items-center gap-6">
-        <Link href="/" className="font-bold text-xl text-zinc-100 tracking-tight flex items-center gap-2">
-          <Bugsy size={28} mood="idle" /> CodeLOL
+        <Link href="/" className="font-extrabold text-xl tracking-tight flex items-center gap-2.5 group">
+          <div className="p-1 rounded-xl bg-purple-500/10 border border-purple-500/30 group-hover:border-purple-400 transition-colors shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+            <Bugsy size={26} mood="idle" />
+          </div>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-black">
+            CodeLOL
+          </span>
         </Link>
         {/* Nav links: only visible to authenticated users */}
-        {user && (
-          <>
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-5 text-sm font-medium text-zinc-400">
-              {navLinks.map((link) => (
-                <Link key={link.name} href={getLocalizedPath(link.path)} className="relative group hover:text-zinc-100 transition-colors py-1">
-                  {link.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
-                </Link>
-              ))}
-            </div>
-
-            {/* Mobile Navigation Drawer */}
-            <div className="md:hidden relative">
-              <details className="group">
-                <summary className="list-none cursor-pointer p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition-colors flex items-center justify-center">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </summary>
-                <div className="absolute left-0 mt-2 w-48 bg-zinc-900/95 backdrop-blur-xl border border-zinc-800 rounded-xl shadow-2xl py-2 z-50 flex flex-col gap-1 px-2">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.name}
-                      href={getLocalizedPath(link.path)}
-                      className="px-3 py-2 text-sm font-medium text-zinc-300 hover:text-white hover:bg-zinc-800/60 rounded-lg transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                </div>
-              </details>
-            </div>
-          </>
-        )}
+        {user && <NavbarClientLinks navLinks={navLinks} activeLang={activeLang} />}
       </div>
-      <div className="flex items-center gap-4 text-zinc-300">
+      <div className="flex items-center gap-3 sm:gap-4 text-zinc-300">
         {/* Widgets: only visible to authenticated users */}
         {user && <LanguageSwitcher />}
         {user && <UserProgress />}
         {user && (
-          <Link href="/settings" className="text-sm hover:text-white transition-colors" title="Settings">
+          <Link 
+            href="/settings" 
+            className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800/60 border border-transparent hover:border-zinc-800 transition-all text-sm" 
+            title="Settings"
+          >
             ⚙️
           </Link>
         )}
@@ -112,15 +80,15 @@ export default async function Navbar() {
         {user ? (
           <>
             <Notifications />
-            <span className="text-sm hidden sm:inline-block">{user.email}</span>
+            <span className="text-xs font-semibold text-zinc-400 hidden xl:inline-block max-w-[160px] truncate">{user.email}</span>
             <form action={handleLogout}>
-              <button className="text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-100 px-4 py-2 rounded transition-colors font-medium">
+              <button className="text-xs sm:text-sm bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-200 px-3.5 py-1.5 rounded-xl transition-all font-semibold hover:border-zinc-700">
                 Log out
               </button>
             </form>
           </>
         ) : (
-          <Link href="/login" className="text-sm bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded transition-colors font-medium">
+          <Link href="/login" className="text-xs sm:text-sm bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-4 py-2 rounded-xl transition-all shadow-md shadow-blue-600/20 active:scale-95">
             Log in
           </Link>
         )}
