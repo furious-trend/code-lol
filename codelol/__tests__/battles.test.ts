@@ -47,6 +47,52 @@ describe('Battles API', () => {
     expect(res).toEqual({ id: 'battle-1', room_code: 'ABCD' });
   });
 
+  it('createBattle retries without language column when schema cache returns PGRST204', async () => {
+    let callCount = 0;
+    const mockInsert = vi.fn().mockImplementation(() => {
+      callCount++;
+      return {
+        select: vi.fn().mockReturnValue({
+          single: vi.fn().mockImplementation(() => {
+            if (callCount === 1) {
+              return Promise.resolve({
+                data: null,
+                error: { code: 'PGRST204', message: "Could not find the 'language' column of 'battles' in the schema cache" }
+              });
+            }
+            return Promise.resolve({
+              data: { id: 'battle-legacy-1', room_code: 'WXYZ99' },
+              error: null
+            });
+          })
+        })
+      };
+    });
+
+    (mockSupabaseClient.from as any).mockImplementation((table: string) => {
+      if (table === 'battles') {
+        return {
+          insert: mockInsert,
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({ data: { id: 'battle-legacy-1', status: 'waiting' }, error: null })
+            })
+          })
+        };
+      }
+      if (table === 'battle_participants') {
+        return { insert: vi.fn().mockResolvedValue({ error: null }) };
+      }
+    });
+
+    const res = await createBattle('problem-1', 2, 300, 'javascript');
+    
+    expect(mockInsert).toHaveBeenCalledTimes(2);
+    expect(mockInsert).toHaveBeenNthCalledWith(1, expect.objectContaining({ language: 'javascript' }));
+    expect(mockInsert).toHaveBeenNthCalledWith(2, expect.not.objectContaining({ language: 'javascript' }));
+    expect(res).toEqual({ id: 'battle-legacy-1', room_code: 'WXYZ99' });
+  });
+
   it('joinBattle inserts a participant', async () => {
     const mockEq = vi.fn().mockReturnThis();
     const mockSingle = vi.fn().mockResolvedValue({ data: { id: 'battle-1', status: 'waiting' }, error: null });

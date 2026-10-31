@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Battle lobby page for hosting and joining multiplayer coding battles", deps: ["@/lib/battles", "@/lib/problems"], state: active, last: "sato@2026-10-31" }
 'use client';
 
 import { useState } from 'react';

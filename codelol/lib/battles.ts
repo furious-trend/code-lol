@@ -1,3 +1,5 @@
+// agent-notes: { ctx: "Battles library for multiplayer room creation, joining, and realtime game state", deps: ["@/lib/supabase/client"], state: active, last: "sato@2026-10-31" }
+
 import { createClient } from '@/lib/supabase/client';
 
 export type BattleStatus = 'waiting' | 'active' | 'finished';
@@ -11,7 +13,7 @@ export interface Battle {
   time_limit_seconds: number;
   started_at: string | null;
   room_code: string;
-  language: string;
+  language?: string;
   created_at: string;
 }
 
@@ -44,23 +46,43 @@ function generateRoomCode(): string {
 export async function createBattle(problemId: string, maxPlayers: number, timeLimitSeconds: number, language: string = 'javascript'): Promise<{ id: string, room_code: string } | null> {
   const supabase = createClient();
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return null;
+  if (!userData?.user) {
+    console.warn('createBattle: User is not authenticated.');
+    return null;
+  }
 
   const roomCode = generateRoomCode();
 
-  const { data, error } = await supabase
+  const basePayload = {
+    created_by: userData.user.id,
+    problem_id: problemId,
+    max_players: maxPlayers,
+    time_limit_seconds: timeLimitSeconds,
+    room_code: roomCode,
+    status: 'waiting' as BattleStatus,
+  };
+
+  // Attempt insert with language if table schema includes it
+  let { data, error } = await supabase
     .from('battles')
     .insert({
-      created_by: userData.user.id,
-      problem_id: problemId,
-      max_players: maxPlayers,
-      time_limit_seconds: timeLimitSeconds,
-      room_code: roomCode,
-      status: 'waiting',
+      ...basePayload,
       language
     })
     .select('id, room_code')
     .single();
+
+  // If column does not exist (PGRST204) in schema cache, retry without language column
+  if (error && (error.code === 'PGRST204' || error.message?.includes('language'))) {
+    console.warn("Retrying battle creation without 'language' column due to database schema mismatch.");
+    const fallback = await supabase
+      .from('battles')
+      .insert(basePayload)
+      .select('id, room_code')
+      .single();
+    data = fallback.data;
+    error = fallback.error;
+  }
 
   if (error) {
     console.error('Error creating battle:', JSON.stringify(error, null, 2));
@@ -92,7 +114,7 @@ export async function getBattleByRoomCode(roomCode: string): Promise<Battle | nu
 export async function joinBattle(roomCode: string): Promise<boolean> {
   const supabase = createClient();
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return false;
+  if (!userData?.user) return false;
 
   const battle = await getBattleByRoomCode(roomCode);
   if (!battle || battle.status !== 'waiting') return false;
@@ -117,7 +139,7 @@ export async function joinBattle(roomCode: string): Promise<boolean> {
 export async function startBattle(battleId: string): Promise<boolean> {
   const supabase = createClient();
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return false;
+  if (!userData?.user) return false;
 
   const { error } = await supabase
     .from('battles')
@@ -139,7 +161,7 @@ export async function startBattle(battleId: string): Promise<boolean> {
 export async function updateParticipantProgress(battleId: string, passedTests: number, totalTests: number, code: string, finished: boolean, solvedAt?: string): Promise<boolean> {
   const supabase = createClient();
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return false;
+  if (!userData?.user) return false;
 
   const updateData: any = {
     passed_tests: passedTests,
