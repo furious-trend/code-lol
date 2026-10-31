@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Home page with streak, joke of the day, and feature exploration cards", deps: ["@/lib/supabase/server", "@/lib/jokes", "@/components/Bugsy", "@/components/WelcomeToast"], state: "active", last: "sato@2026-10-31" }
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getJokeOfTheDay } from "@/lib/jokes";
@@ -103,7 +104,7 @@ export default async function Home() {
       {/* Navigation Links Grid */}
       <section className="w-full max-w-6xl mx-auto mt-8 mb-16">
         <h2 className="text-2xl font-bold mb-6 px-2">Where to next?</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
           <Link href="/learn" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-yellow-500/50 hover:shadow-lg hover:shadow-yellow-500/10">
             <div className="absolute -right-4 -top-4 w-24 h-24 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all"></div>
             <div className="text-3xl mb-4">🧠</div>
@@ -124,12 +125,19 @@ export default async function Home() {
             <h3 className="text-xl font-bold mb-2">Problems</h3>
             <p className="text-sm text-zinc-400">LeetCode-style coding challenges to test your logic.</p>
           </Link>
-          
-          <Link href="/playground" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10">
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition-all"></div>
-            <div className="text-3xl mb-4">🧪</div>
-            <h3 className="text-xl font-bold mb-2">Playground</h3>
-            <p className="text-sm text-zinc-400">Experiment with code in our interactive editor.</p>
+
+          <Link href="/battle" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/10">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-red-500/10 rounded-full blur-2xl group-hover:bg-red-500/20 transition-all"></div>
+            <div className="text-3xl mb-4">⚔️</div>
+            <h3 className="text-xl font-bold mb-2">Battle</h3>
+            <p className="text-sm text-zinc-400">1v1 multiplayer live coding showdowns.</p>
+          </Link>
+
+          <Link href="/leaderboard" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/10">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
+            <div className="text-3xl mb-4">🏆</div>
+            <h3 className="text-xl font-bold mb-2">Ranks</h3>
+            <p className="text-sm text-zinc-400">Global and per-problem competitive leaderboards.</p>
           </Link>
           
           <Link href="/quiz" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/10">
@@ -137,6 +145,13 @@ export default async function Home() {
             <div className="text-3xl mb-4">🎯</div>
             <h3 className="text-xl font-bold mb-2">Quiz Zone</h3>
             <p className="text-sm text-zinc-400">Test your knowledge and earn XP.</p>
+          </Link>
+
+          <Link href="/playground" className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl p-6 overflow-hidden transition-all hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition-all"></div>
+            <div className="text-3xl mb-4">🧪</div>
+            <h3 className="text-xl font-bold mb-2">Playground</h3>
+            <p className="text-sm text-zinc-400">Experiment with code in our interactive editor.</p>
           </Link>
         </div>
       </section>

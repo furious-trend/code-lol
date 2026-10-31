@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Interview prep Java lessons covering String vs StringBuilder, HashMaps, and Garbage Collection", deps: ["./types"], state: "active", last: "sato@2026-10-31" }
 import { Lesson } from './types';
 
 export const javaInterviewLessons: Lesson[] = [
@@ -11,14 +12,14 @@ export const javaInterviewLessons: Lesson[] = [
     expectedOutput: "Hello World",
     gifKeyword: "building",
     miniQuizQuestion: {
-      question: "Why use StringBuilder instead of String?",
-      options: ["It is immutable", "It is faster for concatenation", "It uses less memory inherently", "It is thread-safe"],
+      question: "Why use StringBuilder instead of String when doing frequent modifications?",
+      options: ["It is immutable", "It is faster because it mutates the existing buffer", "It uses less memory inherently", "It is thread-safe"],
       correctAnswerIndex: 1
     },
     biteSized: {
-      meaning: "StringBuilder mutates the string in memory instead of creating new ones.",
-      funnyEgTamil: "Tamil version of: " + "String is writing in pen. StringBuilder is writing in pencil.",
-      funnyEgGeneral: "String is writing in pen. StringBuilder is writing in pencil."
+      meaning: "StringBuilder mutates the string in place instead of creating wasteful intermediate objects in the heap.",
+      funnyEgTamil: "String na pen-la ezhudhi thappana pudhu paper edukkura maari; StringBuilder na pencil-la ezhudhi eraser vachi modify panra maari!",
+      funnyEgGeneral: "String is writing in permanent marker. StringBuilder is writing in pencil with a good eraser."
     }
   },
   {
@@ -36,9 +37,9 @@ export const javaInterviewLessons: Lesson[] = [
       correctAnswerIndex: 2
     },
     biteSized: {
-      meaning: "A data structure that stores key-value pairs using hashing.",
-      funnyEgTamil: "Tamil version of: " + "A coat check system. Give a ticket (key), get your coat (value) instantly.",
-      funnyEgGeneral: "A coat check system. Give a ticket (key), get your coat (value) instantly."
+      meaning: "A data structure that stores key-value pairs using hash functions for O(1) lookups.",
+      funnyEgTamil: "Token counter maari: token number (key) kudutha parcel (value) direct-ah O(1) instant speed-la un kaiyil kedaikkum!",
+      funnyEgGeneral: "A coat check system: Hand over a ticket (key), get your jacket (value) instantly without searching every hanger."
     }
   },
   {
@@ -56,9 +57,9 @@ export const javaInterviewLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     biteSized: {
-      meaning: "Automatic memory management process that frees up unused objects.",
-      funnyEgTamil: "Tamil version of: " + "A Roomba that cleans up your house without you telling it to.",
-      funnyEgGeneral: "A Roomba that cleans up your house without you telling it to."
+      meaning: "Automatic JVM daemon process that reclaims heap memory from unreferenced objects.",
+      funnyEgTamil: "Veetla ammma namakku theriyama room-la irukkura kuppaiya clean panra maari: un useless objects-ah JVM automatic-ah swipe pannidum!",
+      funnyEgGeneral: "An autonomous robot vacuum cleaning up crumbs on the floor without you having to lift a broom."
     }
   }
 ];

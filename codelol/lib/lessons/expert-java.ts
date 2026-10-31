@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Expert Java lessons covering ArrayList vs LinkedList, Streams API, and multithreading", deps: ["./types"], state: "active", last: "sato@2026-10-31" }
 import { Lesson } from './types';
 
 export const javaExpertLessons: Lesson[] = [
@@ -11,14 +12,14 @@ export const javaExpertLessons: Lesson[] = [
     expectedOutput: "Java",
     gifKeyword: "books",
     miniQuizQuestion: {
-      question: "Which collection is faster for random access?",
+      question: "Which collection is faster for random access by index?",
       options: ["LinkedList", "ArrayList", "They are the same", "HashSet"],
       correctAnswerIndex: 1
     },
     biteSized: {
-      meaning: "Different ways to store dynamic lists based on memory and performance needs.",
-      funnyEgTamil: "Tamil version of: " + "ArrayList is reading a book (flip to page 50). LinkedList is a VHS tape (fast forward to minute 50).",
-      funnyEgGeneral: "ArrayList is reading a book (flip to page 50). LinkedList is a VHS tape (fast forward to minute 50)."
+      meaning: "Different list architectures optimized for reading vs insertion/deletion.",
+      funnyEgTamil: "ArrayList book-la direct-ah page 50 open panra maari (O(1)); LinkedList pazhaya cassette reel-ah rewind panni 50-avathu paattu thedura maari (O(n))!",
+      funnyEgGeneral: "ArrayList is reading a book (flip to page 50). LinkedList is a cassette tape (fast forward to minute 50)."
     }
   },
   {
@@ -32,13 +33,13 @@ export const javaExpertLessons: Lesson[] = [
     gifKeyword: "river",
     miniQuizQuestion: {
       question: "What does the filter method in Streams do?",
-      options: ["Modifies every element", "Removes elements that do not match the condition", "Sorts the elements", "Limits the size"],
+      options: ["Modifies every element", "Keeps elements matching the condition and drops the rest", "Sorts the elements", "Limits the size"],
       correctAnswerIndex: 1
     },
     biteSized: {
-      meaning: "A functional way to process sequences of elements in Java.",
-      funnyEgTamil: "Tamil version of: " + "An assembly line filtering out the bad apples.",
-      funnyEgGeneral: "An assembly line filtering out the bad apples."
+      meaning: "A functional pipeline to filter, transform, and collect sequences of elements.",
+      funnyEgTamil: "Tea filter maari: nalla tea decoction mattum cup-kulla pogum, waste thool ellam filter-laye reject aayidum!",
+      funnyEgGeneral: "An assembly line conveyor belt filtering out the bad apples before packaging."
     }
   },
   {
@@ -51,14 +52,14 @@ export const javaExpertLessons: Lesson[] = [
     expectedOutput: "Running...",
     gifKeyword: "multitasking",
     miniQuizQuestion: {
-      question: "How do you start a new thread?",
+      question: "How do you start a new thread so it runs concurrently?",
       options: ["t.run()", "t.start()", "t.begin()", "t.execute()"],
       correctAnswerIndex: 1
     },
     biteSized: {
-      meaning: "Doing multiple things simultaneously in a program.",
-      funnyEgTamil: "Tamil version of: " + "Texting, eating, and watching TV all at the same time.",
-      funnyEgGeneral: "Texting, eating, and watching TV all at the same time."
+      meaning: "Executing multiple paths of code simultaneously in separate threads of execution.",
+      funnyEgTamil: "Orey nerathula phone pesikitte, bike drive panni, tea kudikkira multitasking hero feel dhaan multithreading!",
+      funnyEgGeneral: "Texting, eating pizza, and watching Netflix all at the same time."
     }
   }
 ];

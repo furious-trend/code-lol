@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Intermediate C language lessons covering pointers, dynamic memory, and structs", deps: ["./types"], state: "active", last: "sato@2026-10-31" }
 import { Lesson } from './types';
 
 export const cIntermediateLessons: Lesson[] = [
@@ -20,7 +21,7 @@ export const cIntermediateLessons: Lesson[] = [
     ],
     biteSized: {
       meaning: "A pointer is a variable that stores the memory address of another variable.",
-      funnyEgTamil: "Like keeping the home address of your rowdy friend in your pocket.",
+      funnyEgTamil: "Friend kitta direct-ah briyani dabba irukkaadhu, aana andha dabba entha cupboard-la irukku nu address mattum thalaila irukkum!",
       funnyEgGeneral: "Like giving someone a treasure map instead of the actual treasure."
     }
   },
@@ -40,7 +41,7 @@ export const cIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "malloc allocates memory at runtime on the heap, and free releases it.",
-      funnyEgTamil: "Tamil version of: " + "Renting a car for a road trip (malloc) and returning it so you don't get charged forever (free).",
+      funnyEgTamil: "Kalyana mandapatha vadagai-ku eduthu (malloc), function mudinjathum vacate panra maari (free). Vacate pannala na OS police unna arrest pannidum!",
       funnyEgGeneral: "Renting a car for a road trip (malloc) and returning it so you don't get charged forever (free)."
     }
   },
@@ -60,7 +61,7 @@ export const cIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Structs group different variables under a single name.",
-      funnyEgTamil: "Tamil version of: " + "Packing your clothes, toothbrush, and snacks into one suitcase.",
+      funnyEgTamil: "Thali meal-la sambar, rasam, kootu ellatheyum orey plate-la align panni serve panra maari dhaan struct!",
       funnyEgGeneral: "Packing your clothes, toothbrush, and snacks into one suitcase."
     }
   }

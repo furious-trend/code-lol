@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Intermediate C++ lessons covering classes, constructors, and vectors", deps: ["./types"], state: "active", last: "sato@2026-10-31" }
 import { Lesson } from './types';
 
 export const cppIntermediateLessons: Lesson[] = [
@@ -17,7 +18,7 @@ export const cppIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A class is a blueprint, an object is the actual house built from it.",
-      funnyEgTamil: "Tamil version of: " + "Class is the recipe, Object is the cake you eat.",
+      funnyEgTamil: "Class dhaan biryani recipe book; Object dhaan un plate-la irukkura hot chicken biryani!",
       funnyEgGeneral: "Class is the recipe, Object is the cake you eat."
     }
   },
@@ -37,7 +38,7 @@ export const cppIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A special function called automatically when an object is created.",
-      funnyEgTamil: "Tamil version of: " + "The welcome email you instantly get when signing up for a service.",
+      funnyEgTamil: "College-la join pannadhum direct-ah ID card thalaila maatura maari: object create aanaale constructor instant-ah trigger aayidum!",
       funnyEgGeneral: "The welcome email you instantly get when signing up for a service."
     }
   },
@@ -57,8 +58,8 @@ export const cppIntermediateLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A dynamic array that can grow in size automatically.",
-      funnyEgTamil: "Tamil version of: " + "An elastic waistband after a big meal.",
-      funnyEgGeneral: "An elastic waistband after a big meal."
+      funnyEgTamil: "Virundhu saapaadu saapta piragu stretch aagura elastic track pant maari: size fix panna thevaiye illa, thevaiku yetha maari expand aagum!",
+      funnyEgGeneral: "An elastic waistband after a big feast: resizes automatically without spilling over."
     }
   }
 ];

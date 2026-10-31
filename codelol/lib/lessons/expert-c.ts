@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Expert C language lessons covering double pointers, function pointers, and macros", deps: ["./types"], state: "active", last: "sato@2026-10-31" }
 import { Lesson } from './types';
 
 export const cExpertLessons: Lesson[] = [
@@ -17,8 +18,8 @@ export const cExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A pointer that points to another pointer.",
-      funnyEgTamil: "Tamil version of: " + "Inception, but for computer memory.",
-      funnyEgGeneral: "Inception, but for computer memory."
+      funnyEgTamil: "Cinema twist maari: oru locker kulla innoru locker-oda key irukku, andha second locker-la thaan un cash-e irukku!",
+      funnyEgGeneral: "Inception, but for computer memory: an address of another address."
     }
   },
   {
@@ -37,7 +38,7 @@ export const cExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "Storing the address of a function so you can execute it dynamically.",
-      funnyEgTamil: "Tamil version of: " + "Giving someone the remote control instead of pushing the TV buttons yourself.",
+      funnyEgTamil: "Direct-ah velai seiyyaama, 'Nee avana koopidu' nu function address-ah pass panni execute panra manager vela maari!",
       funnyEgGeneral: "Giving someone the remote control instead of pushing the TV buttons yourself."
     }
   },
@@ -57,8 +58,8 @@ export const cExpertLessons: Lesson[] = [
     },
     biteSized: {
       meaning: "A macro is a fragment of code given a name, processed before compilation.",
-      funnyEgTamil: "Tamil version of: " + "Copy-pasting with find-and-replace, but automated.",
-      funnyEgGeneral: "Copy-pasting with find-and-replace, but automated."
+      funnyEgTamil: "Preprocessor oru blind xerox machine maari. Parenthesis () poda marandhaa, calculation ellam Vadivelu comedy maari ulta aaidum!",
+      funnyEgGeneral: "Copy-pasting with find-and-replace, but automated before the compiler wakes up."
     }
   }
 ];

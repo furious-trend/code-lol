@@ -31,3 +31,4 @@ CREATE POLICY "Anyone can view problem completions for leaderboard"
 
 -- 5. Force PostgREST to reload its schema cache
 NOTIFY pgrst, 'reload schema';
+

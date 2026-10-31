@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Interview prep C++ lessons covering STL sorting, maps, and lambda expressions", deps: ["./types"], state: "active", last: "sato@2026-10-31" }
 import { Lesson } from './types';
 
 export const cppInterviewLessons: Lesson[] = [
@@ -16,9 +17,9 @@ export const cppInterviewLessons: Lesson[] = [
       correctAnswerIndex: 2
     },
     biteSized: {
-      meaning: "Using standard library functions instead of writing them from scratch.",
-      funnyEgTamil: "Tamil version of: " + "Buying a frozen pizza instead of making dough from scratch.",
-      funnyEgGeneral: "Buying a frozen pizza instead of making dough from scratch."
+      meaning: "Using standard library functions instead of writing quicksort by hand.",
+      funnyEgTamil: "Kadaisi varaikkum bubble sort ezhudhi thalavali vara vekkaama, hotel-la ready-made parotta vaangura smartness maari std::sort!",
+      funnyEgGeneral: "Buying a frozen pizza instead of making dough from scratch at 2 AM."
     }
   },
   {
@@ -36,9 +37,9 @@ export const cppInterviewLessons: Lesson[] = [
       correctAnswerIndex: 2
     },
     biteSized: {
-      meaning: "A collection of key-value pairs sorted by key.",
-      funnyEgTamil: "Tamil version of: " + "A dictionary where the word is the key and definition is the value.",
-      funnyEgGeneral: "A dictionary where the word is the key and definition is the value."
+      meaning: "A Red-Black tree backed collection of key-value pairs sorted strictly by key.",
+      funnyEgTamil: "Phone contact list maari: 'Suresh' nu thedina contact number direct-ah O(log n) speed-la eduthu kudukkum!",
+      funnyEgGeneral: "A dictionary where the word is the key and definition is the value, auto-alphabetized."
     }
   },
   {
@@ -56,8 +57,8 @@ export const cppInterviewLessons: Lesson[] = [
       correctAnswerIndex: 0
     },
     biteSized: {
-      meaning: "Inline, anonymous functions used for short snippets of code.",
-      funnyEgTamil: "Tamil version of: " + "A disposable camera—use it once right where you need it, then forget about it.",
+      meaning: "Inline, anonymous functions used for concise, local callbacks.",
+      funnyEgTamil: "Oru tea kudi-kkuradhukku wedding invitation print panna maadhiri function declare pannaama, spot-la ezhudhi mudikkura use-and-throw function!",
       funnyEgGeneral: "A disposable camera—use it once right where you need it, then forget about it."
     }
   }

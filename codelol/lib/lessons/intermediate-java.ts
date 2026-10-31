@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Intermediate Java lessons covering inheritance, interfaces, and exception handling", deps: ["./types"], state: "active", last: "sato@2026-10-31" }
 import { Lesson } from './types';
 
 export const javaIntermediateLessons: Lesson[] = [
@@ -16,8 +17,8 @@ export const javaIntermediateLessons: Lesson[] = [
       correctAnswerIndex: 1
     },
     biteSized: {
-      meaning: "One class acquiring the properties and behaviors of another.",
-      funnyEgTamil: "Tamil version of: " + "Getting your parent's old car when you get your license.",
+      meaning: "One class acquiring the properties and methods of an existing parent class.",
+      funnyEgTamil: "Appa-voda pazhaya Splendor bike licence kedaichadhum automatic-ah namakku transfer aagura maari dhaan 'extends'!",
       funnyEgGeneral: "Getting your parent's old car when you get your license."
     }
   },
@@ -31,13 +32,13 @@ export const javaIntermediateLessons: Lesson[] = [
     expectedOutput: "Woof",
     gifKeyword: "plug",
     miniQuizQuestion: {
-      question: "Which keyword is used when a class uses an interface?",
+      question: "Which keyword is used when a class uses an interface in Java?",
       options: ["extends", "includes", "implements", "using"],
       correctAnswerIndex: 2
     },
     biteSized: {
       meaning: "A contract that guarantees a class will provide specific behaviors.",
-      funnyEgTamil: "Tamil version of: " + "Signing a gym contract (you must go work out... eventually).",
+      funnyEgTamil: "House rent agreement sign panra maari: 'sound()' method irukanum nu interface sollichu na, andha class compulsory athai implement panniye theeraanum!",
       funnyEgGeneral: "Signing a gym contract (you must go work out... eventually)."
     }
   },
@@ -51,13 +52,13 @@ export const javaIntermediateLessons: Lesson[] = [
     expectedOutput: "Cannot divide by zero!",
     gifKeyword: "shield",
     miniQuizQuestion: {
-      question: "What block always executes regardless of an exception?",
+      question: "What block always executes regardless of whether an exception occurs?",
       options: ["catch", "try", "finally", "else"],
       correctAnswerIndex: 2
     },
     biteSized: {
-      meaning: "Handling runtime errors gracefully without crashing the program.",
-      funnyEgTamil: "Tamil version of: " + "A safety net catching you when you fall off the tightrope.",
+      meaning: "Handling runtime errors gracefully without blowing up the JVM.",
+      funnyEgTamil: "Keezha vizhundhalum meesaile mann ottaadha maari: code crash aagaama catch block la catch panni safe-ah continue panra trick!",
       funnyEgGeneral: "A safety net catching you when you fall off the tightrope."
     }
   }
