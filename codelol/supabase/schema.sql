@@ -203,6 +203,9 @@ CREATE POLICY "Users can delete their friendships" ON public.friendships FOR DEL
 DROP POLICY IF EXISTS "Users can view their messages" ON public.direct_messages;
 CREATE POLICY "Users can view their messages" ON public.direct_messages FOR SELECT USING (auth.uid() = sender_id OR auth.uid() = receiver_id);
 
+DROP POLICY IF EXISTS "Users can send messages" ON public.direct_messages;
+CREATE POLICY "Users can send messages" ON public.direct_messages FOR INSERT WITH CHECK (auth.uid() = sender_id);
+
 -- 2.4 Notifications Policies
 DROP POLICY IF EXISTS "Users can view their notifications" ON public.notifications;
 CREATE POLICY "Users can view their notifications" ON public.notifications FOR SELECT USING (auth.uid() = user_id);
@@ -430,3 +433,4 @@ ALTER TABLE public.profiles
 -- 7. NOTIFY POSTGREST TO RELOAD SCHEMA CACHE
 -- ==========================================
 NOTIFY pgrst, 'reload schema';
+
