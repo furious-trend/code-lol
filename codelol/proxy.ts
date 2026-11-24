@@ -6,80 +6,97 @@ export async function proxy(request: NextRequest) {
     request,
   });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value);
-          });
-          supabaseResponse = NextResponse.next({
-            request,
-          });
-          cookiesToSet.forEach(({ name, value, options }) => {
-            supabaseResponse.cookies.set(name, value, options);
-          });
-        },
-      },
-      global: {
-        fetch: (url, options) => {
-          return fetch(url, { ...options, cache: 'no-store' });
-        },
-      },
-    }
-  );
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const url = request.nextUrl.clone();
   const path = url.pathname;
 
-  // Unprotected routes: public pages and API
-  const isPublicRoute = path.startsWith('/login') || path.startsWith('/auth/callback') || path.startsWith('/api/');
-  
-  if (!user && !isPublicRoute) {
-    // Unauthenticated user trying to access a protected route
-    url.pathname = '/login';
-    if (path && path !== '/') {
-      url.searchParams.set('next', path);
-    }
-    return NextResponse.redirect(url);
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // If Supabase environment is not set up, pass through gracefully without crashing
+    return supabaseResponse;
   }
 
-  if (user) {
-    // If authenticated, check if onboarded
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('onboarding_complete')
-      .eq('id', user.id)
-      .single();
+  try {
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) => {
+              request.cookies.set(name, value);
+            });
+            supabaseResponse = NextResponse.next({
+              request,
+            });
+            cookiesToSet.forEach(({ name, value, options }) => {
+              supabaseResponse.cookies.set(name, value, options);
+            });
+          },
+        },
+        global: {
+          fetch: (fetchUrl, options) => {
+            return fetch(fetchUrl, { ...options, cache: 'no-store' });
+          },
+        },
+      }
+    );
 
-    const isOnboarded = profile?.onboarding_complete;
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    // Fully authenticated users shouldn't see the login page
-    if (path.startsWith('/login')) {
-      url.pathname = '/';
+    // Protected routes requiring authentication
+    const isProtectedRoute =
+      path.startsWith('/battle') ||
+      path.startsWith('/friends') ||
+      path.startsWith('/settings') ||
+      path.startsWith('/messages') ||
+      path.startsWith('/stats') ||
+      path === '/onboarding' ||
+      path.startsWith('/onboarding/');
+
+    if (!user && isProtectedRoute) {
+      // Unauthenticated user trying to access a protected route
+      url.pathname = '/login';
+      url.searchParams.set('next', path);
       return NextResponse.redirect(url);
     }
 
-    // Un-onboarded users must go to /onboarding
-    if (!isOnboarded && !path.startsWith('/onboarding') && !path.startsWith('/api/') && !path.startsWith('/auth/callback')) {
-      url.pathname = '/onboarding';
-      return NextResponse.redirect(url);
-    }
+    if (user) {
+      // If authenticated, check if onboarded
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('onboarding_complete')
+        .eq('id', user.id)
+        .single();
 
-    // Onboarded users shouldn't go back to /onboarding
-    if (isOnboarded && path.startsWith('/onboarding')) {
-      url.pathname = '/';
-      return NextResponse.redirect(url);
+      const isOnboarded = profile?.onboarding_complete;
+
+      // Fully authenticated users shouldn't see the login page
+      if (path.startsWith('/login')) {
+        url.pathname = '/';
+        return NextResponse.redirect(url);
+      }
+
+      // Un-onboarded users must go to /onboarding
+      if (!isOnboarded && !path.startsWith('/onboarding') && !path.startsWith('/api/') && !path.startsWith('/auth/callback')) {
+        url.pathname = '/onboarding';
+        return NextResponse.redirect(url);
+      }
+
+      // Onboarded users shouldn't go back to /onboarding
+      if (isOnboarded && path.startsWith('/onboarding')) {
+        url.pathname = '/';
+        return NextResponse.redirect(url);
+      }
     }
+  } catch (error) {
+    console.warn('Proxy auth warning (non-fatal):', error);
   }
 
   return supabaseResponse;

@@ -59,20 +59,21 @@ export default async function Navbar() {
             CodeLOL
           </span>
         </Link>
-        {/* Nav links: only visible to authenticated users */}
-        {user && <NavbarClientLinks navLinks={navLinks} activeLang={activeLang} />}
+        {/* Nav links: visible to all users */}
+        <NavbarClientLinks navLinks={navLinks} activeLang={activeLang} />
       </div>
       <div className="flex items-center gap-3 sm:gap-4 text-zinc-300">
-        {/* Widgets: only visible to authenticated users */}
-        {user && <LanguageSwitcher />}
+        {/* Language switcher for all users */}
+        <LanguageSwitcher />
         {user && <UserProgress />}
         {user && (
           <Link 
             href="/settings" 
             className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800/60 border border-transparent hover:border-zinc-800 transition-all text-sm" 
             title="Settings"
+            aria-label="Settings"
           >
-            ⚙️
+            <span role="img" aria-label="Settings">⚙️</span>
           </Link>
         )}
 

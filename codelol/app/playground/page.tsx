@@ -38,6 +38,7 @@ function PlaygroundContent() {
   const [language, setLanguage] = useState<string>('javascript');
   const [code, setCode] = useState(STARTER_CODE['javascript']);
   const [output, setOutput] = useState('');
+  const [mobileTab, setMobileTab] = useState<'editor' | 'output'>('editor');
   const [isRunning, setIsRunning] = useState(false);
   const [lastRunSuccess, setLastRunSuccess] = useState<boolean | null>(null);
   const [loadingMsg, setLoadingMsg] = useState("Cooking... 🔥");
@@ -109,7 +110,7 @@ function PlaygroundContent() {
   }, [snippetId, learningLanguage]);
 
   const handleRunAndRoast = async () => {
-
+    setMobileTab('output');
     setIsRunning(true);
     setLoadingMsg(getRandomLoadingMessage());
     setOutput('Running...');
@@ -215,11 +216,42 @@ function PlaygroundContent() {
         </div>
       </div>
 
+      {/* Mobile Tab Switcher */}
+      <div className="flex lg:hidden bg-zinc-900 border border-zinc-800 rounded-xl p-1 gap-1 shrink-0">
+        <button
+          type="button"
+          onClick={() => setMobileTab('editor')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            mobileTab === 'editor'
+              ? 'bg-purple-600 text-white shadow'
+              : 'text-zinc-400 hover:text-zinc-200'
+          }`}
+          aria-label="Switch to Code Editor"
+        >
+          <span>💻 Code Editor</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab('output')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            mobileTab === 'output'
+              ? 'bg-purple-600 text-white shadow'
+              : 'text-zinc-400 hover:text-zinc-200'
+          }`}
+          aria-label="Switch to Output and Roast"
+        >
+          <span>⚡ Output & Roast</span>
+          {(output || roastData || isRoasting) && (
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          )}
+        </button>
+      </div>
+
       {/* Main Workspace */}
       <div className="flex flex-col lg:flex-row gap-4 h-full min-h-0">
         
         {/* Editor Area */}
-        <div className="flex-1 border border-zinc-800 rounded-xl overflow-hidden bg-zinc-900 shadow-lg flex flex-col min-h-[300px]">
+        <div className={`flex-1 border border-zinc-800 rounded-xl overflow-hidden bg-zinc-900 shadow-lg flex-col min-h-[300px] ${mobileTab === 'editor' ? 'flex' : 'hidden lg:flex'}`}>
           <div className="bg-zinc-900 border-b border-zinc-800 p-2 px-4 flex items-center">
             <div className="flex gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
@@ -248,7 +280,7 @@ function PlaygroundContent() {
         </div>
 
         {/* Output Console Area */}
-        <div className="lg:w-1/3 flex flex-col gap-4 h-64 lg:h-auto shrink-0 relative">
+        <div className={`lg:w-1/3 flex-col gap-4 h-full lg:h-auto shrink-0 relative ${mobileTab === 'output' ? 'flex min-h-[300px]' : 'hidden lg:flex'}`}>
           <AnimatePresence mode="wait">
             {isRoasting && (
               <motion.div 

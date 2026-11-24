@@ -56,6 +56,7 @@ export default function ProblemSolverPage() {
   const nextProblem = catIdx !== -1 && catIdx < categoryProblems.length - 1 ? categoryProblems[catIdx + 1] : null;
 
   const [code, setCode] = useState(problem?.starterCode || '');
+  const [mobileTab, setMobileTab] = useState<'desc' | 'editor' | 'output'>('desc');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [testResults, setTestResults] = useState<{passed: number, total: number, log: string[]} | null>(null);
   const [rawOutput, setRawOutput] = useState('');
@@ -377,6 +378,7 @@ export default function ProblemSolverPage() {
   };
 
   const handleSubmit = async () => {
+    setMobileTab('output');
     setIsSubmitting(true);
     setLoadingMsg(getRandomLoadingMessage());
     setTestResults(null);
@@ -637,12 +639,55 @@ let _log = [];
 
   return (
     <>
+    {/* Mobile Workspace Tabs (< lg) */}
+    <div className="flex lg:hidden bg-zinc-900 border-b border-zinc-800 sticky top-16 z-30 p-1.5 gap-1 backdrop-blur-md">
+      <button
+        type="button"
+        onClick={() => setMobileTab('desc')}
+        className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+          mobileTab === 'desc'
+            ? 'bg-blue-600 text-white shadow-md'
+            : 'text-zinc-400 hover:text-zinc-200'
+        }`}
+        aria-label="View Problem Description"
+      >
+        <span>📝 Problem</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => setMobileTab('editor')}
+        className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+          mobileTab === 'editor'
+            ? 'bg-blue-600 text-white shadow-md'
+            : 'text-zinc-400 hover:text-zinc-200'
+        }`}
+        aria-label="View Code Editor"
+      >
+        <span>💻 Code</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => setMobileTab('output')}
+        className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+          mobileTab === 'output'
+            ? 'bg-blue-600 text-white shadow-md'
+            : 'text-zinc-400 hover:text-zinc-200'
+        }`}
+        aria-label="View Output and Roast"
+      >
+        <span>⚡ Output</span>
+        {(testResults || rawOutput || roastData || isRoasting) && (
+          <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
+        )}
+      </button>
+    </div>
+
     <div className="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-50 font-sans">
       {/* Left Panel: Problem Description & Editor */}
-      <div className="w-full lg:w-1/2 flex flex-col h-auto lg:h-[calc(100vh-4rem)] lg:border-r border-zinc-800">
+      <div className={`w-full lg:w-1/2 flex-col h-auto lg:h-[calc(100vh-4rem)] lg:border-r border-zinc-800 ${mobileTab === 'output' ? 'hidden lg:flex' : 'flex'}`}>
         
         {/* Problem Description Area (Scrollable) */}
-        <div className="flex-1 p-6 md:p-10 overflow-y-auto">
+        <div className={`flex-1 p-6 md:p-10 overflow-y-auto ${mobileTab === 'desc' ? 'block' : 'hidden lg:block'}`}>
           <div className="mb-6 pb-6 border-b border-zinc-800">
             <div className="flex items-center justify-between mb-4">
               <Link href={`/problems?lang=${activeLang}`} className="text-zinc-500 hover:text-blue-400 inline-block font-medium transition-colors text-sm">
@@ -1012,7 +1057,7 @@ let _log = [];
           )}
         </div>
         
-        {/* Editor Area (Fixed bottom height) */}
+        {/* Editor Area (Responsive height) */}
         <motion.div 
           data-testid="editor-wrapper"
           animate={
@@ -1021,7 +1066,9 @@ let _log = [];
               : { x: 0 }
           }
           transition={{ duration: 0.35 }}
-          className={`h-96 flex flex-col p-6 bg-zinc-900 border-t shrink-0 transition-shadow duration-300 ${
+          className={`flex-col p-6 bg-zinc-900 border-t shrink-0 transition-shadow duration-300 ${
+            mobileTab === 'editor' ? 'flex h-[calc(100vh-10rem)]' : 'hidden lg:flex lg:h-96'
+          } ${
             testResults && testResults.passed !== testResults.total 
               ? 'shadow-[0_0_15px_rgba(239,68,68,0.5)] border-red-500/50' 
               : 'border-zinc-800'
@@ -1063,7 +1110,7 @@ let _log = [];
       </div>
 
       {/* Right Panel: Output & Roast */}
-      <div className="w-full lg:w-1/2 flex flex-col h-auto lg:h-[calc(100vh-4rem)]">
+      <div className={`w-full lg:w-1/2 flex-col h-auto lg:h-[calc(100vh-4rem)] ${mobileTab === 'output' ? 'flex' : 'hidden lg:flex'}`}>
         
         {/* Output Panel (Takes full height) */}
         <div 
