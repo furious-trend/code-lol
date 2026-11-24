@@ -1,7 +1,7 @@
 // agent-notes: { ctx: "Problem solver page with solution gating, progressive hints, Ctrl+Enter shortcuts, and roast feedback", deps: ["@/lib/problems", "@/lib/executor", "@/lib/progress", "@/components/Bugsy"], state: "active", last: "sato@2026-10-31" }
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
@@ -80,11 +80,7 @@ export default function ProblemSolverPage() {
   const { playMemeSound } = useMemeSound();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const startTimeRef = useRef<number | null>(null);
-  const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null);
-  if (!supabaseRef.current) {
-    supabaseRef.current = createClient();
-  }
-  const supabase = supabaseRef.current;
+  const supabase = useMemo(() => createClient(), []);
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const [isLessonRead, setIsLessonRead] = useState(false);
@@ -610,6 +606,7 @@ let _log = [];
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!startTimeRef.current) {
+      // eslint-disable-next-line react-hooks/purity
       startTimeRef.current = Date.now();
     }
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {

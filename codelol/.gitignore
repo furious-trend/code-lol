@@ -58,3 +58,15 @@ update.log
 /venv/
 supabase/.temp/
 
+
+# Cleanup exclusions
+patch_*.py
+fix_*.py
+test*.js
+test*.mjs
+test_*.py
+final-*.txt
+test-output.txt
+test_output.txt
+*Zone.Identifier
+*Zone.Identifier*

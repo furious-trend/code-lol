@@ -74,7 +74,7 @@ export function HeroTerminalPreview() {
 
       {/* Terminal Body */}
       <div className="p-5 font-mono text-xs sm:text-sm">
-        <div className="text-zinc-400 mb-1">// 1. Write buggy code:</div>
+        <div className="text-zinc-400 mb-1">{"// 1. Write buggy code:"}</div>
         <pre className="text-pink-400 bg-zinc-900/40 p-3 rounded-xl border border-zinc-800/60 overflow-x-auto">
           <code>{snippet.code}</code>
         </pre>

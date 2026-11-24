@@ -2,14 +2,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { POST } from '../app/api/run/route';
 import { createClient } from '@/lib/supabase/server';
-import { checkUserRateLimit } from '@/lib/userRateLimit';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(),
 }));
 
-vi.mock('@/lib/userRateLimit', () => ({
-  checkUserRateLimit: vi.fn(),
+vi.mock('@/lib/rateLimit', () => ({
+  checkRateLimit: vi.fn(),
 }));
 
 describe('/api/run route', () => {
@@ -99,8 +99,9 @@ describe('/api/run route', () => {
         getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'user-123' } }, error: null }),
       },
     });
-    (checkUserRateLimit as any).mockResolvedValue({
+    (checkRateLimit as any).mockResolvedValue({
       allowed: false,
+      success: false,
       error: 'Rate limit exceeded 🐢',
     });
 
@@ -118,7 +119,7 @@ describe('/api/run route', () => {
         getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'user-123' } }, error: null }),
       },
     });
-    (checkUserRateLimit as any).mockResolvedValue({ allowed: true });
+    (checkRateLimit as any).mockResolvedValue({ allowed: true, success: true });
 
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,

@@ -1,14 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { POST } from './route';
 import { createClient } from '@/lib/supabase/server';
-import { checkUserRateLimit } from '@/lib/userRateLimit';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(),
 }));
 
-vi.mock('@/lib/userRateLimit', () => ({
-  checkUserRateLimit: vi.fn(),
+vi.mock('@/lib/rateLimit', () => ({
+  checkRateLimit: vi.fn(),
 }));
 
 const mockFetch = vi.fn();
@@ -26,7 +26,7 @@ describe('POST /api/run', () => {
         }),
       },
     });
-    (checkUserRateLimit as any).mockResolvedValue({ allowed: true });
+    (checkRateLimit as any).mockResolvedValue({ allowed: true, success: true });
   });
 
   it('should return 400 for javascript requests indicating client-side execution', async () => {
@@ -54,7 +54,7 @@ describe('POST /api/run', () => {
     const res = await POST(req);
     expect(res.status).toBe(200);
     const data = await res.json();
-    
+
     expect(mockFetch).toHaveBeenCalledTimes(1);
     const callArgs = mockFetch.mock.calls[0];
     expect(callArgs[0]).toBe('https://api.onlinecompiler.io/api/run-code-sync/');
@@ -75,7 +75,7 @@ describe('POST /api/run', () => {
       method: 'POST',
       body: JSON.stringify({ language: 'c', code: 'test' })
     });
-    
+
     // Mock setTimeout to speed up the test
     vi.useFakeTimers();
     const promise = POST(req);
@@ -95,7 +95,7 @@ describe('POST /api/run', () => {
         const timeoutId = setTimeout(() => {
           resolve({ ok: true, json: async () => ({}) });
         }, 35000);
-        
+
         if (options?.signal) {
           options.signal.addEventListener('abort', () => {
             clearTimeout(timeoutId);
@@ -111,7 +111,7 @@ describe('POST /api/run', () => {
       method: 'POST',
       body: JSON.stringify({ language: 'cpp', code: 'test' })
     });
-    
+
     vi.useFakeTimers();
     const promise = POST(req);
     await vi.runAllTimersAsync();

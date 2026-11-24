@@ -2,9 +2,13 @@
 import { pythonCurriculum } from '../lib/python/curriculum';
 import { execSync } from 'child_process';
 import { writeFileSync } from 'fs';
+import os from 'os';
+import path from 'path';
 
 function validate() {
     let failed = false;
+    const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
+    const tempFile = path.join(os.tmpdir(), 'temp_py_run.py');
 
     if (pythonCurriculum.length < 20) {
         console.error(`Expected at least 20 chapters, found ${pythonCurriculum.length}`);
@@ -23,15 +27,17 @@ function validate() {
                 failed = true;
             }
 
-            // Run through python3
+            // Run through python
             const code = lesson.codeExample;
             try {
                 // write to temp file
-                writeFileSync('/tmp/temp_py_run.py', code);
-                const result = execSync('python3 /tmp/temp_py_run.py', { encoding: 'utf-8' }).trim();
-                
-                if (result !== lesson.expectedOutput) {
-                    console.error(`Lesson ${lesson.id} output mismatch.\nExpected:\n${lesson.expectedOutput}\nGot:\n${result}`);
+                writeFileSync(tempFile, code);
+                const rawResult = execSync(`${pythonCmd} "${tempFile}"`, { encoding: 'utf-8' });
+                const result = rawResult.replace(/\r\n/g, '\n').trim();
+                const expected = (lesson.expectedOutput || '').replace(/\r\n/g, '\n').trim();
+
+                if (result !== expected) {
+                    console.error(`Lesson ${lesson.id} output mismatch.\nExpected:\n${expected}\nGot:\n${result}`);
                     failed = true;
                 }
             } catch (e: any) {

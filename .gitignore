@@ -56,3 +56,20 @@ ehthumbs.db
 # yarn.lock
 # pnpm-lock.yaml
 # bun.lockb
+
+# Cleanup exclusions
+codelol/patch_*.py
+codelol/fix_*.py
+codelol/test*.js
+codelol/test*.mjs
+codelol/test_*.py
+codelol/final-*.txt
+codelol/test-output.txt
+codelol/test_output.txt
+fix_python.py
+fix_python2.py
+generate_py_lessons.py
+*Zone.Identifier
+*Zone.Identifier*
+PocketFlow-Tutorial-Codebase-Knowledge/
+codelol/scratch/

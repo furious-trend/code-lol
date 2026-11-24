@@ -3,8 +3,14 @@ import { checkRateLimit } from '../lib/rateLimit';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // Mock dependencies
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn().mockResolvedValue({
+    rpc: vi.fn().mockResolvedValue({ data: true, error: null }),
+  }),
+}));
+
 vi.mock('../lib/rateLimit', () => ({
-  checkRateLimit: vi.fn(() => ({ success: true }))
+  checkRateLimit: vi.fn(() => ({ success: true, allowed: true }))
 }));
 
 describe('/api/roast route', () => {
@@ -78,5 +84,22 @@ describe('/api/roast route', () => {
     expect(data).toHaveProperty('roast');
     expect(typeof data.roast).toBe('string');
   });
-});
 
+  it('returns 429 when rate limit is exceeded with friendly error message', async () => {
+    (checkRateLimit as any).mockReturnValueOnce({
+      success: false,
+      allowed: false,
+      error: 'Slow down! Too many requests, try again in a minute 🐢',
+    });
+
+    const request = createRequest({
+      code: 'console.log("flood")',
+      output: '',
+      isSuccess: false,
+    });
+    const response = await POST(request);
+    expect(response.status).toBe(429);
+    const data = await response.json();
+    expect(data.error).toBe('Slow down! Too many requests, try again in a minute 🐢');
+  });
+});

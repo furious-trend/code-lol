@@ -1,7 +1,7 @@
-// agent-notes: { ctx: "API proxy for OnlineCompiler.io Python, C, C++, and Java execution with client-side JS enforcement", deps: ["next/server", "@/lib/supabase/server", "@/lib/userRateLimit"], state: active, last: "sato@2026-10-28" }
+// agent-notes: { ctx: "API proxy for OnlineCompiler.io Python, C, C++, and Java execution with client-side JS enforcement", deps: ["next/server", "@/lib/supabase/server", "@/lib/rateLimit"], state: active, last: "sato@2026-10-28" }
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { checkUserRateLimit } from '@/lib/userRateLimit';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 const COMPILER_MAP: Record<string, string> = {
   // Python
@@ -124,8 +124,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. DB-backed rate limiting
-    const rateLimit = await checkUserRateLimit(supabase, user.id, 20, 60);
+    // 3. DB-backed rate limiting (10 per minute)
+    const rateLimit = await checkRateLimit(supabase, '/api/run', 10, 60);
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: rateLimit.error || 'Too many requests. Please wait a moment before running code again 🐢' },
@@ -154,7 +154,6 @@ export async function POST(request: Request) {
     let lastStatus = 500;
     while (retries >= 0) {
       try {
-        console.log('Sending request to onlinecompiler:', { compiler, code, input: '' }, 'APIKey:', apiKey);
         const response = await fetchWithTimeout('https://api.onlinecompiler.io/api/run-code-sync/', {
           method: 'POST',
           headers: {
