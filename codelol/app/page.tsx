@@ -5,6 +5,7 @@ import { getJokeOfTheDay } from "@/lib/jokes";
 import { Bugsy } from "@/components/Bugsy";
 import { WelcomeToast } from "@/components/WelcomeToast";
 import { DailyJokeCard } from "@/components/DailyJokeCard";
+import { ResumeLearningBanner } from "@/components/ResumeLearningBanner";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -51,19 +52,28 @@ export default async function Home() {
           Learn to code with a smile. Laugh at bugs, survive AI roasts, and master programming logic.
         </p>
 
+        {/* Dynamic Resume Learning Banner for returning learners */}
+        <ResumeLearningBanner />
+
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-4 mt-2">
           <Link 
-            href="/problems" 
-            className="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-extrabold py-4 px-8 sm:px-10 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-[0_0_35px_rgba(59,130,246,0.35)] text-lg sm:text-xl flex items-center gap-2.5"
+            href="/learn" 
+            className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold py-4 px-8 sm:px-10 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-[0_0_35px_rgba(168,85,247,0.4)] text-base sm:text-lg flex items-center gap-2.5 border border-purple-400/30"
           >
-            Start Solving Problems 🚀
+            Start Your First Lesson (Free &amp; No Signup) 🚀
+          </Link>
+          <Link 
+            href="/problems" 
+            className="bg-zinc-900/90 hover:bg-zinc-800/90 border border-zinc-700/80 hover:border-blue-500/50 text-white font-bold py-4 px-7 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-950/20 text-base flex items-center gap-2"
+          >
+            Explore Problems 💻
           </Link>
           <Link 
             href="/battle" 
-            className="bg-zinc-900/90 hover:bg-zinc-800/90 border border-zinc-700/80 hover:border-red-500/50 text-white font-bold py-4 px-8 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-red-950/20 text-lg flex items-center gap-2"
+            className="bg-zinc-900/90 hover:bg-zinc-800/90 border border-zinc-700/80 hover:border-red-500/50 text-white font-bold py-4 px-7 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-red-950/20 text-base flex items-center gap-2"
           >
-            Enter Battle Arena ⚔️
+            Battle Arena ⚔️
           </Link>
         </div>
       </section>

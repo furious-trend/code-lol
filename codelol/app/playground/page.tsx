@@ -14,6 +14,7 @@ import { useMemeSound } from '@/hooks/useMemeSound';
 import { executeCode } from '@/lib/executor';
 import { getRandomLoadingMessage, getRandomEmptyMessage } from '@/lib/funnyCopy';
 import { createClient } from '@/lib/supabase/client';
+import { translateBeginnerError } from '@/lib/beginnerErrors';
 
 const STARTER_CODE: Record<string, string> = {
   javascript: '// Write your code here\nconsole.log("Hello, World!");',
@@ -36,7 +37,15 @@ function PlaygroundContent() {
   const snippetId = searchParams.get('snippet');
   
   const [language, setLanguage] = useState<string>('javascript');
-  const [code, setCode] = useState(STARTER_CODE['javascript']);
+  const [code, setCode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('draft_playground_javascript');
+        if (saved && saved.trim().length > 0) return saved;
+      } catch {}
+    }
+    return STARTER_CODE['javascript'];
+  });
   const [output, setOutput] = useState('');
   const [mobileTab, setMobileTab] = useState<'editor' | 'output'>('editor');
   const [isRunning, setIsRunning] = useState(false);
@@ -48,6 +57,20 @@ function PlaygroundContent() {
   const supabase = createClient();
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
+
+  const beginnerTip = translateBeginnerError(output || roastError, language);
+
+  const handleResetCode = () => {
+    const defaultCode = STARTER_CODE[language] || STARTER_CODE['javascript'];
+    setCode(defaultCode);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(`draft_playground_${language}`);
+      } catch {}
+    }
+    setOutput('');
+    clearRoast();
+  };
 
   useEffect(() => {
     async function loadPref() {
@@ -168,14 +191,18 @@ function PlaygroundContent() {
             value={language}
             onChange={(e) => {
               const newLang = e.target.value;
-              
-              // Only replace if the user hasn't edited the starter code of the old language
-              if (STARTER_CODE[language] === code) {
-                setCode(STARTER_CODE[newLang] || STARTER_CODE['javascript']);
-              }
-              
               setLanguage(newLang);
               setLearningLanguage(newLang);
+              if (typeof window !== 'undefined') {
+                try {
+                  const saved = localStorage.getItem(`draft_playground_${newLang}`);
+                  if (saved && saved.trim().length > 0) {
+                    setCode(saved);
+                    return;
+                  }
+                } catch {}
+              }
+              setCode(STARTER_CODE[newLang] || STARTER_CODE['javascript']);
             }}
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer"
           >
@@ -203,6 +230,17 @@ function PlaygroundContent() {
             <option value="general">General Humor</option>
             <option value="tamil">Tamil Humor</option>
           </select>
+          
+          <button
+            type="button"
+            onClick={handleResetCode}
+            className="p-2 px-3 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors text-xs sm:text-sm font-semibold flex items-center gap-1.5 cursor-pointer active:scale-95"
+            title="Reset code back to original template"
+            aria-label="Reset code to default"
+          >
+            <span>↺</span>
+            <span>Reset</span>
+          </button>
           
           <motion.button 
             whileHover={{ scale: 1.02 }}
@@ -266,7 +304,15 @@ function PlaygroundContent() {
               language={language}
               theme="vs-dark"
               value={code}
-              onChange={(value) => setCode(value || '')}
+              onChange={(value) => {
+                const val = value || '';
+                setCode(val);
+                if (typeof window !== 'undefined') {
+                  try {
+                    localStorage.setItem(`draft_playground_${language}`, val);
+                  } catch {}
+                }
+              }}
               options={{
                 minimap: { enabled: false },
                 fontSize: 14,
@@ -281,6 +327,16 @@ function PlaygroundContent() {
 
         {/* Output Console Area */}
         <div className={`lg:w-1/3 flex-col gap-4 h-full lg:h-auto shrink-0 relative ${mobileTab === 'output' ? 'flex min-h-[300px]' : 'hidden lg:flex'}`}>
+          {/* Beginner Friendly Guidance Tip */}
+          {beginnerTip && (
+            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-2.5 shadow-sm">
+              <span className="text-base flex-shrink-0">💡</span>
+              <div>
+                <p className="font-extrabold text-amber-300 uppercase tracking-wider">{beginnerTip.title}</p>
+                <p className="text-zinc-200 mt-0.5 leading-relaxed">{beginnerTip.hint}</p>
+              </div>
+            </div>
+          )}
           <AnimatePresence mode="wait">
             {isRoasting && (
               <motion.div 

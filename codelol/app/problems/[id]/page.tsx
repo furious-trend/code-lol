@@ -18,6 +18,7 @@ import ReactMarkdown from 'react-markdown';
 import { createClient } from '@/lib/supabase/client';
 import confetti from 'canvas-confetti';
 import { getResultGif } from '@/lib/localGifs';
+import { translateBeginnerError } from '@/lib/beginnerErrors';
 
 function getSearchParam(key: string): string | null {
   if (typeof window !== 'undefined' && window.location && window.location.search) {
@@ -82,6 +83,11 @@ export default function ProblemSolverPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const startTimeRef = useRef<number | null>(null);
   const supabase = useMemo(() => createClient(), []);
+
+  const beginnerTip = useMemo(() => {
+    const errorText = rawOutput || (testResults && testResults.passed !== testResults.total ? testResults.log?.join('\n') : '');
+    return translateBeginnerError(errorText, activeLang);
+  }, [rawOutput, testResults, activeLang]);
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
   const [isLessonRead, setIsLessonRead] = useState(false);
@@ -214,22 +220,70 @@ export default function ProblemSolverPage() {
     };
   }, [supabase, activeLang, moduleId, queryLang, id]);
 
-  // Sync state if problem loads
+  // Sync state if problem loads, restoring any saved drafts from localStorage
   useEffect(() => {
     if (problem) {
+      let defaultStarter = problem.starterCode;
       if (activeLang === 'python' && problem.starterCodePython) {
-        setCode(problem.starterCodePython);
+        defaultStarter = problem.starterCodePython;
       } else if (activeLang === 'c' && problem.starterCodeC) {
-        setCode(problem.starterCodeC);
+        defaultStarter = problem.starterCodeC;
       } else if (activeLang === 'cpp' && problem.starterCodeCpp) {
-        setCode(problem.starterCodeCpp);
+        defaultStarter = problem.starterCodeCpp;
       } else if (activeLang === 'java' && problem.starterCodeJava) {
-        setCode(problem.starterCodeJava);
-      } else {
-        setCode(problem.starterCode);
+        defaultStarter = problem.starterCodeJava;
+      }
+
+      if (typeof window !== 'undefined') {
+        try {
+          const draftKey = `draft_problem_${id}_${activeLang}`;
+          const savedDraft = localStorage.getItem(draftKey);
+          if (savedDraft && savedDraft.trim().length > 0) {
+            setCode(savedDraft);
+            return;
+          }
+        } catch {}
+      }
+      setCode(defaultStarter);
+
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem(
+            'codelol_last_visited_problem',
+            JSON.stringify({
+              id: problem.id,
+              title: problem.title,
+              language: activeLang,
+              url: `/problems/${id}?lang=${activeLang}`,
+            })
+          );
+        } catch {}
       }
     }
-  }, [problem, activeLang]);
+  }, [problem, activeLang, id]);
+
+  const handleResetCode = () => {
+    if (!problem) return;
+    let defaultStarter = problem.starterCode;
+    if (activeLang === 'python' && problem.starterCodePython) {
+      defaultStarter = problem.starterCodePython;
+    } else if (activeLang === 'c' && problem.starterCodeC) {
+      defaultStarter = problem.starterCodeC;
+    } else if (activeLang === 'cpp' && problem.starterCodeCpp) {
+      defaultStarter = problem.starterCodeCpp;
+    } else if (activeLang === 'java' && problem.starterCodeJava) {
+      defaultStarter = problem.starterCodeJava;
+    }
+
+    setCode(defaultStarter);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(`draft_problem_${id}_${activeLang}`);
+      } catch {}
+    }
+    setTestResults(null);
+    setRawOutput('');
+  };
 
   if (!problem) {
     return (
@@ -276,7 +330,13 @@ export default function ProblemSolverPage() {
     if (!startTimeRef.current) {
       startTimeRef.current = Date.now();
     }
-    setCode(e.target.value);
+    const newCode = e.target.value;
+    setCode(newCode);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(`draft_problem_${id}_${activeLang}`, newCode);
+      } catch {}
+    }
   };
 
   const handleProblemSuccess = async (output: string) => {
@@ -1084,14 +1144,24 @@ let _log = [];
                 <kbd className="text-zinc-400">Ctrl</kbd>+<kbd className="text-zinc-400">Enter</kbd> to Run
               </span>
             </div>
-            <div className="flex gap-3">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleResetCode}
+                className="px-2.5 py-1.5 rounded-xl bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold transition-colors flex items-center gap-1.5 border border-zinc-700/60 active:scale-95 cursor-pointer"
+                title="Reset code back to original starter template"
+                aria-label="Reset code to default"
+              >
+                <span>↺</span>
+                <span>Reset</span>
+              </button>
               <motion.button 
                 whileHover={{ scale: 1.025, boxShadow: "0 0 24px rgba(6, 182, 212, 0.35)" }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 420, damping: 18 }}
                 onClick={handleSubmit}
                 disabled={isSubmitting || isRoasting}
-                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl text-sm transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2 disabled:opacity-50"
+                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-5 sm:px-6 rounded-xl text-xs sm:text-sm transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2 disabled:opacity-50"
               >
                 {isSubmitting || isRoasting ? '⏳ Compiling... please wait' : 'Submit & Roast 🚀🔥'}
               </motion.button>
@@ -1121,7 +1191,18 @@ let _log = [];
               : ''
           }`}
         >
-          <h3 className="font-bold text-zinc-500 mb-6 uppercase tracking-wider text-sm border-b border-zinc-800 pb-2">Execution Output & Roast</h3>
+          <h3 className="font-bold text-zinc-500 mb-4 uppercase tracking-wider text-sm border-b border-zinc-800 pb-2">Execution Output & Roast</h3>
+          
+          {/* Beginner Friendly Guidance Tip */}
+          {beginnerTip && (
+            <div className="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
+              <span className="text-2xl flex-shrink-0">💡</span>
+              <div>
+                <p className="font-extrabold text-amber-300 text-xs uppercase tracking-wider">{beginnerTip.title}</p>
+                <p className="text-sm text-zinc-200 mt-1 leading-relaxed">{beginnerTip.hint}</p>
+              </div>
+            </div>
+          )}
           
 
 

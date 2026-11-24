@@ -118,6 +118,23 @@ export default function InteractiveLibraryClient({
   const prevTopic = activeIndex > 0 ? topics[activeIndex - 1] : null;
   const nextTopic = activeIndex < topics.length - 1 ? topics[activeIndex + 1] : null;
 
+  useEffect(() => {
+    if (activeTopic && typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(
+          'codelol_last_visited_topic',
+          JSON.stringify({
+            id: activeTopic.id,
+            title: activeTopic.title,
+            chapter: activeTopic.chapter,
+            language: activeLang,
+            url: `/learn?lang=${activeLang}&topic=${activeTopic.id}`,
+          })
+        );
+      } catch {}
+    }
+  }, [activeTopic, activeLang]);
+
   const handleSelectTopic = useCallback(
     (topicId: string) => {
       setActiveTopicId(topicId);

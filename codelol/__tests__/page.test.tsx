@@ -20,6 +20,11 @@ test('renders Learn option on the home page', async () => {
   const page = await Home()
   render(page)
   
+  // Look for the primary hero CTA
+  const firstLessonLink = screen.getByRole('link', { name: /Start Your First Lesson/i })
+  expect(firstLessonLink).toBeDefined()
+  expect(firstLessonLink.getAttribute('href')).toBe('/learn')
+
   // Look for the heading of the card
   const learnHeading = screen.getByRole('heading', { name: /Learn/i })
   expect(learnHeading).toBeDefined()

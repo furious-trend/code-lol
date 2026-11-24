@@ -8,7 +8,8 @@ import { useMemeSound } from '@/hooks/useMemeSound';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
 import { Bugsy } from '@/components/Bugsy';
-import { Play, RotateCcw, Copy, Check, Terminal, CheckCircle2 } from 'lucide-react';
+import { Play, RotateCcw, Copy, Check, Terminal, CheckCircle2, Lightbulb } from 'lucide-react';
+import { translateBeginnerError } from '@/lib/beginnerErrors';
 
 interface InteractiveCompilerProps {
   initialCode: string;
@@ -221,11 +222,26 @@ export function InteractiveCompiler({
           )}
         </div>
 
-        <div className="p-4 min-h-[100px] max-h-[220px] overflow-y-auto font-mono text-xs sm:text-sm select-text custom-scrollbar">
+        <div className="p-4 min-h-[100px] max-h-[220px] overflow-y-auto text-xs sm:text-sm select-text custom-scrollbar">
           {error ? (
-            <pre className="text-rose-400 whitespace-pre-wrap break-words leading-relaxed">
-              {error}
-            </pre>
+            <div className="space-y-3">
+              {(() => {
+                const tip = translateBeginnerError(error, language);
+                if (!tip) return null;
+                return (
+                  <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200">
+                    <Lightbulb size={16} className="text-amber-400 shrink-0 mt-0.5" />
+                    <div className="text-xs sm:text-sm font-sans leading-relaxed">
+                      <span className="font-semibold text-amber-300">Beginner Tip ({tip.title}): </span>
+                      {tip.hint}
+                    </div>
+                  </div>
+                );
+              })()}
+              <pre className="font-mono text-rose-400 whitespace-pre-wrap break-words leading-relaxed">
+                {error}
+              </pre>
+            </div>
           ) : output ? (
             <pre className="text-cyan-300 whitespace-pre-wrap break-words leading-relaxed">
               {output}

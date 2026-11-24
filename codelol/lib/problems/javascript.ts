@@ -6,6 +6,26 @@ import { allLessons as jsLessons } from '../lessons/index';
 export const javascriptModuleProblems: ModuleProblem[] = [
   // Chapter 1: The Absolute Basics
   {
+    id: 'say-hello-to-js',
+    moduleId: 'ch1-hello-js',
+    chapterId: 'chapter-1-the-absolute-basics',
+    language: 'javascript',
+    tier: 'beginner',
+    title: 'Say Hello to JavaScript',
+    description: `Every developer's journey begins with sending a message to the console.
+
+### Task:
+Use \`console.log\` to print \`Hello CodeLOL\`.
+
+No functions or wrappers needed—just a clean single line of JavaScript!`,
+    starterCode: `// Write your console.log statement below\n`,
+    expectedOutput: 'Hello CodeLOL',
+    hints: {
+      english: "Use console.log(\"Hello CodeLOL\"); to print the exact greeting to the console.",
+      tamilRoast: "Quotes podama string ezhudhura? Output-la kekkuradhu 'Hello CodeLOL' mattum dhaan. console.log(\"Hello CodeLOL\") podu da!"
+    }
+  },
+  {
     id: 'js-ch1-l1',
     moduleId: '1',
     chapterId: 'chapter-1-the-absolute-basics',

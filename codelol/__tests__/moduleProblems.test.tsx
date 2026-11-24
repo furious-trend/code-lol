@@ -176,6 +176,15 @@ describe('2. Module-Aligned Problem Structure (lib/problems/)', () => {
     expect(p4?.hints.tamilRoast).toContain("Infinite loop pottu terminal-ah moochu mutta vikkatha da!");
   });
 
+  it('includes Level 0 starter problem for JavaScript', () => {
+    const jsProblems = getModuleProblems('javascript');
+    const hello = jsProblems.find(p => p.id === 'say-hello-to-js');
+    expect(hello).toBeDefined();
+    expect(hello?.title).toBe('Say Hello to JavaScript');
+    expect(hello?.expectedOutput).toBe('Hello CodeLOL');
+    expect(hello?.starterCode).toContain('console.log');
+  });
+
   it('retrieves an individual problem by ID and language', () => {
     const pyProblems = getModuleProblems('python');
     const firstPy = pyProblems[0];
