@@ -88,8 +88,8 @@ vi.mock('framer-motion', () => {
   const React = require('react');
   return {
     motion: {
-      button: require('react').forwardRef(({ children, whileHover, whileTap, ...props }: any, ref: any) => <button ref={ref} {...props}>{children}</button>),
-      div: require('react').forwardRef(({ children, animate, transition, ...props }: any, ref: any) => (
+      button: require('react').forwardRef(({ children, whileHover: _whileHover, whileTap: _whileTap, transition: _transition, ...props }: any, ref: any) => <button ref={ref} {...props}>{children}</button>),
+      div: require('react').forwardRef(({ children, animate, transition: _transition, ...props }: any, ref: any) => (
         <div ref={ref} data-testid="motion-div" data-animate={JSON.stringify(animate)} {...props}>{children}</div>
       ))
     },

@@ -85,7 +85,7 @@ export function DailyJokeCard({ initialJoke }: DailyJokeCardProps) {
       </div>
 
       <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800/60">
-        <span className="text-xs text-zinc-500 font-mono">dev_humor.exe</span>
+        <span className="text-xs text-zinc-400 font-mono font-medium">dev_humor.exe</span>
         <span className="text-2xl group-hover:scale-125 transition-transform duration-300 cursor-default">😂</span>
       </div>
     </div>

@@ -218,10 +218,10 @@ export default function ProblemsDashboardClient({
         {/* Stats & Dual-Gate Progress Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-4 sm:p-6 backdrop-blur">
           <div className="flex flex-col gap-1">
-            <span className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Module Mastery</span>
+            <span className="text-zinc-300 text-xs font-bold uppercase tracking-wider">Module Mastery</span>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl sm:text-3xl font-black text-amber-400">{stats.completedModules}</span>
-              <span className="text-zinc-500 text-sm font-medium">/ {stats.totalModules}</span>
+              <span className="text-zinc-400 text-sm font-medium">/ {stats.totalModules}</span>
             </div>
             <div className="w-full bg-zinc-800 rounded-full h-1.5 mt-1 overflow-hidden">
               <div
@@ -232,29 +232,29 @@ export default function ProblemsDashboardClient({
           </div>
 
           <div className="flex flex-col gap-1">
-            <span className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Lessons Read</span>
+            <span className="text-zinc-300 text-xs font-bold uppercase tracking-wider">Lessons Read</span>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl sm:text-3xl font-black text-blue-400">{stats.readLessons}</span>
-              <span className="text-zinc-500 text-sm font-medium">/ {stats.totalModules}</span>
+              <span className="text-zinc-400 text-sm font-medium">/ {stats.totalModules}</span>
             </div>
-            <span className="text-zinc-500 text-xs">Library topics studied</span>
+            <span className="text-zinc-400 text-xs">Library topics studied</span>
           </div>
 
           <div className="flex flex-col gap-1">
-            <span className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Challenges Solved</span>
+            <span className="text-zinc-300 text-xs font-bold uppercase tracking-wider">Challenges Solved</span>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl sm:text-3xl font-black text-green-400">{stats.solvedChallenges}</span>
-              <span className="text-zinc-500 text-sm font-medium">/ {stats.totalModules}</span>
+              <span className="text-zinc-400 text-sm font-medium">/ {stats.totalModules}</span>
             </div>
-            <span className="text-zinc-500 text-xs">Code harnesses passed</span>
+            <span className="text-zinc-400 text-xs">Code harnesses passed</span>
           </div>
 
           <div className="flex flex-col gap-1">
-            <span className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Complete Ratio</span>
+            <span className="text-zinc-300 text-xs font-bold uppercase tracking-wider">Complete Ratio</span>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl sm:text-3xl font-black text-purple-400">{stats.percent}%</span>
             </div>
-            <span className="text-zinc-500 text-xs">Both lesson & challenge done</span>
+            <span className="text-zinc-400 text-xs">Both lesson & challenge done</span>
           </div>
         </div>
 
@@ -281,7 +281,7 @@ export default function ProblemsDashboardClient({
             <h2 className="text-xl md:text-2xl font-bold text-blue-400 flex items-center gap-2">
               <Trophy size={24} className="text-yellow-400" />
               <span>{activeDifficulty} Map</span>
-              <span className="text-sm font-normal text-zinc-500">
+              <span className="text-sm font-normal text-zinc-400">
                 ({filteredGroups.length} Chapters in {activeLanguage.toUpperCase()})
               </span>
             </h2>
@@ -321,7 +321,7 @@ export default function ProblemsDashboardClient({
                         </span>
                         <div>
                           <h3 className="font-bold text-base sm:text-lg text-zinc-100">{group.chapterTitle}</h3>
-                          <span className="text-xs uppercase tracking-wider text-zinc-500 font-bold">
+                          <span className="text-xs uppercase tracking-wider text-zinc-400 font-bold">
                             {group.tier} Tier
                           </span>
                         </div>
@@ -370,7 +370,7 @@ export default function ProblemsDashboardClient({
                             <div className="space-y-2">
                               {/* Top Indicators */}
                               <div className="flex items-center justify-between text-xs">
-                                <span className="font-mono text-zinc-500 text-[11px]">
+                                <span className="font-mono text-zinc-400 text-[11px]">
                                   {problem.moduleId}
                                 </span>
 
@@ -387,7 +387,7 @@ export default function ProblemsDashboardClient({
                                     Lesson Read
                                   </span>
                                 ) : (
-                                  <span className="text-zinc-500 font-medium text-[11px]">
+                                  <span className="text-zinc-400 font-medium text-[11px]">
                                     Not Started
                                   </span>
                                 )}
@@ -408,8 +408,8 @@ export default function ProblemsDashboardClient({
                                 {/* Lesson Read Status */}
                                 <Link
                                   href={`/learn?lang=${activeLanguage}&topic=${problem.moduleId}`}
-                                  className={`flex items-center gap-1.5 transition-colors ${
-                                    isRead ? 'text-blue-400 hover:text-blue-300' : 'text-zinc-500 hover:text-zinc-300'
+                                  className={`flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded ${
+                                    isRead ? 'text-blue-400 hover:text-blue-300' : 'text-zinc-400 hover:text-zinc-200'
                                   }`}
                                   title="Read lesson on Learn"
                                 >
@@ -420,8 +420,8 @@ export default function ProblemsDashboardClient({
                                 {/* Challenge Solved Status */}
                                 <Link
                                   href={`/problems/${problem.id}?lang=${activeLanguage}`}
-                                  className={`flex items-center gap-1.5 transition-colors ${
-                                    isSolved ? 'text-green-400 hover:text-green-300' : 'text-zinc-500 hover:text-zinc-300'
+                                  className={`flex items-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded ${
+                                    isSolved ? 'text-green-400 hover:text-green-300' : 'text-zinc-400 hover:text-zinc-200'
                                   }`}
                                   title="Solve coding challenge"
                                 >

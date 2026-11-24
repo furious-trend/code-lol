@@ -128,7 +128,7 @@ export function LibrarySidebar({
       {/* Chapters & Topics List */}
       <div className="flex-1 overflow-y-auto px-2.5 py-3 space-y-4 custom-scrollbar text-sm">
         {groupedChapters.length === 0 ? (
-          <div className="p-6 text-center text-zinc-500 text-xs">
+          <div className="p-6 text-center text-zinc-400 text-xs">
             No topics found matching &quot;{searchQuery}&quot;
           </div>
         ) : (
@@ -197,7 +197,7 @@ export function LibrarySidebar({
       </div>
 
       {/* Footer Stats */}
-      <div className="p-3 border-t border-zinc-900 bg-zinc-950/80 text-xs text-zinc-500 flex items-center justify-between">
+      <div className="p-3 border-t border-zinc-900 bg-zinc-950/80 text-xs text-zinc-400 flex items-center justify-between">
         <span className="flex items-center gap-1.5">
           <BookOpen size={14} className="text-violet-400" />
           <span>{topics.length} topics</span>

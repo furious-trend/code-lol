@@ -33,14 +33,10 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)] p-4 sm:p-6 md:p-12 gap-12 text-zinc-50 font-sans relative">
       <WelcomeToast />
-      {/* Iconic Funny Transparent Background (Home Page Only) */}
-      <div className="fixed bottom-0 right-10 z-[0] opacity-10 pointer-events-none w-[300px] md:w-[600px] mix-blend-screen">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
-          src="https://media.tenor.com/Yw_A_J8u9T0AAAAi/bongo-cat-transparent.gif" 
-          alt="Funny Transparent Background" 
-          className="w-full h-auto drop-shadow-2xl"
-        />
+      {/* Decorative Arcade Background Ambient Mesh & Grid */}
+      <div className="fixed inset-0 z-[0] pointer-events-none overflow-hidden" aria-hidden="true">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-purple-600/10 via-pink-600/10 to-indigo-600/10 blur-[130px] rounded-full" />
+        <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] opacity-40" />
       </div>
       
       {/* Hero Section */}

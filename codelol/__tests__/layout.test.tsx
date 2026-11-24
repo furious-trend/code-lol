@@ -21,20 +21,28 @@ vi.mock('@/components/ConditionalLayout', () => ({
 
 describe('RootLayout', () => {
   it('renders children, Navbar, AmbientJoke, and the scanline overlay', () => {
-    // Note: Render root layout directly inside testing-library (which wraps it in body/div). 
-    // It might output multiple HTML tags so we can just check DOM content.
-    render(
-      <RootLayout>
-        <div data-testid="mock-children">Test Children</div>
-      </RootLayout>
-    );
+    const originalError = console.error;
+    console.error = (...args: any[]) => {
+      if (typeof args[0] === 'string' && args[0].includes('cannot be a child of')) return;
+      originalError(...args);
+    };
 
-    // Verify children are rendered
-    expect(screen.getByTestId('mock-children')).toBeDefined();
-    
-    // Verify scanline overlay is present by its data-testid
-    const scanline = screen.getByTestId('scanline-overlay');
-    expect(scanline).toBeDefined();
-    expect(scanline.className).toContain('bg-[radial-gradient');
+    try {
+      render(
+        <RootLayout>
+          <div data-testid="mock-children">Test Children</div>
+        </RootLayout>
+      );
+
+      // Verify children are rendered
+      expect(screen.getByTestId('mock-children')).toBeDefined();
+      
+      // Verify scanline overlay is present by its data-testid
+      const scanline = screen.getByTestId('scanline-overlay');
+      expect(scanline).toBeDefined();
+      expect(scanline.className).toContain('bg-[radial-gradient');
+    } finally {
+      console.error = originalError;
+    }
   });
 });

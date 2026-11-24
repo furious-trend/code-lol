@@ -17,10 +17,16 @@ vi.mock('@/lib/supabase/client', () => ({
 // Mock framer-motion
 vi.mock('framer-motion', () => {
   const React = require('react');
+  const motionKeys = new Set(['layoutId', 'whileHover', 'whileTap', 'transition', 'initial', 'animate', 'exit', 'variants']);
   const motion = new Proxy({}, {
     get: (_t: unknown, tag: string) =>
-      ({ children, ...props }: Record<string, unknown>) =>
-        React.createElement(tag, props, children),
+      ({ children, ...props }: Record<string, unknown>) => {
+        const cleanProps: Record<string, unknown> = {};
+        for (const [k, v] of Object.entries(props)) {
+          if (!motionKeys.has(k)) cleanProps[k] = v;
+        }
+        return React.createElement(tag, cleanProps, children);
+      },
   });
   return { motion, AnimatePresence: ({ children }: { children: unknown }) => children };
 });

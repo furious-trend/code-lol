@@ -750,7 +750,7 @@ let _log = [];
         <div className={`flex-1 p-6 md:p-10 overflow-y-auto ${mobileTab === 'desc' ? 'block' : 'hidden lg:block'}`}>
           <div className="mb-6 pb-6 border-b border-zinc-800">
             <div className="flex items-center justify-between mb-4">
-              <Link href={`/problems?lang=${activeLang}`} className="text-zinc-500 hover:text-blue-400 inline-block font-medium transition-colors text-sm">
+              <Link href={`/problems?lang=${activeLang}`} className="text-zinc-400 hover:text-blue-400 inline-block font-medium transition-colors text-sm">
                 ← Back to Problems ({activeLang.toUpperCase()})
               </Link>
               {moduleId && (
@@ -763,7 +763,7 @@ let _log = [];
                     className="text-xs text-zinc-400 hover:text-blue-400 flex items-center gap-1 transition-colors font-medium"
                   >
                     <span>Curriculum Lesson 📖</span>
-                    {isLessonRead ? <span className="text-green-400">✅</span> : <span className="text-zinc-500">○</span>}
+                    {isLessonRead ? <span className="text-green-400">✅</span> : <span className="text-zinc-400">○</span>}
                   </Link>
                 </div>
               )}
@@ -827,7 +827,7 @@ let _log = [];
                 className={`pb-3 text-sm font-bold border-b-2 transition-all flex items-center gap-2 ${
                   activeWorkspaceTab === 'problem'
                     ? 'border-blue-500 text-blue-400'
-                    : 'border-transparent text-zinc-500 hover:text-zinc-300'
+                    : 'border-transparent text-zinc-400 hover:text-zinc-200'
                 }`}
               >
                 <span>📝 Problem Description</span>
@@ -838,7 +838,7 @@ let _log = [];
                 className={`pb-3 text-sm font-bold border-b-2 transition-all flex items-center gap-2 ${
                   activeWorkspaceTab === 'solution'
                     ? 'border-emerald-500 text-emerald-400'
-                    : 'border-transparent text-zinc-500 hover:text-zinc-300'
+                    : 'border-transparent text-zinc-400 hover:text-zinc-200'
                 }`}
               >
                 <span>{isSolved ? '🔓 Solution & Breakdown' : isForfeited ? '🏳️ Solution (Forfeited)' : '🔒 Official Solution'}</span>
@@ -871,7 +871,7 @@ let _log = [];
                   className="flex items-center justify-between w-full font-bold text-sm text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2">💡 Progressive Hints</span>
-                  <span className="text-xs text-zinc-500 font-semibold">{showHints ? 'Hide Hints' : 'Reveal Hints'}</span>
+                  <span className="text-xs text-zinc-400 font-semibold">{showHints ? 'Hide Hints' : 'Reveal Hints'}</span>
                 </button>
                 {showHints && (
                   <div className="mt-4 space-y-4 text-xs sm:text-sm text-zinc-300 animate-in fade-in duration-200">
@@ -903,7 +903,7 @@ let _log = [];
                           {refSolution.syntaxClue}
                         </p>
                       ) : (
-                        <p className="text-zinc-500 text-xs mt-1 italic">Click above if you need the exact function or operator syntax.</p>
+                        <p className="text-zinc-400 text-xs mt-1 italic">Click above if you need the exact function or operator syntax.</p>
                       )}
                     </div>
 
@@ -916,7 +916,7 @@ let _log = [];
 
                     {!isSolved && !isForfeited && (
                       <div className="pt-2 border-t border-zinc-800/80 flex items-center justify-between">
-                        <span className="text-[11px] text-zinc-500">Still stuck after hints?</span>
+                        <span className="text-[11px] text-zinc-400">Still stuck after hints?</span>
                         <button
                           type="button"
                           onClick={() => setShowForfeitModal(true)}
@@ -939,7 +939,7 @@ let _log = [];
                       <p className="text-sm font-bold text-zinc-200">
                         {isSolved ? 'Official Solution Unlocked!' : 'Solution Revealed (Forfeited)'}
                       </p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-xs text-zinc-400">
                         {isSolved ? 'Compare your algorithm with the reference solution.' : 'Reviewed with 0 XP awarded.'}
                       </p>
                     </div>
@@ -1140,7 +1140,7 @@ let _log = [];
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 {activeLang === 'python' ? 'main.py' : activeLang === 'c' ? 'main.c' : activeLang === 'cpp' ? 'main.cpp' : activeLang === 'java' ? 'Main.java' : 'index.js'}
               </h3>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-zinc-500 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
+              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono text-zinc-400 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
                 <kbd className="text-zinc-400">Ctrl</kbd>+<kbd className="text-zinc-400">Enter</kbd> to Run
               </span>
             </div>
@@ -1191,7 +1191,7 @@ let _log = [];
               : ''
           }`}
         >
-          <h3 className="font-bold text-zinc-500 mb-4 uppercase tracking-wider text-sm border-b border-zinc-800 pb-2">Execution Output & Roast</h3>
+          <h3 className="font-bold text-zinc-400 mb-4 uppercase tracking-wider text-sm border-b border-zinc-800 pb-2">Execution Output & Roast</h3>
           
           {/* Beginner Friendly Guidance Tip */}
           {beginnerTip && (
