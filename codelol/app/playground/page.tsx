@@ -1,9 +1,10 @@
+// agent-notes: { ctx: "Interactive multi-language Playground with drafts, beginner error tips, and AI roasts", deps: ["@monaco-editor/react", "@/lib/executor", "@/lib/beginnerErrors", "@/hooks/useRoast"], state: "active", last: "sato@2026-11-26" }
 'use client'
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import Editor, { loader } from '@monaco-editor/react';
+import Editor from '@monaco-editor/react';
 import { getAllLessons } from '@/lib/lessons/index';
 
 
@@ -32,20 +33,23 @@ const FILE_EXT: Record<string, string> = {
   java: 'Main.java'
 };
 
+/** Returns saved localStorage draft for the given language or falls back to its starter template. */
+function resolvePlaygroundCode(lang: string): string {
+  if (typeof window !== 'undefined') {
+    try {
+      const saved = localStorage.getItem(`draft_playground_${lang}`);
+      if (saved && saved.trim().length > 0) return saved;
+    } catch {}
+  }
+  return STARTER_CODE[lang] || STARTER_CODE['javascript'];
+}
+
 function PlaygroundContent() {
   const searchParams = useSearchParams();
   const snippetId = searchParams.get('snippet');
   
   const [language, setLanguage] = useState<string>('javascript');
-  const [code, setCode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('draft_playground_javascript');
-        if (saved && saved.trim().length > 0) return saved;
-      } catch {}
-    }
-    return STARTER_CODE['javascript'];
-  });
+  const [code, setCode] = useState(() => resolvePlaygroundCode('javascript'));
   const [output, setOutput] = useState('');
   const [mobileTab, setMobileTab] = useState<'editor' | 'output'>('editor');
   const [isRunning, setIsRunning] = useState(false);
@@ -54,7 +58,6 @@ function PlaygroundContent() {
   const [emptyMsg, setEmptyMsg] = useState("Run your code to see results and get roasted!");
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
   const { playMemeSound } = useMemeSound();
-  const supabase = createClient();
   const [humorPref, setHumorPref] = useState<'general' | 'tamil'>('general');
   const [learningLanguage, setLearningLanguage] = useState<string>('javascript');
 
@@ -89,7 +92,7 @@ function PlaygroundContent() {
           setLearningLanguage(profile.learning_language);
           if (!snippetId) {
             setLanguage(profile.learning_language);
-            setCode(STARTER_CODE[profile.learning_language] || STARTER_CODE['javascript']);
+            setCode(resolvePlaygroundCode(profile.learning_language));
           }
         }
       } else {
@@ -103,7 +106,7 @@ function PlaygroundContent() {
           setLearningLanguage(storedLang);
           if (!snippetId) {
             setLanguage(storedLang);
-            setCode(STARTER_CODE[storedLang] || STARTER_CODE['javascript']);
+            setCode(resolvePlaygroundCode(storedLang));
           }
         }
       }
@@ -193,16 +196,7 @@ function PlaygroundContent() {
               const newLang = e.target.value;
               setLanguage(newLang);
               setLearningLanguage(newLang);
-              if (typeof window !== 'undefined') {
-                try {
-                  const saved = localStorage.getItem(`draft_playground_${newLang}`);
-                  if (saved && saved.trim().length > 0) {
-                    setCode(saved);
-                    return;
-                  }
-                } catch {}
-              }
-              setCode(STARTER_CODE[newLang] || STARTER_CODE['javascript']);
+              setCode(resolvePlaygroundCode(newLang));
             }}
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer"
           >
@@ -326,10 +320,10 @@ function PlaygroundContent() {
         </div>
 
         {/* Output Console Area */}
-        <div className={`lg:w-1/3 flex-col gap-4 h-full lg:h-auto shrink-0 relative ${mobileTab === 'output' ? 'flex min-h-[300px]' : 'hidden lg:flex'}`}>
+        <div className={`lg:w-1/3 flex-col gap-4 h-full lg:h-auto shrink-0 ${mobileTab === 'output' ? 'flex min-h-[300px]' : 'hidden lg:flex'}`}>
           {/* Beginner Friendly Guidance Tip */}
           {beginnerTip && (
-            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-2.5 shadow-sm">
+            <div data-testid="playground-beginner-tip" className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-2.5 shadow-sm shrink-0">
               <span className="text-base flex-shrink-0">💡</span>
               <div>
                 <p className="font-extrabold text-amber-300 uppercase tracking-wider">{beginnerTip.title}</p>
@@ -337,6 +331,7 @@ function PlaygroundContent() {
               </div>
             </div>
           )}
+          <div data-testid="playground-roast-stage" className="relative flex-1 min-h-[200px]">
           <AnimatePresence mode="wait">
             {isRoasting && (
               <motion.div 
@@ -408,6 +403,7 @@ function PlaygroundContent() {
               </motion.div>
             )}
           </AnimatePresence>
+          </div>
         </div>
         
       </div>

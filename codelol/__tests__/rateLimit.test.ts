@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { checkRateLimit, RATE_LIMIT_ERROR } from '../lib/rateLimit';
+import { checkRateLimit, checkGuestRateLimit, RATE_LIMIT_ERROR } from '../lib/rateLimit';
 import { createClient } from '@/lib/supabase/server';
 
 vi.mock('@/lib/supabase/server', () => ({
@@ -63,5 +63,32 @@ describe('Supabase checkRateLimit', () => {
       p_max: 10,
       p_window_seconds: 60,
     });
+  });
+});
+
+describe('checkGuestRateLimit (in-memory guest throttling)', () => {
+  it('allows guest requests up to maxRequests and blocks when exceeded', () => {
+    const key = `guest-test-${Date.now()}-${Math.random()}`;
+    expect(checkGuestRateLimit(key, 2, 60_000).allowed).toBe(true);
+    expect(checkGuestRateLimit(key, 2, 60_000).allowed).toBe(true);
+
+    const blocked = checkGuestRateLimit(key, 2, 60_000);
+    expect(blocked.allowed).toBe(false);
+    expect(blocked.success).toBe(false);
+    expect(blocked.error).toBe(RATE_LIMIT_ERROR);
+  });
+
+  it('resets guest bucket once window expires', () => {
+    vi.useFakeTimers();
+    try {
+      const key = 'guest-window-reset';
+      expect(checkGuestRateLimit(key, 1, 1000).allowed).toBe(true);
+      expect(checkGuestRateLimit(key, 1, 1000).allowed).toBe(false);
+
+      vi.advanceTimersByTime(1100);
+      expect(checkGuestRateLimit(key, 1, 1000).allowed).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

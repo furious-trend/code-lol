@@ -1,9 +1,9 @@
-// agent-notes: { ctx: "App Router SEO sitemap.ts generating dynamic XML sitemap", deps: ["next", "@/lib/problems"], state: active, last: "antigravity@2026-11-24" }
+// agent-notes: { ctx: "App Router SEO sitemap.ts generating dynamic XML sitemap", deps: ["next", "@/lib/problems"], state: "active", last: "sato@2026-11-26" }
 import type { MetadataRoute } from 'next';
 import { getModuleProblems } from '@/lib/problems';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://codelol.dev';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://code-lol-three.vercel.app';
 
   const routes: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },

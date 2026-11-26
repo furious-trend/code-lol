@@ -163,6 +163,51 @@ CREATE TABLE IF NOT EXISTS public.api_rate_limits (
   window_start timestamptz DEFAULT now()
 );
 
+-- 1.10 Per-Route Rate Limits Table & RPC (Used by /api/run and /api/roast)
+CREATE TABLE IF NOT EXISTS public.rate_limits (
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  route text NOT NULL,
+  window_start timestamptz NOT NULL,
+  count int NOT NULL DEFAULT 1,
+  PRIMARY KEY (user_id, route, window_start)
+);
+
+CREATE OR REPLACE FUNCTION public.check_rate_limit(
+  p_route text,
+  p_max int,
+  p_window_seconds int
+)
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_user_id uuid;
+  v_window_start timestamptz;
+  v_count int;
+BEGIN
+  v_user_id := auth.uid();
+  IF v_user_id IS NULL THEN
+    RETURN false;
+  END IF;
+
+  IF p_window_seconds <= 0 THEN
+    p_window_seconds := 60;
+  END IF;
+
+  v_window_start := to_timestamp(floor(extract(epoch from now()) / p_window_seconds) * p_window_seconds);
+
+  INSERT INTO public.rate_limits (user_id, route, window_start, count)
+  VALUES (v_user_id, p_route, v_window_start, 1)
+  ON CONFLICT (user_id, route, window_start)
+  DO UPDATE SET count = public.rate_limits.count + 1
+  RETURNING count INTO v_count;
+
+  RETURN v_count <= p_max;
+END;
+$$;
+
 -- ==========================================
 -- 2. ROW LEVEL SECURITY (RLS) POLICIES
 -- ==========================================
@@ -175,6 +220,7 @@ ALTER TABLE public.library_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.battles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.battle_participants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.api_rate_limits ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.rate_limits ENABLE ROW LEVEL SECURITY;
 
 -- 2.1 Profiles Policies
 DROP POLICY IF EXISTS "Public profiles are viewable by everyone" ON public.profiles;

@@ -1,5 +1,6 @@
 import { POST } from '../app/api/roast/route';
-import { checkRateLimit } from '../lib/rateLimit';
+import { checkRateLimit, checkGuestRateLimit } from '../lib/rateLimit';
+import { createClient } from '@/lib/supabase/server';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // Mock dependencies
@@ -10,7 +11,8 @@ vi.mock('@/lib/supabase/server', () => ({
 }));
 
 vi.mock('../lib/rateLimit', () => ({
-  checkRateLimit: vi.fn(() => ({ success: true, allowed: true }))
+  checkRateLimit: vi.fn(() => ({ success: true, allowed: true })),
+  checkGuestRateLimit: vi.fn(() => ({ success: true, allowed: true })),
 }));
 
 describe('/api/roast route', () => {
@@ -101,5 +103,46 @@ describe('/api/roast route', () => {
     expect(response.status).toBe(429);
     const data = await response.json();
     expect(data.error).toBe('Slow down! Too many requests, try again in a minute 🐢');
+  });
+
+  it('uses checkGuestRateLimit and succeeds for unauthenticated guest users under limit', async () => {
+    (createClient as any).mockResolvedValueOnce({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+      },
+      rpc: vi.fn().mockResolvedValue({ data: false, error: null }),
+    });
+    (checkGuestRateLimit as any).mockReturnValueOnce({ success: true, allowed: true });
+
+    const request = new Request('http://localhost:3000/api/roast', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-forwarded-for': '203.0.113.1' },
+      body: JSON.stringify({ code: 'console.log("hi")', output: 'hi', isSuccess: true, language: 'javascript' }),
+    });
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    expect(checkGuestRateLimit).toHaveBeenCalledWith('roast:203.0.113.1', 20, 60_000);
+  });
+
+  it('returns 429 when guest rate limit is exceeded', async () => {
+    (createClient as any).mockResolvedValueOnce({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+      },
+      rpc: vi.fn().mockResolvedValue({ data: false, error: null }),
+    });
+    (checkGuestRateLimit as any).mockReturnValueOnce({
+      success: false,
+      allowed: false,
+      error: 'Slow down! Too many requests, try again in a minute 🐢',
+    });
+
+    const request = new Request('http://localhost:3000/api/roast', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: 'console.log("hi")', output: 'hi', isSuccess: true }),
+    });
+    const response = await POST(request);
+    expect(response.status).toBe(429);
   });
 });

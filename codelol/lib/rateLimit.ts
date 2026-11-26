@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Supabase-backed rate limiting per user ID via check_rate_limit Postgres function", deps: ["@/lib/supabase/server"], state: active, last: "antigravity@2026-11-24" }
+// agent-notes: { ctx: "Supabase-backed user rate limiting and in-memory guest rate limiting", deps: ["@/lib/supabase/server"], state: "active", last: "sato@2026-11-26" }
 import { createClient } from '@/lib/supabase/server';
 
 export interface RateLimitResult {
@@ -8,6 +8,38 @@ export interface RateLimitResult {
 }
 
 export const RATE_LIMIT_ERROR = 'Slow down! Too many requests, try again in a minute 🐢';
+
+const guestBuckets = new Map<string, { count: number; resetAt: number }>();
+
+/** Throttles unauthenticated guest requests per key in a bounded in-memory window. */
+export function checkGuestRateLimit(
+  key: string,
+  maxRequests: number = 20,
+  windowMs: number = 60_000
+): RateLimitResult {
+  const now = Date.now();
+  const safeMax = maxRequests > 0 ? maxRequests : 20;
+  const safeWindow = windowMs > 0 ? windowMs : 60_000;
+
+  if (guestBuckets.size > 5000) {
+    for (const [k, v] of guestBuckets.entries()) {
+      if (now >= v.resetAt) guestBuckets.delete(k);
+    }
+  }
+
+  const existing = guestBuckets.get(key);
+  if (!existing || now >= existing.resetAt) {
+    guestBuckets.set(key, { count: 1, resetAt: now + safeWindow });
+    return { success: true, allowed: true };
+  }
+
+  if (existing.count >= safeMax) {
+    return { success: false, allowed: false, error: RATE_LIMIT_ERROR };
+  }
+
+  existing.count += 1;
+  return { success: true, allowed: true };
+}
 
 export async function checkRateLimit(
   clientOrRoute?: any,

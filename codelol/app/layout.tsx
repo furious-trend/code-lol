@@ -1,3 +1,4 @@
+// agent-notes: { ctx: "Root layout with metadata, theme surface, conditional Navbar and AmbientJoke", deps: ["./globals.css", "@/components/Navbar", "@/components/AmbientJoke", "@/components/ConditionalLayout"], state: "active", last: "sato@2026-11-26" }
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     title: "CodeLOL — Learn to Code with Humor & Memes",
     description: "An interactive, gamified platform to learn programming with AI roasts, meme sounds, and multiplayer coding battles.",
     type: "website",
-    url: "https://code-lol-three.vercel.app",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://code-lol-three.vercel.app",
     siteName: "CodeLOL",
   },
   twitter: {
