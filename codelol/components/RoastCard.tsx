@@ -1,4 +1,4 @@
-// agent-notes: { ctx: "Comic speech-bubble card displaying Bugsy, roast, fix, and gif", deps: ["@/lib/moodToGif", "@/components/Bugsy"], state: active, last: "sato@2026-09-23" }
+// agent-notes: { ctx: "Comic speech-bubble card displaying Bugsy, roast, fix, and gif with dynamic language support", deps: ["@/lib/moodToGif", "@/components/Bugsy"], state: active, last: "dani@2026-11-27" }
 import { RoastMood } from '@/lib/moodToGif';
 import Editor from '@monaco-editor/react';
 import { Bugsy } from './Bugsy';
@@ -10,13 +10,15 @@ interface RoastCardProps {
   mood: RoastMood;
   gifUrl: string;
   output?: string;
+  language?: string;
+  source?: 'browser-ai' | 'server-fallback';
   onDismiss: () => void;
   onReplayAudio?: () => void;
 }
 
-export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio }: RoastCardProps) {
+export function RoastCard({ roast, fix, gifUrl, output, language = 'javascript', source, onDismiss, onReplayAudio }: RoastCardProps) {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 items-start w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="flex flex-col sm:flex-row gap-4 items-start w-full motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 duration-500">
       
       {/* Bugsy Avatar */}
       <div className="hidden sm:flex flex-col items-center gap-2 pt-4">
@@ -33,16 +35,38 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
           <div className="flex items-center gap-2">
             <span className="sm:hidden"><Bugsy size={24} mood={fix ? 'laughing' : 'happy'} /></span>
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-              {!fix ? '✅ Bugsy Says...' : '🔥 Roast Time!'}
+              {/* Critical fix: hide decorative emoji from AT (Dani #3) */}
+              <span aria-hidden="true">{!fix ? '✅ ' : '🔥 '}</span>
+              {!fix ? 'Bugsy Says...' : 'Roast Time!'}
             </span>
+            {source && (
+              <span className={`text-[9px] px-1.5 py-0.5 rounded-full border font-mono ${
+                source === 'browser-ai'
+                  ? 'border-purple-500/40 text-purple-400 bg-purple-900/20'
+                  : 'border-zinc-600 text-zinc-500'
+              }`} aria-label={source === 'browser-ai' ? 'On-device AI' : 'Server AI'}>
+                <span aria-hidden="true">{source === 'browser-ai' ? '🧠 on-device AI' : '☁ server'}</span>
+              </span>
+            )}
           </div>
           <div className="flex gap-4">
             {onReplayAudio && (
-              <button onClick={onReplayAudio} className="text-xs text-amber-400 hover:text-amber-200 transition-colors flex items-center gap-1">
-                🔊 Replay
+              /* Critical fix: clean accessible name, emoji aria-hidden (Dani #3) */
+              <button
+                onClick={onReplayAudio}
+                aria-label="Replay audio"
+                className="text-xs text-amber-400 hover:text-amber-200 transition-colors flex items-center gap-1"
+              >
+                <span aria-hidden="true">🔊</span> Replay
               </button>
             )}
-            <button onClick={onDismiss} className="text-xs text-amber-500 hover:text-amber-300 transition-colors font-bold">Dismiss</button>
+            <button
+              onClick={onDismiss}
+              aria-label="Dismiss roast"
+              className="text-xs text-amber-500 hover:text-amber-300 transition-colors font-bold"
+            >
+              Dismiss
+            </button>
           </div>
         </div>
         
@@ -62,12 +86,13 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
           
           {gifUrl && (
             <div className="w-full rounded-xl overflow-hidden border-2 border-amber-500/20 bg-zinc-950 flex justify-center">
+              {/* Important fix: contextual alt text, reduced-motion guard (Dani #4 & #5) */}
               <motion.img 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
                 src={gifUrl} 
-                alt="Reaction GIF" 
+                alt="Bugsy reacting to your code"
                 className="w-full h-auto object-contain max-h-[300px]" 
                 onError={(e) => {
                   const target = e.currentTarget;
@@ -83,13 +108,13 @@ export function RoastCard({ roast, fix, gifUrl, output, onDismiss, onReplayAudio
           {fix && (
             <details className="mt-2 group">
               <summary className="text-sm text-amber-400 font-bold cursor-pointer hover:text-amber-300 mb-2 list-none flex items-center gap-2 bg-amber-500/10 p-2 rounded-lg inline-flex">
-                <span className="group-open:rotate-90 transition-transform text-xs">▶</span>
+                <span className="group-open:rotate-90 transition-transform text-xs" aria-hidden="true">▶</span>
                 SEE THE FIX
               </summary>
               <div className="border-2 border-amber-500/20 rounded-xl overflow-hidden h-48 bg-zinc-950">
                 <Editor
                   height="100%"
-                  language="javascript"
+                  language={language}
                   theme="vs-dark"
                   value={fix}
                   options={{

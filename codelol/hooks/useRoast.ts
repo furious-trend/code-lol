@@ -1,12 +1,15 @@
-// agent-notes: { ctx: "Custom hook for dispatching code roasts and handling animation states", deps: ["@/lib/moodToGif"], state: active, last: "sato@2026-10-31" }
-import { useState, useCallback } from 'react';
-import { RoastMood, moodToGifKeyword } from '@/lib/moodToGif';
+// agent-notes: { ctx: "Custom hook for dispatching code roasts via AI-first path with /api/roast server fallback", deps: ["@/lib/moodToGif", "@/lib/codelolAi", "@/lib/localGifs"], state: active, last: "sato@2026-11-26" }
+import { useState, useCallback, useRef } from 'react';
+import { RoastMood } from '@/lib/moodToGif';
+import { getAiStatusSnapshot, getCodeFeedback, normalizeAiLang, normalizeAiProg } from '@/lib/codelolAi';
 
-interface RoastResult {
+export interface RoastResult {
   roast: string;
   fix: string;
   mood: RoastMood;
   gifUrl: string;
+  source?: 'browser-ai' | 'server-fallback';
+  verdict?: 'roast' | 'praise';
 }
 
 export function useRoast() {
@@ -14,8 +17,9 @@ export function useRoast() {
   const [roastStatus, setRoastStatus] = useState<string>('');
   const [roastData, setRoastData] = useState<RoastResult | null>(null);
   const [roastError, setRoastError] = useState<string>('');
-  
 
+  // Monotonic run-id for stale-result guard
+  const runIdRef = useRef(0);
 
   const clearRoast = () => {
     setRoastData(null);
@@ -35,19 +39,57 @@ export function useRoast() {
       return;
     }
 
+    const myRunId = ++runIdRef.current;
+
     setRoastError('');
     setRoastData(null);
     setRoastStatus('Roasting your code... 🔥');
-    
+
     let isDone = false;
     const timeoutId = setTimeout(() => {
       if (!isDone) {
         setIsRoasting(true);
       }
     }, 500);
-    
+
     try {
-      // 1. Fetch the roast from API
+      const aiSnap = getAiStatusSnapshot();
+      const useAi = aiSnap.status === 'ready';
+
+      if (useAi) {
+        try {
+          const feedback = await getCodeFeedback({
+            lang: normalizeAiLang(humorPref === 'tamil' ? 'ta-Latn' : 'en'),
+            prog: normalizeAiProg(language ?? 'javascript'),
+            expected: 'N/A',
+            actual: output ?? '',
+            error: output ?? '',
+            code,
+          });
+
+          if (runIdRef.current !== myRunId) return; // stale
+
+          let gifUrl = '';
+          try {
+            const { getResultGif } = await import('@/lib/localGifs');
+            gifUrl = getResultGif(!!isSuccess, humorPref);
+          } catch { /* ignore */ }
+
+          setRoastData({
+            roast: feedback.joke,
+            fix: '',
+            mood: feedback.type === 'roast' ? 'facepalm' : 'happy',
+            gifUrl,
+            source: 'browser-ai',
+            verdict: feedback.condition_satisfied ? 'praise' : 'roast',
+          });
+          return;
+        } catch {
+          // AI failed — fall through to server
+        }
+      }
+
+      // Server fallback path
       const roastRes = await fetch('/api/roast', {
         method: 'POST',
         headers: {
@@ -55,14 +97,15 @@ export function useRoast() {
         },
         body: JSON.stringify({ code, output, isSuccess, humorPref, language }),
       });
-      
+
       const roastResponseData = await roastRes.json();
-      
+
       if (!roastRes.ok) {
         throw new Error(roastResponseData.error || 'Failed to connect to the roasting service.');
       }
 
-      // 2. Assign a local GIF based on success/failure
+      if (runIdRef.current !== myRunId) return; // stale
+
       const mood: RoastMood = roastResponseData.mood || 'facepalm';
       let gifUrl = '';
       try {
@@ -76,12 +119,14 @@ export function useRoast() {
         roast: roastResponseData.roast,
         fix: roastResponseData.fix,
         mood: mood,
-        gifUrl: gifUrl
+        gifUrl: gifUrl,
+        source: 'server-fallback',
       };
 
       setRoastData(finalResult);
-      
+
     } catch (err) {
+      if (runIdRef.current !== myRunId) return;
       setRoastError(err instanceof Error ? err.message : 'An unexpected error occurred.');
     } finally {
       isDone = true;

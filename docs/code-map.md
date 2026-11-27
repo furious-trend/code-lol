@@ -37,6 +37,10 @@ User Request (Browser)
    │
    └── [Feedback & Roast Pipeline]
           ├── Execution Output / Error
+          ├── lib/codelolAi.ts ── In-browser wllama AI roast (HF GGUF, OPFS cache, 100% client-side)
+          ├── hooks/useRoast.ts ─ AI-first dispatch with /api/roast server fallback + stale-run guard
+          ├── components/AiRoastControls.tsx ── Lazy load toggle, progressbar, language selector, a11y
+          ├── components/RoastCard.tsx ── Roast/praise card, dynamic language prop, source badge
           ├── lib/fallbackRoasts.ts ── General or Tamil roast/celebration line
           └── lib/gifManifest.json ── Supabase Storage GIF reaction
 ```
@@ -64,10 +68,15 @@ app/
 
 lib/
   ├── executor.ts ────────── (Sandboxed iframe JS runner + compiled language dispatcher)
+  ├── codelolAi.ts ──────── (In-browser wllama AI service: HF GGUF lazy-load, OPFS caching, getCodeFeedback)
   ├── problems/ ──────────── (Multi-language challenge repositories: python, js, c, cpp, java)
   ├── progress.ts ────────── (Module completion status: not_started, lesson_read, challenge_solved, completed)
   ├── python/curriculum.ts ─ (15 chapters, 45 modular python lessons with dual-humor)
   └── supabase/ ──────────── (Server, client, and edge middleware clients)
+
+components/
+  ├── AiRoastControls.tsx ── (Lazy AI model load toggle, progressbar, language toggle, error/cache states)
+  └── RoastCard.tsx ──────── (Roast/praise card: dynamic language prop, source badge, a11y-fixed)
 ```
 
 ---
@@ -103,7 +112,7 @@ lib/
 
 ---
 
-## Complete Test Inventory (41 Suites, 192 Passing Tests)
+## Complete Test Inventory (50 Suites, 281 Passing Tests)
 
 | Subsystem | Test Files | Focus |
 |---|---|---|
@@ -113,5 +122,6 @@ lib/
 | **Problems & Dashboard**| `__tests__/moduleProblems.test.tsx`<br>`__tests__/problemsDashboard.test.tsx`<br>`__tests__/problems.ui.test.tsx`<br>`__tests__/multi-language-switching.test.tsx` | Language switching, chapter grouping, dual-gate completion, hints |
 | **Social & Battles** | `__tests__/battles.test.ts`<br>`__tests__/useBattle.test.tsx`<br>`__tests__/friends.test.ts`<br>`__tests__/friends.ui.test.tsx`<br>`__tests__/friendbell.ui.test.tsx`<br>`__tests__/messages.test.ts`<br>`__tests__/messages.ui.test.tsx` | Realtime 1v1 match lifecycle, friend requests, notifications, direct chat |
 | **Humor & Sounds** | `__tests__/roast.route.test.ts`<br>`__tests__/fallbackRoasts.test.ts`<br>`__tests__/useRoast.test.ts`<br>`__tests__/useMemeSound.test.ts`<br>`__tests__/useMicroCelebration.test.ts`<br>`__tests__/localGifs.test.ts` | General vs. Tamil fallback humor, audio trigger pipelines, GIF lookups |
+| **In-Browser AI (S2)** | `__tests__/codelolAi.test.ts`<br>`__tests__/isolationHeaders.test.ts`<br>`__tests__/roastCard.ui.test.tsx`<br>`__tests__/interactiveCompilerAi.ui.test.tsx` | wllama service, COOP/COEP headers, AiRoastControls a11y, InteractiveCompiler AI wiring |
 | **Leaderboard & Profile**| `__tests__/leaderboard.test.tsx`<br>`__tests__/leaderboard-realtime.test.tsx`<br>`__tests__/settings.test.tsx`<br>`__tests__/onboarding.test.tsx`<br>`__tests__/progress.test.ts`<br>`__tests__/SkillTreeView.test.tsx` | XP scoring, speed rankings, avatar & humor preference updates |
 | **Layout & Tutorials** | `__tests__/page.test.tsx`<br>`__tests__/layout.test.tsx`<br>`__tests__/unifiedTutorial.test.tsx`<br>`__tests__/complexityAnalyzer.test.ts`<br>`__tests__/quizzes.test.ts`<br>`__tests__/notifications.ui.test.tsx` | Shell navigation, scanline overlay, interactive tutorials, complexity estimation |
