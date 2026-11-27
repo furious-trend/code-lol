@@ -7,6 +7,7 @@ import { executeCode } from '@/lib/executor';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { AiRoastControls } from '@/components/AiRoastControls';
 import { Bugsy } from '@/components/Bugsy';
 import { Play, RotateCcw, Copy, Check, Terminal, CheckCircle2, Lightbulb } from 'lucide-react';
 import { translateBeginnerError } from '@/lib/beginnerErrors';
@@ -44,6 +45,11 @@ export function InteractiveCompiler({
   const [isRunning, setIsRunning] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [matchedExpected, setMatchedExpected] = useState<boolean | null>(null);
+  const [activeHumorPref, setActiveHumorPref] = useState<'general' | 'tamil'>(humorPref);
+
+  useEffect(() => {
+    setActiveHumorPref(humorPref);
+  }, [humorPref]);
 
   const { playMemeSound } = useMemeSound();
   const { isRoasting, roastStatus, roastData, roastError, handleRoast, clearRoast } = useRoast();
@@ -68,8 +74,8 @@ export function InteractiveCompiler({
       if (res.error) {
         setError(res.error);
         setOutput(res.output || '');
-        playMemeSound(false, humorPref);
-        await handleRoast(code, res.error, false, '', humorPref, language);
+        playMemeSound(false, activeHumorPref);
+        void handleRoast(code, res.error, false, '', activeHumorPref, language);
       } else {
         const out = res.output || '(Execution completed with no standard output)';
         setOutput(out);
@@ -82,14 +88,14 @@ export function InteractiveCompiler({
           setMatchedExpected(matches);
         }
 
-        playMemeSound(true, humorPref);
-        await handleRoast(code, out, true, '', humorPref, language);
+        playMemeSound(true, activeHumorPref);
+        void handleRoast(code, out, true, '', activeHumorPref, language);
         onCodeRunSuccess?.();
       }
     } catch (err: any) {
       const msg = err?.message || 'Execution error';
       setError(msg);
-      playMemeSound(false, humorPref);
+      playMemeSound(false, activeHumorPref);
     } finally {
       setIsRunning(false);
     }
@@ -255,8 +261,15 @@ export function InteractiveCompiler({
       </div>
 
       {/* Bugsy Reaction Bubble */}
+      <div className="px-4 pt-3 bg-zinc-900/90 border-t border-zinc-800">
+        <AiRoastControls
+          humorPref={activeHumorPref}
+          onHumorPrefChange={setActiveHumorPref}
+          language={language}
+        />
+      </div>
       {(isRoasting || roastError || roastData) && (
-        <div className="p-4 bg-zinc-900/90 border-t border-zinc-800">
+        <div className="p-4 bg-zinc-900/90">
           {isRoasting && (
             <div className="flex items-center gap-3 text-purple-400 text-xs font-medium animate-pulse">
               <Bugsy size={24} mood="thinking" />
@@ -276,6 +289,8 @@ export function InteractiveCompiler({
                 mood={roastData.mood}
                 gifUrl={roastData.gifUrl}
                 output={output}
+                language={language}
+                source={roastData.source}
                 onDismiss={clearRoast}
               />
             </div>

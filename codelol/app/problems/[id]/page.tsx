@@ -8,6 +8,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { problems, getModuleProblem, resolveActiveLanguage, ModuleProblem, getProblemSolution } from '@/lib/problems';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { AiRoastControls } from '@/components/AiRoastControls';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { executeCode } from '@/lib/executor';
 import { saveProblemCompletion } from '@/lib/progress';
@@ -1193,6 +1194,22 @@ let _log = [];
         >
           <h3 className="font-bold text-zinc-400 mb-4 uppercase tracking-wider text-sm border-b border-zinc-800 pb-2">Execution Output & Roast</h3>
           
+          <div className="mb-4">
+            <AiRoastControls
+              humorPref={humorPref}
+              onHumorPrefChange={async (val) => {
+                setHumorPref(val);
+                try { localStorage.setItem('guest_humor', val); } catch {}
+                const supabaseClient = createClient();
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                if (user) {
+                  await supabaseClient.from('profiles').update({ humor_preference: val }).eq('id', user.id);
+                }
+              }}
+              language={activeLang}
+            />
+          </div>
+
           {/* Beginner Friendly Guidance Tip */}
           {beginnerTip && (
             <div className="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm flex items-start gap-3 shadow-sm animate-in fade-in duration-300">
@@ -1260,6 +1277,8 @@ let _log = [];
                    fix={roastData.fix}
                    mood={roastData.mood}
                    gifUrl={roastData.gifUrl}
+                   language={activeLang}
+                   source={roastData.source}
                    onDismiss={() => clearRoast()}
                  />
               )}

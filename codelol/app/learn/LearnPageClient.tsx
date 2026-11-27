@@ -9,6 +9,7 @@ import { getAllLessons } from '@/lib/lessons';
 import Link from 'next/link';
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { AiRoastControls } from '@/components/AiRoastControls';
 import { executeCode } from '@/lib/executor';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { saveLessonProgress } from '@/lib/progress';
@@ -134,7 +135,11 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
               currentLevel={currentLevel} 
               highestUnlockedLevel={highestUnlockedLevel}
               setCurrentLevel={handleSelectLevel} 
-              humorPref={humorPref} 
+              humorPref={humorPref}
+              onHumorPrefChange={(val) => {
+                setHumorPref(val);
+                try { localStorage.setItem('guest_humor', val); } catch {}
+              }}
               learningLanguage={activeLang}
               allLessons={allLessons}
             />
@@ -145,7 +150,7 @@ export default function LearnPageClient({ initialLevel, highestUnlockedLevel, in
   );
 }
 
-function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humorPref, learningLanguage, allLessons }: { currentLevel: number, highestUnlockedLevel: number, setCurrentLevel: (level: number) => void, humorPref: 'general' | 'tamil', learningLanguage: string, allLessons: any[] }) {
+function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humorPref, onHumorPrefChange, learningLanguage, allLessons }: { currentLevel: number, highestUnlockedLevel: number, setCurrentLevel: (level: number) => void, humorPref: 'general' | 'tamil', onHumorPrefChange: (pref: 'general' | 'tamil') => void, learningLanguage: string, allLessons: any[] }) {
   const lesson = allLessons[currentLevel - 1];
   
   // Editor & Run State
@@ -529,6 +534,12 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
             </div>
           </div>
 
+          <AiRoastControls
+            humorPref={humorPref}
+            onHumorPrefChange={onHumorPrefChange}
+            language={learningLanguage}
+          />
+
           {(isRoasting || roastError || roastData) && (
             <div className="animate-in fade-in slide-in-from-top-4 duration-500">
               {isRoasting && (
@@ -550,6 +561,8 @@ function LessonView({ currentLevel, highestUnlockedLevel, setCurrentLevel, humor
                    fix={roastData.fix}
                    mood={roastData.mood}
                    gifUrl={roastData.gifUrl}
+                   language={learningLanguage}
+                   source={roastData.source}
                    onDismiss={clearRoast}
                  />
               )}

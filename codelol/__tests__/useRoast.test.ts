@@ -213,4 +213,22 @@ describe('useRoast AI integration', () => {
     // Only second result should be applied (stale guard discards first)
     expect(result.current.roastData?.roast).toBe('Second roast');
   });
+
+  it('falls back to local fallbackRoasts when /api/roast returns 429 rate limit', async () => {
+    mockGetAiStatusSnapshot.mockReturnValue({ status: 'idle' });
+    fetchMock.mockResolvedValueOnce({
+      ok: false,
+      status: 429,
+      json: async () => ({ error: 'Slow down! Too many requests, try again in a minute 🐢' }),
+    });
+
+    const { result } = renderHook(() => useRoast());
+
+    await act(async () => {
+      await result.current.handleRoast('console.log(1)', '1', true, '', 'general', 'javascript');
+    });
+
+    expect(result.current.roastError).toBe('');
+    expect(result.current.roastData?.roast).toBeTruthy();
+  });
 });

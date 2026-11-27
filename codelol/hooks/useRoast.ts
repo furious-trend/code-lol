@@ -101,6 +101,21 @@ export function useRoast() {
       const roastResponseData = await roastRes.json();
 
       if (!roastRes.ok) {
+        if (roastRes.status === 429) {
+          // Graceful client-side fallback when server /api/roast is rate-limited
+          const { getRandomFallback } = await import('@/lib/fallbackRoasts');
+          const { getResultGif } = await import('@/lib/localGifs');
+          const localFallback = getRandomFallback(!!isSuccess, humorPref, undefined, language as any, output);
+          if (runIdRef.current !== myRunId) return;
+          setRoastData({
+            roast: localFallback.roast,
+            fix: localFallback.fix,
+            mood: (localFallback.mood as RoastMood) || 'facepalm',
+            gifUrl: getResultGif(!!isSuccess, humorPref),
+            source: 'server-fallback',
+          });
+          return;
+        }
         throw new Error(roastResponseData.error || 'Failed to connect to the roasting service.');
       }
 

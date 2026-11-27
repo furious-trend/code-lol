@@ -10,6 +10,7 @@ import { getAllLessons } from '@/lib/lessons/index';
 
 import { useRoast } from '@/hooks/useRoast';
 import { RoastCard } from '@/components/RoastCard';
+import { AiRoastControls } from '@/components/AiRoastControls';
 import { Bugsy } from '@/components/Bugsy';
 import { useMemeSound } from '@/hooks/useMemeSound';
 import { executeCode } from '@/lib/executor';
@@ -321,6 +322,19 @@ function PlaygroundContent() {
 
         {/* Output Console Area */}
         <div className={`lg:w-1/3 flex-col gap-4 h-full lg:h-auto shrink-0 ${mobileTab === 'output' ? 'flex min-h-[300px]' : 'hidden lg:flex'}`}>
+          <AiRoastControls
+            humorPref={humorPref}
+            onHumorPrefChange={async (val) => {
+              setHumorPref(val);
+              localStorage.setItem('guest_humor', val);
+              const supabaseClient = createClient();
+              const { data: { user } } = await supabaseClient.auth.getUser();
+              if (user) {
+                await supabaseClient.from('profiles').update({ humor_preference: val }).eq('id', user.id);
+              }
+            }}
+            language={language}
+          />
           {/* Beginner Friendly Guidance Tip */}
           {beginnerTip && (
             <div data-testid="playground-beginner-tip" className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-2.5 shadow-sm shrink-0">
@@ -380,6 +394,8 @@ function PlaygroundContent() {
                   mood={roastData.mood}
                   gifUrl={roastData.gifUrl}
                   output={output}
+                  language={language}
+                  source={roastData.source}
                   onDismiss={clearRoast}
                   onReplayAudio={() => {
                     if (lastRunSuccess !== null) {
