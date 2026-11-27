@@ -31,11 +31,11 @@ export default async function Home() {
   const joke = getJokeOfTheDay();
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] p-4 sm:p-6 md:p-12 gap-12 text-zinc-50 font-sans relative">
+    <div className="flex flex-col min-h-[calc(100vh-4rem)] p-4 sm:p-6 md:p-12 gap-12 text-zinc-50 font-sans relative overflow-x-clip max-w-full">
       <WelcomeToast />
       {/* Decorative Arcade Background Ambient Mesh & Grid */}
-      <div className="fixed inset-0 z-[0] pointer-events-none overflow-hidden" aria-hidden="true">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-purple-600/10 via-pink-600/10 to-indigo-600/10 blur-[130px] rounded-full" />
+      <div className="fixed inset-0 z-[0] pointer-events-none overflow-hidden max-w-full" aria-hidden="true">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] max-w-full h-[400px] bg-gradient-to-tr from-purple-600/10 via-pink-600/10 to-indigo-600/10 blur-[130px] rounded-full" />
         <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] opacity-40" />
       </div>
       
@@ -133,8 +133,8 @@ export default async function Home() {
           <Link href="/problems" className="group relative bg-zinc-900/80 border border-zinc-800/80 rounded-3xl p-5 overflow-hidden transition-all hover:border-blue-500/60 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 backdrop-blur-xl">
             <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
             <div className="text-3xl mb-3">💻</div>
-            <h3 className="text-lg font-bold mb-1 group-hover:text-blue-400 transition-colors">Problems</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">LeetCode-style coding challenges to test your logic.</p>
+            <h3 className="text-lg font-bold mb-1 group-hover:text-blue-400 transition-colors">Practice Problems</h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">Hands-on coding challenges with test cases &amp; roasts.</p>
           </Link>
 
           <Link href="/battle" className="group relative bg-zinc-900/80 border border-zinc-800/80 rounded-3xl p-5 overflow-hidden transition-all hover:border-red-500/60 hover:shadow-xl hover:shadow-red-500/10 hover:-translate-y-1 backdrop-blur-xl">

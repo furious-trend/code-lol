@@ -1163,8 +1163,9 @@ let _log = [];
                 onClick={handleSubmit}
                 disabled={isSubmitting || isRoasting}
                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-5 sm:px-6 rounded-xl text-xs sm:text-sm transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2 disabled:opacity-50"
+                aria-label="Run automated test cases and roast"
               >
-                {isSubmitting || isRoasting ? '⏳ Compiling... please wait' : 'Submit & Roast 🚀🔥'}
+                {isSubmitting || isRoasting ? '⏳ Compiling... please wait' : 'Submit & Roast (Run Tests) 🚀'}
               </motion.button>
             </div>
           </div>
@@ -1186,6 +1187,9 @@ let _log = [];
         {/* Output Panel (Takes full height) */}
         <div 
           data-testid="terminal-wrapper"
+          role="region"
+          aria-live="polite"
+          aria-label="Execution output and test results"
           className={`flex-1 bg-zinc-950 p-6 md:p-10 overflow-y-auto transition-shadow duration-500 ${
             testResults && testResults.passed === testResults.total 
               ? 'shadow-[inset_0_0_20px_rgba(34,197,94,0.3)] border border-green-500/30' 

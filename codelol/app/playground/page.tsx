@@ -190,7 +190,7 @@ function PlaygroundContent() {
           <p className="text-zinc-400 text-sm">Write, run, and experiment with your code.</p>
         </div>
         
-        <div className="flex items-center gap-4 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
           <select 
             value={language}
             onChange={(e) => {
@@ -199,7 +199,7 @@ function PlaygroundContent() {
               setLearningLanguage(newLang);
               setCode(resolvePlaygroundCode(newLang));
             }}
-            className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer"
+            className="flex-1 sm:flex-none bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer min-w-[110px]"
           >
             <option value="javascript">JavaScript</option>
             <option value="python">Python</option>
@@ -220,7 +220,7 @@ function PlaygroundContent() {
                 await supabaseClient.from('profiles').update({ humor_preference: val }).eq('id', user.id);
               }
             }}
-            className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer"
+            className="flex-1 sm:flex-none bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-sm text-zinc-400 focus:outline-none focus:border-purple-500 cursor-pointer min-w-[125px]"
           >
             <option value="general">General Humor</option>
             <option value="tamil">Tamil Humor</option>
@@ -242,9 +242,9 @@ function PlaygroundContent() {
             whileTap={{ scale: 0.95 }}
             onClick={handleRunAndRoast}
             disabled={isRoasting || isRunning}
-            className={`flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRoasting || isRunning ? 'opacity-50 cursor-not-allowed' : 'shadow-lg shadow-purple-600/30'}`}
+            className={`w-full sm:w-auto bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-5 sm:px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRoasting || isRunning ? 'opacity-50 cursor-not-allowed' : 'shadow-lg shadow-purple-600/30'}`}
           >
-            {isRoasting || isRunning ? '⏳ Compiling... please wait' : 'Submit & Roast 🚀🔥'}
+            {isRoasting || isRunning ? '⏳ Compiling... please wait' : 'Submit & Roast (Run) 🚀🔥'}
           </motion.button>
         </div>
       </div>
@@ -321,7 +321,12 @@ function PlaygroundContent() {
         </div>
 
         {/* Output Console Area */}
-        <div className={`lg:w-1/3 flex-col gap-4 h-full lg:h-auto shrink-0 ${mobileTab === 'output' ? 'flex min-h-[300px]' : 'hidden lg:flex'}`}>
+        <div 
+          role="region"
+          aria-live="polite"
+          aria-label="Code execution output"
+          className={`lg:w-1/3 flex-col gap-4 h-full lg:h-auto shrink-0 ${mobileTab === 'output' ? 'flex min-h-[300px]' : 'hidden lg:flex'}`}
+        >
           <AiRoastControls
             humorPref={humorPref}
             onHumorPrefChange={async (val) => {

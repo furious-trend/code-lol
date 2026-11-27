@@ -228,7 +228,12 @@ export function InteractiveCompiler({
           )}
         </div>
 
-        <div className="p-4 min-h-[100px] max-h-[220px] overflow-y-auto text-xs sm:text-sm select-text custom-scrollbar">
+        <div 
+          role="region"
+          aria-live="polite"
+          aria-label="Terminal output"
+          className="p-4 min-h-[100px] max-h-[220px] overflow-y-auto text-xs sm:text-sm select-text custom-scrollbar"
+        >
           {error ? (
             <div className="space-y-3">
               {(() => {
